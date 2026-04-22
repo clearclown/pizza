@@ -23,6 +23,7 @@ COMPOSE := $(shell \
 	fi)
 
 COMPOSE_FILE := deploy/compose.yaml
+COMPOSE_FIRECRAWL := deploy/compose.firecrawl.yaml
 
 .DEFAULT_GOAL := help
 
@@ -61,23 +62,31 @@ test-e2e: ## E2E (docker compose 起動 → integration テスト)
 .PHONY: up
 up: ## セルフホスト起動 (app + ui profile)
 	@$(COMPOSE) -f $(COMPOSE_FILE) --profile app --profile ui up -d
-	@echo "✅ Started with: $(COMPOSE)"
+	@echo "✅ PI-ZZA services started with: $(COMPOSE)"
+	@echo "   Firecrawl は別途 'make up-firecrawl' または SaaS モード ('FIRECRAWL_MODE=saas') を利用してください"
 
-.PHONY: up-core
-up-core: ## Firecrawl + Redis のみ起動 (dev 用)
-	@$(COMPOSE) -f $(COMPOSE_FILE) up -d firecrawl playwright-service redis
+.PHONY: up-all
+up-all: ## PI-ZZA + Firecrawl セルフホスト全部起動
+	@$(COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_FIRECRAWL) \
+	  --profile app --profile ui --profile firecrawl up -d
+	@echo "✅ Full stack started with: $(COMPOSE)"
+
+.PHONY: up-firecrawl
+up-firecrawl: ## Firecrawl スタックだけ起動 (M2 Kitchen)
+	@$(COMPOSE) -f $(COMPOSE_FIRECRAWL) --profile firecrawl up -d
+	@echo "✅ Firecrawl self-host started → http://localhost:3002"
 
 .PHONY: down
 down: ## 停止 (ボリュームは維持)
-	@$(COMPOSE) -f $(COMPOSE_FILE) down
+	@$(COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_FIRECRAWL) down
 
 .PHONY: down-volumes
 down-volumes: ## 完全クリーンアップ (データ含めて削除)
-	@$(COMPOSE) -f $(COMPOSE_FILE) down -v
+	@$(COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_FIRECRAWL) down -v
 
 .PHONY: logs
-logs: ## ログ追尾 (例: make logs SVC=firecrawl)
-	@$(COMPOSE) -f $(COMPOSE_FILE) logs -f $(SVC)
+logs: ## ログ追尾 (例: make logs SVC=pizza-dough)
+	@$(COMPOSE) -f $(COMPOSE_FILE) -f $(COMPOSE_FIRECRAWL) logs -f $(SVC)
 
 .PHONY: lint
 lint: ## 全言語 lint

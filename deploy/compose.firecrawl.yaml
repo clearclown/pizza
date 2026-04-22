@@ -1,0 +1,123 @@
+# 🧀 Firecrawl セルフホスト — PI-ZZA M2 Kitchen 用
+#
+# 公式 Firecrawl (github.com/mendableai/firecrawl) の最小構成を
+# PI-ZZA が使う範囲に絞った compose。本家の docker-compose.yaml は
+# fire-engine / extract-worker などの付加機能を含むが、PI-ZZA が必要
+# とするのは API + playwright + redis + rabbitmq + postgres のみ。
+#
+# AGPL-3.0 ライセンスの伝播を避けるため、**常に独立コンテナ**として起動し、
+# PI-ZZA 本体とは REST API 経由でのみ通信する。docs/license-compliance.md 参照。
+#
+# 起動:
+#   docker compose -f deploy/compose.firecrawl.yaml --profile firecrawl up -d
+#
+# あるいは pizza 本体と同時:
+#   docker compose -f deploy/compose.yaml -f deploy/compose.firecrawl.yaml \
+#                  --profile app --profile firecrawl up -d
+
+name: pi-zza
+
+networks:
+  pizza-net:
+    external: false
+
+volumes:
+  firecrawl-redis:
+  firecrawl-postgres:
+  firecrawl-rabbitmq:
+
+services:
+  firecrawl-redis:
+    image: redis:alpine
+    container_name: pizza-firecrawl-redis
+    restart: unless-stopped
+    command: ["redis-server", "--bind", "0.0.0.0", "--appendonly", "yes"]
+    volumes:
+      - firecrawl-redis:/data
+    networks:
+      - pizza-net
+    profiles: ["firecrawl"]
+
+  firecrawl-rabbitmq:
+    image: rabbitmq:3-management
+    container_name: pizza-firecrawl-rabbitmq
+    restart: unless-stopped
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "check_running"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+    profiles: ["firecrawl"]
+
+  firecrawl-postgres:
+    image: postgres:16-alpine
+    container_name: pizza-firecrawl-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    volumes:
+      - firecrawl-postgres:/var/lib/postgresql/data
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+    profiles: ["firecrawl"]
+
+  firecrawl-playwright:
+    image: ghcr.io/firecrawl/playwright-service:latest
+    container_name: pizza-firecrawl-playwright
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+      MAX_CONCURRENT_PAGES: "10"
+    networks:
+      - pizza-net
+    profiles: ["firecrawl"]
+
+  firecrawl-api:
+    image: ghcr.io/firecrawl/firecrawl:latest
+    container_name: pizza-firecrawl-api
+    restart: unless-stopped
+    depends_on:
+      firecrawl-redis:
+        condition: service_started
+      firecrawl-rabbitmq:
+        condition: service_healthy
+      firecrawl-postgres:
+        condition: service_healthy
+      firecrawl-playwright:
+        condition: service_started
+    environment:
+      HOST: "0.0.0.0"
+      PORT: "3002"
+      INTERNAL_PORT: "3002"
+      ENV: local
+      NUM_WORKERS_PER_QUEUE: "8"
+      CRAWL_CONCURRENT_REQUESTS: "10"
+      MAX_CONCURRENT_JOBS: "5"
+      BROWSER_POOL_SIZE: "5"
+      REDIS_URL: redis://firecrawl-redis:6379
+      REDIS_RATE_LIMIT_URL: redis://firecrawl-redis:6379
+      PLAYWRIGHT_MICROSERVICE_URL: http://firecrawl-playwright:3000/scrape
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_HOST: firecrawl-postgres
+      POSTGRES_PORT: "5432"
+      USE_DB_AUTHENTICATION: "false"
+      NUQ_RABBITMQ_URL: amqp://firecrawl-rabbitmq:5672
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+    ports:
+      - "3002:3002"
+    networks:
+      - pizza-net
+    command: ["node", "dist/src/harness.js", "--start-docker"]
+    profiles: ["firecrawl"]
