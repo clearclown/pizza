@@ -41,8 +41,9 @@ message StoreContext {
 
 message JudgeResult {
   string place_id = 1;
+  // 後方互換: operation_type != "direct" で true
   bool is_franchise = 2;
-  // 直営=false, FC=true のとき運営会社名
+  // 後方互換: franchisee_name 優先、なければ franchisor_name
   string operator_name = 3;
   // 同一 operator が運営する店舗数の推定値（20以上でメガジー）
   int32 store_count_estimate = 4;
@@ -50,6 +51,15 @@ message JudgeResult {
   string llm_provider = 6;
   string llm_model = 7;
   repeated Evidence evidence = 8;
+  // Phase 4: 事業会社定義の明示化 (docs/operator-definition.md)
+  // direct | franchisee | mixed | unknown
+  string operation_type = 9;
+  // 本部会社 (例: セブン-イレブン・ジャパン)
+  string franchisor_name = 10;
+  // 加盟店運営会社 (メガジー集計キー, 例: 株式会社○○商事)
+  string franchisee_name = 11;
+  // 判定に使用されたモード (llm-only | browser | hybrid)
+  string judge_mode = 12;
 }
 
 message Evidence {

@@ -135,9 +135,22 @@ func (s *Store) UpsertJudgement(ctx context.Context, j *pb.JudgeResult) error {
 	if j.GetIsFranchise() {
 		isFC = 1
 	}
+	// Phase 4: operation_type が空なら is_franchise から推論してレガシ互換を保つ
+	opType := j.GetOperationType()
+	if opType == "" {
+		if isFC == 1 {
+			opType = "franchisee"
+		} else {
+			opType = "direct"
+		}
+	}
 	_, err := s.db.ExecContext(ctx, `
-		INSERT INTO judgements (place_id, is_franchise, operator_name, store_count_estimate, confidence, llm_provider, llm_model)
-		VALUES (?, ?, ?, ?, ?, ?, ?)
+		INSERT INTO judgements (
+			place_id, is_franchise, operator_name, store_count_estimate,
+			confidence, llm_provider, llm_model,
+			operation_type, franchisor_name, franchisee_name, judge_mode
+		)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
 		ON CONFLICT(place_id) DO UPDATE SET
 			is_franchise = excluded.is_franchise,
 			operator_name = excluded.operator_name,
@@ -145,9 +158,15 @@ func (s *Store) UpsertJudgement(ctx context.Context, j *pb.JudgeResult) error {
 			confidence = excluded.confidence,
 			llm_provider = excluded.llm_provider,
 			llm_model = excluded.llm_model,
+			operation_type = excluded.operation_type,
+			franchisor_name = excluded.franchisor_name,
+			franchisee_name = excluded.franchisee_name,
+			judge_mode = excluded.judge_mode,
 			judged_at = CURRENT_TIMESTAMP
-	`, j.GetPlaceId(), isFC, j.GetOperatorName(), j.GetStoreCountEstimate(),
+	`,
+		j.GetPlaceId(), isFC, j.GetOperatorName(), j.GetStoreCountEstimate(),
 		j.GetConfidence(), j.GetLlmProvider(), j.GetLlmModel(),
+		opType, j.GetFranchisorName(), j.GetFranchiseeName(), j.GetJudgeMode(),
 	)
 	if err != nil {
 		return fmt.Errorf("box: upsert judgement %s: %w", j.GetPlaceId(), err)

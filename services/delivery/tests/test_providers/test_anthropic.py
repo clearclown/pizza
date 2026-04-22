@@ -32,6 +32,7 @@ def test_anthropic_make_llm_returns_chat_anthropic(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy-for-unit-test")
+    monkeypatch.delenv("ANTHROPIC_MODEL", raising=False)  # 外部 env を clean
     from browser_use.llm import ChatAnthropic
 
     p = AnthropicProvider()
@@ -45,6 +46,7 @@ def test_anthropic_make_llm_respects_model_override(
     monkeypatch: pytest.MonkeyPatch,
 ) -> None:
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy")
+    monkeypatch.delenv("ANTHROPIC_MODEL", raising=False)
     p = AnthropicProvider()
     llm = p.make_llm(model="claude-sonnet-4-6")
     assert "claude-sonnet-4-6" in getattr(llm, "model", "")

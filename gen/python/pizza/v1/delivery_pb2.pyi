@@ -44,7 +44,7 @@ class StoreContext(_message.Message):
     def __init__(self, store: _Optional[_Union[_seed_pb2.Store, _Mapping]] = ..., markdown: _Optional[str] = ..., candidate_urls: _Optional[_Iterable[str]] = ..., provider_hint: _Optional[str] = ...) -> None: ...
 
 class JudgeResult(_message.Message):
-    __slots__ = ("place_id", "is_franchise", "operator_name", "store_count_estimate", "confidence", "llm_provider", "llm_model", "evidence")
+    __slots__ = ("place_id", "is_franchise", "operator_name", "store_count_estimate", "confidence", "llm_provider", "llm_model", "evidence", "operation_type", "franchisor_name", "franchisee_name", "judge_mode")
     PLACE_ID_FIELD_NUMBER: _ClassVar[int]
     IS_FRANCHISE_FIELD_NUMBER: _ClassVar[int]
     OPERATOR_NAME_FIELD_NUMBER: _ClassVar[int]
@@ -53,6 +53,10 @@ class JudgeResult(_message.Message):
     LLM_PROVIDER_FIELD_NUMBER: _ClassVar[int]
     LLM_MODEL_FIELD_NUMBER: _ClassVar[int]
     EVIDENCE_FIELD_NUMBER: _ClassVar[int]
+    OPERATION_TYPE_FIELD_NUMBER: _ClassVar[int]
+    FRANCHISOR_NAME_FIELD_NUMBER: _ClassVar[int]
+    FRANCHISEE_NAME_FIELD_NUMBER: _ClassVar[int]
+    JUDGE_MODE_FIELD_NUMBER: _ClassVar[int]
     place_id: str
     is_franchise: bool
     operator_name: str
@@ -61,7 +65,11 @@ class JudgeResult(_message.Message):
     llm_provider: str
     llm_model: str
     evidence: _containers.RepeatedCompositeFieldContainer[Evidence]
-    def __init__(self, place_id: _Optional[str] = ..., is_franchise: bool = ..., operator_name: _Optional[str] = ..., store_count_estimate: _Optional[int] = ..., confidence: _Optional[float] = ..., llm_provider: _Optional[str] = ..., llm_model: _Optional[str] = ..., evidence: _Optional[_Iterable[_Union[Evidence, _Mapping]]] = ...) -> None: ...
+    operation_type: str
+    franchisor_name: str
+    franchisee_name: str
+    judge_mode: str
+    def __init__(self, place_id: _Optional[str] = ..., is_franchise: bool = ..., operator_name: _Optional[str] = ..., store_count_estimate: _Optional[int] = ..., confidence: _Optional[float] = ..., llm_provider: _Optional[str] = ..., llm_model: _Optional[str] = ..., evidence: _Optional[_Iterable[_Union[Evidence, _Mapping]]] = ..., operation_type: _Optional[str] = ..., franchisor_name: _Optional[str] = ..., franchisee_name: _Optional[str] = ..., judge_mode: _Optional[str] = ...) -> None: ...
 
 class Evidence(_message.Message):
     __slots__ = ("source_url", "snippet", "reason")

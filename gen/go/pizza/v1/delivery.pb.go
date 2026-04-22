@@ -271,10 +271,11 @@ func (x *StoreContext) GetProviderHint() string {
 }
 
 type JudgeResult struct {
-	state       protoimpl.MessageState `protogen:"open.v1"`
-	PlaceId     string                 `protobuf:"bytes,1,opt,name=place_id,json=placeId,proto3" json:"place_id,omitempty"`
-	IsFranchise bool                   `protobuf:"varint,2,opt,name=is_franchise,json=isFranchise,proto3" json:"is_franchise,omitempty"`
-	// 直営=false, FC=true のとき運営会社名
+	state   protoimpl.MessageState `protogen:"open.v1"`
+	PlaceId string                 `protobuf:"bytes,1,opt,name=place_id,json=placeId,proto3" json:"place_id,omitempty"`
+	// 後方互換: operation_type != "direct" で true
+	IsFranchise bool `protobuf:"varint,2,opt,name=is_franchise,json=isFranchise,proto3" json:"is_franchise,omitempty"`
+	// 後方互換: franchisee_name 優先、なければ franchisor_name
 	OperatorName string `protobuf:"bytes,3,opt,name=operator_name,json=operatorName,proto3" json:"operator_name,omitempty"`
 	// 同一 operator が運営する店舗数の推定値（20以上でメガジー）
 	StoreCountEstimate int32       `protobuf:"varint,4,opt,name=store_count_estimate,json=storeCountEstimate,proto3" json:"store_count_estimate,omitempty"`
@@ -282,8 +283,17 @@ type JudgeResult struct {
 	LlmProvider        string      `protobuf:"bytes,6,opt,name=llm_provider,json=llmProvider,proto3" json:"llm_provider,omitempty"`
 	LlmModel           string      `protobuf:"bytes,7,opt,name=llm_model,json=llmModel,proto3" json:"llm_model,omitempty"`
 	Evidence           []*Evidence `protobuf:"bytes,8,rep,name=evidence,proto3" json:"evidence,omitempty"`
-	unknownFields      protoimpl.UnknownFields
-	sizeCache          protoimpl.SizeCache
+	// Phase 4: 事業会社定義の明示化 (docs/operator-definition.md)
+	// direct | franchisee | mixed | unknown
+	OperationType string `protobuf:"bytes,9,opt,name=operation_type,json=operationType,proto3" json:"operation_type,omitempty"`
+	// 本部会社 (例: セブン-イレブン・ジャパン)
+	FranchisorName string `protobuf:"bytes,10,opt,name=franchisor_name,json=franchisorName,proto3" json:"franchisor_name,omitempty"`
+	// 加盟店運営会社 (メガジー集計キー, 例: 株式会社○○商事)
+	FranchiseeName string `protobuf:"bytes,11,opt,name=franchisee_name,json=franchiseeName,proto3" json:"franchisee_name,omitempty"`
+	// 判定に使用されたモード (llm-only | browser | hybrid)
+	JudgeMode     string `protobuf:"bytes,12,opt,name=judge_mode,json=judgeMode,proto3" json:"judge_mode,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
 }
 
 func (x *JudgeResult) Reset() {
@@ -372,6 +382,34 @@ func (x *JudgeResult) GetEvidence() []*Evidence {
 	return nil
 }
 
+func (x *JudgeResult) GetOperationType() string {
+	if x != nil {
+		return x.OperationType
+	}
+	return ""
+}
+
+func (x *JudgeResult) GetFranchisorName() string {
+	if x != nil {
+		return x.FranchisorName
+	}
+	return ""
+}
+
+func (x *JudgeResult) GetFranchiseeName() string {
+	if x != nil {
+		return x.FranchiseeName
+	}
+	return ""
+}
+
+func (x *JudgeResult) GetJudgeMode() string {
+	if x != nil {
+		return x.JudgeMode
+	}
+	return ""
+}
+
 type Evidence struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	SourceUrl     string                 `protobuf:"bytes,1,opt,name=source_url,json=sourceUrl,proto3" json:"source_url,omitempty"`
@@ -449,7 +487,7 @@ const file_pizza_v1_delivery_proto_rawDesc = "" +
 	"\x05store\x18\x01 \x01(\v2\x0f.pizza.v1.StoreR\x05store\x12\x1a\n" +
 	"\bmarkdown\x18\x02 \x01(\tR\bmarkdown\x12%\n" +
 	"\x0ecandidate_urls\x18\x03 \x03(\tR\rcandidateUrls\x12#\n" +
-	"\rprovider_hint\x18\x04 \x01(\tR\fproviderHint\"\xb2\x02\n" +
+	"\rprovider_hint\x18\x04 \x01(\tR\fproviderHint\"\xca\x03\n" +
 	"\vJudgeResult\x12\x19\n" +
 	"\bplace_id\x18\x01 \x01(\tR\aplaceId\x12!\n" +
 	"\fis_franchise\x18\x02 \x01(\bR\visFranchise\x12#\n" +
@@ -460,7 +498,13 @@ const file_pizza_v1_delivery_proto_rawDesc = "" +
 	"confidence\x12!\n" +
 	"\fllm_provider\x18\x06 \x01(\tR\vllmProvider\x12\x1b\n" +
 	"\tllm_model\x18\a \x01(\tR\bllmModel\x12.\n" +
-	"\bevidence\x18\b \x03(\v2\x12.pizza.v1.EvidenceR\bevidence\"[\n" +
+	"\bevidence\x18\b \x03(\v2\x12.pizza.v1.EvidenceR\bevidence\x12%\n" +
+	"\x0eoperation_type\x18\t \x01(\tR\roperationType\x12'\n" +
+	"\x0ffranchisor_name\x18\n" +
+	" \x01(\tR\x0efranchisorName\x12'\n" +
+	"\x0ffranchisee_name\x18\v \x01(\tR\x0efranchiseeName\x12\x1d\n" +
+	"\n" +
+	"judge_mode\x18\f \x01(\tR\tjudgeMode\"[\n" +
 	"\bEvidence\x12\x1d\n" +
 	"\n" +
 	"source_url\x18\x01 \x01(\tR\tsourceUrl\x12\x18\n" +
