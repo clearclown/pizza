@@ -1,0 +1,93 @@
+name: 🐛 Bug Report
+description: バグを報告して PI-ZZA の品質を上げる
+title: "[bug] "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        バグ報告ありがとうございます 🍕
+        既に同じ issue が存在しないか検索してからお願いします。
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: バグ概要 / Summary
+      description: 何が起きたかを 1-2 文で
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: 再現手順 / Steps to reproduce
+      placeholder: |
+        1. `pizza bake --query "..." --area "..."` を実行
+        2. ...
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 期待される動作 / Expected behavior
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: 実際の動作 / Actual behavior
+    validations:
+      required: true
+
+  - type: dropdown
+    id: module
+    attributes:
+      label: 影響モジュール / Affected module
+      multiple: true
+      options:
+        - M1 Seed (dough)
+        - M2 Kitchen (toppings / firecrawl)
+        - M3 Delivery (courier / browser-use)
+        - M4 Box (BI)
+        - Oven (orchestrator)
+        - proto / gRPC
+        - CI / docs
+        - 不明 / Unknown
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version / Commit SHA
+      placeholder: "v0.1.0 or 7f3a9c1"
+
+  - type: textarea
+    id: environment
+    attributes:
+      label: 環境 / Environment
+      value: |
+        - OS:
+        - Go version: `go version`
+        - Python version: `python --version`
+        - LLM provider:
+        - Firecrawl mode (docker/saas):
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: ログ / 出力 / Logs
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: 確認事項
+      options:
+        - label: API キーやシークレットを含まないことを確認した
+          required: true
+        - label: CODE_OF_CONDUCT を読んだ
+          required: true

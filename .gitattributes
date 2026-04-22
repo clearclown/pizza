@@ -1,0 +1,25 @@
+# 🍕 PI-ZZA .gitattributes
+
+# 改行コード統一
+* text=auto eol=lf
+*.sh text eol=lf
+*.bat text eol=crlf
+*.ps1 text eol=crlf
+
+# バイナリ判定を明示
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.pdf binary
+
+# GitHub Linguist — 生成物とベンダーコードを言語統計から除外
+gen/** linguist-generated=true
+gen/** -diff
+third_party/** linguist-vendored=true
+uv.lock linguist-generated=true
+go.sum linguist-generated=true
+
+# proto は自動検出
+*.proto linguist-language=Protocol-Buffer

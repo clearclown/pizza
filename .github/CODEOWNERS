@@ -1,0 +1,16 @@
+# PI-ZZA Code Owners
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# グローバルオーナー（フォールバック）
+* @clearclown
+
+# proto は破壊的変更に要注意
+/api/ @clearclown
+
+# CI は高権限
+/.github/workflows/ @clearclown
+
+# ライセンス・セキュリティ・行動規範は変更時にオーナー同意必須
+/LICENSE @clearclown
+/SECURITY.md @clearclown
+/CODE_OF_CONDUCT.md @clearclown

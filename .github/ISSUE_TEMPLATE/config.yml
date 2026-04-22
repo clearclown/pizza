@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 💬 Discussions
+    url: https://github.com/clearclown/pizza/discussions
+    about: 質問、アイデア、設計相談はこちら
+  - name: 🔒 Security Vulnerability
+    url: https://github.com/clearclown/pizza/security/advisories/new
+    about: 脆弱性報告は private security advisory で
