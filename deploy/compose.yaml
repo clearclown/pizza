@@ -1,0 +1,188 @@
+# 🍕 PI-ZZA セルフホスト構成 — docker compose / podman compose / podman-compose 互換
+#
+# 起動:
+#   docker compose -f deploy/compose.yaml up -d            # Docker
+#   podman compose -f deploy/compose.yaml up -d            # Podman 4.x+
+#   podman-compose -f deploy/compose.yaml up -d            # podman-compose (pip)
+#
+# 停止:
+#   docker compose -f deploy/compose.yaml down
+#
+# ログ:
+#   docker compose -f deploy/compose.yaml logs -f <service>
+#
+# 互換性方針:
+#   - `version:` キーは書かない (docker compose v2 / podman compose どちらも推論)
+#   - deploy.resources は podman が非対応のため使わない（limits は systemd or cgroup で制御）
+#   - profiles で dev/prod の差分を分離
+#   - 全サービスに healthcheck を入れる
+
+name: pi-zza
+
+networks:
+  pizza-net:
+    driver: bridge
+
+volumes:
+  pizza-data:       # SQLite / CSV 出力
+  redis-data:       # Firecrawl のジョブキュー
+  playwright-data:  # Firecrawl Playwright キャッシュ
+
+# ───────────────────────────────────────────────────────────────────────────
+# M2 Kitchen — Firecrawl stack (セルフホスト)
+# AGPL-3.0 のため PI-ZZA 本体とは REST 越境のみでやり取りする
+# ───────────────────────────────────────────────────────────────────────────
+services:
+  # ─── Firecrawl: API ────────────────────────────────────────────────
+  firecrawl:
+    image: ghcr.io/mendableai/firecrawl:latest
+    container_name: pizza-firecrawl
+    restart: unless-stopped
+    depends_on:
+      redis:
+        condition: service_healthy
+      playwright-service:
+        condition: service_started
+    environment:
+      REDIS_URL: redis://redis:6379
+      REDIS_RATE_LIMIT_URL: redis://redis:6379
+      PLAYWRIGHT_MICROSERVICE_URL: http://playwright-service:3000/scrape
+      USE_DB_AUTHENTICATION: "false"
+      PORT: "3002"
+      HOST: "0.0.0.0"
+      NUM_WORKERS_PER_QUEUE: "8"
+    ports:
+      - "3002:3002"
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3002/v0/health/liveness"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 30s
+
+  # ─── Firecrawl: Playwright サイドカー ────────────────────────────
+  playwright-service:
+    image: ghcr.io/mendableai/playwright-service:latest
+    container_name: pizza-playwright
+    restart: unless-stopped
+    environment:
+      PORT: "3000"
+    volumes:
+      - playwright-data:/tmp/playwright
+    networks:
+      - pizza-net
+
+  # ─── Firecrawl: Redis ────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: pizza-redis
+    restart: unless-stopped
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
+
+  # ─── M1 Seed (Go) ─────────────────────────────────────────────────
+  dough-service:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.dough
+    container_name: pizza-dough
+    restart: unless-stopped
+    environment:
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      GRID_CELL_KM: ${GRID_CELL_KM:-1.0}
+      MAX_CONCURRENCY: ${MAX_CONCURRENCY:-8}
+    ports:
+      - "50051:50051"
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50051"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 15s
+    profiles: ["app"]
+
+  # ─── M3 Delivery (Python) ─────────────────────────────────────────
+  delivery-service:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.delivery
+    container_name: pizza-delivery
+    restart: unless-stopped
+    environment:
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LLM_MODEL: ${LLM_MODEL:-}
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      OPENAI_API_KEY: ${OPENAI_API_KEY:-}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+    ports:
+      - "50053:50053"
+    networks:
+      - pizza-net
+    healthcheck:
+      test: ["CMD", "/bin/grpc_health_probe", "-addr=:50053"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+      start_period: 20s
+    profiles: ["app"]
+
+  # ─── 🔥 Oven (Go Orchestrator) ────────────────────────────────────
+  pizza-orchestrator:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.pizza
+    container_name: pizza-orchestrator
+    restart: "no"  # CLI 的に使うので常駐しない
+    depends_on:
+      firecrawl:
+        condition: service_healthy
+      dough-service:
+        condition: service_healthy
+      delivery-service:
+        condition: service_healthy
+    environment:
+      GOOGLE_MAPS_API_KEY: ${GOOGLE_MAPS_API_KEY:-}
+      FIRECRAWL_MODE: docker
+      FIRECRAWL_API_URL: http://firecrawl:3002
+      SEED_SERVICE_ADDR: dough-service:50051
+      DELIVERY_SERVICE_ADDR: delivery-service:50053
+      LLM_PROVIDER: ${LLM_PROVIDER:-anthropic}
+      LOG_LEVEL: ${LOG_LEVEL:-info}
+      PIZZA_DB_PATH: /var/pizza/pizza.sqlite
+      PIZZA_OUTPUT_DIR: /var/pizza/output
+    volumes:
+      - pizza-data:/var/pizza
+    networks:
+      - pizza-net
+    profiles: ["app"]
+
+  # ─── 📦 Box UI (Streamlit) ────────────────────────────────────────
+  box-ui:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.box-ui
+    container_name: pizza-box-ui
+    restart: unless-stopped
+    environment:
+      PIZZA_DB_PATH: /var/pizza/pizza.sqlite
+    volumes:
+      - pizza-data:/var/pizza:ro
+    ports:
+      - "8501:8501"
+    networks:
+      - pizza-net
+    profiles: ["ui"]

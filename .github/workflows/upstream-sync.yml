@@ -1,0 +1,57 @@
+name: upstream-sync
+
+on:
+  schedule:
+    - cron: "0 9 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - prefix: third_party/google-maps-scraper
+            upstream: https://github.com/gosom/google-maps-scraper.git
+            branch: main
+          - prefix: third_party/browser-use
+            upstream: https://github.com/browser-use/browser-use.git
+            branch: main
+    env:
+      PREFIX: ${{ matrix.prefix }}
+      UPSTREAM: ${{ matrix.upstream }}
+      BRANCH: ${{ matrix.branch }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Check if subtree prefix exists
+        id: check
+        run: |
+          if [ -d "$PREFIX" ] && [ -n "$(ls -A "$PREFIX" 2>/dev/null)" ]; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::$PREFIX is not yet imported as subtree. Skipping."
+          fi
+      - name: Subtree pull
+        if: steps.check.outputs.exists == 'true'
+        run: |
+          git config user.name "pi-zza-upstream-sync[bot]"
+          git config user.email "pi-zza-upstream-sync@users.noreply.github.com"
+          git subtree pull --prefix="$PREFIX" "$UPSTREAM" "$BRANCH" --squash \
+            -m "chore(upstream): sync $PREFIX with $UPSTREAM@$BRANCH"
+      - name: Create PR if changes
+        if: steps.check.outputs.exists == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: upstream-sync/${{ matrix.prefix }}
+          title: "chore(upstream): sync ${{ matrix.prefix }}"
+          body: |
+            Automatic upstream sync for this subtree.
+          labels: upstream-sync, dependencies

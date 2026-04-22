@@ -1,0 +1,36 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  disable-all: true
+  enable:
+    - errcheck
+    - gosimple
+    - govet
+    - ineffassign
+    - staticcheck
+    - unused
+    - gofmt
+    - goimports
+    - misspell
+    - unconvert
+    - revive
+
+issues:
+  max-same-issues: 0
+  exclude-rules:
+    # gen/ は自動生成なので lint 緩和
+    - path: gen/
+      linters:
+        - all
+    # Phase 0 スタブは unused などを許容
+    - path: internal/(dough|toppings|courier|box|slice)/.*\.go
+      linters:
+        - unused
+
+linters-settings:
+  goimports:
+    local-prefixes: github.com/clearclown/pizza
+  misspell:
+    locale: US

@@ -1,0 +1,25 @@
+# 🔥 Oven — Go Orchestrator
+# Build: distroless multi-stage (小さく安全)
+# 動作: podman / docker 両対応
+
+# --- builder ---------------------------------------------------------
+FROM golang:1.22-alpine AS builder
+
+RUN apk add --no-cache git ca-certificates
+
+WORKDIR /src
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+RUN CGO_ENABLED=0 GOOS=linux go build -trimpath -ldflags="-s -w" -o /out/pizza ./cmd/pizza
+
+# --- runtime ---------------------------------------------------------
+FROM gcr.io/distroless/static-debian12:nonroot
+
+COPY --from=builder /out/pizza /pizza
+COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
+
+USER nonroot:nonroot
+ENTRYPOINT ["/pizza"]
+CMD ["help"]

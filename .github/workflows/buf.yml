@@ -1,0 +1,41 @@
+name: buf
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "buf.gen.yaml"
+      - ".github/workflows/buf.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "api/**"
+      - "buf.gen.yaml"
+      - ".github/workflows/buf.yml"
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - run: buf lint api
+
+  breaking:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: bufbuild/buf-action@v1
+        with:
+          setup_only: true
+      - run: buf breaking api --against ".git#branch=main,subdir=api"
