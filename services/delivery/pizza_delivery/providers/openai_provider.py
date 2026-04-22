@@ -14,8 +14,16 @@ class OpenAIProvider:
         return bool(os.getenv("OPENAI_API_KEY"))
 
     def make_llm(self, *, model: str | None = None, **kwargs: Any) -> Any:
-        _ = model, kwargs
-        raise NotImplementedError(
-            "OpenAIProvider.make_llm is Phase 3 target; "
-            "will return browser_use.llm.ChatOpenAI"
+        from browser_use.llm import ChatOpenAI
+
+        api_key = os.getenv("OPENAI_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "OpenAIProvider.make_llm requires OPENAI_API_KEY env var"
+            )
+        chosen_model = model or os.getenv("OPENAI_MODEL") or self.default_model
+        return ChatOpenAI(
+            model=chosen_model,
+            api_key=api_key,
+            **kwargs,
         )

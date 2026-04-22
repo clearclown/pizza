@@ -1,17 +1,10 @@
-"""🔴 Red-phase test — Phase 3 で Green 化する。"""
+"""🟢 Green: Phase 2 で make_llm() が実 ChatAnthropic を返す。"""
 
 from __future__ import annotations
 
 import pytest
 
 from pizza_delivery.providers.anthropic_provider import AnthropicProvider
-
-
-def test_anthropic_make_llm_raises_until_phase3() -> None:
-    """Phase 0 baseline: make_llm() は browser-use ChatAnthropic を返す未来の契約。"""
-    p = AnthropicProvider()
-    with pytest.raises(NotImplementedError, match="Phase 3"):
-        p.make_llm()
 
 
 def test_anthropic_name_and_model() -> None:
@@ -26,3 +19,42 @@ def test_anthropic_ready_checks_env(monkeypatch: pytest.MonkeyPatch) -> None:
     assert p.ready() is False
     monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy")
     assert p.ready() is True
+
+
+def test_anthropic_make_llm_requires_api_key(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    p = AnthropicProvider()
+    with pytest.raises(RuntimeError, match="ANTHROPIC_API_KEY"):
+        p.make_llm()
+
+
+def test_anthropic_make_llm_returns_chat_anthropic(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy-for-unit-test")
+    from browser_use.llm import ChatAnthropic
+
+    p = AnthropicProvider()
+    llm = p.make_llm()
+    assert isinstance(llm, ChatAnthropic)
+    # デフォルトモデルが使われる
+    assert p.default_model in getattr(llm, "model", "")
+
+
+def test_anthropic_make_llm_respects_model_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy")
+    p = AnthropicProvider()
+    llm = p.make_llm(model="claude-sonnet-4-6")
+    assert "claude-sonnet-4-6" in getattr(llm, "model", "")
+
+
+def test_anthropic_make_llm_env_model_override(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.setenv("ANTHROPIC_API_KEY", "sk-ant-dummy")
+    monkeypatch.setenv("ANTHROPIC_MODEL", "claude-haiku-4-5-20251001")
+    p = AnthropicProvider()
+    llm = p.make_llm()
+    assert "claude-haiku-4-5-20251001" in getattr(llm, "model", "")

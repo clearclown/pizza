@@ -58,24 +58,33 @@
 git clone git@github.com:clearclown/pizza.git
 cd pizza
 
-# 2. 環境構築
-make bootstrap            # Go / Python (uv) / buf / ツール一式
+# 2. 環境構築 (Go / uv / buf / ツール一式)
+make bootstrap
 
 # 3. 環境変数
-cp .env.example .env      # GOOGLE_MAPS_API_KEY, LLM_PROVIDER 等を設定
+cp .env.example .env              # GOOGLE_MAPS_API_KEY を最低限設定
 
-# 4. gRPC コード生成
+# 4. gRPC コード生成 + Go バイナリビルド
 make proto
+make build
 
-# 5. テスト (TDD: 現在は Red 状態から開始)
-make test
+# 5. テスト
+make test                         # Go 全 ok + Python 20/20 pass
 
-# 6. ローカル統合起動
-make up                   # firecrawl + dough + delivery を docker compose で
+# 6. PI-ZZA を焼く (最小: Places API 1 本で動く)
+./bin/pizza bake --query "エニタイムフィットネス" --area "新宿"
 
-# 7. PI-ZZA を焼く
-./bin/pizza bake --query "エニタイムフィットネス" --area "東京都"
+# 6b. 判定を実 LLM で有効化する場合
+DELIVERY_MODE=live uv run python -m pizza_delivery &  # 別 shell 推奨
+./bin/pizza bake --query "エニタイムフィットネス" --area "新宿" --with-judge
+
+# 7. BI 可視化
+uv run streamlit run cmd/box-ui/app.py
 ```
+
+**`DELIVERY_MODE` の切替**:
+- `mock` (default) — 固定判定で疎通だけ確保。CI / 疎通テスト用
+- `live` — `.env` の `ANTHROPIC_API_KEY` (または OpenAI / Gemini) を使って browser-use + LLM で真判定
 
 ---
 
@@ -134,10 +143,27 @@ pizza/
 
 ---
 
+## 🚦 実装状況 (Phase 2 時点)
+
+| 機能 | 状態 | 実測 |
+|---|---|---|
+| M1 Seed — Places API (New) で店舗抽出 | 🟢 | 新宿 25 セル → 72 店舗 / 5.4s |
+| M2 Kitchen — Firecrawl REST client | 🟢 | unit test 9/9、live は Firecrawl 稼働時 |
+| M3 Delivery — browser-use + LLM 判定 | 🟢 | mock / live 切替 (`DELIVERY_MODE`) |
+| M4 Box — SQLite + CSV + Streamlit UI | 🟢 | `streamlit run cmd/box-ui/app.py` で可視化 |
+| Oven Pipeline.Bake | 🟢 | Seed → Kitchen → Judge → Box の in-process 統合 |
+| CLI `pizza bake` | 🟢 | `.env` 自動読込 + `--with-judge` でフル統合 |
+| Classification 精度 ≥90% | 🟡 | golden 10 サンプル、mock baseline 60%、Phase 3 で LLM 精度改善 |
+| E2E testcontainers-go | 🟡 | skeleton のみ |
+
+詳細な状況: [docs/phase1-audit.md](./docs/phase1-audit.md)
+
 ## 📚 ドキュメント
 
 - [ARCHITECTURE.md](./ARCHITECTURE.md) — 俯瞰図
 - [docs/architecture.md](./docs/architecture.md) — シーケンス図・SQLite スキーマ・gRPC 契約
+- [docs/phase0-audit.md](./docs/phase0-audit.md) — Phase 0 完了レポート
+- [docs/phase1-audit.md](./docs/phase1-audit.md) — Phase 1 完了 + 残件
 - [docs/tdd-workflow.md](./docs/tdd-workflow.md) — Red-Green-Refactor 実例（Go/Python）
 - [docs/fork-strategy.md](./docs/fork-strategy.md) — git subtree での upstream 同期
 - [docs/license-compliance.md](./docs/license-compliance.md) — AGPL Firecrawl の REST 越境隔離

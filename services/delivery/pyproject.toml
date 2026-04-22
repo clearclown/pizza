@@ -16,6 +16,9 @@ dependencies = [
     "pydantic>=2.8.0",
     "python-dotenv>=1.0.0",
     "structlog>=24.4.0",
+    "pyyaml>=6.0.3",
+    "pandas>=3.0.2",
+    "streamlit>=1.56.0",
 ]
 
 [dependency-groups]

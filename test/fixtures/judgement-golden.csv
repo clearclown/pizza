@@ -1,0 +1,11 @@
+place_id,brand,name,official_url,true_is_franchise,true_operator,notes
+ChIJ_sbux_shinjuku_east,スターバックス コーヒー,スターバックス コーヒー 新宿駅東口店,https://store.starbucks.co.jp/,false,,スターバックス コーヒー ジャパンは全店直営 (2026 時点)
+ChIJ_sbux_ginza,スターバックス コーヒー,スターバックス コーヒー 銀座松屋通り店,https://store.starbucks.co.jp/,false,,全店直営
+ChIJ_muji_shinjuku,無印良品,無印良品 新宿,https://www.muji.com/jp/,false,,良品計画の全店直営
+ChIJ_seveneleven_shinjuku,セブン-イレブン,セブン-イレブン 新宿東口店,https://www.sej.co.jp/,true,,セブン-イレブン・ジャパンは大多数が FC (エリアフランチャイズ)
+ChIJ_familymart_shinjuku,ファミリーマート,ファミリーマート 新宿南口店,https://www.family.co.jp/,true,,大多数が FC
+ChIJ_anytime_shinjuku6,エニタイムフィットネス,エニタイムフィットネス 新宿6丁目店,https://www.anytimefitness.co.jp/shinjuku6/,true,,24h ジム大手 FC (運営会社は各店舗で異なる)
+ChIJ_komeda_ikebukuro,コメダ珈琲店,コメダ珈琲店 池袋東口店,https://www.komeda.co.jp/,true,,大多数が FC (一部直営)
+ChIJ_hottomotto_shinjuku,ほっともっと,ほっともっと 新宿高田馬場店,https://www.hottomotto.com/,true,,プレナスは FC 加盟店多数
+ChIJ_uniqlo_shinjuku,ユニクロ,ユニクロ 新宿ビックロ店,https://www.uniqlo.com/jp/,false,,ファーストリテイリング 全店直営
+ChIJ_ikinari_shinjuku,いきなりステーキ,いきなりステーキ 新宿西口店,https://ikinaristeak.com/,true,,ペッパーフードサービスは FC 加盟店あり

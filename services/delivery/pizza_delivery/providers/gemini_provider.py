@@ -14,8 +14,16 @@ class GeminiProvider:
         return bool(os.getenv("GEMINI_API_KEY"))
 
     def make_llm(self, *, model: str | None = None, **kwargs: Any) -> Any:
-        _ = model, kwargs
-        raise NotImplementedError(
-            "GeminiProvider.make_llm is Phase 3 target; "
-            "will return browser_use.llm.ChatGoogle"
+        from browser_use.llm import ChatGoogle
+
+        api_key = os.getenv("GEMINI_API_KEY")
+        if not api_key:
+            raise RuntimeError(
+                "GeminiProvider.make_llm requires GEMINI_API_KEY env var"
+            )
+        chosen_model = model or os.getenv("GEMINI_MODEL") or self.default_model
+        return ChatGoogle(
+            model=chosen_model,
+            api_key=api_key,
+            **kwargs,
         )
