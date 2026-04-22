@@ -61,7 +61,7 @@ class JudgeResult(_message.Message):
     llm_provider: str
     llm_model: str
     evidence: _containers.RepeatedCompositeFieldContainer[Evidence]
-    def __init__(self, place_id: _Optional[str] = ..., is_franchise: _Optional[bool] = ..., operator_name: _Optional[str] = ..., store_count_estimate: _Optional[int] = ..., confidence: _Optional[float] = ..., llm_provider: _Optional[str] = ..., llm_model: _Optional[str] = ..., evidence: _Optional[_Iterable[_Union[Evidence, _Mapping]]] = ...) -> None: ...
+    def __init__(self, place_id: _Optional[str] = ..., is_franchise: bool = ..., operator_name: _Optional[str] = ..., store_count_estimate: _Optional[int] = ..., confidence: _Optional[float] = ..., llm_provider: _Optional[str] = ..., llm_model: _Optional[str] = ..., evidence: _Optional[_Iterable[_Union[Evidence, _Mapping]]] = ...) -> None: ...
 
 class Evidence(_message.Message):
     __slots__ = ("source_url", "snippet", "reason")

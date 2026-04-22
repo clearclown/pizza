@@ -16,12 +16,13 @@ plugins:
     opt:
       - paths=source_relative
       - require_unimplemented_servers=true
-  # Python message types
-  - remote: buf.build/protocolbuffers/python
+  # Python message types — pin to v31 to emit gencode matching protobuf 6.x
+  # (grpcio-tools currently requires protobuf<7)
+  - remote: buf.build/protocolbuffers/python:v31.1
     out: gen/python
   # Python gRPC server/client stubs
   - remote: buf.build/grpc/python
     out: gen/python
   # Python typing stubs
-  - remote: buf.build/protocolbuffers/pyi
+  - remote: buf.build/protocolbuffers/pyi:v31.1
     out: gen/python
