@@ -1,109 +1,163 @@
-// 🔴 Red phase test — Phase 1+ で Green 化する。
-//
-// bufconn で in-memory gRPC サーバを立て、Pipeline が Seed → Delivery の順で
-// 呼び出すかを検証する。docs/tdd-workflow.md 参照。
+// oven.Pipeline.Bake の in-process Green テスト。
+// in-process SearchBackend / KitchenBackend / JudgeBackend / BoxStore の
+// 各 fake を使ってパイプライン全体を検証する。
 package oven_test
 
 import (
 	"context"
-	"net"
 	"testing"
 
-	"github.com/stretchr/testify/require"
-	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/test/bufconn"
-
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
+	"github.com/clearclown/pizza/internal/box"
+	"github.com/clearclown/pizza/internal/grid"
 	"github.com/clearclown/pizza/internal/oven"
+	"github.com/stretchr/testify/assert"
+	"github.com/stretchr/testify/require"
 )
 
-const bufSize = 1024 * 1024
+// ─── fakes ──────────────────────────────────────────────────────────────
 
-// fakeSeed は Phase 0 Red テスト用の固定応答 Seed サーバ。
-type fakeSeed struct {
-	pb.UnimplementedSeedServiceServer
+type inProcSeed struct {
 	stores []*pb.Store
+	called int
 }
 
-func (s *fakeSeed) SearchStoresInGrid(
-	req *pb.SearchStoresInGridRequest,
-	stream pb.SeedService_SearchStoresInGridServer,
+func (s *inProcSeed) SearchStoresInGrid(
+	ctx context.Context,
+	_ string,
+	_ []grid.Cell,
+	emit func(*pb.Store) error,
 ) error {
-	_ = req
+	s.called++
 	for _, st := range s.stores {
-		if err := stream.Send(&pb.SearchStoresInGridResponse{Store: st}); err != nil {
+		if err := ctx.Err(); err != nil {
+			return err
+		}
+		if err := emit(st); err != nil {
 			return err
 		}
 	}
 	return nil
 }
 
-// fakeDelivery は固定判定結果を返す Delivery サーバ。
-type fakeDelivery struct {
-	pb.UnimplementedDeliveryServiceServer
+type fakeKitchen struct {
+	byURL map[string]string // url -> markdown
+	fails map[string]bool
 }
 
-func (fakeDelivery) JudgeFranchiseType(
-	_ context.Context,
-	req *pb.JudgeFranchiseTypeRequest,
-) (*pb.JudgeFranchiseTypeResponse, error) {
-	return &pb.JudgeFranchiseTypeResponse{
-		Result: &pb.JudgeResult{
-			PlaceId:            req.GetContext().GetStore().GetPlaceId(),
-			IsFranchise:        true,
-			OperatorName:       "テスト運営会社",
-			StoreCountEstimate: 25,
-			Confidence:         0.9,
-		},
-	}, nil
-}
-
-func dialBuf(t *testing.T, lis *bufconn.Listener) *grpc.ClientConn {
-	t.Helper()
-	conn, err := grpc.NewClient("passthrough:///bufnet",
-		grpc.WithContextDialer(func(_ context.Context, _ string) (net.Conn, error) {
-			return lis.Dial()
-		}),
-		grpc.WithTransportCredentials(insecure.NewCredentials()),
-	)
-	require.NoError(t, err)
-	t.Cleanup(func() { _ = conn.Close() })
-	return conn
-}
-
-func TestPipeline_Bake_executesSeedToDelivery(t *testing.T) {
-	t.Parallel()
-
-	// Seed server
-	seedLis := bufconn.Listen(bufSize)
-	seedSrv := grpc.NewServer()
-	pb.RegisterSeedServiceServer(seedSrv, &fakeSeed{
-		stores: []*pb.Store{
-			{PlaceId: "p1", Brand: "B", Name: "Store1"},
-			{PlaceId: "p2", Brand: "B", Name: "Store2"},
-		},
-	})
-	go func() { _ = seedSrv.Serve(seedLis) }()
-	t.Cleanup(seedSrv.Stop)
-
-	// Delivery server
-	delLis := bufconn.Listen(bufSize)
-	delSrv := grpc.NewServer()
-	pb.RegisterDeliveryServiceServer(delSrv, fakeDelivery{})
-	go func() { _ = delSrv.Serve(delLis) }()
-	t.Cleanup(delSrv.Stop)
-
-	p := &oven.Pipeline{
-		Seed:     pb.NewSeedServiceClient(dialBuf(t, seedLis)),
-		Delivery: pb.NewDeliveryServiceClient(dialBuf(t, delLis)),
-		// Kitchen / Box は Phase 1+ で mock 注入
+func (f *fakeKitchen) Scrape(_ context.Context, url string) (*pb.MarkdownDoc, error) {
+	if f.fails[url] {
+		return nil, assert.AnError
 	}
+	md, ok := f.byURL[url]
+	if !ok {
+		md = "(no content)"
+	}
+	return &pb.MarkdownDoc{Url: url, Markdown: md, Title: "T", Metadata: map[string]string{}}, nil
+}
 
-	err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{
-		Brand: "エニタイムフィットネス",
+type fakeJudge struct{}
+
+func (fakeJudge) JudgeFranchiseType(_ context.Context, req *pb.JudgeFranchiseTypeRequest) (*pb.JudgeFranchiseTypeResponse, error) {
+	st := req.GetContext().GetStore()
+	return &pb.JudgeFranchiseTypeResponse{Result: &pb.JudgeResult{
+		PlaceId:            st.GetPlaceId(),
+		IsFranchise:        true,
+		OperatorName:       "(mock) 株式会社ピザ運営",
+		StoreCountEstimate: 25,
+		Confidence:         0.42,
+		LlmProvider:        "mock",
+	}}, nil
+}
+
+// ─── tests ──────────────────────────────────────────────────────────────
+
+func tokyoSquarePolygon() *pb.Polygon {
+	return &pb.Polygon{
+		Vertices: []*pb.LatLng{
+			{Lat: 35.685, Lng: 139.690},
+			{Lat: 35.685, Lng: 139.700},
+			{Lat: 35.695, Lng: 139.700},
+			{Lat: 35.695, Lng: 139.690},
+		},
+	}
+}
+
+func newTestPipeline(t *testing.T, kitchen oven.KitchenBackend, judge oven.JudgeBackend) (*oven.Pipeline, *box.Store) {
+	t.Helper()
+	b, err := box.Open("")
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = b.Close() })
+	return &oven.Pipeline{
+		Seed: &inProcSeed{stores: []*pb.Store{
+			{PlaceId: "p1", Brand: "B", Name: "S1", OfficialUrl: "https://example.com/1", Location: &pb.LatLng{}},
+			{PlaceId: "p2", Brand: "B", Name: "S2", OfficialUrl: "https://example.com/2", Location: &pb.LatLng{}},
+			{PlaceId: "p3", Brand: "B", Name: "S3", Location: &pb.LatLng{}}, // URL なし
+		}},
+		Kitchen: kitchen,
+		Judge:   judge,
+		Box:     b,
+	}, b
+}
+
+func TestPipeline_Bake_seedsStoresIntoBoxAndExportsCSV(t *testing.T) {
+	t.Parallel()
+	p, b := newTestPipeline(t, nil, nil)
+	report, err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{
+		Brand:   "B",
+		Polygon: tokyoSquarePolygon(),
+		CellKm:  1.0,
 	})
-	// Phase 0: ErrNotImplemented を期待。Phase 1 以降でこの assertion を差し替える。
-	require.ErrorIs(t, err, oven.ErrNotImplemented,
-		"Phase 0 baseline: Bake must return ErrNotImplemented until Phase 1+ Green")
+	require.NoError(t, err)
+	assert.Equal(t, 3, report.StoresFound)
+	assert.Equal(t, 0, report.MarkdownsFetched)
+	assert.Equal(t, 0, report.JudgementsMade)
+	assert.NotEmpty(t, report.CSV, "CSV should be exported")
+
+	n, err := b.CountStores(context.Background(), "B")
+	require.NoError(t, err)
+	assert.Equal(t, 3, n)
+}
+
+func TestPipeline_Bake_runsKitchenForStoresWithURL(t *testing.T) {
+	t.Parallel()
+	kitchen := &fakeKitchen{byURL: map[string]string{
+		"https://example.com/1": "# store1",
+		"https://example.com/2": "# store2",
+	}}
+	p, _ := newTestPipeline(t, kitchen, nil)
+	report, err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{
+		Brand:   "B",
+		Polygon: tokyoSquarePolygon(),
+		CellKm:  1.0,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, 3, report.StoresFound)
+	assert.Equal(t, 2, report.MarkdownsFetched,
+		"URL なしの p3 は kitchen 対象外")
+}
+
+func TestPipeline_Bake_invokesJudgeForEachStore(t *testing.T) {
+	t.Parallel()
+	p, _ := newTestPipeline(t, nil, fakeJudge{})
+	report, err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{
+		Brand:   "B",
+		Polygon: tokyoSquarePolygon(),
+		CellKm:  1.0,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, 3, report.JudgementsMade)
+}
+
+func TestPipeline_Bake_requiresBrand(t *testing.T) {
+	t.Parallel()
+	p, _ := newTestPipeline(t, nil, nil)
+	_, err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{Polygon: tokyoSquarePolygon()})
+	assert.ErrorContains(t, err, "brand")
+}
+
+func TestPipeline_Bake_requiresBackends(t *testing.T) {
+	t.Parallel()
+	_, err := (&oven.Pipeline{}).Bake(context.Background(), &pb.SearchStoresInGridRequest{Brand: "b"})
+	assert.ErrorContains(t, err, "Seed")
 }
