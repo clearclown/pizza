@@ -25,7 +25,7 @@ import asyncio
 import re
 from dataclasses import dataclass, field
 from typing import Any, Awaitable, Callable, Protocol
-from urllib.parse import urljoin, urlparse
+from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
 
 import httpx
 from bs4 import BeautifulSoup
@@ -133,9 +133,21 @@ _COMPANY_RE_SUFFIX = re.compile(
 
 
 def _trim_at_particles(body: str) -> str:
-    """body の先頭から、助詞や句読点の直前までを返す。"""
+    """body の先頭から、助詞・句読点・英語 boilerplate の直前までを返す。"""
     body = body.rstrip()
-    for p in ["、", "。", "の", "が", "を", "は", "で", "と", "も"]:
+    # Japanese particles
+    jp_stops = ["、", "。", "の", "が", "を", "は", "で", "と", "も"]
+    # English boilerplate in footer/copyright
+    en_stops = [
+        " All", " all",
+        "©", " ©", "(c)", "(C)",
+        " Copyright", " copyright",
+        " Rights", " rights",
+        " Inc", " Inc.",
+        " Ltd", " Ltd.",
+        " Co.", " Co ",
+    ]
+    for p in jp_stops + en_stops:
         i = body.find(p)
         if i >= 0:
             body = body[:i]
