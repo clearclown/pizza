@@ -51,10 +51,63 @@ CREATE INDEX IF NOT EXISTS idx_judgements_operator ON judgements(operator_name);
 CREATE INDEX IF NOT EXISTS idx_judgements_franchisee ON judgements(franchisee_name);
 CREATE INDEX IF NOT EXISTS idx_judgements_optype ON judgements(operation_type);
 
--- mega_franchisees view (Phase 4): franchisee_name で集計
--- Phase 2 互換の operator_name ベースにフォールバックするため COALESCE を使う
+-- ────────────────────────────────────────────────────────────────────
+-- Phase 5: Research Pipeline (店舗単位 + 芋づる式)
+-- ────────────────────────────────────────────────────────────────────
+
+-- operator_stores: 確定した (operator, place_id) のマップ
+-- - 1 operator が複数 store を運営する関係を表現
+-- - メガジー判定の正しいソース (judgements より上位)
+CREATE TABLE IF NOT EXISTS operator_stores (
+  operator_name    TEXT NOT NULL,
+  place_id         TEXT NOT NULL,
+  brand            TEXT,
+  operator_type    TEXT,              -- direct | franchisee | unknown
+  confidence       REAL DEFAULT 0.0,
+  discovered_via   TEXT DEFAULT 'per_store',  -- per_store | chain_discovery | manual
+  confirmed_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (operator_name, place_id),
+  FOREIGN KEY (place_id) REFERENCES stores(place_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_operator_stores_name  ON operator_stores(operator_name);
+CREATE INDEX IF NOT EXISTS idx_operator_stores_brand ON operator_stores(brand);
+CREATE INDEX IF NOT EXISTS idx_operator_stores_via   ON operator_stores(discovered_via);
+
+-- store_evidence: 個別店舗について集めた raw 証拠 (URL + snippet)
+-- - 判定の再現性・人間レビューのため必須
+CREATE TABLE IF NOT EXISTS store_evidence (
+  id            INTEGER PRIMARY KEY AUTOINCREMENT,
+  place_id      TEXT NOT NULL,
+  evidence_url  TEXT NOT NULL,
+  snippet       TEXT NOT NULL,
+  reason        TEXT,                 -- operator_keyword | direct_keyword | metadata
+  keyword       TEXT,
+  collected_at  TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (place_id) REFERENCES stores(place_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_store_evidence_place ON store_evidence(place_id);
+
+-- mega_franchisees view (Phase 5): operator_stores ベースで集計
+-- - 旧: judgements + franchisee_name で集計 (推論混入の可能性)
+-- - 新: operator_stores の確定データのみで集計 (evidence backed)
 DROP VIEW IF EXISTS mega_franchisees;
 CREATE VIEW mega_franchisees AS
+  SELECT
+    operator_name,
+    COUNT(DISTINCT place_id)                 AS store_count,
+    AVG(confidence)                          AS avg_confidence,
+    GROUP_CONCAT(DISTINCT brand)             AS brands,
+    GROUP_CONCAT(DISTINCT discovered_via)    AS discovered_via_methods,
+    MIN(operator_type)                       AS operator_type
+  FROM operator_stores
+  WHERE operator_name IS NOT NULL AND operator_name != ''
+  GROUP BY operator_name;
+
+-- legacy 用 (Phase 4 compatible): judgements ベースの view も残す
+DROP VIEW IF EXISTS mega_franchisees_legacy;
+CREATE VIEW mega_franchisees_legacy AS
   SELECT
     COALESCE(NULLIF(franchisee_name, ''), operator_name) AS operator_name,
     COUNT(*)        AS store_count,
@@ -62,7 +115,7 @@ CREATE VIEW mega_franchisees AS
   FROM judgements
   WHERE (
     operation_type = 'franchisee'
-    OR (operation_type IS NULL AND is_franchise = 1)  -- 後方互換
+    OR (operation_type IS NULL AND is_franchise = 1)
   )
   AND COALESCE(NULLIF(franchisee_name, ''), operator_name) IS NOT NULL
   AND COALESCE(NULLIF(franchisee_name, ''), operator_name) != ''

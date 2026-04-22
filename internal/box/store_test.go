@@ -163,3 +163,144 @@ func TestStore_roundTripThroughFile(t *testing.T) {
 	n, _ := s2.CountStores(context.Background(), "")
 	assert.Equal(t, 1, n)
 }
+
+// ─── Phase 5: operator_stores + store_evidence tests ────────────────
+
+func TestStore_UpsertOperatorStore_insertAndUpdate(t *testing.T) {
+	t.Parallel()
+	s, _ := box.Open("")
+	defer s.Close()
+	ctx := context.Background()
+	require.NoError(t, s.UpsertStore(ctx, sampleStore("p1", "B")))
+
+	// insert
+	require.NoError(t, s.UpsertOperatorStore(ctx, &box.OperatorStoreInput{
+		OperatorName:  "株式会社AFJ",
+		PlaceID:       "p1",
+		Brand:         "B",
+		OperatorType:  "franchisee",
+		Confidence:    0.85,
+		DiscoveredVia: "per_store",
+	}))
+	n, err := s.CountOperatorStores(ctx, "株式会社AFJ")
+	require.NoError(t, err)
+	assert.Equal(t, 1, n)
+
+	// update (higher confidence wins)
+	require.NoError(t, s.UpsertOperatorStore(ctx, &box.OperatorStoreInput{
+		OperatorName:  "株式会社AFJ",
+		PlaceID:       "p1",
+		Brand:         "B",
+		OperatorType:  "franchisee",
+		Confidence:    0.95,
+		DiscoveredVia: "chain_discovery",
+	}))
+	// still 1 row
+	n2, _ := s.CountOperatorStores(ctx, "株式会社AFJ")
+	assert.Equal(t, 1, n2)
+}
+
+func TestStore_UpsertOperatorStore_rejectsEmpty(t *testing.T) {
+	t.Parallel()
+	s, _ := box.Open("")
+	defer s.Close()
+	err := s.UpsertOperatorStore(context.Background(), &box.OperatorStoreInput{})
+	assert.ErrorContains(t, err, "requires OperatorName and PlaceID")
+}
+
+func TestStore_QueryStoresByOperator_returnsAllForOperator(t *testing.T) {
+	t.Parallel()
+	s, _ := box.Open("")
+	defer s.Close()
+	ctx := context.Background()
+
+	// 2 店舗を AFJ に紐付け
+	for _, pid := range []string{"p1", "p2"} {
+		require.NoError(t, s.UpsertStore(ctx, sampleStore(pid, "エニタイム")))
+		require.NoError(t, s.UpsertOperatorStore(ctx, &box.OperatorStoreInput{
+			OperatorName:  "株式会社AFJ Project",
+			PlaceID:       pid,
+			Brand:         "エニタイム",
+			OperatorType:  "franchisee",
+			Confidence:    0.9,
+			DiscoveredVia: "per_store",
+		}))
+	}
+	// 1 店舗を別 operator に紐付け
+	require.NoError(t, s.UpsertStore(ctx, sampleStore("p3", "エニタイム")))
+	require.NoError(t, s.UpsertOperatorStore(ctx, &box.OperatorStoreInput{
+		OperatorName:  "株式会社Other",
+		PlaceID:       "p3",
+		Brand:         "エニタイム",
+		OperatorType:  "franchisee",
+		Confidence:    0.8,
+		DiscoveredVia: "per_store",
+	}))
+
+	rows, err := s.QueryStoresByOperator(ctx, "株式会社AFJ Project")
+	require.NoError(t, err)
+	require.Len(t, rows, 2)
+	ids := []string{rows[0].PlaceID, rows[1].PlaceID}
+	assert.ElementsMatch(t, []string{"p1", "p2"}, ids)
+}
+
+func TestStore_InsertStoreEvidence_dedupe(t *testing.T) {
+	t.Parallel()
+	s, _ := box.Open("")
+	defer s.Close()
+	ctx := context.Background()
+	require.NoError(t, s.UpsertStore(ctx, sampleStore("p1", "B")))
+
+	in := &box.StoreEvidenceInput{
+		PlaceID:     "p1",
+		EvidenceURL: "https://example.com/about",
+		Snippet:     "運営会社: 株式会社テスト",
+		Reason:      "operator_keyword",
+		Keyword:     "運営会社",
+	}
+	require.NoError(t, s.InsertStoreEvidence(ctx, in))
+	// 同一 snippet prefix → 重複として insert されない
+	require.NoError(t, s.InsertStoreEvidence(ctx, in))
+
+	var n int
+	err := s.InsertStoreEvidence(ctx, &box.StoreEvidenceInput{
+		PlaceID: "", EvidenceURL: "x",
+	})
+	assert.ErrorContains(t, err, "requires PlaceID")
+	_ = n
+}
+
+func TestStore_MegaFranchiseesView_usesOperatorStores(t *testing.T) {
+	t.Parallel()
+	s, _ := box.Open("")
+	defer s.Close()
+	ctx := context.Background()
+
+	// X が 3 店舗、Y が 1 店舗 を運営
+	stores := []struct {
+		operator string
+		placeID  string
+	}{
+		{"株式会社X", "p1"},
+		{"株式会社X", "p2"},
+		{"株式会社X", "p3"},
+		{"株式会社Y", "p4"},
+	}
+	for _, st := range stores {
+		require.NoError(t, s.UpsertStore(ctx, sampleStore(st.placeID, "B")))
+		require.NoError(t, s.UpsertOperatorStore(ctx, &box.OperatorStoreInput{
+			OperatorName:  st.operator,
+			PlaceID:       st.placeID,
+			Brand:         "B",
+			OperatorType:  "franchisee",
+			Confidence:    0.9,
+			DiscoveredVia: "per_store",
+		}))
+	}
+
+	mega, err := s.QueryMegaFranchisees(ctx, 3)
+	require.NoError(t, err)
+	require.Len(t, mega, 1)
+	assert.Equal(t, "株式会社X", mega[0].GetOperatorName())
+	assert.Equal(t, int32(3), mega[0].GetStoreCount())
+}

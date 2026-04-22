@@ -171,6 +171,29 @@ func (s *Store) UpsertJudgement(ctx context.Context, j *pb.JudgeResult) error {
 	if err != nil {
 		return fmt.Errorf("box: upsert judgement %s: %w", j.GetPlaceId(), err)
 	}
+
+	// Phase 5 bridge: operation_type=franchisee で運営会社名があれば
+	// operator_stores にも自動で記録 (legacy テストとの互換)。
+	// ここでの operator 名は franchisee_name を優先、なければ operator_name。
+	if opType == "franchisee" || opType == "direct" {
+		opName := j.GetFranchiseeName()
+		if opName == "" && opType == "direct" {
+			opName = j.GetFranchisorName()
+		}
+		if opName == "" {
+			opName = j.GetOperatorName()
+		}
+		if opName != "" {
+			_ = s.UpsertOperatorStore(ctx, &OperatorStoreInput{
+				OperatorName:  opName,
+				PlaceID:       j.GetPlaceId(),
+				Brand:         "",
+				OperatorType:  opType,
+				Confidence:    j.GetConfidence(),
+				DiscoveredVia: "judgement_bridge",
+			})
+		}
+	}
 	return nil
 }
 
@@ -205,6 +228,133 @@ func (s *Store) QueryMegaFranchisees(ctx context.Context, minCount int) ([]*pb.M
 		})
 	}
 	return out, rows.Err()
+}
+
+// ─── Phase 5: Research Pipeline (operator-first) ─────────────────────
+
+// OperatorStoreInput は operator_stores への upsert 入力。
+type OperatorStoreInput struct {
+	OperatorName   string
+	PlaceID        string
+	Brand          string
+	OperatorType   string  // direct | franchisee | unknown
+	Confidence     float64
+	DiscoveredVia  string  // per_store | chain_discovery | manual
+}
+
+// UpsertOperatorStore は確定した (operator, store) ペアを記録する。
+// 同 operator で同 place_id は PRIMARY KEY 重複として更新される
+// (より高い confidence で上書き)。
+func (s *Store) UpsertOperatorStore(ctx context.Context, in *OperatorStoreInput) error {
+	if in == nil || in.OperatorName == "" || in.PlaceID == "" {
+		return fmt.Errorf("box: UpsertOperatorStore requires OperatorName and PlaceID")
+	}
+	via := in.DiscoveredVia
+	if via == "" {
+		via = "per_store"
+	}
+	_, err := s.db.ExecContext(ctx, `
+		INSERT INTO operator_stores
+		  (operator_name, place_id, brand, operator_type, confidence, discovered_via)
+		VALUES (?, ?, ?, ?, ?, ?)
+		ON CONFLICT(operator_name, place_id) DO UPDATE SET
+		  brand          = COALESCE(excluded.brand, operator_stores.brand),
+		  operator_type  = COALESCE(NULLIF(excluded.operator_type, ''), operator_stores.operator_type),
+		  confidence     = MAX(excluded.confidence, operator_stores.confidence),
+		  discovered_via = COALESCE(NULLIF(excluded.discovered_via, ''), operator_stores.discovered_via),
+		  confirmed_at   = CURRENT_TIMESTAMP
+	`, in.OperatorName, in.PlaceID, in.Brand, in.OperatorType, in.Confidence, via)
+	if err != nil {
+		return fmt.Errorf("box: upsert operator_stores: %w", err)
+	}
+	return nil
+}
+
+// StoreEvidenceInput は store_evidence insert 入力。
+type StoreEvidenceInput struct {
+	PlaceID     string
+	EvidenceURL string
+	Snippet     string
+	Reason      string
+	Keyword     string
+}
+
+// InsertStoreEvidence は 1 件の evidence を記録する。
+// 同一 (place_id, evidence_url, snippet[:200]) の重複は insert しない (冪等)。
+func (s *Store) InsertStoreEvidence(ctx context.Context, in *StoreEvidenceInput) error {
+	if in == nil || in.PlaceID == "" || in.EvidenceURL == "" {
+		return fmt.Errorf("box: InsertStoreEvidence requires PlaceID and EvidenceURL")
+	}
+	// 重複チェック
+	var n int
+	sig := in.Snippet
+	if len(sig) > 200 {
+		sig = sig[:200]
+	}
+	err := s.db.QueryRowContext(ctx, `
+		SELECT COUNT(*) FROM store_evidence
+		WHERE place_id = ? AND evidence_url = ? AND SUBSTR(snippet, 1, 200) = ?
+	`, in.PlaceID, in.EvidenceURL, sig).Scan(&n)
+	if err != nil {
+		return fmt.Errorf("box: check evidence dup: %w", err)
+	}
+	if n > 0 {
+		return nil
+	}
+	_, err = s.db.ExecContext(ctx, `
+		INSERT INTO store_evidence (place_id, evidence_url, snippet, reason, keyword)
+		VALUES (?, ?, ?, ?, ?)
+	`, in.PlaceID, in.EvidenceURL, in.Snippet, in.Reason, in.Keyword)
+	if err != nil {
+		return fmt.Errorf("box: insert evidence: %w", err)
+	}
+	return nil
+}
+
+// OperatorStoreRow は QueryStoresByOperator の 1 行。
+type OperatorStoreRow struct {
+	PlaceID       string
+	Brand         string
+	OperatorType  string
+	Confidence    float64
+	DiscoveredVia string
+}
+
+// QueryStoresByOperator は指定 operator が運営する店舗一覧を返す。
+func (s *Store) QueryStoresByOperator(ctx context.Context, operator string) ([]OperatorStoreRow, error) {
+	rows, err := s.db.QueryContext(ctx, `
+		SELECT place_id, brand, operator_type, confidence, discovered_via
+		FROM operator_stores
+		WHERE operator_name = ?
+		ORDER BY confirmed_at
+	`, operator)
+	if err != nil {
+		return nil, fmt.Errorf("box: query stores by operator: %w", err)
+	}
+	defer rows.Close()
+	var out []OperatorStoreRow
+	for rows.Next() {
+		var r OperatorStoreRow
+		if err := rows.Scan(&r.PlaceID, &r.Brand, &r.OperatorType, &r.Confidence, &r.DiscoveredVia); err != nil {
+			return nil, err
+		}
+		out = append(out, r)
+	}
+	return out, rows.Err()
+}
+
+// CountOperatorStores は operator_stores 全件数を返す (debug/metrics 用)。
+func (s *Store) CountOperatorStores(ctx context.Context, operator string) (int, error) {
+	var n int
+	var err error
+	if operator == "" {
+		err = s.db.QueryRowContext(ctx, `SELECT COUNT(*) FROM operator_stores`).Scan(&n)
+	} else {
+		err = s.db.QueryRowContext(ctx,
+			`SELECT COUNT(*) FROM operator_stores WHERE operator_name = ?`,
+			operator).Scan(&n)
+	}
+	return n, err
 }
 
 // CountStores は指定ブランドの店舗数を返す (brand="" で全件)。
