@@ -1,11 +1,9 @@
-"""Anthropic Claude provider.
-
-Phase 0: スタブ。Phase 3 で anthropic SDK を使って chat を実装する。
-"""
+"""Anthropic Claude provider — browser-use ChatAnthropic をラップ。"""
 
 from __future__ import annotations
 
 import os
+from typing import Any
 
 
 class AnthropicProvider:
@@ -15,6 +13,10 @@ class AnthropicProvider:
     def ready(self) -> bool:
         return bool(os.getenv("ANTHROPIC_API_KEY"))
 
-    def chat(self, *, system: str, user: str, model: str | None = None) -> str:
-        _ = system, user, model
-        raise NotImplementedError("AnthropicProvider.chat is Phase 3 target")
+    def make_llm(self, *, model: str | None = None, **kwargs: Any) -> Any:
+        """browser_use.llm.ChatAnthropic を返す (Phase 3 で活性化)。"""
+        _ = model, kwargs
+        raise NotImplementedError(
+            "AnthropicProvider.make_llm is Phase 3 target; "
+            "will return browser_use.llm.ChatAnthropic"
+        )

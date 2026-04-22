@@ -1,7 +1,7 @@
 """🔴 Red-phase tests for pizza_delivery.providers.registry.
 
-Phase 0 時点ではスタブ実装だが、registry レベルの構造は最初から正しい。
-本テストは Green で通る（registry は実装済）。agent 層以降の Red は別ファイル。
+registry レベルの動作は Phase 0 から Green (構造は完成)。
+make_llm 実装は各 provider の Phase 3 Red ファイル参照。
 """
 
 from __future__ import annotations
@@ -34,29 +34,27 @@ def test_register_custom_provider() -> None:
         def ready(self) -> bool:
             return True
 
-        def chat(self, *, system: str, user: str, model: str | None = None) -> str:
-            return f"fake:{user}"
+        def make_llm(self, *, model: str | None = None, **_: object) -> str:
+            return f"fake-llm:{model or self.default_model}"
 
     register_provider("fake", FakeProvider)
     try:
         p = get_provider("fake")
         assert p.name == "fake"
-        assert p.chat(system="", user="hi") == "fake:hi"
+        assert p.make_llm() == "fake-llm:fake-1"
+        assert p.make_llm(model="fake-2") == "fake-llm:fake-2"
     finally:
-        # clean up to avoid leaking into other tests
         from pizza_delivery.providers.registry import _PROVIDERS
 
         _PROVIDERS.pop("fake", None)
 
 
 def test_provider_protocol_conformance() -> None:
-    """各 provider が LLMProvider Protocol を満たすこと。"""
+    """各 provider が LLMProvider Protocol を満たすこと (runtime_checkable)。"""
     for name in available_providers():
         p = get_provider(name)
-        # Protocol 適合の実質チェック
-        assert hasattr(p, "name")
-        assert hasattr(p, "default_model")
-        assert callable(getattr(p, "ready", None))
-        assert callable(getattr(p, "chat", None))
-        # 型的にも LLMProvider として使えること
-        _: LLMProvider = p  # noqa: F841
+        # runtime_checkable Protocol による構造的型チェック
+        assert isinstance(p, LLMProvider), f"{name} does not satisfy LLMProvider"
+        assert hasattr(p, "name") and hasattr(p, "default_model")
+        assert callable(getattr(p, "ready"))
+        assert callable(getattr(p, "make_llm"))

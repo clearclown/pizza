@@ -1,8 +1,9 @@
-"""Google Gemini provider. Phase 0: stub."""
+"""Google Gemini provider — browser-use ChatGoogle をラップ。"""
 
 from __future__ import annotations
 
 import os
+from typing import Any
 
 
 class GeminiProvider:
@@ -12,6 +13,9 @@ class GeminiProvider:
     def ready(self) -> bool:
         return bool(os.getenv("GEMINI_API_KEY"))
 
-    def chat(self, *, system: str, user: str, model: str | None = None) -> str:
-        _ = system, user, model
-        raise NotImplementedError("GeminiProvider.chat is Phase 3 target")
+    def make_llm(self, *, model: str | None = None, **kwargs: Any) -> Any:
+        _ = model, kwargs
+        raise NotImplementedError(
+            "GeminiProvider.make_llm is Phase 3 target; "
+            "will return browser_use.llm.ChatGoogle"
+        )
