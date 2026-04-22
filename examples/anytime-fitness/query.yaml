@@ -1,0 +1,11 @@
+# Example query: エニタイムフィットネス × 東京都
+brand: "エニタイムフィットネス"
+area:
+  prefecture: "東京都"
+grid:
+  cell_km: 1.0
+judgement:
+  mega_threshold: 20
+llm:
+  provider: anthropic
+  model: claude-opus-4-7
