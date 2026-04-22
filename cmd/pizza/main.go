@@ -31,6 +31,8 @@ import (
 	"github.com/clearclown/pizza/internal/toppings"
 
 	"github.com/joho/godotenv"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 )
 
 func main() {
@@ -94,6 +96,7 @@ func cmdBake(args []string) error {
 	outPath := fs.String("out", "", "CSV output path (auto-named if empty)")
 	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
 	noKitchen := fs.Bool("no-kitchen", false, "skip Firecrawl Markdown fetch")
+	withJudge := fs.Bool("with-judge", false, "connect to delivery-service gRPC and run judgements")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -143,11 +146,25 @@ func cmdBake(args []string) error {
 	}
 	defer store.Close()
 
+	// M3 Delivery backend (optional, --with-judge で有効化)
+	var judge oven.JudgeBackend
+	if *withJudge {
+		conn, jerr := grpc.NewClient(cfg.DeliveryServiceAddr,
+			grpc.WithTransportCredentials(insecure.NewCredentials()),
+		)
+		if jerr != nil {
+			log.Printf("⚠️  judge disabled: %v", jerr)
+		} else {
+			defer conn.Close()
+			judge = &grpcJudge{client: pb.NewDeliveryServiceClient(conn)}
+		}
+	}
+
 	// Pipeline
 	p := &oven.Pipeline{
 		Seed:    seed,
 		Kitchen: kitchen,
-		Judge:   nil, // Phase 3 で差し替え
+		Judge:   judge,
 		Box:     store,
 		Workers: cfg.MaxConcurrency,
 	}
@@ -157,6 +174,11 @@ func cmdBake(args []string) error {
 		fmt.Printf("   Kitchen enabled (%s)\n", cfg.FirecrawlMode)
 	} else {
 		fmt.Printf("   Kitchen disabled (skip Markdown fetch)\n")
+	}
+	if judge != nil {
+		fmt.Printf("   Judge enabled (%s)\n", cfg.DeliveryServiceAddr)
+	} else {
+		fmt.Printf("   Judge disabled (no --with-judge)\n")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
@@ -192,4 +214,13 @@ func cmdBake(args []string) error {
 	fmt.Printf("   CSV:         %s\n", *outPath)
 	fmt.Printf("   DB:          %s\n", *dbPath)
 	return nil
+}
+
+// grpcJudge は oven.JudgeBackend を gRPC client で満たす adapter。
+type grpcJudge struct {
+	client pb.DeliveryServiceClient
+}
+
+func (g *grpcJudge) JudgeFranchiseType(ctx context.Context, req *pb.JudgeFranchiseTypeRequest) (*pb.JudgeFranchiseTypeResponse, error) {
+	return g.client.JudgeFranchiseType(ctx, req)
 }
