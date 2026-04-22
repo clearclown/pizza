@@ -2,10 +2,30 @@ place_id,brand,name,official_url,true_is_franchise,true_operator,notes
 ChIJ_sbux_shinjuku_east,スターバックス コーヒー,スターバックス コーヒー 新宿駅東口店,https://store.starbucks.co.jp/,false,,スターバックス コーヒー ジャパンは全店直営 (2026 時点)
 ChIJ_sbux_ginza,スターバックス コーヒー,スターバックス コーヒー 銀座松屋通り店,https://store.starbucks.co.jp/,false,,全店直営
 ChIJ_muji_shinjuku,無印良品,無印良品 新宿,https://www.muji.com/jp/,false,,良品計画の全店直営
-ChIJ_seveneleven_shinjuku,セブン-イレブン,セブン-イレブン 新宿東口店,https://www.sej.co.jp/,true,,セブン-イレブン・ジャパンは大多数が FC (エリアフランチャイズ)
-ChIJ_familymart_shinjuku,ファミリーマート,ファミリーマート 新宿南口店,https://www.family.co.jp/,true,,大多数が FC
-ChIJ_anytime_shinjuku6,エニタイムフィットネス,エニタイムフィットネス 新宿6丁目店,https://www.anytimefitness.co.jp/shinjuku6/,true,,24h ジム大手 FC (運営会社は各店舗で異なる)
-ChIJ_komeda_ikebukuro,コメダ珈琲店,コメダ珈琲店 池袋東口店,https://www.komeda.co.jp/,true,,大多数が FC (一部直営)
-ChIJ_hottomotto_shinjuku,ほっともっと,ほっともっと 新宿高田馬場店,https://www.hottomotto.com/,true,,プレナスは FC 加盟店多数
 ChIJ_uniqlo_shinjuku,ユニクロ,ユニクロ 新宿ビックロ店,https://www.uniqlo.com/jp/,false,,ファーストリテイリング 全店直営
+ChIJ_gu_shibuya,ジーユー,ジーユー 渋谷店,https://www.gu-global.com/jp/,false,,ファーストリテイリング全店直営
+ChIJ_zara_ginza,ザラ,ZARA 銀座,https://www.zara.com/jp/,false,,Inditex 全店直営
+ChIJ_hm_shibuya,H&M,H&M 渋谷店,https://www2.hm.com/ja_jp/,false,,H&M 全店直営
+ChIJ_ito_yokado_shinjuku,イトーヨーカドー,イトーヨーカドー 新宿花園店,https://www.itoyokado.co.jp/,false,,セブン&アイ直営大型 GMS
+ChIJ_life_shinjuku,ライフ,ライフ 新宿店,https://www.lifecorp.jp/,false,,ライフコーポレーション直営
+ChIJ_maruetsu_shinjuku,マルエツ,マルエツ 新宿店,https://www.maruetsu.co.jp/,false,,マルエツ直営スーパー
+ChIJ_seveneleven_shinjuku,セブン-イレブン,セブン-イレブン 新宿東口店,https://www.sej.co.jp/,true,,セブン-イレブン・ジャパンは大多数が FC (エリアフランチャイズ)
+ChIJ_familymart_shinjuku,ファミリーマート,ファミリーマート 新宿南口店,https://www.family.co.jp/,true,,ファミマも大多数が FC
+ChIJ_lawson_shinjuku,ローソン,ローソン 新宿駅南口店,https://www.lawson.co.jp/,true,,ローソンも大多数が FC
+ChIJ_anytime_shinjuku6,エニタイムフィットネス,エニタイムフィットネス 新宿6丁目店,https://www.anytimefitness.co.jp/shinjuku6/,true,,24h ジム大手 FC (運営会社は各店舗で異なる)
+ChIJ_anytime_ikebukuro,エニタイムフィットネス,エニタイムフィットネス 池袋西口店,https://www.anytimefitness.co.jp/ikebukuro-west/,true,,同 FC
+ChIJ_komeda_ikebukuro,コメダ珈琲店,コメダ珈琲店 池袋東口店,https://www.komeda.co.jp/,true,,大多数が FC (一部直営)
+ChIJ_komeda_shinjuku,コメダ珈琲店,コメダ珈琲店 新宿西口店,https://www.komeda.co.jp/,true,,FC 主体
+ChIJ_hottomotto_shinjuku,ほっともっと,ほっともっと 新宿高田馬場店,https://www.hottomotto.com/,true,,プレナスは FC 加盟店多数
+ChIJ_hottomotto_shibuya,ほっともっと,ほっともっと 渋谷道玄坂店,https://www.hottomotto.com/,true,,同
 ChIJ_ikinari_shinjuku,いきなりステーキ,いきなりステーキ 新宿西口店,https://ikinaristeak.com/,true,,ペッパーフードサービスは FC 加盟店あり
+ChIJ_gusto_shinjuku,ガスト,ガスト 新宿三丁目店,https://www.skylark.co.jp/gusto/,false,,すかいらーくグループ直営
+ChIJ_saizeriya_shinjuku,サイゼリヤ,サイゼリヤ 新宿センタービル店,https://www.saizeriya.co.jp/,false,,サイゼリヤは全店直営
+ChIJ_mcdonalds_shinjuku,マクドナルド,マクドナルド 新宿南口店,https://www.mcdonalds.co.jp/,true,,日本マクドナルドは直営と FC 混在 (~70% 直営)
+ChIJ_yoshinoya_shinjuku,吉野家,吉野家 新宿西口店,https://www.yoshinoya.com/,true,,吉野家も直営 FC 混在 (一部 FC)
+ChIJ_mosburger_shinjuku,モスバーガー,モスバーガー 新宿東口店,https://www.mos.jp/,true,,モスバーガー FC 多数
+ChIJ_doutor_shinjuku,ドトールコーヒー,ドトールコーヒー 新宿南口店,https://www.doutor.co.jp/,true,,ドトールは FC 多め
+ChIJ_matsuya_shinjuku,松屋,松屋 新宿西口店,https://www.matsuyafoods.co.jp/,false,,松屋フーズ直営
+ChIJ_royalhost_shinjuku,ロイヤルホスト,ロイヤルホスト 新宿靖国通り店,https://www.royalhost.jp/,false,,ロイヤルホスト直営が主
+ChIJ_bamiyan_shinjuku,バーミヤン,バーミヤン 新宿三丁目店,https://www.skylark.co.jp/bamiyan/,false,,すかいらーくグループ直営
+ChIJ_karaoke_bigecho_shinjuku,ビッグエコー,ビッグエコー 新宿東口店,https://big-echo.jp/,true,,第一興商 FC 多い
