@@ -1,0 +1,27 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/clearclown/pizza/gen/go
+plugins:
+  # Go message types
+  - remote: buf.build/protocolbuffers/go
+    out: gen/go
+    opt:
+      - paths=source_relative
+  # Go gRPC server/client stubs
+  - remote: buf.build/grpc/go
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=true
+  # Python message types
+  - remote: buf.build/protocolbuffers/python
+    out: gen/python
+  # Python gRPC server/client stubs
+  - remote: buf.build/grpc/python
+    out: gen/python
+  # Python typing stubs
+  - remote: buf.build/protocolbuffers/pyi
+    out: gen/python

@@ -1,0 +1,49 @@
+// M4 Box Module — BI / 集計クエリ
+syntax = "proto3";
+
+package pizza.v1;
+
+service BIService {
+  // QueryMegaFranchisees は 20 店舗以上を運営するメガジーをストリームで返す。
+  rpc QueryMegaFranchisees(QueryMegaFranchiseesRequest) returns (stream QueryMegaFranchiseesResponse);
+
+  // ExportCSV はフィルタ結果を CSV バイト列で返す。
+  rpc ExportCSV(ExportCSVRequest) returns (ExportCSVResponse);
+}
+
+message QueryMegaFranchiseesRequest {
+  Filter filter = 1;
+}
+
+message QueryMegaFranchiseesResponse {
+  Megaji megaji = 1;
+}
+
+message ExportCSVRequest {
+  Filter filter = 1;
+}
+
+message ExportCSVResponse {
+  CSVBlob blob = 1;
+}
+
+message Filter {
+  string brand = 1;
+  int32 min_store_count = 2; // デフォルト 20
+  double min_confidence = 3; // デフォルト 0.7
+  string prefecture = 4;
+}
+
+message Megaji {
+  string operator_name = 1;
+  int32 store_count = 2;
+  double avg_confidence = 3;
+  double estimated_revenue_jpy = 4;
+  double score = 5;
+  repeated string brands = 6;
+}
+
+message CSVBlob {
+  bytes content = 1;
+  string filename = 2;
+}

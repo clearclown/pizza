@@ -1,0 +1,59 @@
+// M3 Delivery Module — browser-use + LLM による FC 判定
+syntax = "proto3";
+
+package pizza.v1;
+
+import "pizza/v1/seed.proto";
+
+service DeliveryService {
+  // JudgeFranchiseType は 1 店舗のコンテキストを受け、直営/FC を判定する。
+  rpc JudgeFranchiseType(JudgeFranchiseTypeRequest) returns (JudgeFranchiseTypeResponse);
+
+  // BatchJudge はストリームで複数店舗を処理する（順序保存）。
+  rpc BatchJudge(stream BatchJudgeRequest) returns (stream BatchJudgeResponse);
+}
+
+message JudgeFranchiseTypeRequest {
+  StoreContext context = 1;
+}
+
+message JudgeFranchiseTypeResponse {
+  JudgeResult result = 1;
+}
+
+message BatchJudgeRequest {
+  StoreContext context = 1;
+}
+
+message BatchJudgeResponse {
+  JudgeResult result = 1;
+}
+
+message StoreContext {
+  Store store = 1;
+  // markdown は Kitchen が生成した Markdown
+  string markdown = 2;
+  // candidate_urls は会社概要候補などの追加 URL
+  repeated string candidate_urls = 3;
+  // provider_hint で明示的に LLM プロバイダを選べる（空なら env default）
+  string provider_hint = 4;
+}
+
+message JudgeResult {
+  string place_id = 1;
+  bool is_franchise = 2;
+  // 直営=false, FC=true のとき運営会社名
+  string operator_name = 3;
+  // 同一 operator が運営する店舗数の推定値（20以上でメガジー）
+  int32 store_count_estimate = 4;
+  double confidence = 5;
+  string llm_provider = 6;
+  string llm_model = 7;
+  repeated Evidence evidence = 8;
+}
+
+message Evidence {
+  string source_url = 1;
+  string snippet = 2;
+  string reason = 3;
+}

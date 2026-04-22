@@ -1,0 +1,33 @@
+// M2 Kitchen Module — HTML → Markdown 変換（Firecrawl の gRPC ラッパ契約）
+// 注: 初期実装では Go から Firecrawl REST を直接叩く。本 proto は将来の
+// 独自ロジック追加時に gRPC サービス化するための枠。
+syntax = "proto3";
+
+package pizza.v1;
+
+service KitchenService {
+  // ConvertToMarkdown は 1 URL を Markdown 化する。
+  rpc ConvertToMarkdown(ConvertToMarkdownRequest) returns (ConvertToMarkdownResponse);
+}
+
+message ConvertToMarkdownRequest {
+  string url = 1;
+  // timeout_ms 省略時は 30000
+  int32 timeout_ms = 2;
+  // prefer_sections は優先抽出したいキーワード（例: "会社概要", "店舗一覧"）
+  repeated string prefer_sections = 3;
+}
+
+message ConvertToMarkdownResponse {
+  MarkdownDoc doc = 1;
+}
+
+message MarkdownDoc {
+  string url = 1;
+  string markdown = 2;
+  // title は <title> から抽出
+  string title = 3;
+  // metadata はサイト固有の付加情報
+  map<string, string> metadata = 4;
+  int64 fetched_at_unix = 5;
+}

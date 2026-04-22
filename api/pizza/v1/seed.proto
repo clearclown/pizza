@@ -1,0 +1,48 @@
+// M1 Seed Module — Google Maps からの網羅的店舗抽出
+syntax = "proto3";
+
+package pizza.v1;
+
+// SeedService は指定エリアから店舗を網羅抽出する。
+service SeedService {
+  // SearchStoresInGrid はポリゴンをグリッド分割し、各セルで nearbySearch を
+  // 実行して Store をストリームで返す。
+  rpc SearchStoresInGrid(SearchStoresInGridRequest) returns (stream SearchStoresInGridResponse);
+}
+
+message SearchStoresInGridRequest {
+  // brand は検索対象ブランド名（例: "エニタイムフィットネス"）
+  string brand = 1;
+  // polygon は検索対象領域のポリゴン
+  Polygon polygon = 2;
+  // cell_km は 1 セルあたりの辺長 (km)。デフォルト 1.0
+  double cell_km = 3;
+  // language は Google Maps API の言語指定（例: "ja"）
+  string language = 4;
+}
+
+message SearchStoresInGridResponse {
+  Store store = 1;
+}
+
+// Polygon は領域を表す多角形。
+message Polygon {
+  repeated LatLng vertices = 1;
+}
+
+message LatLng {
+  double lat = 1;
+  double lng = 2;
+}
+
+// Store は 1 店舗分の情報。
+message Store {
+  string place_id = 1;
+  string brand = 2;
+  string name = 3;
+  string address = 4;
+  LatLng location = 5;
+  string official_url = 6;
+  string phone = 7;
+  string grid_cell_id = 8;
+}
