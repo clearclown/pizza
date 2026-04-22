@@ -162,10 +162,17 @@ def _browser_fallback_enabled() -> bool:
 # ─── Prompt loading ────────────────────────────────────────────────────
 
 _PROMPT_PATH = Path(__file__).parent / "prompts" / "judge.yaml"
+_PROMPT_V4_PATH = Path(__file__).parent / "prompts" / "judge_v4_extraction.yaml"
 
 
 def _load_prompt() -> dict[str, str]:
     with _PROMPT_PATH.open("r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+
+def _load_prompt_v4() -> dict[str, str]:
+    """v4 extraction-only prompt (Phase 4 evidence-based)。"""
+    with _PROMPT_V4_PATH.open("r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
 
@@ -327,3 +334,108 @@ def _extract_judge_json(completion: Any) -> JudgeJSON:
     if isinstance(payload, dict):
         return JudgeJSON.model_validate(payload)
     raise ValueError(f"cannot extract JudgeJSON from {type(payload).__name__}: {payload!r}")
+
+
+# ─── Evidence-based judgement (Phase 4 primary path) ───────────────────
+
+
+async def judge_by_evidence(
+    req: JudgeRequest,
+    *,
+    llm: LLMClient | None = None,
+    provider_name: str = "",
+    model_name: str = "",
+    evidence_collector: Any | None = None,
+) -> JudgeReply:
+    """Evidence-based 判定。
+
+    Step 1: EvidenceCollector で公式サイトから raw snippet を取得
+    Step 2: LLM (v4 prompt) で snippet → JudgeJSON に**抽出のみ** (推論禁止)
+    Step 3: evidence を Evidence[] として JudgeReply.evidence に保存
+
+    evidence が空なら operation_type=unknown を強制 (推測しない)。
+
+    evidence_collector を注入するとテストで mock できる。
+    None の場合は EvidenceCollector() を使用する。
+    """
+    import json as _json
+
+    if evidence_collector is None:
+        from pizza_delivery.evidence import EvidenceCollector
+
+        evidence_collector = EvidenceCollector()
+
+    # Step 1: Collect evidence
+    evidences = await evidence_collector.collect(
+        brand=req.brand,
+        official_url=req.official_url,
+        extra_urls=req.candidate_urls or [],
+    )
+
+    # No evidence → unknown
+    if not evidences:
+        return JudgeReply(
+            place_id=req.place_id,
+            is_franchise=False,
+            operator_name="",
+            store_count_estimate=0,
+            confidence=0.2,
+            llm_provider=provider_name or "evidence-none",
+            llm_model=model_name or "none",
+            reasoning="公式サイトから evidence を収集できなかった",
+            operation_type="unknown",
+            franchisor_name="",
+            franchisee_name="",
+            judge_mode="evidence",
+        )
+
+    # Step 2: LLM で extraction
+    if llm is None:
+        from pizza_delivery.providers import get_provider
+
+        provider_name = provider_name or os.getenv("LLM_PROVIDER", "anthropic")
+        provider = get_provider(provider_name)
+        llm = provider.make_llm()
+        if not model_name:
+            model_name = getattr(llm, "model", "") or getattr(llm, "model_name", "")
+
+    from browser_use.llm.messages import SystemMessage, UserMessage
+
+    prompt = _load_prompt_v4()
+    # evidence を JSON 化 (snippet は長すぎないよう 1 件 500 文字上限)
+    ev_for_prompt = [
+        {
+            "source_url": e.source_url,
+            "snippet": e.snippet[:500],
+            "reason": e.reason,
+            "keyword": e.keyword,
+        }
+        for e in evidences[:15]  # 上位 15 件
+    ]
+    system_msg = SystemMessage(content=prompt["system"])
+    user_msg = UserMessage(
+        content=prompt["task"].format(
+            brand=req.brand,
+            name=req.name,
+            official_url=req.official_url or "(不明)",
+            evidence_json=_json.dumps(ev_for_prompt, ensure_ascii=False, indent=2),
+        )
+    )
+
+    completion = await llm.ainvoke([system_msg, user_msg], output_format=JudgeJSON)
+    parsed = _extract_judge_json(completion).derive_legacy()
+
+    return JudgeReply(
+        place_id=req.place_id,
+        is_franchise=parsed.is_franchise,
+        operator_name=parsed.operator_name,
+        store_count_estimate=parsed.store_count_estimate,
+        confidence=parsed.confidence,
+        llm_provider=provider_name or "unknown",
+        llm_model=model_name or "unknown",
+        reasoning=f"{parsed.reasoning} (evidence={len(evidences)} sources)",
+        operation_type=parsed.operation_type,
+        franchisor_name=parsed.franchisor_name,
+        franchisee_name=parsed.franchisee_name,
+        judge_mode="evidence",
+    )
