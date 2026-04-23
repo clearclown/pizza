@@ -620,6 +620,12 @@ func cmdScan(args []string) error {
 	maxResearch := fs.Int("max-research", 100, "research で処理する上限店舗数")
 	outPath := fs.String("out", "", "サマリ CSV 出力パス")
 	noResearch := fs.Bool("no-research", false, "research を skip")
+	// LLM 層の opt-in フラグ (Phase 20+: 既定は LLM 全 off、明示的に on にする)
+	withKitchen := fs.Bool("with-kitchen", false, "Firecrawl Markdown fetch を有効化 (M2 Kitchen)")
+	withJudge := fs.Bool("with-judge", false, "Expert Panel (gRPC) で judge を回す")
+	judgeMode := fs.String("judge-mode", "panel", "judge 経路: mock | live | panel")
+	withVerify := fs.Bool("with-verify", false, "CrossVerifier (Layer C: 別 LLM critic) を有効化")
+	verifyHoujin := fs.Bool("verify-houjin", false, "国税庁法人番号 API で operator 実在確認 (Layer D)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -664,7 +670,12 @@ func cmdScan(args []string) error {
 			"--query", *brand,
 			"--area", area,
 			"--cell-km", strconv.FormatFloat(*cellKm, 'f', -1, 64),
-			"--no-kitchen",
+		}
+		if !*withKitchen {
+			bakeArgs = append(bakeArgs, "--no-kitchen")
+		}
+		if *withJudge {
+			bakeArgs = append(bakeArgs, "--with-judge", "--judge-mode", *judgeMode)
 		}
 		if err := cmdBake(bakeArgs); err != nil {
 			log.Printf("⚠️  bake failed for area=%q: %v", area, err)
@@ -677,7 +688,12 @@ func cmdScan(args []string) error {
 		researchArgs := []string{
 			"--brand", *brand,
 			"--max-stores", strconv.Itoa(*maxResearch),
-			"--no-verify",
+		}
+		if !*withVerify {
+			researchArgs = append(researchArgs, "--no-verify")
+		}
+		if *verifyHoujin {
+			researchArgs = append(researchArgs, "--verify-houjin")
 		}
 		if err := cmdResearch(researchArgs); err != nil {
 			log.Printf("⚠️  research skipped: %v", err)

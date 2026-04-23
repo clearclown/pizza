@@ -170,6 +170,39 @@ class CrossBrandOperator:
         return len(self.brand_counts)
 
 
+def _load_known_franchisor_names() -> set[str]:
+    """registry YAML の master_franchisor 名を全 brand 横断で収集する。
+
+    megafranchisee 集計で本部 (= 加盟店でなく franchisor) を混入させないために
+    使う。master_franchisor が per_store 抽出で operator_type='unknown' のまま
+    登録されてしまうケース (例: モスバーガー per_store で『株式会社モス
+    フードサービス』が 363 件) を除外する。
+
+    また、明らかに別ブランドの本部 (例: ドムドムフードサービス = ドムドム
+    ハンバーガーの本部) もブロックリストとして追加する。
+    """
+    names: set[str] = set()
+    # master_franchisor from registry
+    try:
+        from .franchisee_registry import load_registry
+
+        reg = load_registry()
+        for brand_name, br in reg.brands.items():
+            mf = (br.master_franchisor or {}).get("name", "")
+            if mf:
+                names.add(mf)
+    except Exception:
+        pass
+    # 明示ブロックリスト (別ブランドの本部が per_store で誤抽出されたとき用)
+    names.update({
+        "株式会社ドムドムフードサービス",
+        "ドムドムフードサービス",
+        "株式会社日本マクドナルドホールディングス",
+        "日本マクドナルドホールディングス",
+    })
+    return names
+
+
 def aggregate_cross_brand_operators(
     *,
     db_path: str,
@@ -177,6 +210,7 @@ def aggregate_cross_brand_operators(
     min_brands: int = 1,
     exclude_franchisor: bool = True,
     normalize_names: bool = True,
+    extra_franchisor_blocklist: set[str] | None = None,
 ) -> list[CrossBrandOperator]:
     """operator_stores を brand 指定なしで集計 (1 operator = 1 行)。
 
@@ -219,6 +253,12 @@ def aggregate_cross_brand_operators(
     finally:
         conn.close()
 
+    # 本部 / 別ブランド本部の除外セット (正規化済で比較)
+    blocklist_raw = _load_known_franchisor_names()
+    if extra_franchisor_blocklist:
+        blocklist_raw = blocklist_raw | set(extra_franchisor_blocklist)
+    blocklist = {_norm(n) or n for n in blocklist_raw}
+
     by_operator: dict[str, CrossBrandOperator] = {}
     # 元表記の候補を key ごとに保持して最長を表示名にする
     displays: dict[str, list[str]] = {}
@@ -226,6 +266,9 @@ def aggregate_cross_brand_operators(
         if not operator_name:
             continue
         key = _norm(operator_name) or operator_name
+        # 本部・フランチャイザー名と一致すれば除外
+        if exclude_franchisor and key in blocklist:
+            continue
         displays.setdefault(key, []).append(operator_name)
         op = by_operator.get(key)
         if op is None:
