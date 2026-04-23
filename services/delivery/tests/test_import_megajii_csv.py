@@ -14,6 +14,7 @@ from pizza_delivery.commands.import_megajii_csv import (
     parse_int_yen_thousand,
     prefecture_from_address,
     read_tsv,
+    save_rows_to_sqlite,
     split_brands,
 )
 
@@ -130,6 +131,61 @@ class TestReadTSV:
         rows = read_tsv(p)
         assert len(rows) == 1
         assert rows[0].raw_name == "別の会社"
+
+    def test_save_rows_to_sqlite_roundtrip(self, tmp_path: Path):
+        """TSV parse → SQLite dump → SQL 読取りで同データが戻ること。"""
+        import sqlite3
+        tsv = tmp_path / "in.tsv"
+        tsv.write_text(
+            "# section: megajii\n"
+            "大和フーヅ\tパン小売業\t69\t山崎\t埼玉県熊谷市\t7630476\t642797\t5891334\thttps://a.jp/\tミスタードーナツ・モスバーガー\n"
+            "# section: franchisor\n"
+            "株式会社モスフードサービス\tモスバーガー\tハンバーガー店\t1266\t中村\t東京都品川区\t69153000\t66281000\t59751000\thttps://mos.jp/\tモスバーガー\thttps://mos.jp/fc/\n",
+            encoding="utf-8",
+        )
+        rows = read_tsv(tsv)
+        db = tmp_path / "out.sqlite"
+        n = save_rows_to_sqlite(rows, db)
+        assert n == 2
+
+        conn = sqlite3.connect(db)
+        try:
+            cur = conn.execute(
+                "SELECT line, section, raw_name, brand_name, store_count "
+                "FROM megajii_rows ORDER BY line"
+            )
+            got = cur.fetchall()
+        finally:
+            conn.close()
+        assert got[0][1] == "megajii"
+        assert got[0][2] == "大和フーヅ"
+        assert got[0][4] == 69
+        assert got[1][1] == "franchisor"
+        assert got[1][3] == "モスバーガー"
+        assert got[1][4] == 1266
+
+    def test_save_rows_truncates_on_reimport(self, tmp_path: Path):
+        """再 import で古い行が truncate されること。"""
+        import sqlite3
+        db = tmp_path / "out.sqlite"
+
+        from pizza_delivery.commands.import_megajii_csv import ImportRow
+        save_rows_to_sqlite([
+            ImportRow(section="megajii", raw_name="旧社", raw_line=1),
+        ], db)
+        save_rows_to_sqlite([
+            ImportRow(section="megajii", raw_name="新社A", raw_line=1),
+            ImportRow(section="megajii", raw_name="新社B", raw_line=2),
+        ], db)
+
+        conn = sqlite3.connect(db)
+        try:
+            rows = conn.execute(
+                "SELECT raw_name FROM megajii_rows ORDER BY line"
+            ).fetchall()
+        finally:
+            conn.close()
+        assert [r[0] for r in rows] == ["新社A", "新社B"]
 
     def test_skip_header_row(self, tmp_path: Path):
         p = tmp_path / "sample.tsv"

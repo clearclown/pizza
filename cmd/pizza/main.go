@@ -909,6 +909,8 @@ func cmdImportMegajiiCSV(args []string) error {
 	dryRun := fs.Bool("dry-run", false, "提案のみで DB 更新しない")
 	out := fs.String("out", "", "提案 JSON 出力 (optional)")
 	concurrency := fs.Int("concurrency", 3, "LLM 並列数")
+	saveDB := fs.String("save-db", "",
+		"TSV parse 結果を SQLite に保存 (例: var/external/megajii.sqlite)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -926,6 +928,9 @@ func cmdImportMegajiiCSV(args []string) error {
 	}
 	if *out != "" {
 		pyArgs = append(pyArgs, "--out", *out)
+	}
+	if *saveDB != "" {
+		pyArgs = append(pyArgs, "--save-db", *saveDB)
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }

@@ -152,6 +152,55 @@ def prefecture_from_address(address: str) -> str:
     return m.group(1) if m else ""
 
 
+def save_rows_to_sqlite(rows: list[ImportRow], db_path: Path) -> int:
+    """TSV parse 結果を SQLite に保存。再 import で truncate 上書き。
+
+    ユーザーが SQL で直接検索できるようにする (LIKE / JOIN / 集計)。
+    migrations は不要、単一 table。
+    """
+    import sqlite3
+    db_path.parent.mkdir(parents=True, exist_ok=True)
+    conn = sqlite3.connect(db_path)
+    try:
+        conn.execute(
+            "CREATE TABLE IF NOT EXISTS megajii_rows ("
+            "line INTEGER PRIMARY KEY, "
+            "section TEXT, "
+            "raw_name TEXT, "
+            "industry TEXT, "
+            "store_count INTEGER, "
+            "representative TEXT, "
+            "address TEXT, "
+            "revenue_current_jpy INTEGER, "
+            "revenue_previous_jpy INTEGER, "
+            "website_url TEXT, "
+            "raw_brands TEXT, "
+            "brand_name TEXT, "
+            "recruit_url TEXT"
+            ")"
+        )
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_mg_raw_name ON megajii_rows(raw_name)")
+        conn.execute("CREATE INDEX IF NOT EXISTS idx_mg_section ON megajii_rows(section)")
+        conn.execute("DELETE FROM megajii_rows")
+        conn.executemany(
+            "INSERT INTO megajii_rows VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            [
+                (
+                    r.raw_line, r.section, r.raw_name, r.industry,
+                    r.store_count, r.representative, r.address,
+                    r.revenue_current_jpy, r.revenue_previous_jpy,
+                    r.website_url, r.raw_brands, r.brand_name,
+                    r.recruit_url,
+                )
+                for r in rows
+            ],
+        )
+        conn.commit()
+        return len(rows)
+    finally:
+        conn.close()
+
+
 def read_tsv(path: Path) -> list[ImportRow]:
     """TSV を読んで section 判別 + parse。空行 / # コメント / header 行 skip。"""
     rows: list[ImportRow] = []
@@ -579,12 +628,19 @@ def _main() -> None:
     ap.add_argument("--dry-run", action="store_true", help="提案のみで DB 更新しない")
     ap.add_argument("--out", default="", help="提案 JSON 出力パス (optional)")
     ap.add_argument("--concurrency", type=int, default=3, help="LLM 並列数")
+    ap.add_argument("--save-db", default="",
+                    help="TSV parse 結果を SQLite に保存 (例: var/external/megajii.sqlite)")
     args = ap.parse_args()
 
     p = Path(args.csv)
     if not p.exists():
         print(f"❌ csv not found: {p}", file=sys.stderr)
         sys.exit(2)
+
+    if args.save_db:
+        rows = read_tsv(p)
+        saved = save_rows_to_sqlite(rows, Path(args.save_db))
+        print(f"💾 saved {saved} rows → {args.save_db}")
 
     out_proposals = Path(args.out) if args.out else None
     stats = asyncio.run(import_megajii_tsv(
