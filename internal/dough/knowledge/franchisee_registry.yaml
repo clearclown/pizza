@@ -681,3 +681,410 @@ multi_brand_operators:
     verified_via: ["公式サイト", "NetIB-NEWS"]
     note: "モス 5 は brands.モスバーガー に登録済。LPガス/石油事業も兼営。"
 
+  # ─── BC2024 ランキング由来の多業態メガジー (Phase 20 追加分、2026-04-23 調査) ───
+  # 注: 各社の brand 別店舗数は BC 記事・公式サイト概算。"その他" は除外、
+  #     検証可能な主要ブランドのみ記録。正確値は IR/有価証券報告書で再確認推奨。
+
+  - name: 株式会社ホットマン
+    corporate_number: "3370001002204"
+    head_office: 宮城県仙台市太白区西多賀4-4-17
+    brands:
+      イエローハット: 64
+      TSUTAYA: 18
+      ダイソー: 10
+      アップガレージ: 6
+      カーセブン: 5
+    total_stores: 123
+    observed_at: "2024-08"
+    bc_ranking_2024: 11
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3370001002204
+      - http://www.yg-hotman.com/business/shops.php
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東北ロードサイド大手、10ブランド超。主要5を記録、他は概算で省略。"
+
+  - name: 株式会社サンエー
+    corporate_number: "5360001008803"
+    head_office: 沖縄県宜野湾市大山7-2-10
+    brands:
+      ローソン: 261
+      マツモトキヨシ: 40
+    total_stores: 367
+    observed_at: "2024-08"
+    bc_ranking_2024: 1
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5360001008803
+      - https://www.san-a.co.jp/company/about/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "沖縄最大手。ローソン沖縄は連結子会社形態、厳密には FC ではない点に注意。"
+
+  - name: ＪＲ九州ファーストフーズ株式会社
+    corporate_number: "6290001013578"
+    head_office: 福岡県福岡市博多区博多駅前3-25-21
+    brands:
+      ケンタッキーフライドチキン: 84
+      ミスタードーナツ: 50
+      シアトルズベストコーヒー: 20
+    total_stores: 198
+    observed_at: "2024-08"
+    bc_ranking_2024: 7
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6290001013578
+      - https://www.jrff.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "JR九州子会社。KFC/ミスド基幹 + 駅ナカ複数ブランド。"
+
+  - name: タニザワフーズ株式会社
+    corporate_number: "2180301001314"
+    head_office: 愛知県岡崎市井田西町1-2
+    brands:
+      ケンタッキーフライドチキン: 25
+      吉野家: 18
+      かつや: 15
+      サーティワンアイスクリーム: 15
+      びっくりドンキー: 10
+      リンガーハット: 8
+      ピザハット: 5
+    total_stores: 96
+    observed_at: "2024-08"
+    bc_ranking_2024: 21
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=2180301001314
+      - http://www.tanizawafoods.co.jp/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東海の 7 ブランド多業態 FC。愛知/静岡/岐阜。"
+
+  - name: 株式会社近鉄リテーリング
+    corporate_number: "4120001023117"
+    head_office: 大阪府大阪市天王寺区下味原町1-26
+    brands:
+      ファミリーマート: 60
+      ケンタッキーフライドチキン: 15
+      成城石井: 10
+      ドトールコーヒー: 10
+      モスバーガー: 5
+    total_stores: 119
+    observed_at: "2024-08"
+    bc_ranking_2024: 13
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=4120001023117
+      - https://kintetsu-retailing.co.jp/company/organization/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "近鉄グループ駅ナカ。9 ブランドのうち上位 5 を記録。"
+
+  - name: 株式会社ありがとうサービス
+    corporate_number: "2500001012603"
+    head_office: 愛媛県今治市八町西3-6-30
+    brands:
+      ハードオフ: 30
+      オフハウス: 25
+      ブックオフ: 20
+      モスバーガー: 20
+    total_stores: 117
+    observed_at: "2024-08"
+    bc_ranking_2024: 15
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=2500001012603
+      - https://www.arigatou-s.com/enterprise/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東証スタンダード。四国本社。リユース軸+モスバーガー。11 ブランド展開中。"
+
+  - name: 株式会社ブレンズ
+    corporate_number: "8310001005959"
+    head_office: 沖縄県浦添市宮城1-36-8
+    brands:
+      ほっともっと: 95
+      やよい軒: 14
+    total_stores: 109
+    observed_at: "2024-08"
+    bc_ranking_2024: 16
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=8310001005959
+      - https://www.e-brains.co.jp/company.php
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "プレナス主要 FC。沖縄/広島/長崎・佐賀。"
+
+  - name: 株式会社アメリカヤコーポレーション
+    corporate_number: "1070001021566"
+    head_office: 群馬県館林市
+    brands:
+      かつや: 10
+      らあめん花月嵐: 5
+      からあげ: 4
+    total_stores: 29
+    observed_at: "2024-08"
+    bc_ranking_2024: 35
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1070001021566
+      - https://www.americaya1979.co.jp
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "フランチャイズ・ショー記事"]
+    note: "関東ロードサイド。飲食 12 ブランド。"
+
+  - name: 株式会社太陽エンタープライズ
+    corporate_number: "7020001010196"
+    head_office: 神奈川県横浜市瀬谷区二ツ橋町
+    brands:
+      ミスタードーナツ: 40
+      牛角: 20
+      土間土間: 15
+      サーティワンアイスクリーム: 10
+    total_stores: 119
+    observed_at: "2024-08"
+    bc_ranking_2024: 13
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7020001010196
+      - https://www.taiyouent.co.jp/about/history.html
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "関東首都圏。1977 年ミスド FC 加盟起点。11 ブランド中主要 4 を記録。"
+
+  - name: チタカ・インターナショナル・フーズ株式会社
+    corporate_number: "5180001045939"
+    head_office: 愛知県北名古屋市
+    brands:
+      ケンタッキーフライドチキン: 20
+      ミスタードーナツ: 15
+      天丼てんや: 5
+    total_stores: 46
+    observed_at: "2018-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5180001045939
+      - https://www.chitaka.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "Wikipedia"]
+    note: "愛知/岐阜/静岡。自社ブランド知多家も併営。観測値 2018 年 (最新値要更新)。"
+
+  - name: 株式会社ファイブスター
+    corporate_number: "7360001011029"
+    head_office: 滋賀県彦根市松原町1880-5
+    brands:
+      COCOS: 74
+      海座: 3
+    total_stores: 79
+    observed_at: "2024-08"
+    bc_ranking_2024: 28
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7360001011029
+      - https://www.f-star.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "ココス FC 基幹 + 自社ブランド併営。"
+
+  - name: 株式会社G-7ホールディングス
+    corporate_number: "9140001017351"
+    head_office: 兵庫県神戸市須磨区中落合2-2-5
+    brands:
+      業務スーパー: 170
+      オートバックス: 90
+      めぐみの郷: 30
+      バイクワールド: 20
+    total_stores: 344
+    observed_at: "2024-08"
+    bc_ranking_2024: 2
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=9140001017351
+      - https://www.g-7holdings.co.jp/group/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東証プライム。業スー FC 日本最大級 + オートバックス創業母体。"
+
+  - name: 株式会社イートスタイル
+    corporate_number: "1350001010012"
+    head_office: 福岡県福岡市
+    brands:
+      サーティワンアイスクリーム: 60
+      串カツ田中: 25
+      久世福商店: 15
+    total_stores: 144
+    observed_at: "2024-08"
+    bc_ranking_2024: 17
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1350001010012
+      - https://www.eatstyle.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "福岡拠点。サーティワン起点 8 ブランド。"
+
+  - name: 株式会社アース
+    corporate_number: "6240001035569"
+    head_office: 広島県福山市箕島町5816-29
+    brands:
+      かつや: 7
+      からやま: 7
+      小木曽製粉所: 2
+    total_stores: 22
+    observed_at: "2024-08"
+    bc_ranking_2024: 180
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6240001035569
+      - https://aasg.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "福山本社。アークランドサービス系 FC 軸。"
+
+  - name: 株式会社ジェイアール西日本デイリーサービスネット
+    corporate_number: "6140001055008"
+    head_office: 兵庫県尼崎市潮江1-2-12
+    brands:
+      セブン-イレブン: 190
+      QBハウス: 17
+    total_stores: 207
+    observed_at: "2024-08"
+    bc_ranking_2024: 6
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6140001055008
+      - https://www.dailyservice.co.jp/company/overview
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "JR 西日本グループ。駅ナカセブン (ハートイン含) + QB。"
+
+  - name: 株式会社ゼロエミッション
+    corporate_number: "4010101001999"
+    head_office: 東京都八王子市大和田町5-1-21
+    brands:
+      ハードオフ: 25
+      オフハウス: 20
+      ブックオフ: 20
+      ホビーオフ: 18
+      モードオフ: 8
+    total_stores: 91
+    observed_at: "2025-04"
+    bc_ranking_2024: 23
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=4010101001999
+      - https://www.zero-emission.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東京多摩+関東。リユース 5 ブランド。"
+
+  - name: 株式会社マキヤ
+    corporate_number: "3080101001770"
+    head_office: 静岡県沼津市三津221-1
+    brands:
+      業務スーパー: 40
+      ダイソー: 20
+      エスポット: 10
+      ハードオフ: 7
+    total_stores: 78
+    observed_at: "2024-08"
+    bc_ranking_2024: 29
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3080101001770
+      - https://www.makiya-group.co.jp/about/business/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "東証スタンダード。静岡/山梨/神奈川。エスポットは自社 DS。"
+
+  - name: 株式会社東急グルメフロント
+    corporate_number: "3013201003998"
+    head_office: 東京都目黒区
+    brands:
+      ケンタッキーフライドチキン: 18
+      しぶそば: 15
+      タリーズコーヒー: 12
+      ドトールコーヒー: 8
+      銀だこ: 5
+    total_stores: 58
+    observed_at: "2024-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3013201003998
+      - https://www.tokyu-gf.com/companyprofile
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "Wikipedia"]
+    note: "東急グループ外食。駅ナカ 4 FC + 自社しぶそば。"
+
+  - name: 株式会社ビッグワンホールディングス
+    corporate_number: "6060001006885"
+    head_office: 栃木県さくら市櫻野505
+    brands:
+      TSUTAYA: 10
+      エニタイムフィットネス: 8
+      かつや: 6
+      ドトールコーヒー: 5
+      ブックオフ: 4
+      シャトレーゼ: 3
+    total_stores: 54
+    observed_at: "2024-08"
+    bc_ranking_2024: 50
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6060001006885
+      - https://bigone.co.jp/stores/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "栃木本社。10 ブランドのうち主要 6。"
+
+  - name: 株式会社オカダコーポレーション
+    corporate_number: "1012401015392"
+    head_office: 京都府 (本社要再確認)
+    brands:
+      シャトレーゼ: 6
+      丸源ラーメン: 5
+      やっぱりステーキ: 4
+    total_stores: 30
+    observed_at: "2024-08"
+    bc_ranking_2024: 131
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1012401015392
+      - https://www.okada-corporation.net/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "同名法人複数あり。法人番号は 1012401015392 を暫定採用、要再確認。"
+
+  - name: 株式会社ワイズテーブルコーポレーション
+    corporate_number: "6010401054605"
+    head_office: 東京都港区赤坂
+    brands:
+      ゴンチャ: 20
+      The Kitchen Salvatore Cuomo: 15
+      XEX: 10
+    total_stores: 86
+    observed_at: "2024-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010401054605
+      - https://www.ystable.co.jp/corporate/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト"]
+    note: "東証スタンダード。Gong cha のマスター FC 保有。イタリアン軸 23 ブランド。"
+
+  - name: 有限会社タイホウグループ
+    corporate_number: "5130002005624"
+    head_office: 愛知県名古屋市北区田幡2-13-18
+    brands:
+      ミスタードーナツ: 25
+      モスバーガー: 10
+      ザ・どん: 8
+      ダスキン: 5
+      ピザハット: 3
+    total_stores: 61
+    observed_at: "2024-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5130002005624
+      - https://www.taiho-group.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト"]
+    note: "既登録『タイホウコーポレーション (1180001037667)』とは別法人 (HD 的持株)。"
+
+  - name: 株式会社トークインコーポレーション
+    corporate_number: "8080002010783"
+    head_office: 茨城県水戸市 (要再確認)
+    brands:
+      コメダ珈琲店: 9
+      はなまるうどん: 3
+      天丼てんや: 3
+    total_stores: 23
+    observed_at: "2024-08"
+    bc_ranking_2024: 172
+    source_urls:
+      - https://www.talk-in.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["公式サイト", "ビジネスチャンス誌2024"]
+    note: "法人番号は派生検索ヒット値で要再確認。"
+

@@ -149,6 +149,35 @@ CREATE VIEW all_franchisees AS
     AND COALESCE(operator_type, '') != 'franchisor'
   GROUP BY operator_name;
 
+-- Phase 19: 事業会社主語 × brand 別内訳 view。メガジー横断で「この会社は
+-- どの業態を何店舗運営しているか」を 1 行で見たいときに使う。
+-- JSON で brand_counts を持つので BI ツール (pandas/duckdb/jq) から簡単に pivot 可。
+DROP VIEW IF EXISTS mega_franchisees_multi_brand;
+CREATE VIEW mega_franchisees_multi_brand AS
+  SELECT
+    operator_name,
+    COUNT(DISTINCT place_id)              AS total_stores,
+    COUNT(DISTINCT brand)                 AS brand_count,
+    JSON_GROUP_OBJECT(brand, brand_n)     AS brand_counts_json,
+    GROUP_CONCAT(DISTINCT discovered_via) AS discovered_via_methods,
+    MAX(corporate_number)                 AS corporate_number,
+    MIN(operator_type)                    AS operator_type
+  FROM (
+    SELECT
+      operator_name,
+      brand,
+      COUNT(DISTINCT place_id) AS brand_n,
+      MAX(discovered_via)      AS discovered_via,
+      MAX(corporate_number)    AS corporate_number,
+      MIN(operator_type)       AS operator_type,
+      MIN(place_id)            AS place_id
+    FROM operator_stores
+    WHERE operator_name IS NOT NULL AND operator_name != ''
+      AND COALESCE(operator_type, '') != 'franchisor'
+    GROUP BY operator_name, brand
+  )
+  GROUP BY operator_name;
+
 -- legacy 用 (Phase 4 compatible): judgements ベースの view も残す
 DROP VIEW IF EXISTS mega_franchisees_legacy;
 CREATE VIEW mega_franchisees_legacy AS
