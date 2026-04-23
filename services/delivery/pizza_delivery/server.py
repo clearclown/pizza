@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import asyncio
 import os
+import threading
 from concurrent import futures
 from typing import Any
 
@@ -22,6 +23,38 @@ from grpc_health.v1 import health, health_pb2, health_pb2_grpc
 from grpc_reflection.v1alpha import reflection
 
 from pizza.v1 import delivery_pb2, delivery_pb2_grpc
+
+
+# ─── 永続 event loop (Phase 21 fix) ───────────────────────────────────
+# gRPC sync handler 内で asyncio.run() を毎回呼ぶと httpx AsyncClient 等の
+# 非同期リソース cleanup が閉じた loop に task 追加しようとして
+# "Event loop is closed" エラー連発 → confidence ≈ 0 の低質判定を生む。
+# 単一の永続 loop をバックグラウンドスレッドで回して、
+# run_coroutine_threadsafe で gRPC sync handler から投入する。
+
+_PERSISTENT_LOOP: asyncio.AbstractEventLoop | None = None
+_LOOP_THREAD: threading.Thread | None = None
+_LOOP_LOCK = threading.Lock()
+
+
+def _ensure_persistent_loop() -> asyncio.AbstractEventLoop:
+    global _PERSISTENT_LOOP, _LOOP_THREAD
+    with _LOOP_LOCK:
+        if _PERSISTENT_LOOP is not None and not _PERSISTENT_LOOP.is_closed():
+            return _PERSISTENT_LOOP
+        loop = asyncio.new_event_loop()
+        t = threading.Thread(target=loop.run_forever, name="pizza-delivery-loop", daemon=True)
+        t.start()
+        _PERSISTENT_LOOP = loop
+        _LOOP_THREAD = t
+        return loop
+
+
+def _run_sync(coro, timeout: float = 120.0):
+    """gRPC sync handler から async coroutine を同期実行。"""
+    loop = _ensure_persistent_loop()
+    fut = asyncio.run_coroutine_threadsafe(coro, loop)
+    return fut.result(timeout=timeout)
 
 
 # ─── MOCK Servicer ─────────────────────────────────────────────────────
@@ -119,7 +152,7 @@ class RealDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
             provider_hint=request.context.provider_hint,
         )
         try:
-            reply = asyncio.run(
+            reply = _run_sync(
                 judge_franchise(
                     judge_req,
                     llm=self._llm,
@@ -225,7 +258,7 @@ class PanelDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
             worker_b_name="gemini-flash-b",
         )
         try:
-            verdict = asyncio.run(
+            verdict = _run_sync(
                 panel.deliberate(judge_req, evidence_collector=EvidenceCollector())
             )
         except Exception as exc:
