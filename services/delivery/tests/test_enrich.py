@@ -172,13 +172,25 @@ class _StubPlaces:
 
 
 class _StubScraper:
-    def __init__(self, op_by_phone: dict[str, OperatorInfo | None]) -> None:
+    def __init__(
+        self,
+        op_by_phone: dict[str, OperatorInfo | None],
+        op_by_url: dict[str, OperatorInfo | None] | None = None,
+    ) -> None:
         self.op_by_phone = op_by_phone
-        self.calls = 0
+        self.op_by_url = op_by_url or {}
+        self.phone_calls = 0
+        self.url_calls = 0
 
     async def lookup_operator_by_phone(self, phone: str, brand_hint: str = ""):
-        self.calls += 1
+        self.phone_calls += 1
         return self.op_by_phone.get(phone)
+
+    async def scrape_operator_from_url(
+        self, url: str, brand_hint: str = "", store_name: str = ""
+    ):
+        self.url_calls += 1
+        return self.op_by_url.get(url)
 
 
 def test_enricher_full_flow(tmp_path: Path) -> None:
@@ -231,6 +243,57 @@ def test_enricher_handles_scraper_exception(tmp_path: Path) -> None:
     # 例外は errors に記録され pipeline は継続
     assert stats.operators_found == 0
     assert len(stats.errors) >= 1
+
+
+def test_enricher_url_fallback_when_phone_missing(tmp_path: Path) -> None:
+    """phone 逆引き miss or phone 無しのとき、official_url で訪問 fallback。"""
+    db = tmp_path / "p.sqlite"
+    _setup_db(db)
+    places = _StubPlaces({})  # Places Details でも phone 無し
+    # phone 逆引きは全 miss、URL 直訪問で全 hit
+    scraper = _StubScraper(
+        op_by_phone={},
+        op_by_url={
+            "https://mos.jp/2": OperatorInfo(name="株式会社URL運営A", confidence=0.6),
+            "https://mos.jp/3": OperatorInfo(name="株式会社URL運営B", confidence=0.5),
+        },
+    )
+    enr = Enricher(
+        places_client=places, browser_scraper=scraper,
+        details_concurrency=1, lookup_concurrency=1,
+    )
+    stats = asyncio.run(enr.enrich(db_path=db, brand="モスバーガー"))
+    # URL fallback で 2 店舗とも operator 取れる
+    assert stats.operators_found == 2
+    # p2 は既存 phone があるので phone 経路 1 回試行 (miss → URL)、
+    # p3 は phone 無しで URL 直行。合計 URL 経路 2 回
+    assert scraper.url_calls == 2
+    assert scraper.phone_calls == 1  # p2 のみ phone 逆引き試行
+
+
+def test_enricher_phone_preferred_over_url(tmp_path: Path) -> None:
+    """phone があれば phone ルートを優先、URL 経路は呼ばない。"""
+    db = tmp_path / "p.sqlite"
+    _setup_db(db)
+    places = _StubPlaces({"p3": "03-3333-3333"})
+    scraper = _StubScraper(
+        op_by_phone={
+            "03-1234-5678": OperatorInfo(name="P2phone", confidence=0.8),
+            "03-3333-3333": OperatorInfo(name="P3phone", confidence=0.8),
+        },
+        op_by_url={
+            "https://mos.jp/2": OperatorInfo(name="P2url", confidence=0.5),
+            "https://mos.jp/3": OperatorInfo(name="P3url", confidence=0.5),
+        },
+    )
+    enr = Enricher(
+        places_client=places, browser_scraper=scraper,
+        details_concurrency=1, lookup_concurrency=1,
+    )
+    stats = asyncio.run(enr.enrich(db_path=db, brand="モスバーガー"))
+    assert stats.operators_found == 2
+    # 両方 phone でヒット → URL 経路は呼ばれない
+    assert scraper.url_calls == 0
 
 
 def test_enricher_no_candidates_short_circuit(tmp_path: Path) -> None:

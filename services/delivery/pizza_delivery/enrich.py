@@ -202,19 +202,30 @@ class Enricher:
         )
         stats.phones_obtained = sum(1 for p in phones if p)
 
-        # Step 2: browser-use で 電話逆引き (より慎重に並列制限)
+        # Step 2: browser-use による operator 特定 (慎重な並列制限)
+        # fallback 優先順位:
+        #   1. phone あり → iタウンページ等で電話番号逆引き
+        #   2. phone 無し + official_url あり → 公式店舗ページを実ブラウザ訪問
+        #   3. どちらも無ければ skip
         look_sem = asyncio.Semaphore(self.lookup_concurrency)
 
-        async def _lookup(pid: str, phone: str, store_name: str) -> None:
-            if not phone:
+        async def _lookup(pid: str, phone: str, store_name: str, url: str) -> None:
+            if not phone and not url:
                 return
             async with look_sem:
+                info = None
                 try:
-                    info = await self.browser_scraper.lookup_operator_by_phone(
-                        phone, brand_hint=brand,
-                    )
+                    if phone:
+                        info = await self.browser_scraper.lookup_operator_by_phone(
+                            phone, brand_hint=brand,
+                        )
+                    if (info is None or not info.name) and url:
+                        # 電話逆引き miss → 公式店舗 URL 実ブラウザ訪問で補完
+                        info = await self.browser_scraper.scrape_operator_from_url(
+                            url, brand_hint=brand, store_name=store_name,
+                        )
                 except Exception as e:
-                    stats.errors.append(f"lookup {pid} phone={phone}: {e}")
+                    stats.errors.append(f"lookup {pid}: {e}")
                     return
                 if info is None or not info.name:
                     return
@@ -230,7 +241,7 @@ class Enricher:
 
         await asyncio.gather(
             *(
-                _lookup(s[0], phones[i], s[1])
+                _lookup(s[0], phones[i], s[1], s[4])
                 for i, s in enumerate(stores)
             ),
             return_exceptions=False,
