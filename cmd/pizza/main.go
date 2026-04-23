@@ -109,6 +109,10 @@ func main() {
 		if err := cmdEvaluate(os.Args[2:]); err != nil {
 			log.Fatalf("pizza evaluate: %v", err)
 		}
+	case "enrich":
+		if err := cmdEnrich(os.Args[2:]); err != nil {
+			log.Fatalf("pizza enrich: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -144,6 +148,7 @@ Subcommands:
   pizza jfa-export       ORM 登録済のブランド×事業会社リストを CSV 出力
   pizza integrate        JFA / 国税庁 CSV / pipeline operator を ORM に統合 (総合 FC 事業会社リスト)
   pizza evaluate         truth (JFA) × pipeline の突合 metric を算出 (brand/operator/link recall)
+  pizza enrich           Places Details (phone) + browser-use 逆引きで operator 一括特定
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -535,6 +540,30 @@ func cmdEvaluate(args []string) error {
 		"--truth", *truth, "--pipeline", *pipe}
 	if *out != "" {
 		pyArgs = append(pyArgs, "--out", *out)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdEnrich は Places Details (phone) + browser-use 逆引きで operator を
+// 一括特定する。モス等「公式ページに FC 加盟店名が載らない」brand 用。
+//
+//	pizza enrich --brand モスバーガー --max-stores 50
+func cmdEnrich(args []string) error {
+	fs := flag.NewFlagSet("enrich", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド (空で全件)")
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	maxStores := fs.Int("max-stores", 50, "処理上限 (暴走ガード)")
+	detConc := fs.Int("details-concurrency", 4, "Places Details 並列数")
+	lookConc := fs.Int("lookup-concurrency", 2, "browser-use 並列数 (低め推奨)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.enrich",
+		"--db", *dbPath, "--max-stores", strconv.Itoa(*maxStores),
+		"--details-concurrency", strconv.Itoa(*detConc),
+		"--lookup-concurrency", strconv.Itoa(*lookConc)}
+	if *brand != "" {
+		pyArgs = append(pyArgs, "--brand", *brand)
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }
