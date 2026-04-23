@@ -77,6 +77,10 @@ func main() {
 		if err := cmdBench(os.Args[2:]); err != nil {
 			log.Fatalf("pizza bench: %v", err)
 		}
+	case "registry-expand":
+		if err := cmdRegistryExpand(os.Args[2:]); err != nil {
+			log.Fatalf("pizza registry-expand: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -104,6 +108,7 @@ Subcommands:
   pizza audit     ブランド全加盟店の Top-down × Bottom-up 突合 + CSV 出力
   pizza scan      1 コマンドで全自動 (migrate→bake→research→audit、サマリ CSV)
   pizza bench     複数ブランド逐次実走 + metrics JSON (速度/API call 数 計測)
+  pizza registry-expand  未登録 operator を集計して YAML-ready 候補を出力
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -309,6 +314,63 @@ type grpcJudge struct {
 
 func (g *grpcJudge) JudgeFranchiseType(ctx context.Context, req *pb.JudgeFranchiseTypeRequest) (*pb.JudgeFranchiseTypeResponse, error) {
 	return g.client.JudgeFranchiseType(ctx, req)
+}
+
+// cmdRegistryExpand は operator_stores から未登録 operator を集計、
+// registry 追加候補を YAML に書き出す (Phase 17.4)。
+func cmdRegistryExpand(args []string) error {
+	fs := flag.NewFlagSet("registry-expand", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド (必須)")
+	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
+	minStores := fs.Int("min-stores", 2, "候補にする最低店舗数")
+	outPath := fs.String("out", "", "候補 YAML 出力パス (default var/registry_candidates/<brand>.yaml)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *brand == "" {
+		return errors.New("--brand は必須")
+	}
+	cfg, _ := menu.FromEnv()
+	if *dbPath == "" && cfg != nil {
+		*dbPath = cfg.DBPath
+	}
+	if *dbPath == "" {
+		*dbPath = "./var/pizza.sqlite"
+	}
+	if !filepath.IsAbs(*dbPath) {
+		if abs, err := filepath.Abs(*dbPath); err == nil {
+			*dbPath = abs
+		}
+	}
+	if *outPath == "" {
+		*outPath = fmt.Sprintf("var/registry_candidates/%s.yaml", *brand)
+	}
+	if !filepath.IsAbs(*outPath) {
+		if abs, err := filepath.Abs(*outPath); err == nil {
+			*outPath = abs
+		}
+	}
+
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("registry-expand: %s が見つかりません", deliveryDir)
+	}
+	fmt.Printf("🔍 registry-expand: brand=%q min_stores=%d → %s\n",
+		*brand, *minStores, *outPath)
+	script := fmt.Sprintf(
+		"from pizza_delivery.registry_expander import aggregate_unknown_operators, export_candidates_to_yaml;"+
+			"cands = aggregate_unknown_operators(db_path=%q, brand=%q, min_stores=%d);"+
+			"export_candidates_to_yaml(cands, out_path=%q);"+
+			"print(f'✅ wrote {len(cands)} candidates');"+
+			"[print(f'  {c.name}  ({c.estimated_store_count} 店舗)') for c in cands]",
+		*dbPath, *brand, *minStores, *outPath,
+	)
+	cmd := exec.Command("uv", "run", "python", "-c", script)
+	cmd.Dir = deliveryDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
 }
 
 // cmdBench は複数ブランドを逐次 scan し、速度/API call 数を JSON で出す。
