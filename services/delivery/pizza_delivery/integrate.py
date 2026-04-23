@@ -103,10 +103,34 @@ def hydrate_corporate_numbers(
                 best = c
         if best is None or best_sim < min_similarity:
             continue
-        op.corporate_number = best.corporate_number
-        op.head_office = f"{best.prefecture}{best.city}{best.street}".strip()
-        if not op.prefecture:
-            op.prefecture = best.prefecture
+
+        # 同じ 法人番号を既に別 operator が持っていたら、そちらに merge する
+        existing = (
+            session.query(OperatorCompany)
+            .filter(
+                OperatorCompany.corporate_number == best.corporate_number,
+                OperatorCompany.id != op.id,
+            )
+            .one_or_none()
+        )
+        if existing is not None:
+            # op の全 link を existing に付け替え、op を削除
+            for link in list(op.links):
+                link.operator_id = existing.id
+            session.flush()
+            session.delete(op)
+            # existing の住所を補完 (空なら)
+            if not existing.head_office:
+                existing.head_office = (
+                    f"{best.prefecture}{best.city}{best.street}".strip()
+                )
+            if not existing.prefecture:
+                existing.prefecture = best.prefecture
+        else:
+            op.corporate_number = best.corporate_number
+            op.head_office = f"{best.prefecture}{best.city}{best.street}".strip()
+            if not op.prefecture:
+                op.prefecture = best.prefecture
         hydrated += 1
     session.commit()
     return hydrated

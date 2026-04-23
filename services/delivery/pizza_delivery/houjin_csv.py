@@ -304,35 +304,69 @@ class HoujinCSVIndex:
         limit: int = 20,
         active_only: bool = True,
     ) -> list[HoujinCSVRecord]:
-        """法人名で前方一致 + like 検索。"""
+        """法人名で検索。性能優先 2 段階:
+
+          1. **exact match** (`name = ?`) — index が即ヒット、O(log N)
+          2. miss なら **prefix LIKE** (`name LIKE 'X%'`) — index が使える
+          3. それでも miss なら substring LIKE (O(N) だが最終手段)
+
+        大量一括 hydrate で 577 万行を 500 回 LIKE '%...%' 走らせると
+        分単位になるため、段階的 fallback で高速化する。
+        """
         if not name or not name.strip():
             return []
+        q_base = (
+            "SELECT corporate_number, process, update_date, name, "
+            "prefecture, city, street FROM houjin_registry "
+        )
+        active_clause = ""
+        active_args: list = []
+        if active_only:
+            active_clause = " AND process IN (" + ",".join("?" * len(ACTIVE_PROCESS_CODES)) + ")"
+            active_args = sorted(ACTIVE_PROCESS_CODES)
+
         conn = sqlite3.connect(self.db_path)
         try:
-            q = "SELECT corporate_number, process, update_date, name, prefecture, city, street FROM houjin_registry WHERE name LIKE ?"
-            args: list = [f"%{name.strip()}%"]
-            if active_only:
-                q += " AND process IN (" + ",".join("?" * len(ACTIVE_PROCESS_CODES)) + ")"
-                args.extend(sorted(ACTIVE_PROCESS_CODES))
-            q += " LIMIT ?"
-            args.append(limit)
-            rows = conn.execute(q, args).fetchall()
+            n = name.strip()
+            # Step 1: exact
+            rows = conn.execute(
+                q_base + "WHERE name = ?" + active_clause + " LIMIT ?",
+                [n] + active_args + [limit],
+            ).fetchall()
+            if rows:
+                return [_rec(r) for r in rows]
+
+            # Step 2: prefix
+            rows = conn.execute(
+                q_base + "WHERE name LIKE ?" + active_clause + " LIMIT ?",
+                [n + "%"] + active_args + [limit],
+            ).fetchall()
+            if rows:
+                return [_rec(r) for r in rows]
+
+            # Step 3: substring (fallback、遅い)
+            rows = conn.execute(
+                q_base + "WHERE name LIKE ?" + active_clause + " LIMIT ?",
+                ["%" + n + "%"] + active_args + [limit],
+            ).fetchall()
+            return [_rec(r) for r in rows]
         finally:
             conn.close()
-        return [
-            HoujinCSVRecord(
-                corporate_number=r[0], process=r[1], update_date=r[2],
-                name=r[3], prefecture=r[4], city=r[5], street=r[6],
-            )
-            for r in rows
-        ]
 
     def count(self) -> int:
+        """登録件数 (active 問わず)。"""
         conn = sqlite3.connect(self.db_path)
         try:
             return conn.execute("SELECT COUNT(*) FROM houjin_registry").fetchone()[0]
         finally:
             conn.close()
+
+
+def _rec(row: tuple) -> HoujinCSVRecord:
+    return HoujinCSVRecord(
+        corporate_number=row[0], process=row[1], update_date=row[2],
+        name=row[3], prefecture=row[4], city=row[5], street=row[6],
+    )
 
 
 # ─── verify_operator (互換 I/F) ──────────────────────────────────────

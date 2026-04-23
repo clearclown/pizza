@@ -105,6 +105,10 @@ func main() {
 		if err := cmdIntegrate(os.Args[2:]); err != nil {
 			log.Fatalf("pizza integrate: %v", err)
 		}
+	case "evaluate":
+		if err := cmdEvaluate(os.Args[2:]); err != nil {
+			log.Fatalf("pizza evaluate: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -139,6 +143,7 @@ Subcommands:
   pizza jfa-sync         日本フランチャイズチェーン協会 会員企業一覧を scrape + ORM 登録
   pizza jfa-export       ORM 登録済のブランド×事業会社リストを CSV 出力
   pizza integrate        JFA / 国税庁 CSV / pipeline operator を ORM に統合 (総合 FC 事業会社リスト)
+  pizza evaluate         truth (JFA) × pipeline の突合 metric を算出 (brand/operator/link recall)
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -509,6 +514,27 @@ func cmdIntegrate(args []string) error {
 		}
 	default:
 		return fmt.Errorf("unknown mode %q (run|export)", *mode)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdEvaluate は JFA (truth) × pipeline の突合 metric を算出。
+// supervised 学習的な改良ループで「recall の悪い点」を検出するための入口。
+//
+//	pizza evaluate --out var/eval.json
+//	pizza evaluate --truth jfa --pipeline pipeline
+func cmdEvaluate(args []string) error {
+	fs := flag.NewFlagSet("evaluate", flag.ExitOnError)
+	truth := fs.String("truth", "jfa", "truth source label")
+	pipe := fs.String("pipeline", "pipeline", "pipeline source label")
+	out := fs.String("out", "", "JSON レポート (空で stdout)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.evaluator",
+		"--truth", *truth, "--pipeline", *pipe}
+	if *out != "" {
+		pyArgs = append(pyArgs, "--out", *out)
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }
