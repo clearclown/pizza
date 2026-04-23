@@ -1,0 +1,437 @@
+# franchisee_registry.yaml — 加盟店運営会社 (真のメガフランチャイジー) Ground Truth
+#
+# 目的: PI-ZZA の原点 = 「個別加盟店の運営会社を特定する」。
+#       店舗ページには公開されていないが、他ソース (FC 本部公式サイトの
+#       operating_company ページ、IR 資料、業界ニュース、gBizINFO 等) から
+#       ファクトチェック済みの franchisee 情報を蓄積する。
+#
+# 運用:
+#  - 追加は原則 2 つ以上の独立ソースで裏取りすること
+#  - 必ず corporate_number (国税庁 13 桁) を記録 (同名会社との混同防止)
+#  - source_urls は複数記録 (単一ソースに依存しない)
+#  - 店舗数は取得日と共に記録 (時系列で変動)
+#  - Fast Fitness Japan のような本部 (master franchisor) はここではなく
+#    franchisors view で管理 (operator_type='franchisor' で自動分類)
+
+version: 2
+updated_at: "2026-04-23"
+source_ref:
+  - https://www.bc01.net/article/ranking_202408_1_120/  # ビジネスチャンス誌 2024年版 メガジー 1-120位
+  - https://www.bc01.net/article/ranking_202408_121_202/  # 121-202位
+  - https://info.gbiz.go.jp/  # 経産省 gBizINFO (法人番号検証)
+  - https://www.houjin-bangou.nta.go.jp/  # 国税庁法人番号公表サイト
+
+brands:
+  エニタイムフィットネス:
+    master_franchisor:
+      name: 株式会社Fast Fitness Japan
+      corporate_number: ""  # 要確認
+      role: 日本のマスターフランチャイジー (本部)
+      note: |
+        各店舗ページに表示される「株式会社Fast Fitness Japan」は
+        日本における master franchisee (= 本部) であり、個別店舗の運営者ではない。
+        真の加盟店会社は本部公式サイトの /operating_company/ 等で公開されている。
+      source_urls:
+        - https://www.anytimefitness.co.jp/operating_company/
+
+    known_franchisees:
+      - name: 株式会社エムデジ
+        corporate_number: "6430001050730"
+        head_office: 北海道小樽市新光1-11-1
+        estimated_store_count: 17
+        source_urls:
+          - https://www.m-digi.co.jp/fitnes/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6430001050730
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ファクトチェック agent"]
+        note: "北海道 15 店舗 + 関東 2 店舗"
+
+      - name: 株式会社トピーレック
+        corporate_number: "4010601024954"
+        aliases: ["トピーレック", "TOPYREC"]
+        misquoted_as: ["トピークス"]  # ユーザー入力の誤記を記録
+        head_office: 東京都江東区南砂6-7-15
+        estimated_store_count: 5
+        source_urls:
+          - https://anytime-topyrec.com/
+          - https://topyrec.co.jp/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=4010601024954
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "トピー工業 (東証プライム) グループ傘下。墨田菊川・亀戸・東陽町・田園調布・あやせ 等 5 店舗"
+
+      - name: 川勝商事株式会社
+        corporate_number: "1120001042383"
+        head_office: 大阪市福島区玉川1-8-10 UGビル2F
+        estimated_store_count: 20
+        source_urls:
+          - https://www.kawakatsushoji.jp/
+          - https://houjin.jp/c/1120001042383
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "marketingxstrategy.com"]
+        note: "関西中心、2023/07 時点で 20 店舗、2026 年時点ではさらに増加の可能性"
+
+      - name: 株式会社アズ
+        corporate_number: "8120001073612"
+        aliases: ["Azu Co., Ltd."]
+        head_office: 大阪市中央区粉川町1-2
+        estimated_store_count: 13
+        source_urls:
+          - https://www.azu.co.jp/anytimefitness.html
+          - https://alarmbox.jp/companyinfo/entities/8120001073612
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "大阪本社の商業空間プロデュース会社。大阪・東京・埼玉・京都・神奈川 で 13 店舗前後"
+
+      - name: 株式会社アトラクト
+        corporate_number: "3180001058546"
+        head_office: 愛知県名古屋市中区栄3-18-1 ナディアパークビジネスセンタービル17-18F
+        estimated_store_count: 19
+        source_urls:
+          - https://www.attract-cc.com/fitness/index.php
+          - https://www.attract-cc.com/corporate/index.php
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3180001058546
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: |
+          名古屋本社、2002 年設立、携帯販売 + フィットネス + 飲食の多角経営。
+          東京 9 + 愛知 9 + 群馬 1 = 19 店舗。同名法人が全国に複数存在するため
+          法人番号 3180001058546 で厳密に識別する必要あり。
+
+      # Phase 10.3: 追加 9 社 (ビジネスチャンス誌 + 各社公式 + gBizINFO verified)
+      - name: 株式会社KOHATAホールディングス
+        corporate_number: "8020001111919"
+        head_office: 神奈川県川崎市多摩区登戸2121-1 GINZAFOREST301-2
+        estimated_store_count: 67
+        observed_at: "2026-04"
+        source_urls:
+          - https://khd.life/business/anytimefitness/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=8020001111919
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "国内トップクラスのメガ FC。東京/神奈川/埼玉/千葉ほか全国"
+
+      - name: 東食品株式会社
+        corporate_number: "6010401001739"
+        head_office: 東京都港区南青山7-3-1 NGA南青山ビル3F・4F
+        estimated_store_count: 50
+        observed_at: "2026-04"
+        source_urls:
+          - https://azumashokuhin.jp/business/fitness.html
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010401001739
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "フィットネス + スーパー/保育/福祉/不動産の複合企業"
+
+      - name: 株式会社ラ・ヴィーチェ
+        corporate_number: "1050001047381"
+        head_office: 茨城県つくば市梅園2-8-17
+        estimated_store_count: 22
+        observed_at: "2026-04"
+        source_urls:
+          - http://la-viche.com/
+          - https://houjin.jp/c/1050001047381
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "houjin.jp"]
+        note: "2020 年設立、関東 22 店 (つくば/土浦/柏/加須/川口 等)"
+
+      - name: 株式会社glob
+        corporate_number: "2240001041216"
+        head_office: 広島県福山市王子町1-3-5
+        estimated_store_count: 10
+        observed_at: "2026-04"
+        source_urls:
+          - https://www.glob.co.jp/category_shop/anytimefitness/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=2240001041216
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "日経"]
+        note: "青山商事 100% 子会社、洋服の青山併設型"
+
+      - name: 株式会社ペルゴ
+        corporate_number: "6140001061476"
+        head_office: 兵庫県姫路市中地188-1
+        estimated_store_count: 4
+        observed_at: "2026-04"
+        source_urls:
+          - https://www.pergo.co.jp/brand/anytime/
+          - https://houjin.jp/c/6140001061476
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "houjin.jp"]
+        note: "1981 年設立の総合フード企業。姫路中地/田寺/大蔵谷/加古川 4 店"
+
+      - name: 株式会社サンパーク
+        corporate_number: "4120901006550"
+        head_office: 大阪府吹田市岸部北5-11-1
+        estimated_store_count: 3
+        observed_at: "2026-04"
+        source_urls:
+          - https://www.sunpark.ne.jp/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=4120901006550
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "ゴンチャ・エニタイム等 10 ブランド超 FC 加盟、国内外 65+ 店"
+
+      - name: 株式会社ベイスオブスポーツ
+        corporate_number: "6360001019114"
+        head_office: 沖縄県那覇市宮城1-18-1
+        estimated_store_count: 8
+        observed_at: "2026-04"
+        source_urls:
+          - https://www.baseofsports.com/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6360001019114
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "沖縄専業。首里末吉/浦添/小禄/鏡原/沖縄美里/西原/北谷/うるまみどり町"
+
+      - name: 株式会社さくらホーム
+        corporate_number: ""
+        head_office: 石川県金沢市藤江北1-380
+        estimated_store_count: 8
+        observed_at: "2026-04"
+        source_urls:
+          - https://sakura-home.group/outline/anytime.html
+          - https://www.sakura-home.co.jp/company/outline.html
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト"]
+        note: "1995 年設立、北陸不動産。石川/富山 8 店。法人番号要確認 (同名別法人あり)"
+
+      - name: 株式会社タカ・コーポレーション
+        corporate_number: "1120901029447"
+        head_office: 大阪府豊中市上野西3-5-39
+        estimated_store_count: 67
+        observed_at: "2026-04"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1120901029447
+          - https://marketingxstrategy.com/2022/10/22/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "業界ブログ集計"]
+        note: "メガ FC。福島/東京 21/神奈川 14/埼玉 6/千葉 5/静岡/大阪/山口/福岡 6/長崎 5/宮崎 約 67 店"
+
+  # ─── コンビニ大手 ─────────────────────────────────────────────────
+  ファミリーマート:
+    master_franchisor:
+      name: 株式会社ファミリーマート
+      corporate_number: "2013301010706"
+      role: 本部 (master franchisor)
+      source_urls:
+        - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=2013301010706
+      note: |
+        3 大コンビニの中でエリア FC 制度を最も活用。上位加盟店は比較的公開情報多い。
+
+    known_franchisees:
+      - name: JR九州リテール株式会社
+        corporate_number: ""
+        head_office: 福岡県福岡市博多区
+        estimated_store_count: 212
+        observed_at: "2024-07-01"
+        source_urls:
+          - https://www.jr-retail.co.jp/business/fm.php
+          - https://ja.wikipedia.org/wiki/JR九州リテール
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "ビジネスチャンス誌 2024", "ファクトチェック agent"]
+        note: "九州北部の共同エリアフランチャイザー"
+
+      - name: エイ・ケイ・フランチャイズシステム株式会社
+        corporate_number: "1010701027810"
+        aliases: ["エイ・ケイ・FS", "AK-FS"]
+        head_office: 東京都品川区西品川 (住友不動産大崎ガーデンタワー)
+        estimated_store_count: 48
+        observed_at: "2024-08"
+        source_urls:
+          - https://akfs.co.jp/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1010701027810
+          - https://akfs.co.jp/storelist/index.html
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "首都圏中心に 46-49 店舗"
+
+      - name: 株式会社タイレル
+        corporate_number: ""
+        head_office: 東京都府中市
+        estimated_store_count: 34
+        observed_at: "2024-08"
+        source_urls:
+          - https://tilel.co.jp/division/convenience/
+          - https://www.tilel.co.jp/
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "ビジネスチャンス誌 2024"]
+        note: "都心〜多摩地区"
+
+      - name: 株式会社キノシタ
+        corporate_number: ""
+        head_office: ""
+        estimated_store_count: 12
+        source_urls:
+          - https://kinoshita-corp.jp/
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト"]
+
+  ローソン:
+    master_franchisor:
+      name: 株式会社ローソン
+      corporate_number: "2010701019195"
+      role: 本部
+      source_urls:
+        - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=2010701019195
+      note: |
+        3 大コンビニの中でメガ FC 契約に最も積極的。プレスリリースで
+        大規模 FC 契約を実名公表する慣行あり。
+
+    known_franchisees:
+      - name: 株式会社セーブオン
+        corporate_number: ""
+        head_office: 群馬県前橋市
+        estimated_store_count: 338
+        observed_at: "2023-05"
+        valid_to: "2026-03-01"  # ローソン本体吸収予定
+        source_urls:
+          - https://www.lawson.co.jp/company/news/detail/1290457_2504.html
+          - https://www.saveon.co.jp/
+          - https://ja.wikipedia.org/wiki/セーブオン
+        verified_at: "2026-04-23"
+        verified_via: ["ローソン公式プレス", "Wikipedia"]
+        note: "群馬・栃木・埼玉・千葉・新潟・山形・福島・茨城。2026-03 にローソン本体吸収予定、Ground Truth は valid_to 要設定"
+
+      - name: 株式会社新鮮組本部
+        corporate_number: ""
+        head_office: 東京都中央区
+        estimated_store_count: 70
+        source_urls:
+          - https://www.lawson.co.jp/company/news/011820/
+          - https://www.shinsengumihonbu.com/cn3/convenience.html
+        verified_at: "2026-04-23"
+        verified_via: ["ローソン公式プレス"]
+
+      - name: 株式会社Fusion'z
+        aliases: ["フュージョンズ"]
+        corporate_number: ""
+        head_office: 新潟県新潟市中央区
+        estimated_store_count: 39
+        source_urls:
+          - https://fusionz.co.jp/stores/jigyo/lawson.html
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "官報決算 catr.jp"]
+
+      - name: 株式会社アズナス
+        corporate_number: ""
+        head_office: 大阪府大阪市北区
+        estimated_store_count: 0   # 順位 24 相当、具体的数値要確認
+        source_urls:
+          - https://www.bc01.net/article/ranking_202408_1_120/
+        verified_at: "2026-04-23"
+        verified_via: ["ビジネスチャンス誌 2024"]
+
+  マクドナルド:
+    master_franchisor:
+      name: 日本マクドナルド株式会社
+      corporate_number: "5011101033783"
+      parent_name: 日本マクドナルドホールディングス株式会社
+      parent_corporate_number: "8011101029028"
+      head_office: 東京都新宿区西新宿 (新宿 i-LAND タワー)
+      role: 本部
+      source_urls:
+        - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5011101033783
+      note: |
+        日本全体で約 3,000 店のうち約 30% (≈900 店) が FC。FC オーナー約 200 名、
+        平均約 10 店舗。fc-career.mcdonalds-online.com で公式 FC 募集。
+
+    known_franchisees:
+      - name: クォリティフーズ株式会社
+        corporate_number: "6010901041805"
+        head_office: 東京都渋谷区代々木3-25-3
+        estimated_store_count: 183
+        observed_at: "2024"
+        source_urls:
+          - https://www.qualityfoods.co.jp/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6010901041805
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "東京 74 + 新潟 36 + 群馬 36 + 長野 37、売上 426 億円。2018-09 旧法人 4110001001726 (新潟) が現法人へ吸収合併"
+
+      - name: 株式会社豊昇
+        aliases: ["HOSHO"]
+        corporate_number: "8180301025836"
+        head_office: 埼玉県鶴ヶ島市
+        estimated_store_count: 71
+        source_urls:
+          - https://www.th-mcd.com/
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=8180301025836
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "埼玉県企業データベース"]
+        note: "東京・埼玉・群馬、売上 155 億円"
+
+      - name: ヒロフーズ株式会社
+        corporate_number: ""
+        head_office: 岩手県盛岡市
+        estimated_store_count: 33
+        source_urls:
+          - https://www.hirofoods.co.jp/
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト"]
+        note: "岩手・秋田・青森"
+
+  モスバーガー:
+    master_franchisor:
+      name: 株式会社モスフードサービス
+      corporate_number: ""
+      head_office: 東京都品川区大崎
+      role: 本部
+      note: |
+        1,300+ 店舗、うち 9 割が FC と公式発表。個別加盟店の公開情報は弱い。
+
+    known_franchisees:
+      - name: 株式会社モスストアカンパニー
+        corporate_number: ""
+        head_office: 東京都品川区
+        estimated_store_count: 209
+        observed_at: "2023-09"
+        source_urls:
+          - https://mosstorecompany.jp/
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "cookbiz 業界紙"]
+        note: "モスフード 100% 子会社で厳密には『直営扱いの FC』"
+
+  # ─── 全店直営ブランド (FC 無し、参考情報) ─────────────────────────
+  ガスト:
+    master_franchisor:
+      name: 株式会社すかいらーくレストランツ
+      corporate_number: ""
+      parent_name: 株式会社すかいらーくホールディングス
+      head_office: 東京都武蔵野市
+      role: 本部
+      note: |
+        ガスト / バーミヤン / ジョナサン / 夢庵 / ステーキガストは全店直営。
+        FC 無し。Ground Truth としては franchisee 集計から除外。
+    known_franchisees: []
+
+  サイゼリヤ:
+    master_franchisor:
+      name: 株式会社サイゼリヤ
+      corporate_number: ""
+      head_office: 埼玉県吉川市
+      role: 本部
+      note: |
+        全店直営方針を公式明言。ライセンス供与なし。FC 無し。
+    known_franchisees: []
+
+  すき家:
+    master_franchisor:
+      name: 株式会社すき家本部
+      corporate_number: ""
+      parent_name: 株式会社ゼンショーホールディングス
+      head_office: 東京都港区
+      role: 本部
+      note: |
+        FC 0 店・全店直営 (地域子会社による直営形態)。Ground Truth は
+        ゼンショー HD 傘下の地域子会社単位で別途スキーマ化する必要あり。
+    known_franchisees: []
+
+# ─── 公開情報が限定的な業態 (メモ) ────────────────────────────────
+# セブン-イレブン: 1-3 店舗規模の個人・小規模法人オーナーが主体。
+#   publicly available な上位 franchisee list は極めて限定的 (有限会社
+#   商人グループ https://akindo711.com/about/ 等、個別例のみ)
+# コメダ珈琲: 900+ 店、FC 率 95% 超だが上位加盟店の公開情報が限定的
+# ドトール: 800+ FC、小規模個人 FC が主体
+# KFC Japan: 2024-09 カーライル傘下へ、フーズネットワーク株式会社 (大阪) 等
+#   個別例はあるが全体像が流動化
+

@@ -113,6 +113,12 @@ func cellOverlapsPolygon(center *pb.LatLng, minLat, minLng, maxLat, maxLng float
 	return false
 }
 
+// PointInPolygon は Ray Casting アルゴリズムで点の内外判定を行う (exported)。
+// 他パッケージからの polygon post-filter で使用する。
+func PointInPolygon(lat, lng float64, verts []*pb.LatLng) bool {
+	return pointInPolygon(lat, lng, verts)
+}
+
 // pointInPolygon は Ray Casting アルゴリズムで点の内外判定を行う。
 func pointInPolygon(lat, lng float64, verts []*pb.LatLng) bool {
 	n := len(verts)

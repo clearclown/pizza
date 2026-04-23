@@ -59,13 +59,17 @@ CREATE INDEX IF NOT EXISTS idx_judgements_optype ON judgements(operation_type);
 -- - 1 operator が複数 store を運営する関係を表現
 -- - メガジー判定の正しいソース (judgements より上位)
 CREATE TABLE IF NOT EXISTS operator_stores (
-  operator_name    TEXT NOT NULL,
-  place_id         TEXT NOT NULL,
-  brand            TEXT,
-  operator_type    TEXT,              -- direct | franchisee | unknown
-  confidence       REAL DEFAULT 0.0,
-  discovered_via   TEXT DEFAULT 'per_store',  -- per_store | chain_discovery | manual
-  confirmed_at     TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  operator_name        TEXT NOT NULL,
+  place_id             TEXT NOT NULL,
+  brand                TEXT,
+  operator_type        TEXT,                     -- direct | franchisee | unknown
+  confidence           REAL DEFAULT 0.0,
+  discovered_via       TEXT DEFAULT 'per_store', -- per_store | chain_discovery | manual | cross_llm_consensus
+  -- Phase 5.1: Layer D (法人番号 API) による外部 ground-truth
+  verification_score   REAL DEFAULT 0.0,         -- 0.0 未検証 / >0 法人名類似度 / -1 非実在
+  corporate_number     TEXT,                     -- 13 桁 法人番号 (国税庁)
+  verification_source  TEXT,                     -- houjin_bangou_nta | manual | none
+  confirmed_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (operator_name, place_id),
   FOREIGN KEY (place_id) REFERENCES stores(place_id)
 );
@@ -89,9 +93,12 @@ CREATE TABLE IF NOT EXISTS store_evidence (
 
 CREATE INDEX IF NOT EXISTS idx_store_evidence_place ON store_evidence(place_id);
 
--- mega_franchisees view (Phase 5): operator_stores ベースで集計
+-- mega_franchisees view (Phase 5 + 7): operator_stores ベースで集計
 -- - 旧: judgements + franchisee_name で集計 (推論混入の可能性)
 -- - 新: operator_stores の確定データのみで集計 (evidence backed)
+-- - Phase 7: operator_type='franchisor' (本部) を除外。
+--   PI-ZZA の目的は「加盟店運営会社の特定」であり、本部 (Fast Fitness Japan,
+--   日本マクドナルド 等) は mega 集計の対象外。franchisors view を別途提供。
 DROP VIEW IF EXISTS mega_franchisees;
 CREATE VIEW mega_franchisees AS
   SELECT
@@ -103,6 +110,43 @@ CREATE VIEW mega_franchisees AS
     MIN(operator_type)                       AS operator_type
   FROM operator_stores
   WHERE operator_name IS NOT NULL AND operator_name != ''
+    AND COALESCE(operator_type, '') != 'franchisor'
+  GROUP BY operator_name;
+
+-- franchisors view: 本部 (除外された operator) を別途集計できるように。
+-- BI 上「ブランド X の本部会社と、その本部が発見された店舗数」を見るのに使う。
+DROP VIEW IF EXISTS franchisors;
+CREATE VIEW franchisors AS
+  SELECT
+    operator_name,
+    COUNT(DISTINCT place_id)                 AS found_at_store_count,
+    GROUP_CONCAT(DISTINCT brand)             AS brands
+  FROM operator_stores
+  WHERE operator_type = 'franchisor'
+  GROUP BY operator_name;
+
+-- all_franchisees view: メガ閾値に関係なく**全**加盟店運営会社を listing。
+-- PI-ZZA は mega (≥20) だけでなく small/medium franchisee の把握も価値がある
+-- (例: 数店舗のローカル運営会社、将来メガ化する可能性)。
+DROP VIEW IF EXISTS all_franchisees;
+CREATE VIEW all_franchisees AS
+  SELECT
+    operator_name,
+    COUNT(DISTINCT place_id)                 AS store_count,
+    AVG(confidence)                          AS avg_confidence,
+    GROUP_CONCAT(DISTINCT brand)             AS brands,
+    GROUP_CONCAT(DISTINCT discovered_via)    AS discovered_via_methods,
+    MIN(operator_type)                       AS operator_type,
+    MAX(verification_score)                  AS best_verification_score,
+    MAX(corporate_number)                    AS corporate_number,
+    CASE
+      WHEN COUNT(DISTINCT place_id) >= 20 THEN 'mega'
+      WHEN COUNT(DISTINCT place_id) >= 5  THEN 'medium'
+      ELSE 'small'
+    END AS size_class
+  FROM operator_stores
+  WHERE operator_name IS NOT NULL AND operator_name != ''
+    AND COALESCE(operator_type, '') != 'franchisor'
   GROUP BY operator_name;
 
 -- legacy 用 (Phase 4 compatible): judgements ベースの view も残す

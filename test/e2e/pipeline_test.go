@@ -17,11 +17,14 @@ package e2e_test
 import (
 	"bytes"
 	"context"
+	"database/sql"
 	"encoding/csv"
 	"os"
 	"path/filepath"
 	"testing"
 	"time"
+
+	_ "modernc.org/sqlite"
 
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
@@ -133,4 +136,79 @@ func TestE2E_polygonUnknown_returnsError(t *testing.T) {
 	_, err := menu.ResolvePolygon("nonexistent-area")
 	require.Error(t, err)
 	assert.ErrorContains(t, err, "unknown area")
+}
+
+// Phase 11 integration: エニタイム新宿 bake でブランド混入 0 が維持されるか。
+// Layer A (blocklist + similarity) を外した fuzzy 結果で
+// "FIT PLACE24" "24GYM" 等が 1 件も混入しないことを保証する。
+func TestE2E_AnytimeShinjuku_noBrandContamination(t *testing.T) {
+	if os.Getenv("GOOGLE_MAPS_API_KEY") == "" {
+		t.Skip("GOOGLE_MAPS_API_KEY not set; skipping live integration test")
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Minute)
+	defer cancel()
+
+	polygon, err := menu.ResolvePolygon("新宿")
+	require.NoError(t, err)
+
+	// 実 Places API + StrictBrandMatch=true
+	seed := &dough.Searcher{
+		Places: &dough.PlacesClient{
+			APIKey: os.Getenv("GOOGLE_MAPS_API_KEY"), Language: "ja", Region: "JP",
+		},
+		Language: "ja", Region: "JP", StrictBrandMatch: true,
+	}
+
+	// tmpfile DB
+	tmpDB := filepath.Join(t.TempDir(), "test.sqlite")
+	store, err := box.Open(tmpDB)
+	require.NoError(t, err)
+	defer store.Close()
+
+	p := &oven.Pipeline{Seed: seed, Box: store, Workers: 4}
+	report, err := p.Bake(ctx, &pb.SearchStoresInGridRequest{
+		Brand: "エニタイムフィットネス", Polygon: polygon, CellKm: 1.0, Language: "ja",
+	})
+	require.NoError(t, err)
+	require.True(t, report.StoresFound > 30,
+		"新宿エニタイムは通常 40+ 店舗、実行時点で大きく下回るのは異常 (got %d)",
+		report.StoresFound)
+
+	// DB 内の brand=エニタイムフィットネス 全店舗に「エニタイム」or「Anytime」が
+	// 含まれることを確認 (Layer A blocklist の効果、混入 0)
+	// SQLite に直接 SELECT (box.Store のテスト拡張は別作業)
+	db, err := sql.Open("sqlite", tmpDB)
+	require.NoError(t, err)
+	defer db.Close()
+	rows, err := db.QueryContext(ctx,
+		"SELECT name FROM stores WHERE brand=?", "エニタイムフィットネス")
+	require.NoError(t, err)
+	defer rows.Close()
+	checked := 0
+	for rows.Next() {
+		var name string
+		require.NoError(t, rows.Scan(&name))
+		checked++
+		hasAnytime := false
+		for _, kw := range []string{"エニタイム", "Anytime", "anytime", "ANYTIME"} {
+			if stringsContains(name, kw) {
+				hasAnytime = true
+				break
+			}
+		}
+		assert.True(t, hasAnytime,
+			"混入検出: %q は Anytime ブランドの店舗名を含まない", name)
+	}
+	assert.Greater(t, checked, 30, "少なくとも 30 店舗は検証対象")
+}
+
+// stringsContains は strings.Contains と同等 (import 衝突回避のため自前)。
+func stringsContains(s, sub string) bool {
+	for i := 0; i+len(sub) <= len(s); i++ {
+		if s[i:i+len(sub)] == sub {
+			return true
+		}
+	}
+	return false
 }

@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 
 	"github.com/clearclown/pizza/internal/toppings"
@@ -113,6 +114,17 @@ func TestClient_Scrape_non2xxIsErrClient(t *testing.T) {
 	var ec *toppings.ErrClient
 	require.ErrorAs(t, err, &ec)
 	assert.Equal(t, 429, ec.Status)
+}
+
+func TestErrClient_ErrorStringContainsStatusAndBody(t *testing.T) {
+	e := &toppings.ErrClient{Status: 503, Body: "service unavailable"}
+	s := e.Error()
+	if !strings.Contains(s, "503") {
+		t.Errorf("Error() should contain status: got %q", s)
+	}
+	if !strings.Contains(s, "service unavailable") {
+		t.Errorf("Error() should contain body: got %q", s)
+	}
 }
 
 func TestClient_Scrape_successFalseReturnsError(t *testing.T) {

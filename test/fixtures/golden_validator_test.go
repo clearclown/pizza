@@ -152,3 +152,17 @@ func TestValidate_flagsLegacyCompanySuffix(t *testing.T) {
 	}
 	assert.True(t, found, "(株) などレガシー表記を flag するべき")
 }
+
+func TestValidationIssue_StringIncludesAllFields(t *testing.T) {
+	t.Parallel()
+	i := fixtures.ValidationIssue{
+		LineNo:  42,
+		PlaceID: "placeX",
+		Field:   "some_field",
+		Message: "bad value",
+	}
+	s := i.String()
+	for _, substr := range []string{"42", "placeX", "some_field", "bad value"} {
+		assert.Contains(t, s, substr)
+	}
+}

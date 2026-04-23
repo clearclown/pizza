@@ -70,6 +70,55 @@ func (s *Store) Migrate(ctx context.Context) error {
 	if _, err := s.db.ExecContext(ctx, migrationsSQL); err != nil {
 		return fmt.Errorf("box: migrate: %w", err)
 	}
+	// Phase 5.1: 既存 DB 向けの列追加 (CREATE TABLE IF NOT EXISTS では新規列が付かないため)
+	if err := s.ensureOperatorStoresVerificationColumns(ctx); err != nil {
+		return fmt.Errorf("box: migrate verification columns: %w", err)
+	}
+	return nil
+}
+
+// ensureOperatorStoresVerificationColumns は既存 DB に Layer D の列 (verification_score,
+// corporate_number, verification_source) が無ければ ALTER で追加する。
+// SQLite の CREATE TABLE IF NOT EXISTS は既存テーブルに列を足さないため、
+// このパッチアップが必要。
+func (s *Store) ensureOperatorStoresVerificationColumns(ctx context.Context) error {
+	type colDef struct {
+		Name string
+		Type string
+	}
+	required := []colDef{
+		{"verification_score", "REAL DEFAULT 0.0"},
+		{"corporate_number", "TEXT"},
+		{"verification_source", "TEXT"},
+	}
+	existing := make(map[string]bool)
+	rows, err := s.db.QueryContext(ctx, `PRAGMA table_info(operator_stores)`)
+	if err != nil {
+		return err
+	}
+	defer rows.Close()
+	for rows.Next() {
+		var cid int
+		var name, ctype string
+		var notnull, pk int
+		var dflt sql.NullString
+		if err := rows.Scan(&cid, &name, &ctype, &notnull, &dflt, &pk); err != nil {
+			return err
+		}
+		existing[name] = true
+	}
+	if err := rows.Err(); err != nil {
+		return err
+	}
+	for _, c := range required {
+		if existing[c.Name] {
+			continue
+		}
+		stmt := fmt.Sprintf("ALTER TABLE operator_stores ADD COLUMN %s %s", c.Name, c.Type)
+		if _, err := s.db.ExecContext(ctx, stmt); err != nil {
+			return fmt.Errorf("add column %s: %w", c.Name, err)
+		}
+	}
 	return nil
 }
 

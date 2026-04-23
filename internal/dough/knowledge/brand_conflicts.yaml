@@ -1,0 +1,189 @@
+# brand_conflicts.yaml — Places fuzzy match の混入ケースを蓄積するナレッジベース
+#
+# 目的: 「同じ種類のブランド混入を二度と見逃さない」
+# 運用: 実データで新たな誤合致を発見したら、以下のフォーマットで必ず追記する。
+#
+# 追加手順 (再発防止プロトコル):
+#   1. E2E で「brand X 検索に Y が混入した」ことを確認
+#   2. pattern は Y の displayName を `normalizeForBrandMatch` 相当で正規化
+#      (小文字化、空白 /  / 中黒 / ASCII ハイフン除去、長音 "ー" は残す)
+#   3. このファイルの brands[X].conflicts に新エントリを追加
+#   4. internal/dough/brand_filter_test.go の TestIsKnownConflict_* に
+#      最低 1 ケース追加して回帰テスト化
+#   5. go test ./... でグリーン確認
+#
+# スキーマ:
+#   version: int
+#   updated_at: ISO8601 date
+#   brands:
+#     "<brand 文字列>":
+#       allow:              # (optional) 正当な別名 (テスト用)
+#         - "<正規化済み文字列>"
+#       conflicts:
+#         - pattern: "<正規化済み文字列>"
+#           first_sighted: ISO8601 date
+#           example: "生 displayName"
+#           area: "検出した地域 (新宿 / 渋谷 / ...)"
+#           note: "どういう別ブランドか短い説明"
+
+version: 1
+updated_at: "2026-04-23"
+
+brands:
+  エニタイムフィットネス:
+    allow:
+      - "エニタイムフィットネス"
+      - "anytime fitness"
+      - "anytimefitness"
+    conflicts:
+      - pattern: "fitplace"
+        first_sighted: "2026-04-23"
+        example: "FIT PLACE24 新宿西口店"
+        area: "新宿"
+        note: "FIT PLACE24 系列 (別 24h FC)"
+      - pattern: "24gym"
+        first_sighted: "2026-04-23"
+        example: "24GYM 西新宿五丁目店"
+        area: "新宿"
+        note: "24GYM 系列"
+      - pattern: "whitegym"
+        first_sighted: "2026-04-23"
+        example: "WHITEGYM新宿1号店/レンタルジム"
+        area: "新宿"
+        note: "WHITEGYM (レンタル)"
+      - pattern: "vitalgym"
+        first_sighted: "2026-04-23"
+        example: "VITAL GYM24中野新橋店"
+        area: "新宿"
+        note: "VITAL GYM24"
+      - pattern: "ファストジム"
+        first_sighted: "2026-04-23"
+        example: "ファストジム24東中野店"
+        area: "新宿"
+        note: "ファストジム24"
+      - pattern: "addictgym"
+        first_sighted: "2026-04-23"
+        example: "addict gym 千駄ヶ谷店"
+        area: "新宿"
+        note: "addict gym"
+      - pattern: "amazingfitness"
+        first_sighted: "2026-04-23"
+        example: "Amazing fitness"
+        area: "新宿"
+        note: "Amazing fitness"
+      - pattern: "willbefitness"
+        first_sighted: "2026-04-23"
+        example: "WILL BE fitness studio 高田馬場店"
+        area: "新宿"
+        note: "WILL BE fitness studio"
+      - pattern: "chocozap"
+        first_sighted: "design-time"
+        example: "chocoZAP"
+        note: "chocoZAP (RIZAP 系)"
+      - pattern: "chocozap"
+        first_sighted: "design-time"
+        example: "choco zap"
+        note: "chocoZAP variants"
+      - pattern: "joyfit"
+        first_sighted: "design-time"
+        example: "JOYFIT24"
+        note: "JOYFIT 24h"
+
+  "スターバックス コーヒー":
+    allow:
+      - "スターバックスコーヒー"
+    conflicts:
+      - pattern: "ドトール"
+        first_sighted: "design-time"
+        example: "ドトールコーヒー"
+        note: "ドトール (直営カフェ)"
+      - pattern: "タリーズ"
+        first_sighted: "design-time"
+        example: "タリーズコーヒー"
+        note: "タリーズ"
+      - pattern: "プロント"
+        first_sighted: "design-time"
+        example: "プロント"
+        note: "PRONTO"
+      - pattern: "エクセルシオール"
+        first_sighted: "design-time"
+        example: "エクセルシオール カフェ"
+        note: "ドトール系"
+      - pattern: "ベローチェ"
+        first_sighted: "design-time"
+        example: "カフェ・ベローチェ"
+        note: "ベローチェ"
+      - pattern: "サンマルク"
+        first_sighted: "design-time"
+        example: "サンマルクカフェ"
+        note: "サンマルク"
+      - pattern: "コメダ"
+        first_sighted: "design-time"
+        example: "コメダ珈琲店"
+        note: "コメダ珈琲 (FC 大手だが別ブランド)"
+
+  マクドナルド:
+    conflicts:
+      - pattern: "モスバーガー"
+        first_sighted: "design-time"
+        note: "モスバーガー"
+      - pattern: "ロッテリア"
+        first_sighted: "design-time"
+        note: "ロッテリア"
+      - pattern: "バーガーキング"
+        first_sighted: "design-time"
+        note: "バーガーキング"
+      - pattern: "ケンタッキー"
+        first_sighted: "design-time"
+        note: "KFC"
+      - pattern: "ファーストキッチン"
+        first_sighted: "design-time"
+        note: "ファーストキッチン"
+      - pattern: "フレッシュネス"
+        first_sighted: "design-time"
+        note: "フレッシュネスバーガー"
+
+  "セブン-イレブン":
+    conflicts:
+      - pattern: "ファミリーマート"
+        first_sighted: "design-time"
+        note: "ファミマ"
+      - pattern: "ローソン"
+        first_sighted: "design-time"
+        note: "ローソン"
+      - pattern: "デイリーヤマザキ"
+        first_sighted: "design-time"
+        note: "デイリーヤマザキ"
+      - pattern: "ミニストップ"
+        first_sighted: "design-time"
+        note: "ミニストップ"
+
+  ファミリーマート:
+    conflicts:
+      - pattern: "セブンイレブン"
+        first_sighted: "design-time"
+        note: "セブン-イレブン"
+      - pattern: "ローソン"
+        first_sighted: "design-time"
+        note: "ローソン"
+      - pattern: "デイリーヤマザキ"
+        first_sighted: "design-time"
+        note: "デイリーヤマザキ"
+      - pattern: "ミニストップ"
+        first_sighted: "design-time"
+        note: "ミニストップ"
+
+  ローソン:
+    conflicts:
+      - pattern: "セブンイレブン"
+        first_sighted: "design-time"
+        note: "セブン-イレブン"
+      - pattern: "ファミリーマート"
+        first_sighted: "design-time"
+        note: "ファミマ"
+      - pattern: "デイリーヤマザキ"
+        first_sighted: "design-time"
+        note: "デイリーヤマザキ"
+      - pattern: "ミニストップ"
+        first_sighted: "design-time"
+        note: "ミニストップ"

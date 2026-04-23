@@ -15,12 +15,14 @@ type Server struct {
 }
 
 // NewServer は Places API キー + 言語/地域から Server を組み立てる。
+// デフォルトで StrictBrandMatch=true (BI 用途で別ブランド混入を弾く)。
 func NewServer(apiKey, language, region string) *Server {
 	return &Server{
 		Searcher: &Searcher{
-			Places:   &PlacesClient{APIKey: apiKey, Language: language, Region: region},
-			Language: language,
-			Region:   region,
+			Places:           &PlacesClient{APIKey: apiKey, Language: language, Region: region},
+			Language:         language,
+			Region:           region,
+			StrictBrandMatch: true,
 		},
 	}
 }

@@ -1,0 +1,210 @@
+# territory_radius.yaml — FC ブランド別 同ブランド店舗間距離の目安 (Phase 16)
+#
+# 意味:
+#   dominant_min_m    : これ未満の距離に同ブランド 2 店舗 = 重複登録疑い (警告)
+#   dominant_typical_m: 実運用で観測される平均的な店舗間距離
+#   territory_max_m   : これ以上離れていれば別 territory (独立商圏)
+#   strategy          : dominant | territory | dispersed | mixed
+#
+# 用途:
+#   1. 近接 2 店舗検出 → dominant_min_m 未満なら alarm (Places API の重複登録)
+#   2. 既知店舗の territory カバー範囲 (dominant_typical_m)
+#   3. 未探索領域判定 (bottom-up scan を省略する境界)
+#
+# 根拠は各項目 source_urls を参照。契約書/IR/業界紙に明記された数値を優先。
+
+version: 1
+updated_at: "2026-04-23"
+
+industries:
+  convenience_dominant:
+    strategy: dominant
+    dominant_min_m: 80
+    dominant_typical_m: 300
+    territory_max_m: 1000
+    note: "セブン/ファミマ/ローソン 型。territory 非保護、意図的な近接出店"
+
+  convenience_territory:
+    strategy: territory
+    dominant_min_m: 150
+    dominant_typical_m: 500
+    territory_max_m: 1500
+    note: "セイコーマート型。契約書で半径 150m 独占明記"
+
+  gym_24h_territory:
+    strategy: territory
+    dominant_min_m: 800
+    dominant_typical_m: 1600
+    territory_max_m: 5000
+    note: "エニタイム型。US FDD で最大 3mi protected territory"
+
+  gym_24h_dominant:
+    strategy: dominant
+    dominant_min_m: 100
+    dominant_typical_m: 500
+    territory_max_m: 2000
+    note: "chocoZAP 型。コンビニジム、沿線集中ドミナント"
+
+  gym_large:
+    strategy: dispersed
+    dominant_min_m: 2000
+    dominant_typical_m: 4000
+    territory_max_m: 8000
+    note: "ゴールドジム/ルネサンス等、商圏 3-5km 分散"
+
+  fastfood_urban:
+    strategy: dominant
+    dominant_min_m: 100
+    dominant_typical_m: 500
+    territory_max_m: 2000
+    note: "マクドナルド/スタバ/ドトール等、駅前集中"
+
+  fastfood_suburban:
+    strategy: dispersed
+    dominant_min_m: 1000
+    dominant_typical_m: 2500
+    territory_max_m: 5000
+    note: "コメダ型、郊外ロードサイド分散"
+
+  family_restaurant:
+    strategy: dispersed
+    dominant_min_m: 1500
+    dominant_typical_m: 3000
+    territory_max_m: 6000
+    note: "ガスト/サイゼリヤ等、全店直営主体"
+
+  gyudon_bento:
+    strategy: mixed
+    dominant_min_m: 200
+    dominant_typical_m: 800
+    territory_max_m: 3000
+    note: "すき家/吉野家、都市部=近接、郊外=分散"
+
+  drugstore:
+    strategy: dominant
+    dominant_min_m: 300
+    dominant_typical_m: 1000
+    territory_max_m: 3000
+    note: "マツキヨ/ウエルシア、首都圏ドミナント"
+
+  retail_reuse:
+    strategy: dispersed
+    dominant_min_m: 1000
+    dominant_typical_m: 3000
+    territory_max_m: 8000
+    note: "ブックオフ/TSUTAYA/ゲオ、ロードサイド大型"
+
+brands:
+  # ─── コンビニ ────────────────────────────────────
+  セブン-イレブン:
+    industry: convenience_dominant
+    note: "ドミナント代表。新宿駅付近で約100m 事例、territory 非保護"
+  ファミリーマート:
+    industry: convenience_dominant
+  ローソン:
+    industry: convenience_dominant
+  デイリーヤマザキ:
+    industry: convenience_dominant
+  ミニストップ:
+    industry: convenience_dominant
+  セイコーマート:
+    industry: convenience_territory
+    dominant_min_m: 150
+    note: "JFA 公開契約書で半径 150m 独占明記"
+
+  # ─── 24h ジム ────────────────────────────────────
+  エニタイムフィットネス:
+    industry: gym_24h_territory
+    dominant_min_m: 800
+    note: "US FDD protected territory 最大 3mi、日本は説明会告知"
+  chocoZAP:
+    industry: gym_24h_dominant
+    note: "RIZAP 中期計画でドミナント明記"
+  JOYFIT24:
+    industry: gym_24h_territory
+  FIT_PLACE24:
+    industry: gym_24h_territory
+  "24GYM":
+    industry: gym_24h_territory
+  ファストジム24:
+    industry: gym_24h_territory
+
+  # ─── 大型ジム ────────────────────────────────────
+  ゴールドジム:
+    industry: gym_large
+  ルネサンス:
+    industry: gym_large
+  セントラルスポーツ:
+    industry: gym_large
+  コナミスポーツ:
+    industry: gym_large
+  ティップネス:
+    industry: gym_large
+
+  # ─── カフェ/ファストフード ──────────────────────
+  マクドナルド:
+    industry: fastfood_urban
+  モスバーガー:
+    industry: fastfood_urban
+  KFC:
+    industry: fastfood_urban
+  ドトール:
+    industry: fastfood_urban
+  スターバックス:
+    industry: fastfood_urban
+    dominant_min_m: 50
+    note: "東京駅6店、横浜駅13店の近接実績"
+  "スターバックス コーヒー":
+    industry: fastfood_urban
+    dominant_min_m: 50
+  タリーズ:
+    industry: fastfood_urban
+  プロント:
+    industry: fastfood_urban
+  コメダ珈琲:
+    industry: fastfood_suburban
+    note: "郊外ロードサイド 95% FC"
+
+  # ─── ファミレス (大半直営) ───────────────────────
+  ガスト:
+    industry: family_restaurant
+  サイゼリヤ:
+    industry: family_restaurant
+  ジョナサン:
+    industry: family_restaurant
+  デニーズ:
+    industry: family_restaurant
+  ロイヤルホスト:
+    industry: family_restaurant
+
+  # ─── 牛丼/弁当 ──────────────────────────────────
+  すき家:
+    industry: gyudon_bento
+  吉野家:
+    industry: gyudon_bento
+  松屋:
+    industry: gyudon_bento
+  ほっともっと:
+    industry: gyudon_bento
+  オリジン弁当:
+    industry: gyudon_bento
+
+  # ─── ドラッグストア ─────────────────────────────
+  マツモトキヨシ:
+    industry: drugstore
+  ウエルシア:
+    industry: drugstore
+  スギ薬局:
+    industry: drugstore
+  ツルハ:
+    industry: drugstore
+
+  # ─── 小売/中古 ──────────────────────────────────
+  ブックオフ:
+    industry: retail_reuse
+  TSUTAYA:
+    industry: retail_reuse
+  ゲオ:
+    industry: retail_reuse
+  セカンドストリート:
+    industry: retail_reuse
