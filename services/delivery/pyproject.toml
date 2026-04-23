@@ -25,6 +25,10 @@ dependencies = [
     # ORM (Phase 22: 手動 YAML 維持を脱却、DB 中央集約へ)
     "sqlalchemy>=2.0.36",
     "playwright>=1.58.0",
+    "scrapling>=0.4.7",
+    "curl-cffi>=0.15.0",
+    "browserforge>=1.2.4",
+    "msgspec>=0.21.1",
 ]
 
 [dependency-groups]
