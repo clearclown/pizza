@@ -69,14 +69,22 @@ make proto
 make build
 
 # 5. テスト
-make test                         # Go 全 ok + Python 20/20 pass
+make test                         # Go 9 pkg ok + Python 185 pass + 6 live skipped
 
 # 6. PI-ZZA を焼く (最小: Places API 1 本で動く)
 ./bin/pizza bake --query "エニタイムフィットネス" --area "新宿"
 
-# 6b. 判定を実 LLM で有効化する場合
-DELIVERY_MODE=live uv run python -m pizza_delivery &  # 別 shell 推奨
-./bin/pizza bake --query "エニタイムフィットネス" --area "新宿" --with-judge
+# 6b. Expert Panel (Gemini Flash × 2 + Claude critic) で判定
+./bin/pizza serve --mode panel &    # gRPC 起動 (別シェル推奨)
+./bin/pizza bake --query "エニタイムフィットネス" --area "新宿" \
+    --with-judge --judge-mode panel
+
+# 6c. Research Pipeline で operator 深掘り + 広域芋づる式 + 法人番号 verify
+./bin/pizza research --brand "エニタイムフィットネス" \
+    --expand --expand-area "東京都" --verify-houjin
+
+# 全フラグ確認
+./bin/pizza help                  # bake / research / serve の flag 一覧
 
 # 7. BI 可視化
 uv run streamlit run cmd/box-ui/app.py
