@@ -3,10 +3,19 @@ package dough
 import (
 	"context"
 	"fmt"
+	"math"
 	"strings"
 
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
 	"github.com/clearclown/pizza/internal/grid"
+)
+
+// math 関数エイリアス (_haversineM の簡潔化用)
+var (
+	sin  = math.Sin
+	cos  = math.Cos
+	asin = math.Asin
+	sqrt = math.Sqrt
 )
 
 // PlacesSearcher は PlacesClient の抽象 (テスト mockable)。
@@ -23,6 +32,7 @@ type SearchMetrics struct {
 	RejectedPolygon      int // polygon post-filter で弾かれた
 	RejectedDuplicate    int // place_id 重複で弾かれた
 	CellsHitCap          int // max_result_count に達した cell 数 (取りこぼし疑い)
+	CellsSkippedByCover  int // Phase 17.3: cover map で既知領域として skip した cell 数
 	Emitted              int // 最終 emit された件数
 }
 
@@ -135,6 +145,13 @@ func (s *Searcher) SearchStoresInGrid(
 	return nil
 }
 
+// CoveredPoint は既知店舗の座標 + 半径を表す (Phase 17.3)。
+// SearchStoresAdaptive はこれらの円内を「既に網羅済」とみなして API call を省略する。
+type CoveredPoint struct {
+	Lat, Lng float64
+	RadiusM  float64
+}
+
 // AdaptiveSearchOptions は SearchStoresAdaptive の制御パラメータ。
 type AdaptiveSearchOptions struct {
 	// MinCellMeters は cell の短辺がこの値未満になったら分割を停止。
@@ -145,6 +162,11 @@ type AdaptiveSearchOptions struct {
 	// SaturationThreshold: 何件返ったら 「飽和 = 取りこぼし疑い」とみなして分割するか。
 	// API 上限は 20、ここは 20 で設定するのが標準。
 	SaturationThreshold int32
+	// Phase 17.3: CoverMap (既知店舗 + territory 半径) を渡すと、
+	// cell 中心がそのいずれかの円内なら API を叩かず skip する。
+	// top-down で operator 公式から取得した既知店舗の territory を
+	// bottom-up scan で再探索しないための最適化。
+	Covered []CoveredPoint
 }
 
 func (o *AdaptiveSearchOptions) withDefaults() AdaptiveSearchOptions {
@@ -217,6 +239,12 @@ func (s *Searcher) SearchStoresAdaptive(
 			for _, child := range cell.Subdivide() {
 				stack = append(stack, child)
 			}
+			continue
+		}
+
+		// Phase 17.3: CoverMap に含まれる cell は skip (API call 省略)
+		if len(o.Covered) > 0 && _cellCovered(cell, o.Covered) {
+			s.Metrics.CellsSkippedByCover++
 			continue
 		}
 
@@ -299,6 +327,32 @@ func (s *Searcher) SearchStoresAdaptive(
 		}
 	}
 	return nil
+}
+
+// _cellCovered は cell 中心がいずれかの cover 円内かを判定 (Phase 17.3)。
+func _cellCovered(cell grid.QuadCell, cov []CoveredPoint) bool {
+	clat := cell.Center.GetLat()
+	clng := cell.Center.GetLng()
+	for _, c := range cov {
+		if _haversineM(clat, clng, c.Lat, c.Lng) <= c.RadiusM {
+			return true
+		}
+	}
+	return false
+}
+
+// _haversineM は球面距離 m (内部 helper、既存 grid.latDegToM と独立)。
+func _haversineM(lat1, lng1, lat2, lng2 float64) float64 {
+	const r = 6371000.0
+	dlat := (lat2 - lat1) * 3.141592653589793 / 180.0
+	dlng := (lng2 - lng1) * 3.141592653589793 / 180.0
+	la1 := lat1 * 3.141592653589793 / 180.0
+	la2 := lat2 * 3.141592653589793 / 180.0
+	sinLat := sin(dlat / 2)
+	sinLng := sin(dlng / 2)
+	a := sinLat*sinLat + cos(la1)*cos(la2)*sinLng*sinLng
+	c := 2 * asin(sqrt(a))
+	return r * c
 }
 
 // brand 判定の閾値定数。KB に依存しすぎず、類似度数値を主判断に。
