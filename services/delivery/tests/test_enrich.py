@@ -56,10 +56,11 @@ def _setup_db(path: Path) -> None:
         ],
     )
     conn.executemany(
-        "INSERT INTO operator_stores (operator_name, place_id, brand, discovered_via) VALUES (?, ?, ?, ?)",
+        "INSERT INTO operator_stores (operator_name, place_id, brand, discovered_via, operator_type) VALUES (?, ?, ?, ?, ?)",
         [
-            # p1 は既に per_store で処理済 → enrich 対象から除外
-            ("株式会社既知", "p1", "モスバーガー", "per_store"),
+            # p1 は既に 加盟店 (franchisee) 特定済 → enrich 対象から除外
+            # (本部 franchisor だけの場合は再 enrich 対象に含める仕様)
+            ("株式会社既知", "p1", "モスバーガー", "per_store", "franchisee"),
         ],
     )
     conn.commit()
@@ -296,16 +297,57 @@ def test_enricher_phone_preferred_over_url(tmp_path: Path) -> None:
     assert scraper.url_calls == 0
 
 
+def test_candidate_stores_includes_franchisor_only(tmp_path: Path) -> None:
+    """本部 (franchisor) のみで特定されてる店舗は再 enrich 対象に含まれる。"""
+    db = tmp_path / "p.sqlite"
+    _setup_db(db)
+    # p2 を franchisor only (本部しか取れなかった) にする
+    conn = sqlite3.connect(db)
+    conn.executemany(
+        "INSERT OR IGNORE INTO operator_stores (operator_name, place_id, brand, discovered_via, operator_type) VALUES (?,?,?,?,?)",
+        [("株式会社モスフードサービス", "p2", "モスバーガー", "chain_verified", "franchisor")],
+    )
+    conn.commit()
+    conn.close()
+    cands = _candidate_stores(db, brand="モスバーガー")
+    ids = {c[0] for c in cands}
+    # p2 は franchisor のみなので候補に残る、p1 は franchisee (既知) なので除外
+    assert "p2" in ids
+    assert "p1" not in ids
+    # include_franchisor_only=False なら p2 も除外される
+    cands2 = _candidate_stores(db, brand="モスバーガー", include_franchisor_only=False)
+    assert "p2" not in {c[0] for c in cands2}
+
+
+def test_candidate_stores_require_url_excludes_noise(tmp_path: Path) -> None:
+    """official_url が空な store (駐車場/本部エントリ等) は除外 (デフォルト)。"""
+    db = tmp_path / "p.sqlite"
+    _setup_db(db)
+    # official_url が空な noise を追加
+    conn = sqlite3.connect(db)
+    conn.execute(
+        "INSERT INTO stores VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        ("p4", "㈱モスストアカンパニー", "モスバーガー", "東京都品川区", 0, 0, "", ""),
+    )
+    conn.commit()
+    conn.close()
+    cands = _candidate_stores(db, brand="モスバーガー")
+    assert "p4" not in {c[0] for c in cands}
+    # require_url=False なら p4 も含まれる
+    cands2 = _candidate_stores(db, brand="モスバーガー", require_url=False)
+    assert "p4" in {c[0] for c in cands2}
+
+
 def test_enricher_no_candidates_short_circuit(tmp_path: Path) -> None:
     """operator 未確定 store が 0 件 → 即 return。"""
     db = tmp_path / "p.sqlite"
     _setup_db(db)
-    # 全 store を per_store 処理済にしておく
+    # 全 store を per_store franchisee 処理済にしておく (franchisor only だと再 enrich 対象に入る)
     conn = sqlite3.connect(db)
     conn.executemany(
-        "INSERT OR IGNORE INTO operator_stores (operator_name, place_id, brand, discovered_via) VALUES (?,?,?,?)",
-        [("株式会社X", "p2", "モスバーガー", "per_store"),
-         ("株式会社Y", "p3", "モスバーガー", "per_store")],
+        "INSERT OR IGNORE INTO operator_stores (operator_name, place_id, brand, discovered_via, operator_type) VALUES (?,?,?,?,?)",
+        [("株式会社X", "p2", "モスバーガー", "per_store", "franchisee"),
+         ("株式会社Y", "p3", "モスバーガー", "per_store", "franchisee")],
     )
     conn.commit()
     conn.close()

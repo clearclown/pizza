@@ -50,29 +50,51 @@ def _candidate_stores(
     *,
     brand: str = "",
     max_stores: int = 0,
+    include_franchisor_only: bool = True,
+    require_url: bool = True,
 ) -> list[tuple[str, str, str, str, str]]:
     """operator 未確定の店舗 (place_id, name, address, phone, official_url) を返す。
 
-    - stores テーブルから brand 指定で拾う
-    - operator_stores に per_store / enrich 経由の record が既にある place_id は除外
-    - phone 欄が空の店舗を優先 (Places Details を追加で叩く対象)
+    Args:
+      include_franchisor_only: per_store/chain_verified で『本部 (franchisor)
+        または unknown』しか紐付いていない店舗も enrich 対象に含める。
+        既存の pipeline 結果で本部しか取れなかった Mos のようなケースで
+        enrich 経由の真 FC 加盟店特定を可能にする (default True)。
+      require_url: official_url が空な店舗 (駐車場 / 本部エントリ等) は
+        enrich 対象から除外 (default True)。enrich の URL fallback が
+        機能しない noise を排除する。
     """
     conn = sqlite3.connect(db_path)
     try:
+        # 本当に 加盟店 として特定済な store だけを candidates から除外
+        # (franchisor/unknown のみの per_store 結果は再 enrich 対象とする)
+        if include_franchisor_only:
+            exclude_cond = (
+                "os.discovered_via = 'enrich_phone_lookup' "
+                "OR (os.operator_type = 'franchisee' "
+                "    AND os.discovered_via IN ('per_store','chain_verified'))"
+            )
+        else:
+            exclude_cond = (
+                "os.discovered_via IN ('per_store','chain_verified',"
+                "                      'enrich_phone_lookup')"
+            )
         q = (
             "SELECT s.place_id, s.name, s.address, "
             "       COALESCE(s.phone,'') AS phone, "
             "       COALESCE(s.official_url,'') AS url "
             "FROM stores s "
-            "LEFT JOIN operator_stores os "
-            "  ON os.place_id = s.place_id "
-            "  AND os.discovered_via IN ('per_store','chain_verified','enrich_phone_lookup') "
-            "WHERE os.place_id IS NULL "
+            "WHERE s.place_id NOT IN ("
+            "  SELECT os.place_id FROM operator_stores os "
+            "  WHERE " + exclude_cond +
+            ") "
         )
         args: list = []
         if brand:
             q += " AND s.brand = ? "
             args.append(brand)
+        if require_url:
+            q += " AND s.official_url IS NOT NULL AND s.official_url != '' "
         q += " ORDER BY (s.phone IS NULL OR s.phone = '') DESC, s.place_id "
         if max_stores > 0:
             q += " LIMIT ? "
@@ -169,10 +191,16 @@ class Enricher:
         db_path: str | Path,
         brand: str = "",
         max_stores: int = 50,
+        include_franchisor_only: bool = True,
+        require_url: bool = True,
     ) -> EnrichStats:
         self._resolve_deps()
         stats = EnrichStats()
-        stores = _candidate_stores(db_path, brand=brand, max_stores=max_stores)
+        stores = _candidate_stores(
+            db_path, brand=brand, max_stores=max_stores,
+            include_franchisor_only=include_franchisor_only,
+            require_url=require_url,
+        )
         stats.total_candidates = len(stores)
         if not stores:
             return stats
