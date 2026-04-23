@@ -16,6 +16,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"sync/atomic"
 	"time"
 
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
@@ -39,13 +40,42 @@ func (e *ErrAPI) Error() string {
 }
 
 // PlacesClient は Google Places API (New) の REST クライアント。
+//
+// Phase 27 bugfix: Multi-key pool 対応。複数の GCP project の key を
+// round-robin することで実質 throughput を 2x/3x にスケール。
+// APIKeys が指定されていればそちらを優先、空なら APIKey fallback。
 type PlacesClient struct {
-	APIKey     string
+	APIKey     string        // 単一 key (backward compat)
+	APIKeys    []string      // Phase 27: key pool (優先、あれば round-robin)
 	BaseURL    string        // 空なら DefaultPlacesBaseURL
 	HTTPClient *http.Client  // 空なら &http.Client{Timeout: 30s}
 	FieldMask  string        // 空なら DefaultFieldMask
 	Language   string        // "ja" など
 	Region     string        // "JP" など
+
+	keyIdx uint64            // round-robin カウンタ (atomic)
+}
+
+// selectAPIKey は round-robin で次の API key を返す。
+// APIKeys が空なら APIKey を返す (既存動作)。
+func (c *PlacesClient) selectAPIKey() string {
+	if len(c.APIKeys) > 0 {
+		// atomic インクリメントで thread-safe round-robin
+		n := atomic.AddUint64(&c.keyIdx, 1) - 1
+		return c.APIKeys[n%uint64(len(c.APIKeys))]
+	}
+	return c.APIKey
+}
+
+// KeyCount は有効 key 数を返す (設定検証用)。
+func (c *PlacesClient) KeyCount() int {
+	if len(c.APIKeys) > 0 {
+		return len(c.APIKeys)
+	}
+	if c.APIKey != "" {
+		return 1
+	}
+	return 0
 }
 
 func (c *PlacesClient) baseURL() string {
@@ -140,9 +170,11 @@ type DisplayName struct {
 }
 
 // SearchText は Places API (New) の :searchText エンドポイントを叩く。
+// Phase 27: APIKeys が設定されていれば round-robin で複数 key に分散。
 func (c *PlacesClient) SearchText(ctx context.Context, req *SearchTextRequest) (*SearchTextResponse, error) {
-	if c.APIKey == "" {
-		return nil, errors.New("dough: PlacesClient.APIKey is empty")
+	apiKey := c.selectAPIKey()
+	if apiKey == "" {
+		return nil, errors.New("dough: PlacesClient has no API key (APIKey/APIKeys both empty)")
 	}
 	if req == nil || req.TextQuery == "" {
 		return nil, errors.New("dough: SearchText requires non-empty TextQuery")
@@ -157,7 +189,7 @@ func (c *PlacesClient) SearchText(ctx context.Context, req *SearchTextRequest) (
 		return nil, err
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
-	httpReq.Header.Set("X-Goog-Api-Key", c.APIKey)
+	httpReq.Header.Set("X-Goog-Api-Key", apiKey)
 	httpReq.Header.Set("X-Goog-FieldMask", c.fieldMask())
 
 	resp, err := c.httpClient().Do(httpReq)

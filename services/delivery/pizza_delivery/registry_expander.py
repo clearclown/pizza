@@ -265,10 +265,14 @@ def aggregate_cross_brand_operators(
     for operator_name, brand, n, cn, ot, dv in rows:
         if not operator_name:
             continue
-        key = _norm(operator_name) or operator_name
-        # 本部・フランチャイザー名と一致すれば除外
-        if exclude_franchisor and key in blocklist:
+        name_key = _norm(operator_name) or operator_name
+        # 本部・フランチャイザー名と一致すれば除外 (名前ベース)
+        if exclude_franchisor and name_key in blocklist:
             continue
+        # identity key: corporate_number があれば最優先 (表記揺れ横断)、
+        # 無ければ正規化 name で fallback
+        cn_clean = str(cn or "").strip()
+        key = f"corp:{cn_clean}" if cn_clean else f"name:{name_key}"
         displays.setdefault(key, []).append(operator_name)
         op = by_operator.get(key)
         if op is None:
