@@ -1,0 +1,67 @@
+operator_name,total_stores,brand_count,brands_breakdown,corporate_number,operator_types,discovered_vias
+株式会社セーブオン,338,1,ローソン:338,,franchisee,registry
+JR九州リテール株式会社,212,1,ファミリーマート:212,,franchisee,registry
+株式会社ハードオフコーポレーション,210,3,オフハウス:112; ハードオフ:97; アップガレージ:1,6110001012853,unknown,chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+株式会社モスストアカンパニー,209,1,モスバーガー:209,3010701019707,franchisee,registry;llm_cleanse_houjin_verified
+クォリティフーズ株式会社,183,1,マクドナルド:183,6010901041805,franchisee,registry
+株式会社ITTO,149,1,Itto個別指導学院:149,,unknown,chain_discovery
+株式会社カーブスホールディングス,149,1,カーブス:149,5070001005771,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社コメダホールディングス,148,1,コメダ珈琲:148,2180001116676,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社シャトレーゼ企業,147,1,シャトレーゼ:147,,unknown,chain_discovery
+株式会社Fast Fitness Japan,136,1,エニタイムフィットネス:136,,franchisor,chain_discovery
+株式会社豊昇,71,1,マクドナルド:71,8180301025836,franchisee,registry
+株式会社新鮮組本部,70,1,ローソン:70,,franchisee,registry
+株式会社KOHATAホールディングス,67,1,エニタイムフィットネス:67,8020001111919,franchisee,registry
+株式会社タカ・コーポレーション,67,1,エニタイムフィットネス:67,1120901029447,franchisee,registry;llm_cleanse_houjin_verified
+東食品株式会社,50,1,エニタイムフィットネス:50,6010401001739,franchisee,registry;llm_cleanse_houjin_verified
+エイ・ケイ・フランチャイズシステム株式会社,48,1,ファミリーマート:48,1010701027810,franchisee,registry
+株式会社Fusion'z,39,1,ローソン:39,,franchisee,registry
+株式会社タイレル,34,1,ファミリーマート:34,,franchisee,registry
+ヒロフーズ株式会社,33,1,マクドナルド:33,,franchisee,registry
+株式会社ラ・ヴィーチェ,22,1,エニタイムフィットネス:22,1050001047381,franchisee,registry;llm_cleanse_houjin_verified
+川勝商事株式会社,20,1,エニタイムフィットネス:20,1120001042383,franchisee,registry;llm_cleanse_houjin_verified
+株式会社アトラクト,19,1,エニタイムフィットネス:19,3180001058546,franchisee,registry;llm_cleanse_houjin_verified
+株式会社エムデジ,17,1,エニタイムフィットネス:17,6430001050730,franchisee,registry;llm_cleanse_houjin_verified
+株式会社モスフードサービス,16,1,モスバーガー:16,5010701019713,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社アズ,13,1,エニタイムフィットネス:13,8120001073612,franchisee,registry;llm_cleanse_houjin_verified
+株式会社キノシタ,12,1,ファミリーマート:12,,franchisee,registry
+株式会社glob,10,1,エニタイムフィットネス:10,2240001041216,franchisee,registry
+株式会社Kids-UP,9,1,Kids Duo:9,,unknown,chain_discovery
+株式会社さくらホーム,8,1,エニタイムフィットネス:8,3430001027962,franchisee,registry;llm_cleanse_houjin_verified
+株式会社スーパーバリュー,8,1,業務スーパー:8,2030001044306,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社ベイスオブスポーツ,8,1,エニタイムフィットネス:8,6360001019114,franchisee,registry;llm_cleanse_houjin_verified
+株式会社ペルゴラ,8,1,エニタイムフィットネス:8,6140001061476,franchisee,"registry,registry;llm_cleanse_houjin_verified"
+株式会社フィットベイト,6,1,エニタイムフィットネス:6,7040001099451,unknown,chain_discovery;llm_cleanse_houjin_verified
+佐竹食品株式会社,5,1,業務スーパー:5,6120901006607,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社トピーレック,5,1,エニタイムフィットネス:5,4010601024954,franchisee,registry;llm_cleanse_houjin_verified
+株式会社ベネフィット・ワン,5,1,Kids Duo:5,8011001045281,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社エイ・ライン,3,1,モスバーガー:3,2011301000999,franchisee,enrich_phone_lookup;llm_cleanse_houjin_verified
+株式会社サンパーク,3,1,エニタイムフィットネス:3,4120901006550,franchisee,registry;llm_cleanse_houjin_verified
+株式会社サンベルクス,3,1,業務スーパー:3,1011801030720,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社スーパーアルプス,3,1,業務スーパー:3,2010101001836,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社神戸物産,3,1,業務スーパー:3,5140001044630,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社ビッグワン,2,1,TSUTAYA:2,9380001001240,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社メイワ・エステート,2,1,モスバーガー:2,6010501039217,franchisee,enrich_phone_lookup;llm_cleanse_houjin_verified
+株式会社三和,2,1,業務スーパー:2,1400001013281,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社大宮電化,2,2,オフハウス:1; ハードオフ:1,3030001001578,unknown,chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+とら醤油株式会社,1,1,業務スーパー:1,7260001034601,unknown,chain_discovery;llm_cleanse_houjin_verified
+大和フーヅ株式会社,1,1,モスバーガー:1,5010401089998,franchisee,enrich_phone_lookup;llm_cleanse_houjin_verified
+有限会社エアーズ,1,1,モスバーガー:1,8030002026611,franchisee,enrich_phone_lookup;llm_cleanse_houjin_verified
+株式会社UPSTART 2,1,1,オフハウス:1,,unknown,chain_discovery
+株式会社Vidaway,1,1,TSUTAYA:1,,unknown,chain_discovery
+株式会社Vidaway創り手,1,1,TSUTAYA:1,,unknown,chain_discovery
+株式会社アズナス,1,1,ローソン:1,,franchisee,registry
+株式会社アップガレージグループ企業,1,1,アップガレージ:1,,unknown,chain_discovery
+株式会社アリーモ,1,1,Brand off:1,2010501046646,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社アルペンクイックフィットネス,1,1,エニタイムフィットネス:1,,unknown,chain_discovery
+株式会社アーミーフィットネスジャパン,1,1,エニタイムフィットネス:1,7030001034491,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社エイゼン,1,1,エニタイムフィットネス:1,2430001077273,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社ゴトー,1,1,TSUTAYA:1,1380001009662,franchisee,chain_discovery;llm_cleanse_houjin_verified
+株式会社サイン・ハウス,1,1,アップガレージ:1,6010902006286,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社ドムドムフードサービス,1,1,モスバーガー:1,8021001062020,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社リロクラブ,1,1,Kids Duo:1,2011101032251,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社京北スーパー,1,1,業務スーパー:1,2040001065524,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社大創産業,1,1,業務スーパー:1,7240001022681,direct,chain_discovery;llm_cleanse_houjin_verified
+株式会社戸田建設,1,1,TSUTAYA:1,6460101001085,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社湘南開発,1,1,エニタイムフィットネス:1,6040002073695,unknown,chain_discovery;llm_cleanse_houjin_verified
+株式会社竹中工務店,1,1,コメダ珈琲:1,3120001077469,unknown,chain_discovery;llm_cleanse_houjin_verified

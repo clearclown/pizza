@@ -105,6 +105,49 @@ sqlite3 -csv -header var/pizza-registry.sqlite "
 - Stage 3: Claude critic が住所付き rerank で同名他社を弁別 (best_index=-1 なら reject)
 - 429/quota 切れは `_LLMWithFallback` が runtime 検知して自動で primary→fallback 切替
 
+## `fc-operators-unified-2026-04-24.csv` ⭐ 最包括 CSV
+
+**1,037 link rows** — ブランド × 事業会社 の flat table。ORM の
+`franchise_brand` × `brand_operator_link` × `operator_company` を結合した全件 dump。
+
+### 生成手順
+```bash
+./bin/pizza integrate --mode export \
+    --out test/fixtures/megafranchisee/fc-operators-unified-2026-04-24.csv
+```
+
+### 列定義
+| 列 | 説明 |
+|---|---|
+| brand_name | ブランド名 (franchise_brand.name) |
+| industry | 業種 |
+| operator_name | 事業会社名 (canonical) |
+| corporate_number | 13 桁法人番号 (国税庁 verified or 空) |
+| head_office | 本社所在地 |
+| prefecture | 本社所在都道府県 |
+| operator_type | franchisor (本部) / franchisee (加盟) / unknown |
+| estimated_store_count | 推定店舗数 (brand 単位) |
+| source | data source タグ (jfa / manual_megajii_* / houjin_csv / edinet 等) |
+| source_url | 出典 URL (空可) |
+| note | 備考 |
+
+### 使い所
+- 「事業会社 X を運営しているブランドは?」 → operator_name で filter
+- 「ブランド X を運営している事業会社は?」 → brand_name で filter
+- 両方向のクエリが可能な双方向 index
+
+## `megafranchisee-pipeline-2026-04-24.csv`
+
+**66 operators** — pipeline DB (`pizza.sqlite` の operator_stores) を cross-brand
+集計した結果。こちらは実店舗を観測できた operator に限る。
+
+### 生成手順
+```bash
+./bin/pizza megafranchisee --min-total 1 --include-franchisor \
+    --out-csv test/fixtures/megafranchisee/megafranchisee-pipeline-2026-04-24.csv \
+    --top 0
+```
+
 ## `import-megajii-dry-proposals-2026-04-24.csv`
 
 192 行 TSV (人手集計メガジー 179 + 本部 13) に対する import-megajii-csv dry-run の
