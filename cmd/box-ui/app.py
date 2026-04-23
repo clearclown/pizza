@@ -81,6 +81,36 @@ def load_mega_franchisees(db: str, min_count: int) -> pd.DataFrame:
 
 
 @st.cache_data(ttl=30)
+def load_all_franchisees(db: str) -> pd.DataFrame:
+    """mega/medium/small 全規模の加盟店運営会社 (本部は除外)。"""
+    with closing(sqlite3.connect(db)) as conn:
+        # all_franchisees view は migrations に含まれる
+        try:
+            return pd.read_sql_query(
+                "SELECT operator_name, store_count, size_class, avg_confidence, "
+                "brands, discovered_via_methods, corporate_number "
+                "FROM all_franchisees ORDER BY store_count DESC",
+                conn,
+            )
+        except Exception:
+            return pd.DataFrame()
+
+
+@st.cache_data(ttl=30)
+def load_franchisors(db: str) -> pd.DataFrame:
+    """本部 (マスターフランチャイザー) を別枠で表示。"""
+    with closing(sqlite3.connect(db)) as conn:
+        try:
+            return pd.read_sql_query(
+                "SELECT operator_name, found_at_store_count, brands "
+                "FROM franchisors ORDER BY found_at_store_count DESC",
+                conn,
+            )
+        except Exception:
+            return pd.DataFrame()
+
+
+@st.cache_data(ttl=30)
 def load_judgements(db: str, brand: str | None, limit: int = 200) -> pd.DataFrame:
     with closing(sqlite3.connect(db)) as conn:
         if brand:
@@ -132,7 +162,15 @@ min_mega = st.sidebar.number_input(
 
 st.title("PI-ZZA Box 🍕")
 
-tab_stores, tab_mega, tab_judge = st.tabs(["🏪 Stores", "⭐ Mega Franchisees", "🛵 Judgements"])
+tab_stores, tab_mega, tab_all, tab_hq, tab_judge = st.tabs(
+    [
+        "🏪 Stores",
+        "⭐ Mega Franchisees",
+        "🏢 All Franchisees",
+        "🏛 Franchisors (本部)",
+        "🛵 Judgements",
+    ]
+)
 
 with tab_stores:
     df = load_stores(db, selected_brand)
@@ -173,6 +211,47 @@ with tab_mega:
             hide_index=True,
         )
         st.bar_chart(mega_df.set_index("operator_name")["store_count"])
+
+with tab_all:
+    all_df = load_all_franchisees(db)
+    st.subheader(f"All Franchisees — {len(all_df):,} 社 (本部を除外)")
+    if all_df.empty:
+        st.info(
+            "加盟店データがありません。\n\n"
+            "`./bin/pizza migrate --with-registry` で Ground Truth を seed するか、"
+            "`./bin/pizza research --brand ... --max-stores N` で抽出してください。"
+        )
+    else:
+        # size_class でフィルタ + 色分け表示
+        size_filter = st.multiselect(
+            "規模フィルタ", ["mega", "medium", "small"],
+            default=["mega", "medium", "small"],
+        )
+        df = all_df[all_df["size_class"].isin(size_filter)]
+        st.caption(
+            f"Mega: {(all_df['size_class']=='mega').sum()}, "
+            f"Medium: {(all_df['size_class']=='medium').sum()}, "
+            f"Small: {(all_df['size_class']=='small').sum()}"
+        )
+        st.dataframe(
+            df.style.format({"avg_confidence": "{:.2f}"}),
+            use_container_width=True,
+            hide_index=True,
+        )
+        if not df.empty:
+            st.bar_chart(df.set_index("operator_name")["store_count"])
+
+with tab_hq:
+    hq_df = load_franchisors(db)
+    st.subheader(f"Franchisors (本部) — {len(hq_df):,} 社")
+    st.caption(
+        "本部 (master franchisor) は mega 集計から除外されています。"
+        "各本部が PI-ZZA のパイプラインで何店舗の『店舗ページに現れたか』を示します。"
+    )
+    if hq_df.empty:
+        st.info("本部データがありません (research pipeline 未実行 or evidence から本部未検出)。")
+    else:
+        st.dataframe(hq_df, use_container_width=True, hide_index=True)
 
 with tab_judge:
     j_df = load_judgements(db, selected_brand)

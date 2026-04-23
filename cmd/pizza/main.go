@@ -15,17 +15,22 @@ package main
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"flag"
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path/filepath"
+	"strconv"
+	"strings"
 	"time"
 
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
 	"github.com/clearclown/pizza/internal/box"
 	"github.com/clearclown/pizza/internal/dough"
+	"github.com/clearclown/pizza/internal/grid"
 	"github.com/clearclown/pizza/internal/menu"
 	"github.com/clearclown/pizza/internal/oven"
 	"github.com/clearclown/pizza/internal/toppings"
@@ -48,8 +53,32 @@ func main() {
 		if err := cmdBake(os.Args[2:]); err != nil {
 			log.Fatalf("pizza bake: %v", err)
 		}
+	case "research":
+		if err := cmdResearch(os.Args[2:]); err != nil {
+			log.Fatalf("pizza research: %v", err)
+		}
+	case "serve":
+		if err := cmdServe(os.Args[2:]); err != nil {
+			log.Fatalf("pizza serve: %v", err)
+		}
+	case "migrate":
+		if err := cmdMigrate(os.Args[2:]); err != nil {
+			log.Fatalf("pizza migrate: %v", err)
+		}
+	case "audit":
+		if err := cmdAudit(os.Args[2:]); err != nil {
+			log.Fatalf("pizza audit: %v", err)
+		}
+	case "scan":
+		if err := cmdScan(os.Args[2:]); err != nil {
+			log.Fatalf("pizza scan: %v", err)
+		}
+	case "bench":
+		if err := cmdBench(os.Args[2:]); err != nil {
+			log.Fatalf("pizza bench: %v", err)
+		}
 	case "version":
-		fmt.Println("pi-zza v0.1.0 (Phase 1 Green)")
+		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
 		fmt.Println("Known areas:")
 		for _, a := range menu.KnownAreas() {
@@ -67,25 +96,74 @@ func main() {
 func printUsage() {
 	fmt.Println(`🍕 PI-ZZA — Process Integration & Zonal Search Agent
 
-Usage:
-  pizza bake --query BRAND --area AREA [flags]
-  pizza areas       # list available areas
+Subcommands:
+  pizza bake      店舗 seed (Places) + Markdown (Firecrawl) + 判定 (gRPC) + Box
+  pizza research  SQLite stores から operator 深掘り (Research Pipeline, Python)
+  pizza serve     Delivery gRPC service (browser-use + LLM 判定) を起動
+  pizza migrate   SQLite schema/view の最新化 (+ --with-registry で Ground Truth seed)
+  pizza audit     ブランド全加盟店の Top-down × Bottom-up 突合 + CSV 出力
+  pizza scan      1 コマンドで全自動 (migrate→bake→research→audit、サマリ CSV)
+  pizza bench     複数ブランド逐次実走 + metrics JSON (速度/API call 数 計測)
+  pizza areas     利用可能エリア一覧
   pizza version
   pizza help
 
 Flags for 'bake':
-  --query        ブランド名 (例: "エニタイムフィットネス")
-  --area         エリア名  (例: "新宿", "東京都", "大阪府")
-  --cell-km      メッシュセル幅 (km, default 1.0)
-  --out          CSV 出力パス (default var/output/pizza-<brand>-<area>-<ts>.csv)
-  --db           SQLite DB パス (default var/pizza.sqlite)
-  --no-kitchen   Firecrawl 呼び出しを skip (default: .env があれば自動呼び出し)
+  --query           ブランド名 (例: "エニタイムフィットネス")
+  --area            エリア名  (例: "新宿", "東京都")
+  --cell-km         メッシュセル幅 (km, default 1.0)
+  --out             CSV 出力パス (default var/output/pizza-<brand>-<area>-<ts>.csv)
+  --db              SQLite DB パス (default var/pizza.sqlite)
+  --no-kitchen      Firecrawl 呼び出しを skip
+  --with-judge      delivery-service gRPC に判定を委譲する
+  --judge-mode      judge 経路 (mock|live|panel)、delivery-service の DELIVERY_MODE と一致させる想定
+
+Flags for 'research':
+  --brand           対象ブランド (空で全ブランド)
+  --db              SQLite DB path (default var/pizza.sqlite)
+  --max-stores      処理上限店舗数 (0 で全件)
+  --no-verify       CrossVerifier を skip
+  --verify-houjin   国税庁法人番号 API で operator 実在確認 (HOUJIN_BANGOU_APP_ID 必須)
+  --expand          Places API で同 operator の他店舗を広域検索 (芋づる式)
+  --expand-area     --expand 時の area hint (例: "東京都")
+  --concurrency     並行 fetch 数 (default 4)
+
+Flags for 'scan':  (1 コマンドで全自動)
+  --brand           対象ブランド (必須、例: "エニタイムフィットネス")
+  --areas           カンマ区切り area (必須、例: "東京都,大阪府")
+  --cell-km         bake メッシュ幅 (default 2.0)
+  --max-research    research で処理する上限店舗数 (default 100)
+  --out             サマリ CSV 出力パス (default var/scan/<brand>-<ts>.csv)
+  --no-research     per-store 抽出を skip (bake + audit のみ)
+
+Flags for 'audit':
+  --brand           対象ブランド (registry 登録済み、例: "エニタイムフィットネス")
+  --areas           カンマ区切り area (例: "東京都,大阪府,愛知県")
+  --cell-km         Bottom-up bake のメッシュ幅 (default 2.0)
+  --db              SQLite DB path (default var/pizza.sqlite)
+  --out             メイン CSV 出力パス
+  --skip-bake       Bottom-up bake を skip し、既存 stores のみで突合
+  --addr-threshold  住所類似度しきい値 (default 0.7)
+  --radius-m        緯度経度突合半径 (default 150.0)
+
+Flags for 'serve':
+  --mode            mock | live | panel  (default env DELIVERY_MODE or mock)
+  --addr            listen addr (default env DELIVERY_LISTEN_ADDR or 0.0.0.0:50053)
 
 Environment (.env から自動読込):
-  GOOGLE_MAPS_API_KEY    必須
-  FIRECRAWL_MODE         docker | saas (optional)
-  FIRECRAWL_API_URL      docker 時
-  FIRECRAWL_API_KEY      saas 時`)
+  GOOGLE_MAPS_API_KEY     必須 (Places API)
+  FIRECRAWL_MODE          docker | saas (optional)
+  FIRECRAWL_API_URL       docker 時
+  FIRECRAWL_API_KEY       saas 時
+  LLM_PROVIDER            anthropic | openai | gemini (live 時)
+  GEMINI_API_KEY          panel 時 (Worker)
+  ANTHROPIC_API_KEY       panel 時 (Critic)
+  HOUJIN_BANGOU_APP_ID    research --verify-houjin 時
+
+Example (full pipeline 1 コマンド):
+  pizza serve --mode panel &                    # 別シェルで gRPC 起動
+  pizza bake --query エニタイムフィットネス --area 新宿 --with-judge --judge-mode panel
+  pizza research --brand エニタイムフィットネス --expand --verify-houjin`)
 }
 
 func cmdBake(args []string) error {
@@ -97,8 +175,13 @@ func cmdBake(args []string) error {
 	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
 	noKitchen := fs.Bool("no-kitchen", false, "skip Firecrawl Markdown fetch")
 	withJudge := fs.Bool("with-judge", false, "connect to delivery-service gRPC and run judgements")
+	judgeMode := fs.String("judge-mode", "", "delivery-service の mode ヒント (mock|live|panel), env DELIVERY_MODE にも反映")
 	if err := fs.Parse(args); err != nil {
 		return err
+	}
+	// --judge-mode が渡されたら env に伝搬 (delivery-service 側が読む)
+	if *judgeMode != "" {
+		_ = os.Setenv("DELIVERY_MODE", *judgeMode)
 	}
 	if *query == "" || *area == "" {
 		return errors.New("--query and --area are required")
@@ -122,10 +205,13 @@ func cmdBake(args []string) error {
 	}
 
 	// M1 Seed backend (in-process)
+	// StrictBrandMatch=true: Places Text Search の fuzzy 結果 (別ブランド混入) を
+	// displayName ベースで弾く。BI ツール用途では厳密な方が正しい。
 	seed := &dough.Searcher{
-		Places:   &dough.PlacesClient{APIKey: cfg.GoogleMapsAPIKey, Language: "ja", Region: "JP"},
-		Language: "ja",
-		Region:   "JP",
+		Places:           &dough.PlacesClient{APIKey: cfg.GoogleMapsAPIKey, Language: "ja", Region: "JP"},
+		Language:         "ja",
+		Region:           "JP",
+		StrictBrandMatch: true,
 	}
 
 	// M2 Kitchen backend (optional)
@@ -223,4 +309,576 @@ type grpcJudge struct {
 
 func (g *grpcJudge) JudgeFranchiseType(ctx context.Context, req *pb.JudgeFranchiseTypeRequest) (*pb.JudgeFranchiseTypeResponse, error) {
 	return g.client.JudgeFranchiseType(ctx, req)
+}
+
+// cmdBench は複数ブランドを逐次 scan し、速度/API call 数を JSON で出す。
+// 並列は行わない (ユーザー指示)。
+//
+//	pizza bench --brands "エニタイムフィットネス,モスバーガー,TSUTAYA" \
+//	            --areas "東京都" --cell-km 3.0
+func cmdBench(args []string) error {
+	fs := flag.NewFlagSet("bench", flag.ExitOnError)
+	brandsCSV := fs.String("brands", "", "カンマ区切りブランド名リスト")
+	areasCSV := fs.String("areas", "", "カンマ区切り area")
+	cellKm := fs.Float64("cell-km", 3.0, "bake メッシュ幅")
+	outDir := fs.String("out-dir", "var/bench", "サマリ CSV/JSON 出力ディレクトリ")
+	adaptive := fs.Bool("adaptive", true, "Adaptive quad-tree split を使う")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *brandsCSV == "" || *areasCSV == "" {
+		return errors.New("--brands と --areas は必須")
+	}
+	brands := splitAndTrim(*brandsCSV)
+	cfg, err := menu.FromEnv()
+	if err != nil {
+		return fmt.Errorf("load config: %w", err)
+	}
+	if cfg.GoogleMapsAPIKey == "" {
+		return errors.New("GOOGLE_MAPS_API_KEY が未設定 (.env 確認)")
+	}
+	absOutDir, _ := filepath.Abs(*outDir)
+	if err := os.MkdirAll(absOutDir, 0o755); err != nil {
+		return fmt.Errorf("mkdir out: %w", err)
+	}
+
+	// サマリ record
+	type BenchResult struct {
+		Brand     string `json:"brand"`
+		Areas     string `json:"areas"`
+		Stores    int32  `json:"stores_found"`
+		ElapsedSec float32 `json:"elapsed_sec"`
+		APICalls  int    `json:"api_calls"`
+		RejBrand  int    `json:"rejected_brand_filter"`
+		RejPoly   int    `json:"rejected_polygon"`
+		RejDup    int    `json:"rejected_duplicate"`
+		CellsCap  int    `json:"cells_hit_cap"`
+	}
+	var results []BenchResult
+
+	fmt.Printf("🧪 pizza bench: brands=%v areas=%q cell_km=%.1f adaptive=%v\n",
+		brands, *areasCSV, *cellKm, *adaptive)
+
+	ctx := context.Background()
+
+	for _, brand := range brands {
+		fmt.Printf("\n━━━ brand=%q ━━━\n", brand)
+		t0 := time.Now()
+		var totalStores int32
+		var mergedMetrics dough.SearchMetrics
+
+		for _, area := range splitAndTrim(*areasCSV) {
+			polygon, err := menu.ResolvePolygon(area)
+			if err != nil {
+				log.Printf("⚠️  resolve %s: %v", area, err)
+				continue
+			}
+			seed := &dough.Searcher{
+				Places: &dough.PlacesClient{
+					APIKey: cfg.GoogleMapsAPIKey, Language: "ja", Region: "JP",
+				},
+				Language: "ja", Region: "JP",
+				StrictBrandMatch:  true,
+				RestrictToPolygon: polygon,
+			}
+			if *adaptive {
+				count := int32(0)
+				err = seed.SearchStoresAdaptive(
+					ctx, brand, polygon,
+					&dough.AdaptiveSearchOptions{
+						MaxDepth: 4, MinCellMeters: *cellKm * 500.0,
+					},
+					func(_ *pb.Store) error { count++; return nil },
+				)
+				if err != nil {
+					log.Printf("⚠️  adaptive %s/%s: %v", brand, area, err)
+				}
+				totalStores += count
+			} else {
+				cells, err := grid.Split(polygon, *cellKm)
+				if err != nil {
+					log.Printf("⚠️  grid %s: %v", area, err)
+					continue
+				}
+				count := int32(0)
+				err = seed.SearchStoresInGrid(ctx, brand, cells,
+					func(_ *pb.Store) error { count++; return nil })
+				if err != nil {
+					log.Printf("⚠️  grid-search %s/%s: %v", brand, area, err)
+				}
+				totalStores += count
+			}
+			mergedMetrics.APICalls += seed.Metrics.APICalls
+			mergedMetrics.RawResultsTotal += seed.Metrics.RawResultsTotal
+			mergedMetrics.RejectedBrandFilter += seed.Metrics.RejectedBrandFilter
+			mergedMetrics.RejectedPolygon += seed.Metrics.RejectedPolygon
+			mergedMetrics.RejectedDuplicate += seed.Metrics.RejectedDuplicate
+			mergedMetrics.CellsHitCap += seed.Metrics.CellsHitCap
+			mergedMetrics.Emitted += seed.Metrics.Emitted
+		}
+		elapsed := float32(time.Since(t0).Seconds())
+
+		res := BenchResult{
+			Brand: brand, Areas: *areasCSV,
+			Stores: totalStores, ElapsedSec: elapsed,
+			APICalls: mergedMetrics.APICalls,
+			RejBrand: mergedMetrics.RejectedBrandFilter,
+			RejPoly:  mergedMetrics.RejectedPolygon,
+			RejDup:   mergedMetrics.RejectedDuplicate,
+			CellsCap: mergedMetrics.CellsHitCap,
+		}
+		results = append(results, res)
+
+		fmt.Printf("  stores=%d  api_calls=%d  polygon_rej=%d  dup=%d  cells_cap=%d\n",
+			res.Stores, res.APICalls, res.RejPoly, res.RejDup, res.CellsCap)
+		fmt.Printf("  elapsed=%.1fs\n", res.ElapsedSec)
+	}
+
+	// 結果 JSON 出力
+	jsonPath := filepath.Join(absOutDir, fmt.Sprintf(
+		"bench-%s.json", time.Now().Format("20060102-150405")))
+	buf, _ := json.MarshalIndent(results, "", "  ")
+	if err := os.WriteFile(jsonPath, buf, 0o644); err != nil {
+		return fmt.Errorf("write json: %w", err)
+	}
+	fmt.Printf("\n✅ bench done → %s\n", jsonPath)
+	// サマリ表示
+	fmt.Printf("\n%-30s %-10s %-10s %-10s %-10s\n",
+		"brand", "stores", "api_calls", "cells_cap", "elapsed")
+	fmt.Println(strings.Repeat("─", 72))
+	for _, r := range results {
+		fmt.Printf("%-30s %-10d %-10d %-10d %-8.1fs\n",
+			r.Brand, r.Stores, r.APICalls, r.CellsCap, r.ElapsedSec)
+	}
+	return nil
+}
+
+// cmdScan は「1 コマンドで全自動」を実現する高位ラッパ。
+//
+//	pizza scan --brand "エニタイムフィットネス" --areas "東京都"
+//
+// 内部で:
+//  1. migrate (+ registry seed) — Ground Truth を最新化
+//  2. 各 area で bake — Places 店舗 seed (bottom-up)
+//  3. research — per-store で operator 抽出 (SQLite 永続化)
+//  4. audit — Top-down × Bottom-up 突合 + CSV
+//
+// ユーザーは「東京都のエニタイムフィットネス運営会社を調べて」だけで
+// 完成 CSV が手に入る。
+func cmdScan(args []string) error {
+	fs := flag.NewFlagSet("scan", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド (必須)")
+	areasCSV := fs.String("areas", "", "カンマ区切り area (必須)")
+	cellKm := fs.Float64("cell-km", 2.0, "bake メッシュ幅")
+	maxResearch := fs.Int("max-research", 100, "research で処理する上限店舗数")
+	outPath := fs.String("out", "", "サマリ CSV 出力パス")
+	noResearch := fs.Bool("no-research", false, "research を skip")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *brand == "" {
+		return errors.New("--brand は必須")
+	}
+	if *areasCSV == "" {
+		return errors.New("--areas は必須 (例: '東京都,大阪府')")
+	}
+
+	cfg, err := menu.FromEnv()
+	if err != nil {
+		return fmt.Errorf("load config: %w", err)
+	}
+	if cfg.GoogleMapsAPIKey == "" {
+		return errors.New("GOOGLE_MAPS_API_KEY が未設定 (.env 確認)")
+	}
+	if *outPath == "" {
+		ts := time.Now().Format("20060102-150405")
+		*outPath = filepath.Join(cfg.OutputDir, "scan",
+			fmt.Sprintf("%s-%s.csv", *brand, ts))
+	}
+	if !filepath.IsAbs(*outPath) {
+		if abs, err2 := filepath.Abs(*outPath); err2 == nil {
+			*outPath = abs
+		}
+	}
+
+	fmt.Printf("🧭 pizza scan: brand=%q areas=%q → %s\n", *brand, *areasCSV, *outPath)
+
+	// Step 1: migrate (+ registry seed)
+	fmt.Println("━━ [1/4] migrate --with-registry ━━")
+	if err := cmdMigrate([]string{"--with-registry"}); err != nil {
+		return fmt.Errorf("scan/migrate: %w", err)
+	}
+
+	// Step 2: bake (各 area)
+	fmt.Println("━━ [2/4] bake (各 area) ━━")
+	areas := splitAndTrim(*areasCSV)
+	for _, area := range areas {
+		bakeArgs := []string{
+			"--query", *brand,
+			"--area", area,
+			"--cell-km", strconv.FormatFloat(*cellKm, 'f', -1, 64),
+			"--no-kitchen",
+		}
+		if err := cmdBake(bakeArgs); err != nil {
+			log.Printf("⚠️  bake failed for area=%q: %v", area, err)
+		}
+	}
+
+	// Step 3: research (per-store operator 抽出)
+	if !*noResearch {
+		fmt.Println("━━ [3/4] research (per-store operator 抽出) ━━")
+		researchArgs := []string{
+			"--brand", *brand,
+			"--max-stores", strconv.Itoa(*maxResearch),
+			"--no-verify",
+		}
+		if err := cmdResearch(researchArgs); err != nil {
+			log.Printf("⚠️  research skipped: %v", err)
+		}
+	} else {
+		fmt.Println("━━ [3/4] research skipped (--no-research) ━━")
+	}
+
+	// Step 4: audit
+	fmt.Println("━━ [4/4] audit (Top-down × Bottom-up 突合) ━━")
+	auditArgs := []string{
+		"--brand", *brand,
+		"--areas", *areasCSV,
+		"--skip-bake", // Step 2 で既に済
+		"--out", *outPath,
+	}
+	if err := cmdAudit(auditArgs); err != nil {
+		return fmt.Errorf("scan/audit: %w", err)
+	}
+
+	fmt.Printf("\n✅ scan done → %s\n", *outPath)
+	return nil
+}
+
+// cmdAudit は 1 ブランドについて Top-down × Bottom-up の突合監査を実行する。
+//
+//  1. --areas で指定された各 area について bake (Places Text Search) を走らせ
+//     stores テーブルに注入 (Bottom-up)
+//  2. Python audit_cli を spawn して registry x stores の突合を実施
+//  3. 結果 CSV を --out に出力 (+ unknown-stores / missing-operators の副 CSV)
+func cmdAudit(args []string) error {
+	fs := flag.NewFlagSet("audit", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド (registry 登録済み)")
+	areasCSV := fs.String("areas", "", "カンマ区切り area (例: '東京都,大阪府')")
+	cellKm := fs.Float64("cell-km", 2.0, "Bottom-up bake メッシュ幅")
+	dbPath := fs.String("db", "", "SQLite DB path")
+	outPath := fs.String("out", "", "メイン CSV 出力パス")
+	skipBake := fs.Bool("skip-bake", false, "Bottom-up bake を skip")
+	addrThreshold := fs.Float64("addr-threshold", 0.7, "住所類似度しきい値")
+	radiusM := fs.Float64("radius-m", 150.0, "緯度経度突合半径 (m)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *brand == "" {
+		return errors.New("--brand は必須")
+	}
+	if *outPath == "" {
+		return errors.New("--out は必須")
+	}
+
+	cfg, err := menu.FromEnv()
+	if err != nil {
+		return fmt.Errorf("load config: %w", err)
+	}
+	if *dbPath == "" {
+		*dbPath = cfg.DBPath
+	}
+	if !filepath.IsAbs(*dbPath) {
+		if abs, err2 := filepath.Abs(*dbPath); err2 == nil {
+			*dbPath = abs
+		}
+	}
+	if !filepath.IsAbs(*outPath) {
+		if abs, err2 := filepath.Abs(*outPath); err2 == nil {
+			*outPath = abs
+		}
+	}
+	if err := os.MkdirAll(filepath.Dir(*outPath), 0o755); err != nil {
+		return fmt.Errorf("mkdir out: %w", err)
+	}
+
+	areas := splitAndTrim(*areasCSV)
+
+	// Phase 1: Bottom-up bake (各 area で Places Text Search)
+	if !*skipBake {
+		if cfg.GoogleMapsAPIKey == "" {
+			return errors.New("GOOGLE_MAPS_API_KEY が未設定 (.env 確認)")
+		}
+		for _, area := range areas {
+			fmt.Printf("🍞 [audit] bake brand=%q area=%q cell_km=%.1f\n", *brand, area, *cellKm)
+			if err := runBakeForArea(context.Background(), cfg, *brand, area, *cellKm, *dbPath); err != nil {
+				log.Printf("⚠️  [audit] bake skipped area=%q: %v", area, err)
+			}
+		}
+	} else {
+		fmt.Println("⏭  [audit] --skip-bake: 既存 stores のみで突合")
+	}
+
+	// Phase 2: Python audit_cli spawn
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("audit: %s が見つかりません (repo root で実行)", deliveryDir)
+	}
+	pyArgs := []string{
+		"run", "python", "-m", "pizza_delivery.audit_cli",
+		"--db", *dbPath,
+		"--brand", *brand,
+		"--areas", *areasCSV,
+		"--out", *outPath,
+		"--addr-threshold", strconv.FormatFloat(*addrThreshold, 'f', -1, 64),
+		"--radius-m", strconv.FormatFloat(*radiusM, 'f', -1, 64),
+	}
+	fmt.Printf("🔍 [audit] python pizza_delivery.audit_cli --brand %q\n", *brand)
+	cmd := exec.Command("uv", pyArgs...)
+	cmd.Dir = deliveryDir
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
+}
+
+func splitAndTrim(csv string) []string {
+	var out []string
+	for _, t := range splitCSV(csv) {
+		t = trimSpace(t)
+		if t != "" {
+			out = append(out, t)
+		}
+	}
+	return out
+}
+
+func splitCSV(s string) []string {
+	res := []string{}
+	cur := []byte{}
+	for i := 0; i < len(s); i++ {
+		if s[i] == ',' {
+			res = append(res, string(cur))
+			cur = cur[:0]
+		} else {
+			cur = append(cur, s[i])
+		}
+	}
+	res = append(res, string(cur))
+	return res
+}
+
+func trimSpace(s string) string {
+	start := 0
+	end := len(s)
+	for start < end && (s[start] == ' ' || s[start] == '\t' || s[start] == '\n') {
+		start++
+	}
+	for end > start && (s[end-1] == ' ' || s[end-1] == '\t' || s[end-1] == '\n') {
+		end--
+	}
+	return s[start:end]
+}
+
+// runBakeForArea は 1 area について M1 Seed を走らせ stores に注入する。
+// cmdBake の中核ロジックを簡略再利用。
+func runBakeForArea(
+	ctx context.Context,
+	cfg *menu.Config,
+	brand, area string,
+	cellKm float64,
+	dbPath string,
+) error {
+	polygon, err := menu.ResolvePolygon(area)
+	if err != nil {
+		return err
+	}
+	seed := &dough.Searcher{
+		Places:           &dough.PlacesClient{APIKey: cfg.GoogleMapsAPIKey, Language: "ja", Region: "JP"},
+		Language:         "ja",
+		Region:           "JP",
+		StrictBrandMatch: true,
+	}
+	store, err := box.Open(dbPath)
+	if err != nil {
+		return fmt.Errorf("open db: %w", err)
+	}
+	defer store.Close()
+
+	p := &oven.Pipeline{
+		Seed:    seed,
+		Box:     store,
+		Workers: cfg.MaxConcurrency,
+	}
+	rctx, cancel := context.WithTimeout(ctx, 10*time.Minute)
+	defer cancel()
+	report, err := p.Bake(rctx, &pb.SearchStoresInGridRequest{
+		Brand:    brand,
+		Polygon:  polygon,
+		CellKm:   cellKm,
+		Language: "ja",
+	})
+	if err != nil {
+		return err
+	}
+	fmt.Printf("   [audit] %s: cells=%d stores=%d in %.1fs\n",
+		area, report.CellsGenerated, report.StoresFound, report.ElapsedSec)
+	return nil
+}
+
+// cmdResearch は Python 側の Research Pipeline CLI を spawn する。
+// pizza と research を 1 binary から叩けるようにして "コマンドが繋がっていない"
+// 問題を解消する。
+func cmdResearch(args []string) error {
+	fs := flag.NewFlagSet("research", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド (空で全件)")
+	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
+	maxStores := fs.Int("max-stores", 0, "処理上限店舗数 (0 で全件)")
+	noVerify := fs.Bool("no-verify", false, "CrossVerifier をスキップ")
+	verifyHoujin := fs.Bool("verify-houjin", false, "国税庁法人番号 API で operator 実在確認")
+	expand := fs.Bool("expand", false, "Places API 広域芋づる式で operator の他店舗を発見")
+	expandArea := fs.String("expand-area", "", "--expand 時の area hint")
+	concurrency := fs.Int("concurrency", 4, "並行 fetch 数")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+
+	cfg, _ := menu.FromEnv()
+	if *dbPath == "" && cfg != nil {
+		*dbPath = cfg.DBPath
+	}
+	if *dbPath == "" {
+		*dbPath = "./var/pizza.sqlite"
+	}
+	// Python は services/delivery/ で spawn されるので、相対パスは repo root
+	// 基準で絶対化しておかないと child が見つけられない。
+	if !filepath.IsAbs(*dbPath) {
+		if abs, err := filepath.Abs(*dbPath); err == nil {
+			*dbPath = abs
+		}
+	}
+
+	pyArgs := []string{"run", "python", "-m", "pizza_delivery.research", "--db", *dbPath}
+	if *brand != "" {
+		pyArgs = append(pyArgs, "--brand", *brand)
+	}
+	if *maxStores > 0 {
+		pyArgs = append(pyArgs, "--max-stores", strconv.Itoa(*maxStores))
+	}
+	if *noVerify {
+		pyArgs = append(pyArgs, "--no-verify")
+	}
+	if *verifyHoujin {
+		pyArgs = append(pyArgs, "--verify-houjin")
+	}
+	if *expand {
+		pyArgs = append(pyArgs, "--expand-via-places")
+	}
+	if *expandArea != "" {
+		pyArgs = append(pyArgs, "--expand-area", *expandArea)
+	}
+	pyArgs = append(pyArgs, "--concurrency", strconv.Itoa(*concurrency))
+
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("research: %s が見つかりません (repo root で実行してください)", deliveryDir)
+	}
+	fmt.Printf("🔬 pizza research → uv %s\n", pyArgs)
+	cmd := exec.Command("uv", pyArgs...)
+	cmd.Dir = deliveryDir
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
+}
+
+// cmdMigrate は SQLite の schema/view を最新化する。
+// --with-registry フラグで franchisee_registry.yaml を operator_stores に seed。
+func cmdMigrate(args []string) error {
+	fs := flag.NewFlagSet("migrate", flag.ExitOnError)
+	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
+	withRegistry := fs.Bool("with-registry", false, "franchisee_registry.yaml を operator_stores に seed")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	cfg, _ := menu.FromEnv()
+	if *dbPath == "" && cfg != nil {
+		*dbPath = cfg.DBPath
+	}
+	if *dbPath == "" {
+		*dbPath = "./var/pizza.sqlite"
+	}
+	if !filepath.IsAbs(*dbPath) {
+		if abs, err := filepath.Abs(*dbPath); err == nil {
+			*dbPath = abs
+		}
+	}
+	store, err := box.Open(*dbPath)
+	if err != nil {
+		return fmt.Errorf("open db: %w", err)
+	}
+	store.Close()
+	fmt.Printf("✅ migrated %s (schema + views)\n", *dbPath)
+
+	if *withRegistry {
+		// Python 側の registry seeder を spawn
+		deliveryDir := "services/delivery"
+		if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+			return fmt.Errorf("migrate: %s が見つかりません (repo root で実行)", deliveryDir)
+		}
+		fmt.Printf("🌱 seeding franchisee_registry.yaml → operator_stores\n")
+		script := fmt.Sprintf(
+			"from pizza_delivery.franchisee_registry import load_registry, seed_registry_to_sqlite;"+
+				"print('seeded', seed_registry_to_sqlite(%q, load_registry()))",
+			*dbPath,
+		)
+		cmd := exec.Command("uv", "run", "python", "-c", script)
+		cmd.Dir = deliveryDir
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Env = os.Environ()
+		if err := cmd.Run(); err != nil {
+			return fmt.Errorf("registry seed failed: %w", err)
+		}
+	}
+	return nil
+}
+
+// cmdServe は delivery-service gRPC サーバを spawn する。
+// mock / live / panel の mode 指定可能。
+func cmdServe(args []string) error {
+	fs := flag.NewFlagSet("serve", flag.ExitOnError)
+	mode := fs.String("mode", "", "mock | live | panel (default env DELIVERY_MODE or mock)")
+	addr := fs.String("addr", "", "listen addr (default env DELIVERY_LISTEN_ADDR or 0.0.0.0:50053)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	env := os.Environ()
+	if *mode != "" {
+		env = append(env, "DELIVERY_MODE="+*mode)
+	}
+	if *addr != "" {
+		env = append(env, "DELIVERY_LISTEN_ADDR="+*addr)
+	}
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("serve: %s が見つかりません (repo root で実行してください)", deliveryDir)
+	}
+	effectiveMode := *mode
+	if effectiveMode == "" {
+		effectiveMode = os.Getenv("DELIVERY_MODE")
+		if effectiveMode == "" {
+			effectiveMode = "mock"
+		}
+	}
+	fmt.Printf("🛵 pizza serve → delivery-service (mode=%s)\n", effectiveMode)
+	cmd := exec.Command("uv", "run", "python", "-m", "pizza_delivery")
+	cmd.Dir = deliveryDir
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = env
+	return cmd.Run()
 }

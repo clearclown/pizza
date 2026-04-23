@@ -52,6 +52,31 @@ def test_mock_returns_fixed_judgement(running_server_addr: str) -> None:
     assert len(resp.result.evidence) >= 1
 
 
+def test_pick_servicer_mock(monkeypatch) -> None:
+    from pizza_delivery.server import MockDeliveryServicer, pick_servicer
+
+    monkeypatch.setenv("DELIVERY_MODE", "mock")
+    s = pick_servicer()
+    assert isinstance(s, MockDeliveryServicer)
+
+
+def test_pick_servicer_unknown_mode_raises() -> None:
+    from pizza_delivery.server import pick_servicer
+
+    with pytest.raises(ValueError, match="unknown DELIVERY_MODE"):
+        pick_servicer(mode="bogus")
+
+
+def test_pick_servicer_panel_requires_keys(monkeypatch) -> None:
+    # GEMINI_API_KEY / ANTHROPIC_API_KEY 未設定なら RuntimeError
+    monkeypatch.delenv("GEMINI_API_KEY", raising=False)
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    from pizza_delivery.server import pick_servicer
+
+    with pytest.raises(RuntimeError, match="GEMINI_API_KEY"):
+        pick_servicer(mode="panel")
+
+
 def test_mock_batch_judge_streams_results(running_server_addr: str) -> None:
     with grpc.insecure_channel(running_server_addr) as ch:
         stub = delivery_pb2_grpc.DeliveryServiceStub(ch)

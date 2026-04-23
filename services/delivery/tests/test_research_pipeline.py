@@ -38,13 +38,16 @@ CREATE TABLE IF NOT EXISTS stores (
 );
 
 CREATE TABLE IF NOT EXISTS operator_stores (
-  operator_name    TEXT NOT NULL,
-  place_id         TEXT NOT NULL,
-  brand            TEXT,
-  operator_type    TEXT,
-  confidence       REAL DEFAULT 0.0,
-  discovered_via   TEXT DEFAULT 'per_store',
-  confirmed_at     TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  operator_name        TEXT NOT NULL,
+  place_id             TEXT NOT NULL,
+  brand                TEXT,
+  operator_type        TEXT,
+  confidence           REAL DEFAULT 0.0,
+  discovered_via       TEXT DEFAULT 'per_store',
+  verification_score   REAL DEFAULT 0.0,
+  corporate_number     TEXT,
+  verification_source  TEXT,
+  confirmed_at         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (operator_name, place_id)
 );
 
@@ -244,6 +247,134 @@ async def test_pipeline_rejects_missing_db(tmp_path: Path) -> None:
         await pipeline.run(
             ResearchRequest(brand="X", db_path=str(tmp_path / "nonexistent.db")),
         )
+
+
+# ─── Layer D: 法人番号 API verification 統合 ──────────────────────────
+
+
+class FakeHoujinClient:
+    """HoujinBangouClient の interface を持つ in-memory fake。
+
+    responses は operator 名 → (found, active_name, corporate_number) の dict。
+    見つからない operator は 空結果を返す (active 0 件)。
+    """
+
+    def __init__(self, responses: dict[str, tuple[bool, str, str]]):
+        self.responses = responses
+        self.called_names: list[str] = []
+
+    async def search_by_name(self, name: str):
+        from pizza_delivery.houjin_bangou import HoujinRecord, HoujinSearchResult
+
+        self.called_names.append(name)
+        found, active_name, corp_num = self.responses.get(name, (False, "", ""))
+        if not found:
+            return HoujinSearchResult(query=name, records=[])
+        return HoujinSearchResult(
+            query=name,
+            records=[
+                HoujinRecord(
+                    corporate_number=corp_num,
+                    name=active_name,
+                    address="東京都",
+                    process="01",
+                    update="",
+                )
+            ],
+        )
+
+
+@pytest.mark.asyncio
+async def test_pipeline_writes_verification_columns(tmp_path: Path) -> None:
+    db = tmp_path / "test.db"
+    _seed_db(str(db), [("p1", "エニタイム", "新宿店", "https://x/1")])
+
+    stub = StubExtractor(
+        results_by_place={"p1": _mk_result("p1", "株式会社Fast Fitness Japan")}
+    )
+    # 法人番号 API が実在かつ正確に hit
+    houjin = FakeHoujinClient(
+        responses={
+            "株式会社Fast Fitness Japan": (
+                True, "株式会社Fast Fitness Japan", "1234567890123",
+            ),
+        }
+    )
+    pipeline = ResearchPipeline(
+        chain=ChainDiscovery(extractor=stub),
+        verifier=CrossVerifier(extractor=stub),
+        houjin_client=houjin,
+    )
+    report = await pipeline.run(
+        ResearchRequest(brand="エニタイム", db_path=str(db), verify=False, verify_houjin=True),
+    )
+    assert len(report.operators) == 1
+    op = report.operators[0]
+    assert op.verification_score >= 0.9
+    assert op.corporate_number == "1234567890123"
+
+    # houjin_client は operator 名で 1 回だけ呼ばれる (全 place_id 同一 operator)
+    assert houjin.called_names == ["株式会社Fast Fitness Japan"]
+
+    # SQLite に列が書き込まれる
+    conn = sqlite3.connect(str(db))
+    row = conn.execute(
+        "SELECT verification_score, corporate_number, verification_source "
+        "FROM operator_stores WHERE place_id=?",
+        ("p1",),
+    ).fetchone()
+    conn.close()
+    assert row is not None
+    assert row[0] >= 0.9
+    assert row[1] == "1234567890123"
+    assert row[2] == "houjin_bangou_nta"
+
+
+@pytest.mark.asyncio
+async def test_pipeline_flags_non_existent_operator(tmp_path: Path) -> None:
+    db = tmp_path / "test.db"
+    _seed_db(str(db), [("p1", "B", "N", "https://x/1")])
+
+    stub = StubExtractor(results_by_place={"p1": _mk_result("p1", "株式会社幽霊法人")})
+    # 国税庁 API でヒットしない → verification_score = -1 (non-existent flag)
+    houjin = FakeHoujinClient(responses={})
+    pipeline = ResearchPipeline(
+        chain=ChainDiscovery(extractor=stub),
+        verifier=CrossVerifier(extractor=stub),
+        houjin_client=houjin,
+    )
+    report = await pipeline.run(
+        ResearchRequest(brand="B", db_path=str(db), verify=False, verify_houjin=True),
+    )
+    op = report.operators[0]
+    assert op.verification_score == -1.0
+    assert op.corporate_number == ""
+
+    conn = sqlite3.connect(str(db))
+    row = conn.execute(
+        "SELECT verification_score, corporate_number FROM operator_stores WHERE place_id=?",
+        ("p1",),
+    ).fetchone()
+    conn.close()
+    assert row[0] == -1.0
+
+
+@pytest.mark.asyncio
+async def test_pipeline_skips_houjin_when_flag_off(tmp_path: Path) -> None:
+    db = tmp_path / "test.db"
+    _seed_db(str(db), [("p1", "B", "N", "https://x/1")])
+    stub = StubExtractor(results_by_place={"p1": _mk_result("p1", "株式会社ABC")})
+    houjin = FakeHoujinClient(responses={})
+    pipeline = ResearchPipeline(
+        chain=ChainDiscovery(extractor=stub),
+        verifier=CrossVerifier(extractor=stub),
+        houjin_client=houjin,
+    )
+    # verify_houjin=False なら client は呼ばれない
+    await pipeline.run(
+        ResearchRequest(brand="B", db_path=str(db), verify=False, verify_houjin=False),
+    )
+    assert houjin.called_names == []
 
 
 @pytest.mark.asyncio

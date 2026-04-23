@@ -38,7 +38,8 @@ class MockFetcher:
         ("運営会社: 株式会社AFJ Project が当店を運営", ["株式会社AFJ Project"]),
         ("運営元は株式会社メガ・スポーツです", ["株式会社メガ・スポーツ"]),
         ("弊社は(株)テストフードが展開", ["(株)テストフード"]),
-        ("当社名: ㈱ピザ商事の子会社", ["㈱ピザ商事"]),
+        # Phase 9: NFKC 正規化で ㈱ → (株) に統一される
+        ("当社名: ㈱ピザ商事の子会社", ["(株)ピザ商事"]),
         ("本店: 株式会社A / 支店: 株式会社B", ["株式会社A", "株式会社B"]),
         ("運営情報なし", []),
     ],
@@ -47,6 +48,174 @@ def test_find_company_names_in_snippet(snippet, expected) -> None:
     got = find_company_names_in_snippet(snippet)
     for exp in expected:
         assert exp in got, f"expected {exp!r} in {got!r}"
+
+
+# Phase 7: 「XXX 株式会社について紹介します」のような suffix-noise で
+# prefix pattern が誤抽出しないことを保証する。
+@pytest.mark.parametrize(
+    "snippet, must_include, must_exclude",
+    [
+        (
+            "日本マクドナルド株式会社について紹介します。",
+            "日本マクドナルド株式会社",
+            "株式会社について紹介します",
+        ),
+        (
+            "株式会社フーズに関するお問い合わせ",
+            "株式会社フーズ",
+            "株式会社フーズに関するお問い合わせ",
+        ),
+        (
+            "株式会社Aに対する調査結果",
+            "株式会社A",
+            "株式会社Aに対する調査結果",
+        ),
+    ],
+)
+def test_find_company_names_rejects_verb_suffix_noise(
+    snippet, must_include, must_exclude
+) -> None:
+    got = find_company_names_in_snippet(snippet)
+    assert must_include in got, f"{must_include!r} が抽出されるべき: got {got!r}"
+    for name in got:
+        assert must_exclude not in name, (
+            f"noise フレーズ {must_exclude!r} を含む誤抽出が残っている: {got!r}"
+        )
+
+
+# Phase 7: 会社概要ページの HTML ラベル ("名称", "会社概要", "会社案内" 等) が
+# body 前方に紛れ込む noise を除去できる。
+@pytest.mark.parametrize(
+    "snippet, wanted",
+    [
+        (
+            "会社案内 会社概要 会社概要 名称 スターバックス コーヒー ジャパン株式会社",
+            "スターバックス コーヒー ジャパン株式会社",
+        ),
+        (
+            "会社名 日本マクドナルド株式会社 本社 東京都",
+            "日本マクドナルド株式会社",
+        ),
+        (
+            "商号 ㈱ファミリーマート 代表取締役 細見 研介",
+            "(株)ファミリーマート",  # NFKC で ㈱ → (株)
+        ),
+    ],
+)
+def test_find_company_names_strips_html_labels(snippet, wanted) -> None:
+    got = find_company_names_in_snippet(snippet)
+    assert wanted in got, (
+        f"{wanted!r} が抽出されるべき (HTML ラベル除去): got {got!r}"
+    )
+
+
+# Phase 9 Bug 1: Unicode dash を body に含められる
+@pytest.mark.parametrize(
+    "snippet, wanted",
+    [
+        # ASCII hyphen
+        ("運営: 株式会社セブン-イレブン・ジャパン の店舗", "株式会社セブン-イレブン・ジャパン"),
+        # U+2010 HYPHEN
+        ("運営会社は株式会社セブン‐イレブン・ジャパンです。", "株式会社セブン‐イレブン・ジャパン"),
+        # U+2013 EN DASH
+        ("株式会社セブン–イレブン・ジャパン が運営", "株式会社セブン–イレブン・ジャパン"),
+        # U+FF0D 全角マイナス (NFKC で ASCII - になるはずだが念のため)
+        ("株式会社セブン－イレブン・ジャパン の店舗", "株式会社セブン-イレブン・ジャパン"),
+    ],
+)
+def test_find_company_names_accepts_unicode_dashes(snippet, wanted) -> None:
+    got = find_company_names_in_snippet(snippet)
+    # snippet が NFKC 前後で内容変わる可能性、どちらか含まれていれば OK
+    assert any(wanted in g or g == wanted for g in got), (
+        f"期待 {wanted!r} が抽出されず: got {got!r}"
+    )
+
+
+# Phase 9 Bug 2: 複数社を連結しない (non-greedy + separator 強化)
+def test_find_company_names_no_concat_suffix() -> None:
+    s = "運営は株式会社A 委託先 株式会社B株式会社"
+    out = find_company_names_in_snippet(s)
+    assert "株式会社A" in out or any("A" in n for n in out)
+    assert "株式会社B" in out
+    for n in out:
+        assert "A株式会社B" not in n, (
+            f"連結誤抽出が残っている: {out!r}"
+        )
+
+
+def test_find_company_names_three_operators_separate() -> None:
+    """3 社を 1 つの snippet に並べて、3 件別々に抽出されること。"""
+    s = (
+        "A 店は株式会社アルファが運営。"
+        "B 店は株式会社ベータ・ジャパンが運営。"
+        "C 店は株式会社ガンマ商事が運営。"
+    )
+    out = find_company_names_in_snippet(s)
+    assert "株式会社アルファ" in out
+    assert "株式会社ベータ・ジャパン" in out
+    assert "株式会社ガンマ商事" in out
+
+
+def test_find_company_names_real_family_mart_pattern() -> None:
+    """実ログで観測された複数社連結パターンに基づく回帰テスト。"""
+    s = (
+        "運営会社: 株式会社ファミマ・サポート / "
+        "本件事業: 株式会社クリアーウォーター津南"
+    )
+    out = find_company_names_in_snippet(s)
+    assert "株式会社ファミマ・サポート" in out or any(
+        "ファミマ" in n for n in out
+    )
+    # 3 社連結は発生しない
+    for n in out:
+        assert "サポート株式会社" not in n, f"連結バグ再発: {out!r}"
+
+
+# Phase 11 バグ fix: 広告文 (キャンペーン/期間/年月日) の body 吸収を防ぐ
+@pytest.mark.parametrize(
+    "snippet, wanted, must_not_include",
+    [
+        # 実ログで観測: エニタイムで広告文が吸収された
+        (
+            "株式会社アルペンクイックフィットネス キャンペーン期間2026年4月1日",
+            "株式会社アルペンクイックフィットネス",
+            "キャンペーン",
+        ),
+        # 年月日 suffix
+        (
+            "株式会社テスト 2026年5月1日オープン",
+            "株式会社テスト",
+            "2026",
+        ),
+        # "期間" 単独
+        (
+            "株式会社サンプル 期間限定",
+            "株式会社サンプル",
+            "期間",
+        ),
+        # "特典" キーワード
+        (
+            "株式会社プロ 特典情報",
+            "株式会社プロ",
+            "特典",
+        ),
+        # "お知らせ"
+        (
+            "株式会社ABC お知らせ: 営業時間変更",
+            "株式会社ABC",
+            "お知らせ",
+        ),
+    ],
+)
+def test_find_company_names_strips_advertising_noise(
+    snippet, wanted, must_not_include
+) -> None:
+    got = find_company_names_in_snippet(snippet)
+    assert wanted in got, f"期待 {wanted!r} 抽出されず: {got!r}"
+    for name in got:
+        assert must_not_include not in name, (
+            f"広告文 {must_not_include!r} が body に残っている: {got!r}"
+        )
 
 
 @pytest.mark.parametrize(
