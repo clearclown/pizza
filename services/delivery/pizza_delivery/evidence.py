@@ -133,10 +133,18 @@ _COMPANY_RE_SUFFIX = re.compile(
 
 
 def _trim_at_particles(body: str) -> str:
-    """body の先頭から、助詞・句読点・英語 boilerplate の直前までを返す。"""
+    """body の先頭から、助詞・句読点・英語 boilerplate・会社概要ラベルの直前までを返す。"""
     body = body.rstrip()
     # Japanese particles
     jp_stops = ["、", "。", "の", "が", "を", "は", "で", "と", "も"]
+    # 会社概要ラベル (所在地、住所、電話など後続の情報が混ざるのを防ぐ)
+    jp_labels = [
+        "所在地", "住所", "電話", "電話番号", "FAX", "Fax", "ファックス",
+        "〒", "Tel", "TEL", "Phone",
+        "設立", "代表", "代表者", "代表取締役", "事業内容", "本社", "本店",
+        "資本金", "従業員", "創業", "公式サイト", "URL", "ウェブサイト",
+        "業種", "営業時間", "定休日",
+    ]
     # English boilerplate in footer/copyright
     en_stops = [
         " All", " all",
@@ -147,7 +155,7 @@ def _trim_at_particles(body: str) -> str:
         " Ltd", " Ltd.",
         " Co.", " Co ",
     ]
-    for p in jp_stops + en_stops:
+    for p in jp_stops + jp_labels + en_stops:
         i = body.find(p)
         if i >= 0:
             body = body[:i]

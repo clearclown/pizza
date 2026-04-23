@@ -21,6 +21,7 @@ from dataclasses import dataclass, field
 from typing import Awaitable, Callable
 
 from pizza_delivery.evidence import Evidence
+from pizza_delivery.normalize import canonical_key, normalize_operator_name
 from pizza_delivery.per_store import PerStoreExtractor, StoreExtractionResult
 
 
@@ -127,18 +128,34 @@ class ChainDiscovery:
 def _aggregate(
     results: list[StoreExtractionResult], total: int
 ) -> ChainDiscoveryReport:
-    """results を operator_name でグループ化して Report を組む。"""
-    groups: dict[str, list[StoreExtractionResult]] = {}
+    """results を operator_name でグループ化して Report を組む。
+
+    Phase 5 改善: normalize.canonical_key でグルーピングすることで
+    表記揺れ (株式会社 FIT PLACE / 株式会社FIT PLACE) を同一クラスタに
+    マージする。表示名は最頻出の元表記を採用。
+    """
+    # key = canonical_key; value = (display name frequencies, results)
+    groups: dict[str, dict[str, object]] = {}
     unknown = 0
     for r in results:
-        if r.has_operator:
-            groups.setdefault(r.operator_name, []).append(r)
-        else:
+        if not r.has_operator:
             unknown += 1
+            continue
+        key = canonical_key(r.operator_name)
+        if key not in groups:
+            groups[key] = {"display_freq": {}, "results": []}
+        disp = normalize_operator_name(r.operator_name)
+        freq = groups[key]["display_freq"]  # type: ignore[assignment]
+        freq[disp] = freq.get(disp, 0) + 1  # type: ignore[index]
+        groups[key]["results"].append(r)  # type: ignore[index]
 
     operators: list[OperatorSummary] = []
-    for op_name, rs in groups.items():
-        # 最頻値で operator_type を決定 (複数 store が同 operator でも type が揺れる可能性)
+    for _, data in groups.items():
+        rs: list[StoreExtractionResult] = data["results"]  # type: ignore[assignment]
+        # 表示名は最頻出 (tie なら最初に出現したもの)
+        disp_freq: dict[str, int] = data["display_freq"]  # type: ignore[assignment]
+        display_name = max(disp_freq.keys(), key=lambda k: disp_freq[k])
+        # operator_type も最頻値
         type_freq: dict[str, int] = {}
         for r in rs:
             type_freq[r.operator_type] = type_freq.get(r.operator_type, 0) + 1
@@ -146,7 +163,7 @@ def _aggregate(
         avg_conf = sum(r.confidence for r in rs) / len(rs)
         operators.append(
             OperatorSummary(
-                operator_name=op_name,
+                operator_name=display_name,
                 operator_type=dominant_type,
                 store_count=len(rs),
                 stores=rs,
