@@ -296,6 +296,64 @@ func TestMatchesBrand_blocklistPriority(t *testing.T) {
 	}
 }
 
+// ─── Phase 18: URL ドメイン二次 filter ─────────────────────────────
+
+func TestHasForeignDomain(t *testing.T) {
+	cases := []struct {
+		brand, url string
+		want       bool
+	}{
+		// Mos の URL に BK が紐付く (実発見 6 件の型)
+		{"モスバーガー", "https://www.burgerking.co.jp/", true},
+		{"モスバーガー", "https://www.mos.jp/shop/detail/?shop_cd=12345", false},
+		{"モスバーガー", "", false},
+		// Anytime に chocoZAP ドメインが紐付く = 誤登録
+		{"エニタイムフィットネス", "https://chocozap.jp/shop/", true},
+		{"エニタイムフィットネス", "https://www.anytimefitness.co.jp/", false},
+		// 大文字 / パス付き URL も検出
+		{"マクドナルド", "HTTPS://WWW.MOS.JP/", true},
+		// 未登録ブランドは常に false
+		{"未登録ブランド", "https://example.com/", false},
+	}
+	for _, tc := range cases {
+		got := hasForeignDomain(tc.brand, tc.url)
+		if got != tc.want {
+			t.Errorf("hasForeignDomain(%q, %q) = %v, want %v",
+				tc.brand, tc.url, got, tc.want)
+		}
+	}
+}
+
+func TestMatchesBrand_rejectsForeignDomain(t *testing.T) {
+	// displayName が Mos でも official_url が BK ドメインなら reject
+	// (Places 側の登録データ誤り対策)
+	p := &PlaceRaw{
+		DisplayName: DisplayName{Text: "モスバーガー 渋谷店"},
+		WebsiteURI:  "https://www.burgerking.co.jp/",
+	}
+	if matchesBrand(p, "モスバーガー") {
+		t.Error("foreign domain (burgerking.co.jp) should reject Mos displayName")
+	}
+
+	// 同じ displayName でも URL が正しければ accept
+	p2 := &PlaceRaw{
+		DisplayName: DisplayName{Text: "モスバーガー 渋谷店"},
+		WebsiteURI:  "https://www.mos.jp/shop/detail/?shop_cd=12345",
+	}
+	if !matchesBrand(p2, "モスバーガー") {
+		t.Error("legitimate mos.jp URL should accept Mos displayName")
+	}
+
+	// URL 空は判定保留 → displayName 判定に委ねる
+	p3 := &PlaceRaw{
+		DisplayName: DisplayName{Text: "モスバーガー 渋谷店"},
+		WebsiteURI:  "",
+	}
+	if !matchesBrand(p3, "モスバーガー") {
+		t.Error("empty URL should not block valid displayName")
+	}
+}
+
 func TestNormalizeForBrandMatch(t *testing.T) {
 	cases := []struct {
 		in, out string

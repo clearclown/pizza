@@ -1,21 +1,26 @@
-"""Phase 17.4: Registry 自動拡充 loop。
+"""Phase 17.4 + Phase 19: Registry 自動拡充 loop / 横断メガジー集計。
 
 unknown_stores (registry 未突合の bottom-up 店舗) に per_store で見つかった
 operator_name を集計し、頻度 >= min_stores の社を「registry 追加候補」として
-YAML-ready 形式で書き出す。
+YAML-ready 形式で書き出す (1 ブランド内集計)。
+
+さらに Phase 19 で追加: **brand を跨いだ operator 集計**。1 つの事業会社が
+複数ブランドを運営しているケース (例: 大和フーヅ=ミスド48+モス18) を正しく
+1 行に集約する。この事業会社主語の view がメガジー (多業態メガフランチャイジー)
+発見の正しい粒度。
 
 運用:
   1. pizza scan / audit で unknown_stores.csv が生成される
-  2. pizza registry-expand で候補を抽出 (operator_stores テーブルから集計)
-  3. 人間がレビューして franchisee_registry.yaml に追記
-     (or ファクトチェック agent に自動検証させる)
+  2. pizza registry-expand で 1 ブランド候補を抽出
+  3. pizza megafranchisee (cross-brand) で事業会社横断リストを抽出
+  4. 人間 or agent がレビューして franchisee_registry.yaml に追記
 """
 
 from __future__ import annotations
 
 import csv as csv_mod
 import sqlite3
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 
@@ -139,3 +144,192 @@ def load_unknown_stores_csv(path: str) -> list[dict]:
         for row in reader:
             out.append(row)
     return out
+
+
+# ─── Phase 19: 横断 (cross-brand) メガジー集計 ─────────────────────────
+
+
+@dataclass
+class CrossBrandOperator:
+    """複数ブランドを跨いだ 1 事業会社の集計行。
+
+    例: 大和フーヅ = {ミスタードーナツ:48, モスバーガー:18} → total 66 店。
+    1 ブランドごとの件数 `brand_counts` を保持し、total_stores は合計。
+    """
+
+    name: str
+    total_stores: int
+    brand_counts: dict[str, int] = field(default_factory=dict)
+    corporate_number: str = ""
+    operator_types: set[str] = field(default_factory=set)
+    discovered_vias: set[str] = field(default_factory=set)
+
+    @property
+    def brand_count(self) -> int:
+        """運営しているブランド数 (多業態度)。"""
+        return len(self.brand_counts)
+
+
+def aggregate_cross_brand_operators(
+    *,
+    db_path: str,
+    min_total_stores: int = 1,
+    min_brands: int = 1,
+    exclude_franchisor: bool = True,
+) -> list[CrossBrandOperator]:
+    """operator_stores を brand 指定なしで集計 (1 operator = 1 行)。
+
+    - 同一 operator が複数ブランドに跨って保有していれば全ブランド合算
+    - operator_type in ('franchisor', 'direct') は本部・直営なので除外
+      (exclude_franchisor=True のとき)
+    - total_stores >= min_total_stores AND brand_count >= min_brands
+    - 合計店舗数降順でソート
+
+    対象: メガジー (20+店) から中堅 (2店) まで、1 行で全事業実態を見たい
+    ときのエントリポイント。
+    """
+    conn = sqlite3.connect(db_path)
+    try:
+        # ブランド別内訳まで一度に拾う
+        filt = ""
+        if exclude_franchisor:
+            filt = " AND COALESCE(operator_type,'') NOT IN ('franchisor','direct')"
+        rows = conn.execute(
+            "SELECT operator_name, brand, "
+            "       COUNT(DISTINCT place_id) AS n, "
+            "       COALESCE(MAX(corporate_number),'') AS cn, "
+            "       COALESCE(MAX(operator_type),'') AS ot, "
+            "       COALESCE(MAX(discovered_via),'') AS dv "
+            "FROM operator_stores "
+            "WHERE operator_name != ''"
+            + filt
+            + " GROUP BY operator_name, brand "
+            + "ORDER BY operator_name, n DESC"
+        ).fetchall()
+    finally:
+        conn.close()
+
+    by_operator: dict[str, CrossBrandOperator] = {}
+    for operator_name, brand, n, cn, ot, dv in rows:
+        if not operator_name:
+            continue
+        op = by_operator.get(operator_name)
+        if op is None:
+            op = CrossBrandOperator(
+                name=operator_name,
+                total_stores=0,
+                corporate_number=str(cn or ""),
+            )
+            by_operator[operator_name] = op
+        op.brand_counts[str(brand or "")] = int(n)
+        op.total_stores += int(n)
+        if ot:
+            op.operator_types.add(str(ot))
+        if dv:
+            op.discovered_vias.add(str(dv))
+        # 最初に来た非空 corporate_number を固定
+        if not op.corporate_number and cn:
+            op.corporate_number = str(cn)
+
+    out: list[CrossBrandOperator] = []
+    for op in by_operator.values():
+        if op.total_stores < min_total_stores:
+            continue
+        if op.brand_count < min_brands:
+            continue
+        out.append(op)
+    # 合計降順、同数なら名前昇順
+    out.sort(key=lambda o: (-o.total_stores, o.name))
+    return out
+
+
+def export_cross_brand_to_csv(
+    operators: list[CrossBrandOperator],
+    *,
+    out_path: str,
+) -> None:
+    """メガジー横断 CSV を書き出す。
+
+    列: operator_name, total_stores, brand_count, brands_breakdown,
+        corporate_number, operator_types, discovered_vias
+    brands_breakdown は "ブランドA:N; ブランドB:M; ..." の 1 カラム文字列。
+    """
+    p = Path(out_path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    with open(p, "w", encoding="utf-8", newline="") as f:
+        w = csv_mod.writer(f)
+        w.writerow([
+            "operator_name",
+            "total_stores",
+            "brand_count",
+            "brands_breakdown",
+            "corporate_number",
+            "operator_types",
+            "discovered_vias",
+        ])
+        for op in operators:
+            breakdown = "; ".join(
+                f"{b}:{n}" for b, n in sorted(
+                    op.brand_counts.items(), key=lambda kv: (-kv[1], kv[0])
+                )
+            )
+            w.writerow([
+                op.name,
+                op.total_stores,
+                op.brand_count,
+                breakdown,
+                op.corporate_number,
+                ",".join(sorted(op.operator_types)),
+                ",".join(sorted(op.discovered_vias)),
+            ])
+
+
+def export_cross_brand_to_yaml(
+    operators: list[CrossBrandOperator],
+    *,
+    out_path: str,
+) -> None:
+    """operator-first YAML で書き出す。
+
+    既存 `franchisee_registry.yaml` は brand-first だが、メガジー分析では
+    operator を主語にした逆方向 index が欲しい。これはその候補 dump。
+    """
+    p = Path(out_path)
+    p.parent.mkdir(parents=True, exist_ok=True)
+    lines: list[str] = []
+    lines.append("# Phase 19: 横断メガジー候補 (operator → brands 逆方向 index)")
+    lines.append(f"# {len(operators)} 社、合計店舗数降順")
+    lines.append("")
+    lines.append("operators:")
+    for op in operators:
+        # key のコロン安全化
+        safe_key = op.name.replace(":", "：")
+        lines.append(f"  {safe_key}:")
+        lines.append(f"    total_stores: {op.total_stores}")
+        lines.append(f"    brand_count: {op.brand_count}")
+        if op.corporate_number:
+            lines.append(f'    corporate_number: "{op.corporate_number}"')
+        else:
+            lines.append(
+                '    corporate_number: ""  # TODO: gBizINFO で確認'
+            )
+        lines.append("    brands:")
+        for b, n in sorted(
+            op.brand_counts.items(), key=lambda kv: (-kv[1], kv[0])
+        ):
+            safe_b = (b or "unknown").replace(":", "：")
+            lines.append(f"      {safe_b}: {n}")
+        if op.operator_types:
+            lines.append(
+                "    operator_types: ["
+                + ", ".join(f'"{t}"' for t in sorted(op.operator_types))
+                + "]"
+            )
+        if op.discovered_vias:
+            lines.append(
+                "    discovered_vias: ["
+                + ", ".join(f'"{d}"' for d in sorted(op.discovered_vias))
+                + "]"
+            )
+        lines.append("")
+    p.write_text("\n".join(lines), encoding="utf-8")

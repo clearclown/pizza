@@ -13,8 +13,12 @@ import pytest
 
 from pizza_delivery.registry_expander import (
     CandidateFranchisee,
+    CrossBrandOperator,
+    aggregate_cross_brand_operators,
     aggregate_unknown_operators,
     export_candidates_to_yaml,
+    export_cross_brand_to_csv,
+    export_cross_brand_to_yaml,
     load_unknown_stores_csv,
 )
 
@@ -126,6 +130,127 @@ def test_export_candidates_to_yaml_appends_block(tmp_path: Path) -> None:
     assert "エニタイムフィットネス" in text
     # 法人番号は "" 初期値 (手動確認前提)
     assert 'corporate_number: ""' in text
+
+
+# ─── Phase 19: cross-brand メガジー集計 ─────────────────────────────
+
+
+def _seed_with_corp(db: str, rows: list[tuple]) -> None:
+    """rows = (operator_name, place_id, brand, operator_type, corporate_number, discovered_via)."""
+    conn = sqlite3.connect(db)
+    conn.executescript(_SCHEMA)
+    conn.executemany(
+        "INSERT INTO operator_stores "
+        "(operator_name, place_id, brand, operator_type, "
+        " corporate_number, discovered_via) "
+        "VALUES (?, ?, ?, ?, ?, ?)",
+        rows,
+    )
+    conn.commit()
+    conn.close()
+
+
+def test_aggregate_cross_brand_groups_by_operator(tmp_path: Path) -> None:
+    """1 事業会社が複数ブランド運営 → 1 行に集約される。"""
+    db = tmp_path / "t.db"
+    _seed_with_corp(
+        str(db),
+        [
+            # 大和フーヅ: モス 3 + ミスド 5 = 8 店 (多業態)
+            ("大和フーヅ株式会社", "m1", "モスバーガー", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "m2", "モスバーガー", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "m3", "モスバーガー", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "d1", "ミスタードーナツ", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "d2", "ミスタードーナツ", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "d3", "ミスタードーナツ", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "d4", "ミスタードーナツ", "franchisee", "5010401089998", "per_store"),
+            ("大和フーヅ株式会社", "d5", "ミスタードーナツ", "franchisee", "5010401089998", "per_store"),
+            # 単一ブランドの中堅
+            ("株式会社単独社", "x1", "エニタイムフィットネス", "franchisee", "", "per_store"),
+            ("株式会社単独社", "x2", "エニタイムフィットネス", "franchisee", "", "per_store"),
+            # 本部 (除外されるはず)
+            ("株式会社モスフードサービス", "h1", "モスバーガー", "franchisor", "", "per_store"),
+        ],
+    )
+    ops = aggregate_cross_brand_operators(db_path=str(db), min_total_stores=1)
+    names = {o.name: o for o in ops}
+    # 大和フーヅが 2 ブランド合計で 1 行に
+    assert "大和フーヅ株式会社" in names
+    y = names["大和フーヅ株式会社"]
+    assert y.total_stores == 8
+    assert y.brand_count == 2
+    assert y.brand_counts["モスバーガー"] == 3
+    assert y.brand_counts["ミスタードーナツ"] == 5
+    assert y.corporate_number == "5010401089998"
+    # 単独社も入る
+    assert "株式会社単独社" in names
+    assert names["株式会社単独社"].total_stores == 2
+    # 本部 (franchisor) は除外
+    assert "株式会社モスフードサービス" not in names
+    # 合計降順: 大和フーヅ (8) が単独社 (2) より先
+    assert ops[0].name == "大和フーヅ株式会社"
+    assert ops[1].name == "株式会社単独社"
+
+
+def test_aggregate_cross_brand_min_brands_filter(tmp_path: Path) -> None:
+    """min_brands=2 なら多業態のみ残る。"""
+    db = tmp_path / "t.db"
+    _seed_with_corp(
+        str(db),
+        [
+            ("多業態社", "p1", "A", "franchisee", "", "per_store"),
+            ("多業態社", "p2", "B", "franchisee", "", "per_store"),
+            ("単一社", "q1", "A", "franchisee", "", "per_store"),
+            ("単一社", "q2", "A", "franchisee", "", "per_store"),
+            ("単一社", "q3", "A", "franchisee", "", "per_store"),
+        ],
+    )
+    ops = aggregate_cross_brand_operators(
+        db_path=str(db), min_total_stores=1, min_brands=2,
+    )
+    names = {o.name for o in ops}
+    assert "多業態社" in names
+    assert "単一社" not in names
+
+
+def test_export_cross_brand_csv(tmp_path: Path) -> None:
+    out = tmp_path / "mj.csv"
+    ops = [
+        CrossBrandOperator(
+            name="大和フーヅ株式会社",
+            total_stores=66,
+            brand_counts={"ミスタードーナツ": 48, "モスバーガー": 18},
+            corporate_number="5010401089998",
+        ),
+    ]
+    export_cross_brand_to_csv(ops, out_path=str(out))
+    text = out.read_text(encoding="utf-8")
+    assert "大和フーヅ株式会社" in text
+    assert "ミスタードーナツ:48" in text
+    assert "モスバーガー:18" in text
+    assert "5010401089998" in text
+    # ヘッダー
+    assert "brand_count" in text
+
+
+def test_export_cross_brand_yaml(tmp_path: Path) -> None:
+    out = tmp_path / "mj.yaml"
+    ops = [
+        CrossBrandOperator(
+            name="大和フーヅ株式会社",
+            total_stores=66,
+            brand_counts={"ミスタードーナツ": 48, "モスバーガー": 18},
+            corporate_number="5010401089998",
+        ),
+    ]
+    export_cross_brand_to_yaml(ops, out_path=str(out))
+    text = out.read_text(encoding="utf-8")
+    assert "operators:" in text
+    assert "大和フーヅ株式会社:" in text
+    assert "total_stores: 66" in text
+    assert "brand_count: 2" in text
+    assert "ミスタードーナツ: 48" in text
+    assert "モスバーガー: 18" in text
 
 
 def test_load_unknown_stores_csv(tmp_path: Path) -> None:

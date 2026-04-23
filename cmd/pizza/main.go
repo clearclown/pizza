@@ -81,6 +81,10 @@ func main() {
 		if err := cmdRegistryExpand(os.Args[2:]); err != nil {
 			log.Fatalf("pizza registry-expand: %v", err)
 		}
+	case "megafranchisee":
+		if err := cmdMegaFranchisee(os.Args[2:]); err != nil {
+			log.Fatalf("pizza megafranchisee: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -109,6 +113,7 @@ Subcommands:
   pizza scan      1 コマンドで全自動 (migrate→bake→research→audit、サマリ CSV)
   pizza bench     複数ブランド逐次実走 + metrics JSON (速度/API call 数 計測)
   pizza registry-expand  未登録 operator を集計して YAML-ready 候補を出力
+  pizza megafranchisee   brand 横断で事業会社別 total 店舗数を集計 (operator 主語 CSV+YAML)
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -364,6 +369,75 @@ func cmdRegistryExpand(args []string) error {
 			"print(f'✅ wrote {len(cands)} candidates');"+
 			"[print(f'  {c.name}  ({c.estimated_store_count} 店舗)') for c in cands]",
 		*dbPath, *brand, *minStores, *outPath,
+	)
+	cmd := exec.Command("uv", "run", "python", "-c", script)
+	cmd.Dir = deliveryDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
+}
+
+// cmdMegaFranchisee は brand を跨いだ事業会社集計 (Phase 19)。
+// 1 事業会社 = 1 行。運営している全ブランドの店舗数内訳 + total を出す。
+//
+//	pizza megafranchisee --min-total 5 --min-brands 1 \
+//	    --out-csv var/megajii/all.csv --out-yaml var/megajii/all.yaml
+func cmdMegaFranchisee(args []string) error {
+	fs := flag.NewFlagSet("megafranchisee", flag.ExitOnError)
+	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
+	minTotal := fs.Int("min-total", 2, "候補にする最低合計店舗数")
+	minBrands := fs.Int("min-brands", 1, "複数ブランド運営だけ残したいなら >=2")
+	outCSV := fs.String("out-csv", "var/megajii/operators.csv", "operator 主語 CSV")
+	outYAML := fs.String("out-yaml", "", "operator 主語 YAML (省略可)")
+	includeHQ := fs.Bool("include-franchisor", false, "本部・直営も集計に含める")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	cfg, _ := menu.FromEnv()
+	if *dbPath == "" && cfg != nil {
+		*dbPath = cfg.DBPath
+	}
+	if *dbPath == "" {
+		*dbPath = "./var/pizza.sqlite"
+	}
+	if !filepath.IsAbs(*dbPath) {
+		if abs, err := filepath.Abs(*dbPath); err == nil {
+			*dbPath = abs
+		}
+	}
+	if !filepath.IsAbs(*outCSV) {
+		if abs, err := filepath.Abs(*outCSV); err == nil {
+			*outCSV = abs
+		}
+	}
+	if *outYAML != "" && !filepath.IsAbs(*outYAML) {
+		if abs, err := filepath.Abs(*outYAML); err == nil {
+			*outYAML = abs
+		}
+	}
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("megafranchisee: %s が見つかりません", deliveryDir)
+	}
+	excludeHQ := "True"
+	if *includeHQ {
+		excludeHQ = "False"
+	}
+	fmt.Printf("🏢 megafranchisee: min_total=%d min_brands=%d → %s\n",
+		*minTotal, *minBrands, *outCSV)
+	yamlStmt := ""
+	if *outYAML != "" {
+		yamlStmt = fmt.Sprintf("export_cross_brand_to_yaml(ops, out_path=%q);", *outYAML)
+	}
+	script := fmt.Sprintf(
+		"from pizza_delivery.registry_expander import aggregate_cross_brand_operators, export_cross_brand_to_csv, export_cross_brand_to_yaml;"+
+			"ops = aggregate_cross_brand_operators(db_path=%q, min_total_stores=%d, min_brands=%d, exclude_franchisor=%s);"+
+			"export_cross_brand_to_csv(ops, out_path=%q);"+
+			"%s"+
+			"print(f'✅ {len(ops)} operators');"+
+			"[print(f'  {o.total_stores:4d} 店  {o.brand_count} 業態  {o.name}  ({\", \".join(f\"{b}:{n}\" for b,n in sorted(o.brand_counts.items(), key=lambda kv:-kv[1]))})') for o in ops[:30]]",
+		*dbPath, *minTotal, *minBrands, excludeHQ, *outCSV, yamlStmt,
 	)
 	cmd := exec.Command("uv", "run", "python", "-c", script)
 	cmd.Dir = deliveryDir

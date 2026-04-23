@@ -383,6 +383,13 @@ func matchesBrand(p *PlaceRaw, brand string) bool {
 	}
 	name := p.DisplayName.Text
 
+	// 0. Phase 18: 公式 URL ドメインが「既知の別ブランド」なら即 reject。
+	// displayName が brand と一致していても Places 登録データ側の誤りである
+	// ケースがある (例: Mos バーガー店に burgerking.co.jp が紐付く 6 件)。
+	if hasForeignDomain(brand, p.WebsiteURI) {
+		return false
+	}
+
 	// 1. 完全 substring (生 & 正規化)
 	if strings.Contains(name, brand) {
 		return true

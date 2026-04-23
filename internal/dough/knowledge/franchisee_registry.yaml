@@ -381,15 +381,124 @@ brands:
 
     known_franchisees:
       - name: 株式会社モスストアカンパニー
-        corporate_number: ""
-        head_office: 東京都品川区
+        corporate_number: "3010701019707"
+        head_office: 東京都品川区大崎2-1-1
         estimated_store_count: 209
         observed_at: "2023-09"
         source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=3010701019707
           - https://mosstorecompany.jp/
         verified_at: "2026-04-23"
-        verified_via: ["公式サイト", "cookbiz 業界紙"]
-        note: "モスフード 100% 子会社で厳密には『直営扱いの FC』"
+        verified_via: ["gBizINFO", "公式サイト", "cookbiz 業界紙"]
+        note: "モスフード 100% 子会社。全国最大の FC。"
+      - name: 大和フーヅ株式会社
+        corporate_number: "5010401089998"
+        head_office: 埼玉県熊谷市筑波3-193 熊谷通運ビル5F
+        estimated_store_count: 18
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5010401089998
+          - https://www.ymtfds.co.jp/ymfd/corporate/
+          - https://www.bc01.net/article/ranking_202408_1_120/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "埼玉・群馬中心。ミスド48 + モス18 他。BC2024 ランキング45位。"
+      - name: 株式会社ヴィアン
+        corporate_number: "5010401003406"
+        head_office: 東京都港区芝浦2-14-4 オアーゼネクサス芝浦3F
+        estimated_store_count: 4
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5010401003406
+          - https://www.viens.co.jp/company/outline.html
+          - https://www.bc01.net/article/ranking_202408_1_120/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "首都圏+沖縄。モス4 + ミスド29 + かつや4 等 計44店。BC2024 97位。"
+      - name: 株式会社フジタコーポレーション
+        corporate_number: "9430001054035"
+        head_office: 北海道苫小牧市若草町5-3-5
+        estimated_store_count: 5
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=9430001054035
+          - https://www.fujitacorp.co.jp/main/shop-cat/02mosburger/
+          - https://www.bc01.net/article/ranking_202408_1_120/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "北海道道央。モス5 + 多業態。自社ブランド『かつてん』FC 本部。BC2024 77位。"
+      - name: 株式会社三栄本社
+        corporate_number: "7390001000722"
+        head_office: 山形県山形市飯田1-9-10
+        estimated_store_count: 13
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7390001000722
+          - http://www.saneihonsha.co.jp/company/
+          - https://www.bc01.net/article/ranking_202408_121_202/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024", "Wikipedia"]
+        note: "山形県中心。モス13 + 昭和ホルモン亭6 + コメダ4 他 計28店。1980年モス加盟。"
+      - name: タイホウコーポレーション株式会社
+        corporate_number: "1180001037667"
+        head_office: 愛知県名古屋市中区上前津2-4-10
+        estimated_store_count: 11
+        observed_at: "2024-07"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1180001037667
+          - https://www.taiho-group.co.jp/company/
+          - https://www.bc01.net/article/ranking_202408_121_202/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "愛知・岐阜中心。モス10-11 + ピザハット7 他。BC2024 掲載。"
+      - name: 株式会社フレックス
+        corporate_number: "7120101034003"
+        head_office: 鳥取県鳥取市湖山町北1-454-5
+        estimated_store_count: 12
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7120101034003
+          - https://www.flex1980.co.jp/aboutus/company/
+          - https://www.bc01.net/article/ranking_202408_121_202/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "鳥取・山陰エリア。モス約12店 + 餃子の王将3。同名企業複数、法人番号要確認。"
+      - name: 株式会社ファミリーフード
+        corporate_number: "6240001031857"
+        head_office: 広島県福山市南蔵王町2-16-5
+        estimated_store_count: 13
+        observed_at: "2024-04"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6240001031857
+          - https://familyfood.jp/
+          - https://a-fgroup.jp/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト"]
+        note: "広島備後地方。モス13 + はなまるうどん他。A-F グループ所属。1976年モス加盟。"
+      - name: 株式会社みちのくジャパン
+        corporate_number: "8400001006262"
+        head_office: 岩手県北上市大通り4-4-22
+        estimated_store_count: 2
+        observed_at: "2024-08"
+        source_urls:
+          - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=8400001006262
+          - https://www.michinoku-japan.com/
+          - https://www.bc01.net/article/ranking_202408_1_120/
+        verified_at: "2026-04-23"
+        verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+        note: "岩手県中心。ほっかほっか亭 + サーティワン + モス。BC2024 12位の大手。"
+      - name: 株式会社山浩商事
+        corporate_number: "1360001012164"
+        head_office: 沖縄県名護市城2-1-21
+        estimated_store_count: 5
+        observed_at: "2024-04"
+        source_urls:
+          - https://www.yamako-s.co.jp/eating-out.php
+          - https://www.data-max.co.jp/corpo_database/corpo/detail/1360001012164
+          - https://web-repo.jp/articles/1430
+        verified_at: "2026-04-23"
+        verified_via: ["公式サイト", "NetIB-NEWS"]
+        note: "沖縄県(名護・那覇・読谷・沖縄市)。モス5 + らあめん花月嵐2。1976年沖縄県初モス加盟47年。"
 
   # ─── 全店直営ブランド (FC 無し、参考情報) ─────────────────────────
   ガスト:

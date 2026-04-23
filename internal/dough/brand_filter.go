@@ -91,6 +91,70 @@ func BrandConflictEntriesOf(brand string) []BrandConflictEntry {
 	return brandConflictEntries[brand]
 }
 
+// ─── Phase 18: URL ドメイン二次 filter ───────────────────────────────
+
+// BrandForeignDomains はブランドごとの「混入が起きやすい外部ドメイン」。
+// 店舗の official_url がこのドメインで終わる場合、displayName の brand が
+// 正しくても reject する (Places 側の登録誤り対策)。
+//
+// 例: Mos バーガー店として Places 検出された店舗が official_url =
+//     burgerking.co.jp になっている 6 件の誤登録データ発見を契機に導入。
+var BrandForeignDomains = map[string][]string{
+	"モスバーガー": {
+		"burgerking.co.jp",
+		"mcdonalds.co.jp",
+		"kfc.co.jp",
+		"lotteria.jp",
+	},
+	"マクドナルド": {
+		"mos.co.jp",
+		"mos.jp",
+		"burgerking.co.jp",
+		"kfc.co.jp",
+		"lotteria.jp",
+	},
+	"エニタイムフィットネス": {
+		"fitplace.jp",
+		"chocozap.jp",
+		"joyfit.jp",
+	},
+	"スターバックス コーヒー": {
+		"doutor.co.jp",
+		"tullys.co.jp",
+	},
+	"セブン-イレブン": {
+		"family.co.jp",
+		"lawson.co.jp",
+	},
+	"ファミリーマート": {
+		"sej.co.jp",
+		"lawson.co.jp",
+	},
+	"ローソン": {
+		"sej.co.jp",
+		"family.co.jp",
+	},
+}
+
+// hasForeignDomain は brand の official_url が別ブランドのドメインかを判定。
+// URL が空 or 判定不能なら false (判定保留)。
+func hasForeignDomain(brand, officialURL string) bool {
+	if officialURL == "" {
+		return false
+	}
+	domains := BrandForeignDomains[brand]
+	if len(domains) == 0 {
+		return false
+	}
+	url := strings.ToLower(officialURL)
+	for _, d := range domains {
+		if strings.Contains(url, strings.ToLower(d)) {
+			return true
+		}
+	}
+	return false
+}
+
 // isKnownConflict は brand に対して name が blocklist に該当するか判定。
 // 正規化後の name に conflict キーワードの正規化形が含まれていれば true。
 // この判定は substring ベースであり、正則文字列一致より広めに弾く。
