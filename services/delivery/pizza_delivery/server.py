@@ -265,6 +265,52 @@ class PanelDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
             context.abort(grpc.StatusCode.INTERNAL, f"panel failed: {exc}")
             raise
 
+        # Phase 21: Panel mode でも browser fallback を発火。
+        # Panel の confidence が低い + official_url あり + ENABLE_BROWSER_FALLBACK=1
+        # のとき browser_use.Agent で実ブラウザ調査してverdict を補強する。
+        used_browser = False
+        browser_note = ""
+        try:
+            from pizza_delivery.agent import (
+                _build_browser_task,
+                _default_browser_agent,
+                _browser_fallback_enabled,
+                _fallback_threshold,
+            )
+
+            if (
+                _browser_fallback_enabled()
+                and store.official_url
+                and verdict.final_confidence < _fallback_threshold()
+            ):
+                browser_task = _build_browser_task(judge_req)
+                try:
+                    # critic 用 LLM を browser_use.Agent に注入
+                    bjson = _run_sync(
+                        _default_browser_agent(
+                            browser_task, self._critic_llm, store.official_url
+                        ),
+                        timeout=180.0,
+                    )
+                    if bjson.confidence > verdict.final_confidence:
+                        verdict.final_confidence = bjson.confidence
+                        if bjson.franchisee_name:
+                            verdict.final_franchisee = bjson.franchisee_name
+                        if bjson.franchisor_name:
+                            verdict.final_franchisor = bjson.franchisor_name
+                        if bjson.operation_type:
+                            verdict.final_operation_type = bjson.operation_type
+                        used_browser = True
+                        browser_note = (
+                            f"\n[browser_fallback] confidence→{bjson.confidence:.2f}, "
+                            f"op_type={bjson.operation_type}, "
+                            f"franchisee={bjson.franchisee_name!r}"
+                        )
+                except Exception as be:
+                    browser_note = f"\n[browser_fallback_failed] {be}"
+        except ImportError:
+            pass
+
         operator_display = verdict.final_franchisee or verdict.final_franchisor
         is_franchise = verdict.final_operation_type not in ("direct", "")
         result = delivery_pb2.JudgeResult(
@@ -276,13 +322,13 @@ class PanelDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
             llm_provider="panel:gemini×2+claude",
             llm_model=f"{self._worker_a_model}/{self._worker_b_model}→{self._critic_model}",
         )
-        if verdict.reasoning:
-            snippet = verdict.reasoning[:400]
+        if verdict.reasoning or browser_note:
+            snippet = (verdict.reasoning + browser_note)[:400]
             result.evidence.append(
                 delivery_pb2.Evidence(
                     source_url=store.official_url or "",
                     snippet=snippet,
-                    reason="panel_critic",
+                    reason="panel_critic+browser" if used_browser else "panel_critic",
                 )
             )
         return delivery_pb2.JudgeFranchiseTypeResponse(result=result)

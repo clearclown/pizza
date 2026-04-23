@@ -103,10 +103,15 @@ services:
       PORT: "3002"
       INTERNAL_PORT: "3002"
       ENV: local
-      NUM_WORKERS_PER_QUEUE: "8"
-      CRAWL_CONCURRENT_REQUESTS: "10"
-      MAX_CONCURRENT_JOBS: "5"
-      BROWSER_POOL_SIZE: "5"
+      # NOTE: Mac podman VM はメモリ制限 (~4GB 程度が普通) のため、
+      # Firecrawl api+worker+nuq-worker×N を 1 コンテナで起動すると
+      # exit code 137 (SIGKILL = OOMKill) で crash loop。
+      # 単発 worker に絞って起動する (PI-ZZA 用途は scrape 1 URL 程度で十分)。
+      NUM_WORKERS_PER_QUEUE: "1"
+      CRAWL_CONCURRENT_REQUESTS: "2"
+      MAX_CONCURRENT_JOBS: "2"
+      BROWSER_POOL_SIZE: "2"
+      NODE_OPTIONS: "--max-old-space-size=512"
       REDIS_URL: redis://firecrawl-redis:6379
       REDIS_RATE_LIMIT_URL: redis://firecrawl-redis:6379
       PLAYWRIGHT_MICROSERVICE_URL: http://firecrawl-playwright:3000/scrape

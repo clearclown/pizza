@@ -80,7 +80,8 @@ type ScrapeRequest struct {
 	URL             string   `json:"url"`
 	Formats         []string `json:"formats,omitempty"`          // ["markdown"] など
 	OnlyMainContent bool     `json:"onlyMainContent,omitempty"`
-	TimeoutMs       int32    `json:"timeout,omitempty"`           // ms
+	TimeoutMs       int32    `json:"timeout,omitempty"`          // ms
+	WaitFor         int32    `json:"waitFor,omitempty"`          // ms、SPA 用に JS 実行待ち
 }
 
 // ScrapeResponse は Firecrawl からの応答 (主要フィールドのみ)。
@@ -111,6 +112,10 @@ func (c *Client) Scrape(ctx context.Context, url string) (*pb.MarkdownDoc, error
 		Formats:         []string{"markdown"},
 		OnlyMainContent: true,
 		TimeoutMs:       c.timeoutMs(),
+		// SPA (Mos www.mos.jp/shop/detail/?shop_cd=XXX 等) は server-side
+		// render ではないため、JS 実行後の DOM を待つ必要がある。
+		// 5 秒待ちで Mos/マクドナルド/Anytime 等の主要ブランドは十分対応可能。
+		WaitFor: 5000,
 	}
 	body, _ := json.Marshal(req)
 
