@@ -85,6 +85,14 @@ func main() {
 		if err := cmdMegaFranchisee(os.Args[2:]); err != nil {
 			log.Fatalf("pizza megafranchisee: %v", err)
 		}
+	case "houjin-import":
+		if err := cmdHoujinImport(os.Args[2:]); err != nil {
+			log.Fatalf("pizza houjin-import: %v", err)
+		}
+	case "houjin-search":
+		if err := cmdHoujinSearch(os.Args[2:]); err != nil {
+			log.Fatalf("pizza houjin-search: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -114,6 +122,8 @@ Subcommands:
   pizza bench     複数ブランド逐次実走 + metrics JSON (速度/API call 数 計測)
   pizza registry-expand  未登録 operator を集計して YAML-ready 候補を出力
   pizza megafranchisee   brand 横断で事業会社別 total 店舗数を集計 (operator 主語 CSV+YAML)
+  pizza houjin-import    国税庁 法人番号 CSV/zip を local SQLite に取込 (Layer D Ground Truth)
+  pizza houjin-search    local 法人番号 index を operator 名で検索
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -369,6 +379,72 @@ func cmdRegistryExpand(args []string) error {
 			"print(f'✅ wrote {len(cands)} candidates');"+
 			"[print(f'  {c.name}  ({c.estimated_store_count} 店舗)') for c in cands]",
 		*dbPath, *brand, *minStores, *outPath,
+	)
+	cmd := exec.Command("uv", "run", "python", "-c", script)
+	cmd.Dir = deliveryDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
+}
+
+// cmdHoujinImport は 国税庁 法人番号 CSV (or zip) を local SQLite に取込む。
+// APP_ID 不要で完全オフライン。Layer D (operator 実在検証) の Ground Truth。
+//
+//	pizza houjin-import --csv 13_20260331.zip --encoding utf-8
+func cmdHoujinImport(args []string) error {
+	fs := flag.NewFlagSet("houjin-import", flag.ExitOnError)
+	csvPath := fs.String("csv", "", "国税庁 CSV または zip ファイル (必須)")
+	encoding := fs.String("encoding", "utf-8", "CSV encoding: utf-8 | cp932")
+	dbPath := fs.String("db", "", "local sqlite index (default var/houjin/registry.sqlite)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *csvPath == "" {
+		return errors.New("--csv は必須 (国税庁 CSV/zip パス)")
+	}
+	deliveryDir := "services/delivery"
+	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
+		return fmt.Errorf("houjin-import: %s が見つかりません", deliveryDir)
+	}
+	script := fmt.Sprintf(
+		"from pizza_delivery.houjin_csv import HoujinCSVIndex;"+
+			"idx = HoujinCSVIndex(%q if %q else None);"+
+			"n = idx.ingest_csv(%q, encoding=%q);"+
+			"print(f'✅ ingested {n} records → {idx.db_path}')",
+		*dbPath, *dbPath, *csvPath, *encoding,
+	)
+	cmd := exec.Command("uv", "run", "python", "-c", script)
+	cmd.Dir = deliveryDir
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd.Run()
+}
+
+// cmdHoujinSearch は local 法人番号 index を operator 名で検索する。
+// オフライン動作のため houjin-import 済みの前提。
+//
+//	pizza houjin-search --name "株式会社モスストアカンパニー"
+func cmdHoujinSearch(args []string) error {
+	fs := flag.NewFlagSet("houjin-search", flag.ExitOnError)
+	name := fs.String("name", "", "operator 名 (部分一致)")
+	limit := fs.Int("limit", 10, "上限件数")
+	dbPath := fs.String("db", "", "local sqlite index")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *name == "" {
+		return errors.New("--name は必須")
+	}
+	deliveryDir := "services/delivery"
+	script := fmt.Sprintf(
+		"from pizza_delivery.houjin_csv import HoujinCSVIndex;"+
+			"idx = HoujinCSVIndex(%q if %q else None);"+
+			"rows = idx.search_by_name(%q, limit=%d);"+
+			"print(f'found {len(rows)} match(es) in local index');"+
+			"[print(f'  {r.corporate_number}  {r.name}  [{r.process}]  {r.address}') for r in rows]",
+		*dbPath, *dbPath, *name, *limit,
 	)
 	cmd := exec.Command("uv", "run", "python", "-c", script)
 	cmd.Dir = deliveryDir
