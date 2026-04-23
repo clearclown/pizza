@@ -213,6 +213,30 @@ def test_aggregate_cross_brand_min_brands_filter(tmp_path: Path) -> None:
     assert "単一社" not in names
 
 
+def test_aggregate_cross_brand_normalizes_operator_names(tmp_path: Path) -> None:
+    """㈱ / (株) / 株式会社 の表記ゆれで別 operator にならない。"""
+    db = tmp_path / "t.db"
+    _seed_with_corp(
+        str(db),
+        [
+            ("㈱フレックス", "p1", "モスバーガー", "franchisee", "7120101034003", "per_store"),
+            ("(株)フレックス", "p2", "モスバーガー", "franchisee", "7120101034003", "per_store"),
+            ("株式会社フレックス", "p3", "餃子の王将", "franchisee", "7120101034003", "per_store"),
+        ],
+    )
+    ops = aggregate_cross_brand_operators(
+        db_path=str(db), min_total_stores=1, normalize_names=True,
+    )
+    assert len(ops) == 1, f"表記ゆれは 1 operator に集約されるはず: {[o.name for o in ops]}"
+    op = ops[0]
+    assert op.total_stores == 3
+    assert op.brand_count == 2
+    assert op.brand_counts["モスバーガー"] == 2
+    assert op.brand_counts["餃子の王将"] == 1
+    # 表示名は最長 (情報量最大) の "株式会社フレックス"
+    assert op.name == "株式会社フレックス"
+
+
 def test_export_cross_brand_csv(tmp_path: Path) -> None:
     out = tmp_path / "mj.csv"
     ops = [

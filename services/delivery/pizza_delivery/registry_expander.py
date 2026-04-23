@@ -176,6 +176,7 @@ def aggregate_cross_brand_operators(
     min_total_stores: int = 1,
     min_brands: int = 1,
     exclude_franchisor: bool = True,
+    normalize_names: bool = True,
 ) -> list[CrossBrandOperator]:
     """operator_stores を brand 指定なしで集計 (1 operator = 1 行)。
 
@@ -184,10 +185,19 @@ def aggregate_cross_brand_operators(
       (exclude_franchisor=True のとき)
     - total_stores >= min_total_stores AND brand_count >= min_brands
     - 合計店舗数降順でソート
+    - normalize_names=True で "㈱X" / "(株)X" / "株式会社X" 等の表記ゆれを
+      同一 operator として集約 (正規化後の文字列を key、元表記のうち最長を表示)
 
     対象: メガジー (20+店) から中堅 (2店) まで、1 行で全事業実態を見たい
     ときのエントリポイント。
     """
+    if normalize_names:
+        try:
+            from .normalize import normalize_operator_name as _norm
+        except ImportError:
+            _norm = lambda x: x  # noqa: E731
+    else:
+        _norm = lambda x: x  # noqa: E731
     conn = sqlite3.connect(db_path)
     try:
         # ブランド別内訳まで一度に拾う
@@ -210,18 +220,24 @@ def aggregate_cross_brand_operators(
         conn.close()
 
     by_operator: dict[str, CrossBrandOperator] = {}
+    # 元表記の候補を key ごとに保持して最長を表示名にする
+    displays: dict[str, list[str]] = {}
     for operator_name, brand, n, cn, ot, dv in rows:
         if not operator_name:
             continue
-        op = by_operator.get(operator_name)
+        key = _norm(operator_name) or operator_name
+        displays.setdefault(key, []).append(operator_name)
+        op = by_operator.get(key)
         if op is None:
             op = CrossBrandOperator(
-                name=operator_name,
+                name=operator_name,  # 後で最長に差し替え
                 total_stores=0,
                 corporate_number=str(cn or ""),
             )
-            by_operator[operator_name] = op
-        op.brand_counts[str(brand or "")] = int(n)
+            by_operator[key] = op
+        # 同一 (operator, brand) は集計済の可能性があるので加算でなく max
+        b = str(brand or "")
+        op.brand_counts[b] = op.brand_counts.get(b, 0) + int(n)
         op.total_stores += int(n)
         if ot:
             op.operator_types.add(str(ot))
@@ -230,6 +246,11 @@ def aggregate_cross_brand_operators(
         # 最初に来た非空 corporate_number を固定
         if not op.corporate_number and cn:
             op.corporate_number = str(cn)
+
+    # 元表記のうち最も長い (情報量の多い) ものを表示名に採用
+    for key, op in by_operator.items():
+        candidates = displays.get(key, [op.name])
+        op.name = max(candidates, key=lambda s: (len(s), s))
 
     out: list[CrossBrandOperator] = []
     for op in by_operator.values():

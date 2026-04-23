@@ -391,6 +391,8 @@ func cmdMegaFranchisee(args []string) error {
 	outCSV := fs.String("out-csv", "var/megajii/operators.csv", "operator 主語 CSV")
 	outYAML := fs.String("out-yaml", "", "operator 主語 YAML (省略可)")
 	includeHQ := fs.Bool("include-franchisor", false, "本部・直営も集計に含める")
+	sortBy := fs.String("sort-by", "total", "ソート基準: total(合計店舗数) | brands(業態数)")
+	top := fs.Int("top", 30, "top N 社を表示 (0 で全件)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -424,20 +426,29 @@ func cmdMegaFranchisee(args []string) error {
 	if *includeHQ {
 		excludeHQ = "False"
 	}
-	fmt.Printf("🏢 megafranchisee: min_total=%d min_brands=%d → %s\n",
-		*minTotal, *minBrands, *outCSV)
+	sortKey := "-o.total_stores"
+	if *sortBy == "brands" {
+		sortKey = "(-o.brand_count, -o.total_stores)"
+	}
+	fmt.Printf("🏢 megafranchisee: min_total=%d min_brands=%d sort=%s → %s\n",
+		*minTotal, *minBrands, *sortBy, *outCSV)
 	yamlStmt := ""
 	if *outYAML != "" {
 		yamlStmt = fmt.Sprintf("export_cross_brand_to_yaml(ops, out_path=%q);", *outYAML)
 	}
+	topExpr := fmt.Sprintf("ops[:%d]", *top)
+	if *top == 0 {
+		topExpr = "ops"
+	}
 	script := fmt.Sprintf(
 		"from pizza_delivery.registry_expander import aggregate_cross_brand_operators, export_cross_brand_to_csv, export_cross_brand_to_yaml;"+
 			"ops = aggregate_cross_brand_operators(db_path=%q, min_total_stores=%d, min_brands=%d, exclude_franchisor=%s);"+
+			"ops.sort(key=lambda o: %s);"+
 			"export_cross_brand_to_csv(ops, out_path=%q);"+
 			"%s"+
 			"print(f'✅ {len(ops)} operators');"+
-			"[print(f'  {o.total_stores:4d} 店  {o.brand_count} 業態  {o.name}  ({\", \".join(f\"{b}:{n}\" for b,n in sorted(o.brand_counts.items(), key=lambda kv:-kv[1]))})') for o in ops[:30]]",
-		*dbPath, *minTotal, *minBrands, excludeHQ, *outCSV, yamlStmt,
+			"[print(f'  {o.total_stores:4d} 店  {o.brand_count} 業態  {o.name}  ({\", \".join(f\"{b}:{n}\" for b,n in sorted(o.brand_counts.items(), key=lambda kv:-kv[1]))})') for o in %s]",
+		*dbPath, *minTotal, *minBrands, excludeHQ, sortKey, *outCSV, yamlStmt, topExpr,
 	)
 	cmd := exec.Command("uv", "run", "python", "-c", script)
 	cmd.Dir = deliveryDir
