@@ -156,6 +156,56 @@ class PlacesClient:
             )
         return out
 
+    async def get_place_details(
+        self,
+        place_id: str,
+        *,
+        fields: str = "",
+    ) -> PlaceRaw | None:
+        """単一 place_id の詳細 (phone / website / reviews 等) を取得。
+
+        Google Places API Details `/places/{id}` endpoint。FC 加盟店特定で
+        重要な phone / websiteUri / formattedAddress / displayName を取る。
+
+        fields 省略時は FC 特定用の標準 field mask を使用。
+        """
+        if not place_id:
+            return None
+        if not fields:
+            fields = (
+                "id,displayName,formattedAddress,nationalPhoneNumber,"
+                "internationalPhoneNumber,websiteUri,location,businessStatus,"
+                "types,primaryType,primaryTypeDisplayName"
+            )
+        url = f"{self.base_url.rstrip('/')}/places/{place_id}"
+        headers = {
+            "X-Goog-Api-Key": self.api_key,
+            "X-Goog-FieldMask": fields,
+            "Accept-Language": self.language_code,
+        }
+        async with httpx.AsyncClient(timeout=self.timeout) as client:
+            resp = await client.get(url, headers=headers)
+        if resp.status_code == 404:
+            return None
+        if resp.status_code < 200 or resp.status_code >= 300:
+            raise PlacesAPIError(resp.status_code, resp.text)
+        p = resp.json() or {}
+        loc = p.get("location") or {}
+        dn = p.get("displayName") or {}
+        return PlaceRaw(
+            place_id=p.get("id", place_id),
+            name=(dn.get("text") or ""),
+            address=(p.get("formattedAddress") or ""),
+            lat=float(loc.get("latitude") or 0.0),
+            lng=float(loc.get("longitude") or 0.0),
+            website_uri=(p.get("websiteUri") or ""),
+            phone=(
+                p.get("nationalPhoneNumber")
+                or p.get("internationalPhoneNumber")
+                or ""
+            ),
+        )
+
     async def search_by_operator(
         self,
         operator_name: str,
