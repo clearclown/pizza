@@ -173,8 +173,14 @@ def import_pipeline_operators(
     """pipeline 側の SQLite (var/pizza.sqlite) から operator_stores を読み、
     ORM の BrandOperatorLink + OperatorCompany に upsert。
 
+    cross-brand の本部混入 (例: モスバーガー brand で『ドムドムフードサービス』
+    が抽出されるケース) は registry_expander のブロックリストで除外する。
+
     戻り値: 新規 link 数。
     """
+    from pizza_delivery.normalize import canonical_key
+    from pizza_delivery.registry_expander import _load_known_franchisor_names
+
     path = Path(pipeline_db_path)
     if not path.exists():
         logger.warning("pipeline DB が見つからない: %s", path)
@@ -198,8 +204,19 @@ def import_pipeline_operators(
     finally:
         conn.close()
 
+    # 本部・異 brand 本部 ブロックリスト (canonical_key 正規化済)
+    block = {canonical_key(n) for n in _load_known_franchisor_names()}
+
     added = 0
+    skipped = 0
     for op_name, brand_name, n, cn, ot, dv in rows:
+        if canonical_key(op_name) in block:
+            logger.info(
+                "integrate: skip franchisor/別本部混入 %s × %s",
+                op_name, brand_name,
+            )
+            skipped += 1
+            continue
         brand = upsert_brand(session, brand_name, source="pipeline")
         op = upsert_operator(
             session,
@@ -219,6 +236,8 @@ def import_pipeline_operators(
             note=f"discovered_via={dv}",
         )
         added += 1
+    if skipped:
+        logger.info("integrate: skipped %d franchisor-like rows", skipped)
     session.commit()
     return added
 
