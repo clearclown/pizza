@@ -544,3 +544,140 @@ brands:
 # KFC Japan: 2024-09 カーライル傘下へ、フーズネットワーク株式会社 (大阪) 等
 #   個別例はあるが全体像が流動化
 
+# ═════════════════════════════════════════════════════════════════
+# Phase 20: multi_brand_operators — 事業会社主語の「複数ブランド運営」index
+# ═════════════════════════════════════════════════════════════════
+#
+# 同じ事業会社が brands[].known_franchisees 経由で seed される場合は
+# (operator, brand) の重複 seed は自動で skip される (Python 側で実装)。
+# ここでは known_franchisees に **無い** 他ブランドの内訳だけを書けば良い。
+#
+# 大和フーヅ: brands.モスバーガー に 18 店は既登録 → ここでは ミスド 48 を追加
+# のように使い、1 operator が持つ全ブランド像を段階的に網羅する。
+#
+# source: ビジネスチャンス誌メガフランチャイジーランキング2024 (bc01.net)
+multi_brand_operators:
+  - name: 大和フーヅ株式会社
+    corporate_number: "5010401089998"
+    head_office: 埼玉県熊谷市筑波3-193 熊谷通運ビル5F
+    brands:
+      ミスタードーナツ: 48
+    total_stores: 66
+    observed_at: "2024-08"
+    bc_ranking_2024: 45
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5010401089998
+      - https://www.ymtfds.co.jp/ymfd/corporate/
+      - https://www.bc01.net/article/ranking_202408_1_120/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "モス 18 は brands.モスバーガー に登録済。ここではミスド 48 を補完。"
+
+  - name: 株式会社ヴィアン
+    corporate_number: "5010401003406"
+    head_office: 東京都港区芝浦2-14-4 オアーゼネクサス芝浦3F
+    brands:
+      ミスタードーナツ: 29
+      かつや: 4
+    total_stores: 44
+    observed_at: "2024-08"
+    bc_ranking_2024: 97
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=5010401003406
+      - https://www.viens.co.jp/company/outline.html
+      - https://www.bc01.net/article/ranking_202408_1_120/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "モス 4 は brands.モスバーガー に登録済。ここではミスド + かつや を補完。"
+
+  - name: 株式会社三栄本社
+    corporate_number: "7390001000722"
+    head_office: 山形県山形市飯田1-9-10
+    brands:
+      昭和ホルモン亭: 6
+      コメダ珈琲店: 4
+    total_stores: 28
+    observed_at: "2024-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7390001000722
+      - http://www.saneihonsha.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "Wikipedia"]
+    note: "モス 13 は brands.モスバーガー に登録済。他業態複数を補完。"
+
+  - name: タイホウコーポレーション株式会社
+    corporate_number: "1180001037667"
+    head_office: 愛知県名古屋市中区上前津2-4-10
+    brands:
+      ピザハット: 7
+      ほけんの窓口: 3
+    total_stores: 21
+    observed_at: "2024-07"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=1180001037667
+      - https://www.taiho-group.co.jp/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト"]
+    note: "モス 10-11 は brands.モスバーガー に登録済。"
+
+  - name: 株式会社フレックス
+    corporate_number: "7120101034003"
+    head_office: 鳥取県鳥取市湖山町北1-454-5
+    brands:
+      餃子の王将: 3
+    total_stores: 15
+    observed_at: "2024-08"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=7120101034003
+      - https://www.flex1980.co.jp/aboutus/company/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "同名企業複数あり、法人番号は鳥取市のもの採用。"
+
+  - name: 株式会社ファミリーフード
+    corporate_number: "6240001031857"
+    head_office: 広島県福山市南蔵王町2-16-5
+    brands:
+      はなまるうどん: 4
+      ペッパーランチ: 3
+      天丼てんや: 2
+    total_stores: 22
+    observed_at: "2024-04"
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=6240001031857
+      - https://familyfood.jp/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト"]
+    note: "モス 13 は brands.モスバーガー に登録済。他業態は推定値 (要再確認)。"
+
+  - name: 株式会社みちのくジャパン
+    corporate_number: "8400001006262"
+    head_office: 岩手県北上市大通り4-4-22
+    brands:
+      ほっかほっか亭: 30
+      サーティワンアイスクリーム: 8
+    total_stores: 40
+    observed_at: "2024-08"
+    bc_ranking_2024: 12
+    source_urls:
+      - https://info.gbiz.go.jp/hojin/ichiran?hojinBango=8400001006262
+      - https://www.michinoku-japan.com/
+      - https://www.bc01.net/article/ranking_202408_1_120/
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO", "公式サイト", "ビジネスチャンス誌2024"]
+    note: "モス 2 は brands.モスバーガー に登録済。BC 12位の大手 (岩手県)。推定値含む。"
+
+  - name: 株式会社山浩商事
+    corporate_number: "1360001012164"
+    head_office: 沖縄県名護市城2-1-21
+    brands:
+      らあめん花月嵐: 2
+    total_stores: 7
+    observed_at: "2024-04"
+    source_urls:
+      - https://www.yamako-s.co.jp/eating-out.php
+      - https://www.data-max.co.jp/corpo_database/corpo/detail/1360001012164
+    verified_at: "2026-04-23"
+    verified_via: ["公式サイト", "NetIB-NEWS"]
+    note: "モス 5 は brands.モスバーガー に登録済。LPガス/石油事業も兼営。"
+

@@ -45,10 +45,34 @@ class BrandRegistry:
 
 
 @dataclass
+class MultiBrandOperator:
+    """Phase 20: 複数ブランドの FC を運営している事業会社 1 行。
+
+    例: 大和フーヅ = {モスバーガー:18, ミスタードーナツ:48}
+    既存 `BrandRegistry.known_franchisees` は brand-first で 1 ブランド内の
+    franchisee を列挙するが、こちらは operator-first で operator を
+    主語に複数 brand を持たせる逆方向 index。
+    """
+
+    name: str
+    corporate_number: str
+    brands: dict[str, int] = field(default_factory=dict)
+    head_office: str = ""
+    total_stores: int = 0
+    source_urls: list[str] = field(default_factory=list)
+    verified_at: str = ""
+    verified_via: list[str] = field(default_factory=list)
+    bc_ranking_2024: int = 0
+    observed_at: str = ""
+    note: str = ""
+
+
+@dataclass
 class Registry:
     version: int
     updated_at: str
     brands: dict[str, BrandRegistry] = field(default_factory=dict)
+    multi_brand_operators: list[MultiBrandOperator] = field(default_factory=list)
 
 
 def _default_path() -> Path:
@@ -87,6 +111,31 @@ def load_registry(path: Path | str | None = None) -> Registry:
                 )
             )
         reg.brands[brand_name] = br
+
+    # Phase 20: multi_brand_operators セクション
+    for mbo in raw.get("multi_brand_operators") or []:
+        brands_map: dict[str, int] = {}
+        for b, n in (mbo.get("brands") or {}).items():
+            try:
+                brands_map[str(b)] = int(n)
+            except (TypeError, ValueError):
+                continue
+        total = int(mbo.get("total_stores") or sum(brands_map.values()))
+        reg.multi_brand_operators.append(
+            MultiBrandOperator(
+                name=str(mbo["name"]),
+                corporate_number=str(mbo.get("corporate_number", "")),
+                brands=brands_map,
+                head_office=str(mbo.get("head_office", "")),
+                total_stores=total,
+                source_urls=list(mbo.get("source_urls") or []),
+                verified_at=str(mbo.get("verified_at", "")),
+                verified_via=list(mbo.get("verified_via") or []),
+                bc_ranking_2024=int(mbo.get("bc_ranking_2024") or 0),
+                observed_at=str(mbo.get("observed_at", "")),
+                note=str(mbo.get("note", "")),
+            )
+        )
     return reg
 
 
@@ -149,6 +198,60 @@ def seed_registry_to_sqlite(
                             (fr.name, place_id, brand_name, default_confidence),
                         )
                     inserted += 1
+
+        # Phase 20: multi_brand_operators の seed (operator × brand 毎に dummy place_id)
+        for mbo in registry.multi_brand_operators:
+            corp = mbo.corporate_number or "no-no"
+            for brand_name, count in mbo.brands.items():
+                if count <= 0:
+                    continue
+                # 重複回避: この (operator, brand) が既に known_franchisees 経由で
+                # seed されているなら MBO 側は skip (double-count 防止)
+                already_seeded = cur.execute(
+                    "SELECT COUNT(*) FROM operator_stores "
+                    "WHERE operator_name=? AND brand=? "
+                    "  AND discovered_via IN ('registry','registry_mbo')",
+                    (mbo.name, brand_name),
+                ).fetchone()[0]
+                if already_seeded >= count:
+                    continue
+                # brand ごとのスラッグで namespace を分ける (既存 REG: と衝突回避)
+                brand_slug = brand_name.replace(" ", "").replace("/", "")
+                for i in range(1, count + 1):
+                    place_id = f"REG-MBO:{corp}:{brand_slug}:{i}"
+                    exists = cur.execute(
+                        "SELECT 1 FROM operator_stores "
+                        "WHERE operator_name=? AND place_id=? LIMIT 1",
+                        (mbo.name, place_id),
+                    ).fetchone()
+                    if exists:
+                        continue
+                    if has_ver_cols:
+                        cur.execute(
+                            """
+                            INSERT INTO operator_stores
+                              (operator_name, place_id, brand, operator_type,
+                               confidence, discovered_via,
+                               verification_score, corporate_number,
+                               verification_source)
+                            VALUES (?, ?, ?, 'franchisee', ?, 'registry_mbo',
+                                    1.0, ?, 'manual_factcheck')
+                            """,
+                            (mbo.name, place_id, brand_name, default_confidence,
+                             mbo.corporate_number),
+                        )
+                    else:
+                        cur.execute(
+                            """
+                            INSERT INTO operator_stores
+                              (operator_name, place_id, brand, operator_type,
+                               confidence, discovered_via)
+                            VALUES (?, ?, ?, 'franchisee', ?, 'registry_mbo')
+                            """,
+                            (mbo.name, place_id, brand_name, default_confidence),
+                        )
+                    inserted += 1
+
         conn.commit()
         return inserted
     finally:

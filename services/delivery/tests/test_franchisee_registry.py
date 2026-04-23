@@ -10,6 +10,7 @@ import pytest
 from pizza_delivery.franchisee_registry import (
     BrandRegistry,
     KnownFranchisee,
+    MultiBrandOperator,
     Registry,
     load_registry,
     seed_registry_to_sqlite,
@@ -102,6 +103,105 @@ def test_seed_registry_to_sqlite_inserts_all_estimated_stores(tmp_path: Path) ->
     counts = {r[0]: r[1] for r in rows}
     assert counts["株式会社A"] == 3
     assert counts["株式会社B"] == 2
+
+
+# ─── Phase 20: multi_brand_operators ───────────────────────────────
+
+
+def test_load_registry_parses_multi_brand_operators(tmp_path: Path) -> None:
+    """multi_brand_operators セクションが読める。"""
+    yaml_path = tmp_path / "reg.yaml"
+    yaml_path.write_text(
+        """
+version: 1
+updated_at: "2026-04-23"
+brands: {}
+multi_brand_operators:
+  - name: 大和フーヅ株式会社
+    corporate_number: "5010401089998"
+    head_office: 埼玉県熊谷市筑波3-193
+    brands:
+      モスバーガー: 18
+      ミスタードーナツ: 48
+    total_stores: 66
+    bc_ranking_2024: 45
+    source_urls: ["https://example.com/"]
+    verified_at: "2026-04-23"
+    verified_via: ["gBizINFO"]
+    note: "埼玉・群馬中心"
+""",
+        encoding="utf-8",
+    )
+    reg = load_registry(yaml_path)
+    assert len(reg.multi_brand_operators) == 1
+    mbo = reg.multi_brand_operators[0]
+    assert mbo.name == "大和フーヅ株式会社"
+    assert mbo.corporate_number == "5010401089998"
+    assert mbo.brands["モスバーガー"] == 18
+    assert mbo.brands["ミスタードーナツ"] == 48
+    assert mbo.total_stores == 66
+    assert mbo.bc_ranking_2024 == 45
+
+
+def test_seed_multi_brand_operators_spawns_place_ids_per_brand(tmp_path: Path) -> None:
+    """MBO は brand ごとに count 件ずつ operator_stores に展開される。"""
+    db = tmp_path / "t.db"
+    conn = sqlite3.connect(str(db))
+    conn.executescript(_SCHEMA)
+    conn.commit()
+    conn.close()
+
+    reg = Registry(
+        version=1, updated_at="",
+        brands={},
+        multi_brand_operators=[
+            MultiBrandOperator(
+                name="大和フーヅ株式会社",
+                corporate_number="5010401089998",
+                brands={"モスバーガー": 3, "ミスタードーナツ": 5},
+                total_stores=8,
+            )
+        ],
+    )
+    inserted = seed_registry_to_sqlite(str(db), reg)
+    assert inserted == 8
+
+    conn = sqlite3.connect(str(db))
+    try:
+        # brand 別カウントが正しい
+        rows = conn.execute(
+            "SELECT brand, COUNT(*) FROM operator_stores "
+            "WHERE operator_name='大和フーヅ株式会社' GROUP BY brand"
+        ).fetchall()
+    finally:
+        conn.close()
+    bc = dict(rows)
+    assert bc["モスバーガー"] == 3
+    assert bc["ミスタードーナツ"] == 5
+
+
+def test_seed_multi_brand_idempotent(tmp_path: Path) -> None:
+    db = tmp_path / "t.db"
+    conn = sqlite3.connect(str(db))
+    conn.executescript(_SCHEMA)
+    conn.commit()
+    conn.close()
+    reg = Registry(
+        version=1, updated_at="",
+        brands={},
+        multi_brand_operators=[
+            MultiBrandOperator(
+                name="テスト社",
+                corporate_number="1112223334445",
+                brands={"A": 2},
+                total_stores=2,
+            )
+        ],
+    )
+    n1 = seed_registry_to_sqlite(str(db), reg)
+    n2 = seed_registry_to_sqlite(str(db), reg)
+    assert n1 == 2
+    assert n2 == 0
 
 
 def test_seed_is_idempotent(tmp_path: Path) -> None:
