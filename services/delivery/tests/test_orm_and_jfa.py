@@ -143,6 +143,39 @@ def test_parse_member_index_normalizes_corp_abbrev() -> None:
     assert "上島珈琲貿易株式会社" in names
 
 
+def test_parse_member_index_skips_industry_as_brand() -> None:
+    """col[1] に業種説明のみ (brand 無し) の行では brand_name が空になる。
+    セブン銀行行で ATM の業種説明が brand に混入するバグ防止。
+    """
+    html = """<table>
+      <tr>
+        <td>株式会社セブン銀行</td>
+        <td>ATMの設置推進及びATMサービスの展開</td>
+      </tr>
+      <tr>
+        <td>株式会社モスフードサービス</td>
+        <td>モスバーガー<br>外食</td>
+      </tr>
+    </table>"""
+    members = _parse_member_index(html)
+    by_name = {m.operator_name: m for m in members}
+    assert by_name["株式会社セブン銀行"].brand_name == ""
+    assert "ATM" in by_name["株式会社セブン銀行"].industry
+    assert by_name["株式会社モスフードサービス"].brand_name == "モスバーガー"
+
+
+def test_parse_member_index_strips_english_suffix() -> None:
+    """『株式会社モスフードサービス MOS FOOD SERVICES INC.』 → 日本語部のみ。"""
+    html = """<table>
+      <tr>
+        <td>株式会社モスフードサービス MOS FOOD SERVICES INC.</td>
+        <td>モスバーガー<br>外食</td>
+      </tr>
+    </table>"""
+    members = _parse_member_index(html)
+    assert members[0].operator_name == "株式会社モスフードサービス"
+
+
 def test_parse_member_index_skips_non_corporate() -> None:
     html = """<table>
       <tr><td>こんにちは</td><td>普通のテキスト</td></tr>

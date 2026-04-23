@@ -24,6 +24,7 @@ from __future__ import annotations
 import argparse
 import asyncio
 import json
+import os
 import sys
 from pathlib import Path
 
@@ -100,9 +101,11 @@ async def run(args: argparse.Namespace) -> int:
     chain = ChainDiscovery(extractor=extractor, max_concurrency=args.concurrency)
     verifier = CrossVerifier(extractor=extractor)
 
-    # Layer D: 法人番号 API client (optional)
+    # Layer D: 法人番号検証 (HOUJIN_BANGOU_APP_ID 設定時のみ Web-API 直叩き)。
+    # APP_ID が無い環境では houjin_client=None を渡し、pipeline 内部で
+    # VerifyPipeline (ローカル CSV / gBizINFO) fallback が自動起動する。
     houjin_client = None
-    if args.verify_houjin:
+    if args.verify_houjin and os.getenv("HOUJIN_BANGOU_APP_ID"):
         from pizza_delivery.houjin_bangou import HoujinBangouClient
 
         houjin_client = HoujinBangouClient()
