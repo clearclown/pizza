@@ -157,18 +157,124 @@ class RealDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
             yield delivery_pb2.BatchJudgeResponse(result=resp.result)
 
 
+# ─── PANEL Servicer (Phase 5.1: 組織設計) ─────────────────────────────
+
+
+class PanelDeliveryServicer(delivery_pb2_grpc.DeliveryServiceServicer):
+    """Expert Panel (Gemini Flash×2 + Claude critic) で判定する組織モード。
+
+    env:
+      GEMINI_API_KEY           — Worker (2 基)
+      ANTHROPIC_API_KEY        — Critic
+      PANEL_WORKER_A_MODEL     — default gemini-2.5-flash
+      PANEL_WORKER_B_MODEL     — default gemini-2.5-flash
+      PANEL_CRITIC_MODEL       — default ANTHROPIC_MODEL (claude-haiku-4-5)
+    """
+
+    def __init__(self) -> None:
+        from pizza_delivery.claude_critic import ClaudeCritic
+        from pizza_delivery.providers import get_provider
+
+        gemini = get_provider("gemini")
+        anthropic = get_provider("anthropic")
+        if not gemini.ready():
+            raise RuntimeError("PanelDeliveryServicer requires GEMINI_API_KEY")
+        if not anthropic.ready():
+            raise RuntimeError("PanelDeliveryServicer requires ANTHROPIC_API_KEY")
+
+        worker_a_model = os.getenv("PANEL_WORKER_A_MODEL", "gemini-2.5-flash")
+        worker_b_model = os.getenv("PANEL_WORKER_B_MODEL", "gemini-2.5-flash")
+        critic_model = os.getenv("PANEL_CRITIC_MODEL") or None
+
+        self._worker_a = gemini.make_llm(model=worker_a_model)
+        self._worker_b = gemini.make_llm(model=worker_b_model)
+        self._critic_llm = anthropic.make_llm(model=critic_model)
+        self._critic = ClaudeCritic(
+            llm=self._critic_llm,
+            model_name=getattr(self._critic_llm, "model", "") or "claude",
+        )
+        self._worker_a_model = worker_a_model
+        self._worker_b_model = worker_b_model
+        self._critic_model = getattr(self._critic_llm, "model", "") or "claude"
+
+    def JudgeFranchiseType(  # noqa: N802
+        self,
+        request: delivery_pb2.JudgeFranchiseTypeRequest,
+        context: Any,
+    ) -> delivery_pb2.JudgeFranchiseTypeResponse:
+        from pizza_delivery.agent import JudgeRequest
+        from pizza_delivery.evidence import EvidenceCollector
+        from pizza_delivery.panel import ExpertPanel
+
+        store = request.context.store
+        judge_req = JudgeRequest(
+            place_id=store.place_id,
+            brand=store.brand,
+            name=store.name,
+            address=store.address,
+            markdown=request.context.markdown,
+            official_url=store.official_url,
+            candidate_urls=list(request.context.candidate_urls),
+            provider_hint=request.context.provider_hint,
+        )
+        panel = ExpertPanel(
+            worker_a_llm=self._worker_a,
+            worker_b_llm=self._worker_b,
+            critic=self._critic,
+            worker_a_name="gemini-flash-a",
+            worker_b_name="gemini-flash-b",
+        )
+        try:
+            verdict = asyncio.run(
+                panel.deliberate(judge_req, evidence_collector=EvidenceCollector())
+            )
+        except Exception as exc:
+            context.abort(grpc.StatusCode.INTERNAL, f"panel failed: {exc}")
+            raise
+
+        operator_display = verdict.final_franchisee or verdict.final_franchisor
+        is_franchise = verdict.final_operation_type not in ("direct", "")
+        result = delivery_pb2.JudgeResult(
+            place_id=verdict.place_id,
+            is_franchise=is_franchise,
+            operator_name=operator_display,
+            store_count_estimate=0,
+            confidence=verdict.final_confidence,
+            llm_provider="panel:gemini×2+claude",
+            llm_model=f"{self._worker_a_model}/{self._worker_b_model}→{self._critic_model}",
+        )
+        if verdict.reasoning:
+            snippet = verdict.reasoning[:400]
+            result.evidence.append(
+                delivery_pb2.Evidence(
+                    source_url=store.official_url or "",
+                    snippet=snippet,
+                    reason="panel_critic",
+                )
+            )
+        return delivery_pb2.JudgeFranchiseTypeResponse(result=result)
+
+    def BatchJudge(self, request_iterator, context):  # noqa: N802
+        for req in request_iterator:
+            single = delivery_pb2.JudgeFranchiseTypeRequest(context=req.context)
+            resp = self.JudgeFranchiseType(single, context)
+            yield delivery_pb2.BatchJudgeResponse(result=resp.result)
+
+
 # ─── Factory ───────────────────────────────────────────────────────────
 
 
 def pick_servicer(mode: str | None = None) -> delivery_pb2_grpc.DeliveryServiceServicer:
-    """DELIVERY_MODE から Servicer を選択する。"""
+    """DELIVERY_MODE から Servicer を選択する。mock | live | panel。"""
     if mode is None:
         mode = os.getenv("DELIVERY_MODE", "mock").lower()
     if mode == "live":
         return RealDeliveryServicer()
+    if mode == "panel":
+        return PanelDeliveryServicer()
     if mode == "mock":
         return MockDeliveryServicer()
-    raise ValueError(f"unknown DELIVERY_MODE {mode!r} (want mock|live)")
+    raise ValueError(f"unknown DELIVERY_MODE {mode!r} (want mock|live|panel)")
 
 
 def build_server(

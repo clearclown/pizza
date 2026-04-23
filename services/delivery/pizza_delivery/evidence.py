@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import asyncio
 import re
+import unicodedata
 from dataclasses import dataclass, field
 from typing import Any, Awaitable, Callable, Protocol
 from urllib.parse import urljoin, urlparse, urlsplit, urlunsplit
@@ -117,17 +118,23 @@ ABOUT_LINK_TEXTS = [
 # 日本語法人名 — 助詞 (が,を,は,の,で,と,も) で body を切る
 # body に含めてよい文字: ASCII letters/digits, hiragana ぁ-ゖ, katakana ァ-ヿ, kanji 一-龠,
 #   空白, 中黒・ ー, & - etc.
-_COMPANY_BODY_CHARS = r"A-Za-z0-9ぁ-ゖァ-ヿ一-龠々ー・\s&\-"
+# Phase 9: Unicode dash 類 (U+2010..U+2015, U+2212) を追加して
+# 「株式会社セブン‐イレブン・ジャパン」等を取りこぼさない。
+_COMPANY_BODY_CHARS = r"A-Za-z0-9ぁ-ゖァ-ヿ一-龠々ー・\s&\-‐-―−"
 _COMPANY_BODY_STOP = r"、。,.がをはのでとも"
 
-# prefix ("株式会社", "㈱", "(株)") + body (greedy、body_chars 外で自動停止)
+# body を 1 文字ずつ、"株式会社"/"㈱"/"(株)" を含まない atom として定義する。
+# これで body は次の「株式会社」の直前で必ず止まり、複数社の連結誤抽出を防ぐ。
+_COMPANY_BODY_ATOM = rf"(?:(?!株式会社|㈱|\(株\))[{_COMPANY_BODY_CHARS}])"
+
+# prefix ("株式会社", "㈱", "(株)") + body
 _COMPANY_RE_PREFIX = re.compile(
-    rf"(株式会社|㈱|\(株\))([{_COMPANY_BODY_CHARS}]{{1,40}})",
+    rf"(株式会社|㈱|\(株\))({_COMPANY_BODY_ATOM}{{1,40}})",
     re.MULTILINE,
 )
 # body + suffix ("株式会社")
 _COMPANY_RE_SUFFIX = re.compile(
-    rf"([{_COMPANY_BODY_CHARS}]{{1,40}})(株式会社)",
+    rf"({_COMPANY_BODY_ATOM}{{1,40}})(株式会社)",
     re.MULTILINE,
 )
 
@@ -155,10 +162,46 @@ def _trim_at_particles(body: str) -> str:
         " Ltd", " Ltd.",
         " Co.", " Co ",
     ]
-    for p in jp_stops + jp_labels + en_stops:
+    # Verb/preposition suffix noise — 法人名の直後に来がちな日本語 verbe-ish
+    # 表現。例: "株式会社について紹介します" / "株式会社フーズに関する"
+    verb_stops = [
+        "について",
+        "に関する",
+        "に関し",
+        "に対する",
+        "に対し",
+        "によって",
+        "による",
+        "として",
+        "への",
+        "からの",
+    ]
+    # Phase 11: 広告/案内文の吸収を防ぐ。法人名直後に来がちな商業文言。
+    # 例: "株式会社アルペンクイックフィットネス キャンペーン期間2026年4月1日"
+    ad_stops = [
+        "キャンペーン",
+        "期間",
+        "特典",
+        "限定",
+        "お得",
+        "お知らせ",
+        "セール",
+        "イベント",
+        "新着",
+        "最新",
+        "情報",
+        "募集",
+        "求人",
+    ]
+    for p in jp_stops + jp_labels + en_stops + verb_stops + ad_stops:
         i = body.find(p)
         if i >= 0:
             body = body[:i]
+    # 年月日表記が body に混入 ("2026年5月1日オープン") した場合の trim
+    date_re = re.compile(r"(20\d{2}|令和\d+|平成\d+)")
+    m = date_re.search(body)
+    if m:
+        body = body[: m.start()]
     return body.rstrip()
 
 
@@ -346,8 +389,15 @@ def _dedupe_evidence(items: list[Evidence]) -> list[Evidence]:
 def find_company_names_in_snippet(snippet: str) -> list[str]:
     """snippet から法人名 (株式会社..., ..株式会社, (株).., ㈱..) を正規表現で抽出。
 
+    Phase 9:
+      - 入力を NFKC 正規化 (全角記号 → 半角、全角マイナス → ASCII hyphen 等)
+      - body に「株式会社」を含めない atom で複数社連結誤抽出を防止
+      - body charset に Unicode dash U+2010..U+2015 / U+2212 を追加
+
     助詞 (が/を/は/の/で/と/も) や句読点で body を切る。
     """
+    # NFKC 正規化で全角→半角の差異を吸収
+    snippet = unicodedata.normalize("NFKC", snippet)
     out: list[str] = []
 
     # prefix pattern: "株式会社" + body
@@ -367,8 +417,18 @@ def find_company_names_in_snippet(snippet: str) -> list[str]:
         # body が助詞列や空で始まる場合は skip 気味
         body = body_raw.strip()
         # body の末尾トリム (「本店: 株式会社A 支店: 」のような挟み込みを避けるため)
-        # 単純に直近の助詞/句読点より後ろを取る
-        for sep in ["、", "。", "  ", "\n", "：", ":"]:
+        # 単純に直近の助詞/句読点/label より後ろを取る。
+        # Phase 7: 会社概要ページの HTML ラベルも含める。
+        separators = [
+            "、", "。",
+            "   ", "  ",  # 連続半角スペース
+            "　",          # 全角スペース
+            "\n", "：", ":",
+            # HTML ラベル (会社概要ページでよく見る)
+            "名称", "会社名", "社名", "商号", "事業者名", "法人名",
+            "会社概要", "企業情報", "会社案内", "会社情報", "Home", "HOME",
+        ]
+        for sep in separators:
             i = body.rfind(sep)
             if i >= 0:
                 body = body[i + len(sep):].strip()

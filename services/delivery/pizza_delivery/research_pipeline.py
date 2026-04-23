@@ -22,7 +22,7 @@ import asyncio
 import sqlite3
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Awaitable, Callable
+from typing import Any, Awaitable, Callable
 
 from pizza_delivery.chain_discovery import (
     ChainDiscovery,
@@ -51,7 +51,13 @@ class ResearchRequest:
     db_path: str = ""               # SQLite DB path (required)
     max_stores: int = 0             # 0 で全件
     verify: bool = True             # CrossVerifier を走らせるか (デフォルト True)
+    verify_houjin: bool = False     # Layer D: 国税庁法人番号 API で operator 実在確認
     max_concurrency: int = 4
+    # Step 6.2: Places API 広域芋づる式 (depth=1 固定)
+    expand_via_places: bool = False
+    places_client: Any | None = None  # PlacesClient インターフェース (search_by_operator)
+    expand_area_hint: str = ""
+    max_expansion_per_operator: int = 20
 
 
 @dataclass
@@ -66,6 +72,10 @@ class MegaFranchiseeCandidate:
     unverified_count: int
     brands: list[str]
     place_ids: list[str]
+    # Layer D: 法人番号 API 照合結果
+    verification_score: float = 0.0   # >0 類似度 / 0 未検証 / -1 非実在
+    corporate_number: str = ""         # 13 桁 法人番号 (ヒット時)
+    verification_source: str = ""      # houjin_bangou_nta | none
 
     @property
     def is_mega(self) -> bool:
@@ -119,16 +129,32 @@ def _load_stores_from_sqlite(
     ]
 
 
+def _has_verification_columns(conn: sqlite3.Connection) -> bool:
+    """operator_stores テーブルに Phase 5.1 の verification 列があるかチェック。"""
+    rows = conn.execute("PRAGMA table_info(operator_stores)").fetchall()
+    return any(r[1] == "verification_score" for r in rows)
+
+
 def _persist_results(
     db_path: str,
     report: ChainDiscoveryReport,
     verified: dict[str, bool] | None = None,
+    houjin_verifications: dict[str, dict] | None = None,
 ) -> None:
-    """ChainDiscovery 結果と verify 結果を operator_stores + store_evidence に保存。"""
+    """ChainDiscovery 結果と verify 結果を operator_stores + store_evidence に保存。
+
+    houjin_verifications は operator_name → {verification_score, corporate_number,
+    verification_source} の dict。存在する場合は列に書き込む (列が DB にあれば)。
+    """
     conn = sqlite3.connect(db_path)
     try:
         cur = conn.cursor()
+        has_ver_cols = _has_verification_columns(conn)
         for op in report.operators:
+            hv = (houjin_verifications or {}).get(op.operator_name, {})
+            v_score = hv.get("verification_score", 0.0)
+            v_corp = hv.get("corporate_number", "")
+            v_src = hv.get("verification_source", "")
             for st in op.stores:
                 # operator_stores upsert
                 via = "chain_discovery"
@@ -139,20 +165,41 @@ def _persist_results(
                         conf = min(1.0, conf + 0.1)
                     elif verified.get(st.place_id) is False:
                         via = "chain_unverified"
-                cur.execute(
-                    """
-                    INSERT INTO operator_stores
-                      (operator_name, place_id, brand, operator_type, confidence, discovered_via)
-                    VALUES (?, ?, ?, ?, ?, ?)
-                    ON CONFLICT(operator_name, place_id) DO UPDATE SET
-                      brand = excluded.brand,
-                      operator_type = excluded.operator_type,
-                      confidence = MAX(excluded.confidence, operator_stores.confidence),
-                      discovered_via = excluded.discovered_via,
-                      confirmed_at = CURRENT_TIMESTAMP
-                    """,
-                    (op.operator_name, st.place_id, st.brand, op.operator_type, conf, via),
-                )
+                if has_ver_cols:
+                    cur.execute(
+                        """
+                        INSERT INTO operator_stores
+                          (operator_name, place_id, brand, operator_type, confidence,
+                           discovered_via, verification_score, corporate_number, verification_source)
+                        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(operator_name, place_id) DO UPDATE SET
+                          brand = excluded.brand,
+                          operator_type = excluded.operator_type,
+                          confidence = MAX(excluded.confidence, operator_stores.confidence),
+                          discovered_via = excluded.discovered_via,
+                          verification_score = excluded.verification_score,
+                          corporate_number = excluded.corporate_number,
+                          verification_source = excluded.verification_source,
+                          confirmed_at = CURRENT_TIMESTAMP
+                        """,
+                        (op.operator_name, st.place_id, st.brand, op.operator_type, conf, via,
+                         v_score, v_corp, v_src),
+                    )
+                else:
+                    cur.execute(
+                        """
+                        INSERT INTO operator_stores
+                          (operator_name, place_id, brand, operator_type, confidence, discovered_via)
+                        VALUES (?, ?, ?, ?, ?, ?)
+                        ON CONFLICT(operator_name, place_id) DO UPDATE SET
+                          brand = excluded.brand,
+                          operator_type = excluded.operator_type,
+                          confidence = MAX(excluded.confidence, operator_stores.confidence),
+                          discovered_via = excluded.discovered_via,
+                          confirmed_at = CURRENT_TIMESTAMP
+                        """,
+                        (op.operator_name, st.place_id, st.brand, op.operator_type, conf, via),
+                    )
                 # store_evidence: 各 evidence を重複防止で insert
                 for ev in st.evidences:
                     sig = ev.snippet[:200] if ev.snippet else ""
@@ -181,6 +228,65 @@ def _persist_results(
 class ResearchPipeline:
     chain: ChainDiscovery = field(default_factory=ChainDiscovery)
     verifier: CrossVerifier = field(default_factory=CrossVerifier)
+    # Layer D: 国税庁法人番号 API による operator 実在確認 (optional)
+    # None の場合は verify_houjin=True であっても Layer D はスキップ。
+    houjin_client: "object | None" = None
+
+    async def _expand_via_places(
+        self,
+        req: "ResearchRequest",
+        chain_report: ChainDiscoveryReport,
+        log: Callable[[str], None],
+    ) -> int:
+        """各 operator について Places API 広域検索 → stores テーブルに new 店舗 insert。
+
+        depth=1 固定 (insert された store から再発見される operator では再検索しない)。
+        戻り値: 新規に insert された stores 件数。
+        """
+        added = 0
+        for op in chain_report.operators:
+            log(f"[expand] Places.search_by_operator({op.operator_name!r})")
+            places = await req.places_client.search_by_operator(
+                op.operator_name,
+                area_hint=req.expand_area_hint,
+                max_result_count=req.max_expansion_per_operator,
+            )
+            if not places:
+                continue
+            # SQLite に insert (既存 place_id は skip)
+            conn = sqlite3.connect(req.db_path)
+            try:
+                cur = conn.cursor()
+                for p in places:
+                    if not p.place_id:
+                        continue
+                    exists = cur.execute(
+                        "SELECT 1 FROM stores WHERE place_id=? LIMIT 1",
+                        (p.place_id,),
+                    ).fetchone()
+                    if exists:
+                        continue
+                    cur.execute(
+                        "INSERT INTO stores "
+                        "(place_id, brand, name, address, lat, lng, "
+                        " official_url, phone) "
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                        (
+                            p.place_id,
+                            req.brand or "",
+                            p.name,
+                            p.address,
+                            p.lat,
+                            p.lng,
+                            p.website_uri,
+                            p.phone,
+                        ),
+                    )
+                    added += 1
+                conn.commit()
+            finally:
+                conn.close()
+        return added
 
     async def run(
         self,
@@ -218,6 +324,17 @@ class ResearchPipeline:
             f"{chain_report.stores_with_operator} / {chain_report.total_stores_checked} with operator"
         )
 
+        # 2.5. Places API 広域芋づる式 (Step 6.2, depth=1 固定)
+        #   operator を見つけたら同 operator の他店舗を Places API で検索し、
+        #   stores テーブルに追加 (既存 place_id は重複 insert しない)。
+        if (
+            req.expand_via_places
+            and req.places_client is not None
+            and chain_report.operators
+        ):
+            new_stores_added = await self._expand_via_places(req, chain_report, log)
+            log(f"[expand] added {new_stores_added} new stores to SQLite")
+
         # 3. CrossVerifier (optional)
         verified: dict[str, bool] = {}
         if req.verify and chain_report.operators:
@@ -246,9 +363,42 @@ class ResearchPipeline:
             confirmed = sum(1 for v in vresults if v.confirmed)
             log(f"[verify] {confirmed}/{len(vresults)} verified")
 
+        # 3.5. Layer D: 法人番号 API による operator 実在確認 (optional)
+        houjin_verifications: dict[str, dict] = {}
+        if req.verify_houjin and self.houjin_client is not None and chain_report.operators:
+            from pizza_delivery.houjin_bangou import verify_operator
+
+            log(
+                f"[houjin] verifying {len(chain_report.operators)} operators "
+                "against 国税庁 法人番号 API..."
+            )
+            for op in chain_report.operators:
+                search = await self.houjin_client.search_by_name(op.operator_name)
+                v = verify_operator(op.operator_name, search)
+                if v["exists"]:
+                    houjin_verifications[op.operator_name] = {
+                        "verification_score": float(v["name_similarity"]),
+                        "corporate_number": v["best_match_number"],
+                        "verification_source": "houjin_bangou_nta",
+                    }
+                else:
+                    # 非実在 flag: score=-1
+                    houjin_verifications[op.operator_name] = {
+                        "verification_score": -1.0,
+                        "corporate_number": "",
+                        "verification_source": "houjin_bangou_nta",
+                    }
+            hits = sum(1 for v in houjin_verifications.values() if v["verification_score"] > 0)
+            log(f"[houjin] {hits}/{len(houjin_verifications)} operators verified as existing")
+
         # 4. Persist to SQLite
         log("[persist] writing to operator_stores + store_evidence...")
-        _persist_results(req.db_path, chain_report, verified if req.verify else None)
+        _persist_results(
+            req.db_path,
+            chain_report,
+            verified if req.verify else None,
+            houjin_verifications=houjin_verifications or None,
+        )
 
         # 5. Build report
         mega_candidates: list[MegaFranchiseeCandidate] = []
@@ -257,6 +407,7 @@ class ResearchPipeline:
             brands = sorted({s.brand for s in op.stores if s.brand})
             v_count = sum(1 for p in place_ids if verified.get(p) is True)
             u_count = sum(1 for p in place_ids if verified.get(p) is False)
+            hv = houjin_verifications.get(op.operator_name, {})
             mega_candidates.append(
                 MegaFranchiseeCandidate(
                     operator_name=op.operator_name,
@@ -267,6 +418,9 @@ class ResearchPipeline:
                     unverified_count=u_count,
                     brands=brands,
                     place_ids=place_ids,
+                    verification_score=hv.get("verification_score", 0.0),
+                    corporate_number=hv.get("corporate_number", ""),
+                    verification_source=hv.get("verification_source", ""),
                 )
             )
 

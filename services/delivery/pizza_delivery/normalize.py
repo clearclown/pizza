@@ -40,27 +40,32 @@ _ZEN_HAN_MAP = {
 def normalize_operator_name(name: str) -> str:
     """operator 名を正規化する。
 
+    Phase 9: neologdn を優先的に使用 (mecab-neologd 準拠、全角/半角/繰り返し
+    記号/波ダッシュ等を広くカバー)。未インストール時は従来の NFKC。
+
     操作:
       1. 前後 trim
-      2. (株) / ㈱ / （株） → 株式会社
-      3. Unicode NFKC 正規化 (全角英数 → 半角、など)
+      2. neologdn.normalize または Unicode NFKC (全角→半角、濁点正規化)
+      3. (株) / ㈱ / （株） → 株式会社
       4. 連続空白 → 1 つ
       5. 末尾のみ: 句読点・記号を除去
       6. 法人接頭/接尾 (株式会社) 前後の余分な空白を取り除く
-
-    例:
-      "株式会社 FIT PLACE" → "株式会社FIT PLACE"
-      "（株） コメダ" → "株式会社コメダ"
-      "㈱テスト　" → "株式会社テスト"
-      "株式会社 テスト 所在地 東京都..." → この関数は所在地切り取りは行わない
     """
     if not name:
         return ""
 
     s = name.strip()
 
-    # Unicode NFKC: 全角→半角、濁点正規化
-    s = unicodedata.normalize("NFKC", s)
+    # neologdn が入っていれば優先、無ければ NFKC
+    try:
+        import neologdn  # noqa
+
+        s = neologdn.normalize(s)
+    except ImportError:
+        s = unicodedata.normalize("NFKC", s)
+    else:
+        # neologdn 後に念のため NFKC (㈱→(株) を確実に)
+        s = unicodedata.normalize("NFKC", s)
 
     # 全角空白マップ
     for zen, han in _ZEN_HAN_MAP.items():
@@ -86,11 +91,29 @@ def normalize_operator_name(name: str) -> str:
     return s
 
 
+def _strip_kabushiki(name: str) -> str:
+    """前後の '株式会社' / '有限会社' を strip して core 部分を返す。
+
+    normalize_operator_name 適用後に呼ぶ想定 (㈱ → 株式会社 に統一済)。
+    """
+    s = name
+    for tag in ("株式会社", "有限会社"):
+        while s.startswith(tag):
+            s = s[len(tag):]
+        while s.endswith(tag):
+            s = s[: -len(tag)]
+    return s.strip()
+
+
 def operators_match(a: str, b: str) -> bool:
     """2 つの operator 名が同じ法人を指すかを判定する。
 
-    - 正規化後に完全一致
-    - または一方が他方の substring (3 文字以上)
+    Phase 9 強化:
+      1. normalize_operator_name 後の完全一致
+      2. 株式会社 を前後 strip した core 部分で完全一致 (prefix/suffix ゆれ吸収)
+         例: "株式会社川勝商事" ⇔ "川勝商事株式会社"
+      3. 一方が他方の substring (3 文字以上)
+      4. rapidfuzz.token_set_ratio / ratio で部分類似度 ≥ 88
     """
     na = normalize_operator_name(a)
     nb = normalize_operator_name(b)
@@ -98,11 +121,32 @@ def operators_match(a: str, b: str) -> bool:
         return False
     if na == nb:
         return True
-    # 部分一致 (株式会社名の省略表記をマージ)
+
+    # 2. 株式会社 を剥がしたコア部分で比較
+    core_a = _strip_kabushiki(na)
+    core_b = _strip_kabushiki(nb)
+    if core_a and core_b and core_a == core_b:
+        return True
+
+    # 3. 部分一致 (株式会社名の省略表記をマージ)
     if len(na) >= 3 and na in nb:
         return True
     if len(nb) >= 3 and nb in na:
         return True
+
+    # 4. rapidfuzz による類似度判定
+    try:
+        from rapidfuzz import fuzz  # optional, 未インストール時は fallback
+
+        if len(na) >= 4 and len(nb) >= 4:
+            # token_set_ratio: 空白区切り token の集合一致 (語順違い吸収)
+            if fuzz.token_set_ratio(na, nb) >= 88:
+                return True
+            # core 同士の character-level ratio
+            if core_a and core_b and fuzz.ratio(core_a, core_b) >= 88:
+                return True
+    except ImportError:
+        pass
     return False
 
 

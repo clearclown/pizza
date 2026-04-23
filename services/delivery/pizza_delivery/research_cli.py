@@ -66,6 +66,26 @@ def build_parser() -> argparse.ArgumentParser:
     p.add_argument(
         "--json", action="store_true", help="結果を JSON で stdout 出力"
     )
+    # Phase 5.1 / 6 拡張フラグ
+    p.add_argument(
+        "--verify-houjin",
+        action="store_true",
+        help="国税庁法人番号 API で operator 実在確認 (HOUJIN_BANGOU_APP_ID 必須)",
+    )
+    p.add_argument(
+        "--expand-via-places",
+        action="store_true",
+        help="Places API で同 operator の他店舗を広域検索 (芋づる式)",
+    )
+    p.add_argument(
+        "--expand-area", default="", help="--expand-via-places 時の area hint"
+    )
+    p.add_argument(
+        "--max-expansion-per-operator",
+        type=int,
+        default=20,
+        help="1 operator あたり広域検索で収集する最大店舗数",
+    )
     return p
 
 
@@ -79,7 +99,24 @@ async def run(args: argparse.Namespace) -> int:
     extractor = PerStoreExtractor(collector=collector)
     chain = ChainDiscovery(extractor=extractor, max_concurrency=args.concurrency)
     verifier = CrossVerifier(extractor=extractor)
-    pipeline = ResearchPipeline(chain=chain, verifier=verifier)
+
+    # Layer D: 法人番号 API client (optional)
+    houjin_client = None
+    if args.verify_houjin:
+        from pizza_delivery.houjin_bangou import HoujinBangouClient
+
+        houjin_client = HoujinBangouClient()
+
+    # Step 6.2: Places API expansion client (optional)
+    places_client = None
+    if args.expand_via_places:
+        from pizza_delivery.places_client import PlacesClient
+
+        places_client = PlacesClient()
+
+    pipeline = ResearchPipeline(
+        chain=chain, verifier=verifier, houjin_client=houjin_client
+    )
 
     def log(msg: str) -> None:
         print(f"  {msg}", file=sys.stderr)
@@ -89,8 +126,15 @@ async def run(args: argparse.Namespace) -> int:
         db_path=str(db_path),
         max_stores=args.max_stores,
         verify=not args.no_verify,
+        verify_houjin=args.verify_houjin,
         max_concurrency=args.concurrency,
     )
+    # ResearchRequest 経由で places_client を渡す (未実装フィールドは setattr で注入)
+    if places_client is not None:
+        setattr(req, "places_client", places_client)
+        setattr(req, "expand_via_places", True)
+        setattr(req, "expand_area_hint", args.expand_area)
+        setattr(req, "max_expansion_per_operator", args.max_expansion_per_operator)
 
     print("🍕 PI-ZZA Research pipeline", file=sys.stderr)
     print(

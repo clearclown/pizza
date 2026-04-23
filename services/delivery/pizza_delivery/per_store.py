@@ -97,8 +97,53 @@ DIRECT_EXPLICIT_HINTS = [
     "弊社直営",
 ]
 
+# 抽出対象の会社名が 本部 (master franchisor) であることを示すヒント。
+# ここがヒットした場合、その会社は個別の加盟店ではなく FC 本部であり、
+# 店舗を運営する「真の franchisee」は別に存在する (公開情報にないことが多い)。
+FRANCHISOR_MASTER_HINTS = [
+    "マスターフランチャイジー",
+    "master franchisee",
+    "Master Franchisee",
+    "フランチャイザー",
+    "franchisor",
+    "本部へのお問い合わせ",
+    "本部へお問い合わせ",
+    "として事業展開",
+    "本部会社",
+]
+
+
+def _has_master_franchisor_hint(evidences: list["Evidence"]) -> bool:
+    """evidence 内のどれかに franchisor (本部) ヒントが含まれているか。"""
+    for e in evidences:
+        for hint in FRANCHISOR_MASTER_HINTS:
+            if hint in e.snippet:
+                return True
+    return False
+
 
 # ─── Extractor ─────────────────────────────────────────────────────────
+
+
+# 直営大手 (スタバ等) 対応: 店舗 detail ページに会社名が無くても
+# ドメインルート配下の「会社概要/コーポレート」系 path を試す。
+COMMON_ABOUT_SUFFIXES: tuple[str, ...] = (
+    "company/",
+    "company/summary/",
+    "corporate/",
+    "about/",
+)
+
+
+def _has_operator_evidence(evidences: list["Evidence"]) -> bool:
+    """既存 evidence から operator 候補を deterministic に検出できるか。"""
+    if _find_explicit_franchisee_operator(evidences) is not None:
+        return True
+    if _has_direct_evidence(evidences):
+        return True
+    if _find_company_names_in_all(evidences):
+        return True
+    return False
 
 
 @dataclass
@@ -108,6 +153,10 @@ class PerStoreExtractor:
     collector: EvidenceCollector = field(default_factory=EvidenceCollector)
     # 店舗 URL からドメインルートを辿って会社概要を探すか
     follow_domain_root: bool = True
+    # Step 6.1: ドメインルートで見つからなかったとき、/company/ 等も試すか
+    follow_common_about_paths: bool = True
+    # /company/, /corporate/ 等の suffix を試す上限 (cost ガード)
+    max_about_paths: int = 3
 
     async def extract(
         self,
@@ -136,14 +185,41 @@ class PerStoreExtractor:
         )
 
         # Step 2: ドメインルート も見る (会社概要が root にある想定)
+        # Phase 7 Step 1: _domain_root_candidates で複数候補を取得。
+        # 例: map.mcdonalds.co.jp/x → [map.mcdonalds.co.jp/, www.mcdonalds.co.jp/]
+        roots: list[str] = []
         if self.follow_domain_root:
-            root = _domain_root(official_url)
-            if root and root != official_url:
+            for cand in _domain_root_candidates(official_url):
+                if cand == official_url:
+                    continue
+                roots.append(cand)
                 root_evs = await self.collector.collect(
                     brand=brand,
-                    official_url=root,
+                    official_url=cand,
                 )
                 evidences = evidences + root_evs
+
+        # Step 2.5: ここまでで operator が取れていなければ /company/ 等を試す
+        # 複数 root 候補それぞれに対して suffix 配列を試行 (直営大手対応)。
+        if (
+            self.follow_common_about_paths
+            and roots
+            and not _has_operator_evidence(_dedupe(evidences))
+        ):
+            for root in roots:
+                if _has_operator_evidence(_dedupe(evidences)):
+                    break
+                for suffix in COMMON_ABOUT_SUFFIXES[: self.max_about_paths]:
+                    about_url = root.rstrip("/") + "/" + suffix
+                    about_evs = await self.collector.collect(
+                        brand=brand,
+                        official_url=about_url,
+                    )
+                    if about_evs:
+                        evidences = evidences + about_evs
+                        # operator 検出できたら早期終了
+                        if _has_operator_evidence(_dedupe(evidences)):
+                            break
 
         # dedupe (snippet + url + reason)
         evidences = _dedupe(evidences)
@@ -154,7 +230,7 @@ class PerStoreExtractor:
             return result
 
         # Step 3: deterministic rule extraction
-        # (a) Explicit FC 記載 — "運営: 株式会社XXX"
+        # (a) Explicit FC 記載 — "運営: 株式会社XXX"  (個別 franchisee 名が取れる)
         fc_op = _find_explicit_franchisee_operator(evidences)
         if fc_op:
             result.operator_name = fc_op[0]
@@ -177,6 +253,23 @@ class PerStoreExtractor:
             result.confidence = 0.6
             result.reasoning = "直営記載はあるが運営会社名を特定できず"
             return result
+
+        # (c') 本部 (master franchisor) だけが取れるケース
+        # 例: エニタイムの店舗ページに「株式会社Fast Fitness Japan はマスター
+        # フランチャイジーです。当店はフランチャイジーが運営します」とある。
+        # この場合、抽出される株式会社は**本部**であり、真の加盟店は別途存在
+        # するが公開情報にない。mega_franchisees では除外すべき対象。
+        if _has_master_franchisor_hint(evidences):
+            candidates = _find_company_names_in_all(evidences)
+            if candidates:
+                result.operator_name = candidates[0]
+                result.operator_type = "franchisor"
+                result.confidence = 0.65
+                result.reasoning = (
+                    "本部 (master franchisor) を検出。個別加盟店会社は店舗ページ"
+                    "に公開されていないため別経路での特定が必要"
+                )
+                return result
 
         # (c) 店舗ページに「株式会社○○」単独記載がある場合
         # → franchisee か franchisor かは不明だが、ある会社が運営に関わっている
@@ -203,9 +296,66 @@ class PerStoreExtractor:
 
 
 def _domain_root(url: str) -> str:
-    """URL の scheme + host を返す。例: https://a.example.com/foo → https://a.example.com/"""
-    m = re.match(r"(https?://[^/]+)", url)
-    return f"{m.group(1)}/" if m else ""
+    """URL の scheme + host を返す。例: https://a.example.com/foo → https://a.example.com/
+
+    後方互換のため 1 URL だけ返す。複数親候補は _domain_root_candidates()。
+    """
+    cands = _domain_root_candidates(url)
+    return cands[0] if cands else ""
+
+
+# 地図/店舗サブドメインとみなすホスト prefix。
+# これらのサブドメインには会社概要ページが無いことが多いため、
+# 親の www.* に昇格して /company/ を試す。
+_SUBDOMAIN_TO_PROMOTE: tuple[str, ...] = (
+    "map.",
+    "maps.",
+    "store.",
+    "stores.",
+    "shop.",
+    "shops.",
+    "locator.",
+    "finder.",
+    "as.",       # chizumaru などの外部地図サブドメイン
+)
+
+
+def _domain_root_candidates(url: str) -> list[str]:
+    """URL から会社概要サイト候補を優先度順で返す。
+
+    返却:
+      [<同一ホストの root>, <親ドメイン (www.X) の root>, ...]
+
+    例:
+      https://map.mcdonalds.co.jp/map/13 →
+        ["https://map.mcdonalds.co.jp/", "https://www.mcdonalds.co.jp/"]
+
+      https://www.anytimefitness.co.jp/x/ →
+        ["https://www.anytimefitness.co.jp/"]   (既に www、昇格なし)
+
+      https://example.com/x/ →
+        ["https://example.com/"]   (apex、昇格先なし)
+
+    親昇格の判断基準:
+      host が _SUBDOMAIN_TO_PROMOTE のいずれかで始まる場合のみ、
+      先頭部分を `www.` に置換した候補を追加する。
+    """
+    m = re.match(r"(https?)://([^/]+)", url)
+    if not m:
+        return []
+    scheme, host = m.group(1), m.group(2)
+    out = [f"{scheme}://{host}/"]
+
+    # 親ドメイン昇格: 特定 prefix を www.* に置換
+    lower = host.lower()
+    for prefix in _SUBDOMAIN_TO_PROMOTE:
+        if lower.startswith(prefix):
+            parent = "www." + host[len(prefix):]
+            parent_url = f"{scheme}://{parent}/"
+            if parent_url not in out:
+                out.append(parent_url)
+            break
+    return out
 
 
 def _dedupe(evidences: list[Evidence]) -> list[Evidence]:
