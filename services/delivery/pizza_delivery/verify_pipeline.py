@@ -49,16 +49,22 @@ class VerifyPipeline:
       try_csv:        local CSV index (registry.sqlite) が作成済なら使う
       try_gbiz:       GBIZ_API_TOKEN があれば gBizINFO を叩く
       csv_db_path:    CSV index の場所 (default: var/houjin/registry.sqlite)
+      llm:            LLM client (browser_use.llm.Chat*) を与えると入力 operator
+                      名の LLM 前処理 (canonical 化) を行い検索精度を上げる。
+                      None なら決定論の canonical_key のみ。
     """
 
     try_web_api: bool = True
     try_csv: bool = True
     try_gbiz: bool = True
     csv_db_path: str | None = None
+    llm: Any = None
     # Cached clients (lazy)
     _web_client: Any = field(default=None, init=False, repr=False)
     _csv_idx: Any = field(default=None, init=False, repr=False)
     _gbiz_client: Any = field(default=None, init=False, repr=False)
+    # 同じ入力に対して LLM pre-cleanse 結果を cache
+    _llm_cache: dict[str, str] = field(default_factory=dict, init=False, repr=False)
 
     # ── 経路別の有効性判定 ──────────────────────────
 
@@ -127,35 +133,66 @@ class VerifyPipeline:
 
     # ── 公開 API ──────────────────────────────────
 
+    async def _llm_canonicalize(self, name: str) -> str:
+        """LLM が有効なら canonical 名を返す、無ければ原文。
+
+        結果は cache。LLM 失敗は graceful (原文を返す)。
+        """
+        if self.llm is None:
+            return name
+        if name in self._llm_cache:
+            return self._llm_cache[name]
+        try:
+            from pizza_delivery.llm_cleanser import canonicalize_operator_name
+
+            r = await canonicalize_operator_name(name, self.llm)
+            canonical = r.canonical if r.canonical else name
+        except Exception as e:
+            logger.debug("llm cleanse failed: %s", e)
+            canonical = name
+        self._llm_cache[name] = canonical
+        return canonical
+
     async def verify(self, name: str) -> dict[str, Any]:
         """operator 名を利用可能な経路で順番に検証。
 
-        - 何らかの経路で exists=True なら即座に return (優先度順)
-        - 全経路 miss/skipped なら最後の結果 (or EMPTY) を返す
-        - source 列で検証経路を追跡できる
+        流れ:
+          0. LLM が有れば canonical 化 (㈱ → 株式会社 等)
+          1. 原文で検索 → 中間結果
+          2. canonical で検索 (原文と違えば) → 上書き候補
+          3. 何らかの経路で exists=True なら即座に return (経路優先度順)
+          4. 全経路 miss/skipped なら最後の結果 (or EMPTY)
+        `source` 列で検証経路を追跡可能。
         """
         if not name or not name.strip():
             return dict(_EMPTY_RESULT)
 
+        # 0. LLM pre-cleanse (利用可能時のみ)
+        canonical = await self._llm_canonicalize(name)
+        query_variants = [name]
+        if canonical and canonical != name:
+            query_variants.append(canonical)
+
         last_result: dict[str, Any] | None = None
 
-        if self._web_ready():
-            r = await self._try_web_api(name)
-            if r and r.get("exists"):
-                return r
-            last_result = r or last_result
+        for q in query_variants:
+            if self._web_ready():
+                r = await self._try_web_api(q)
+                if r and r.get("exists"):
+                    return r
+                last_result = r or last_result
 
-        if self._csv_ready():
-            r = await self._try_csv(name)
-            if r and r.get("exists"):
-                return r
-            last_result = r or last_result
+            if self._csv_ready():
+                r = await self._try_csv(q)
+                if r and r.get("exists"):
+                    return r
+                last_result = r or last_result
 
-        if self._gbiz_ready():
-            r = await self._try_gbiz(name)
-            if r and r.get("exists"):
-                return r
-            last_result = r or last_result
+            if self._gbiz_ready():
+                r = await self._try_gbiz(q)
+                if r and r.get("exists"):
+                    return r
+                last_result = r or last_result
 
         return last_result or dict(_EMPTY_RESULT)
 

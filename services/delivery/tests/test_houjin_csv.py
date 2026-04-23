@@ -26,6 +26,10 @@ from pizza_delivery.houjin_csv import (
 # 列構造 (0-indexed): seq, corporateNumber, process, ...
 # 抜粋して最低限列数を満たすダミー行。
 
+# 国税庁 CSV 実レイアウト (全 30 列):
+#   [0] seq [1] corp_num [2] process [3] correct [4] update [5] change
+#   [6] name [7] furigana [8] 国名code [9] prefecture [10] city [11] street
+#   [12] 国外 [13] pref_code [14] city_code [15] postal ...
 _SAMPLE_ROW_MOS = (
     "1,"
     "3010701019707,"  # 法人番号
@@ -35,23 +39,24 @@ _SAMPLE_ROW_MOS = (
     "2023-09-15,"      # 変更年月日
     "株式会社モスストアカンパニー,"   # 商号
     "カブシキガイシャモスストアカンパニー,"  # フリガナ
-    "東京都,"          # prefectureName
-    "品川区,"          # cityName
-    "大崎2-1-1,"       # streetNumber
-    ",,,13,13109,,,,\n"  # 他の列 (国外/郵便/pref_cd/city_cd/...)
+    "101,"             # 国名 code (101=日本)
+    "東京都,"          # prefecture NAME
+    "品川区,"          # city NAME
+    "大崎2-1-1,"       # street
+    ",13,13109,,,,,,,,,,,,\n"  # 以降 pref_code/city_code 等
 )
 
 _SAMPLE_ROW_VIENS = (
     "2,5010401003406,01,0,2024-03-01,2024-03-01,"
     "株式会社ヴィアン,カブシキガイシャヴィアン,"
-    "東京都,港区,芝浦2-14-4,,,,13,13103,,,,\n"
+    "101,東京都,港区,芝浦2-14-4,,13,13103,,,,,,,,,,,,\n"
 )
 
 _SAMPLE_ROW_DEAD = (
     # process=71 = 吸収合併消滅
     "3,9999999999999,71,0,2022-01-01,2022-01-01,"
     "株式会社消滅社,カブシキガイシャショウメツシャ,"
-    "東京都,港区,芝浦X-X-X,,,,13,13103,,,,\n"
+    "101,東京都,港区,芝浦X-X-X,,13,13103,,,,,,,,,,,,\n"
 )
 
 

@@ -22,6 +22,8 @@ dependencies = [
     "httpx>=0.28.1",
     "beautifulsoup4>=4.14.3",
     "lxml>=6.1.0",
+    # ORM (Phase 22: 手動 YAML 維持を脱却、DB 中央集約へ)
+    "sqlalchemy>=2.0.36",
 ]
 
 [dependency-groups]

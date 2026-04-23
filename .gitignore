@@ -210,3 +210,6 @@ coverage/
 .playwright/
 playwright-report/
 test-output/
+
+# 国税庁 法人番号 CSV 全件 (公式ダウンロード済、PI-ZZA で再取得可)
+docs/assets/*.zip

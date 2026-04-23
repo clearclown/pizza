@@ -45,13 +45,31 @@ from typing import Iterable, Iterator
 
 
 # CSV カラム位置 (0-indexed、国税庁仕様)
+# 国税庁 全件 CSV 実レイアウト (2026-03 確認):
+#   [0] seq
+#   [1] 法人番号
+#   [2] process (処理区分)
+#   [3] correct (訂正区分)
+#   [4] 更新年月日
+#   [5] 変更年月日
+#   [6] 商号又は名称
+#   [7] 商号フリガナ
+#   [8] 国名コード (101=日本国内)
+#   [9] 国内所在地 (都道府県名)
+#   [10] 国内所在地 (市区町村名)
+#   [11] 国内所在地 (丁目番地等)
+#   [12] 国外所在地
+#   [13] 都道府県コード
+#   [14] 市区町村コード
+#   [15] 郵便番号
+#   ...
 COL_CORPORATE_NUMBER = 1
 COL_PROCESS = 2
 COL_UPDATE_DATE = 4
 COL_NAME = 6
-COL_PREFECTURE = 8
-COL_CITY = 9
-COL_STREET = 10
+COL_PREFECTURE = 9
+COL_CITY = 10
+COL_STREET = 11
 
 # process code の active 判定 (国税庁仕様 houjin_bangou.py と同じ)
 ACTIVE_PROCESS_CODES = frozenset({"01", "11", "12", "13", "21", "22", "31"})
@@ -86,10 +104,39 @@ class HoujinCSVRecord:
 # ─── CSV/zip 読込 ─────────────────────────────────────────────────────
 
 
+def _decode_bytes(data: bytes, preferred: str) -> tuple[str, str]:
+    """bytes を decode、fallback で encoding を自動判定。
+
+    戻り値: (text, used_encoding)。
+    戦略:
+      1. preferred で strict decode 試行
+      2. 失敗したら utf-8 / cp932 / utf-8-sig を順に試行
+      3. 全て駄目なら preferred + errors='replace' で化け文字許容
+    """
+    # BOM check
+    if data[:3] == b"\xef\xbb\xbf":
+        return data.decode("utf-8-sig", errors="replace"), "utf-8-sig"
+    candidates = [preferred]
+    for c in ("utf-8", "cp932", "utf-8-sig"):
+        if c not in candidates:
+            candidates.append(c)
+    for enc in candidates:
+        try:
+            return data.decode(enc), enc
+        except UnicodeDecodeError:
+            continue
+    return data.decode(preferred, errors="replace"), preferred
+
+
 def iter_records(csv_path: str | Path, *, encoding: str = "utf-8") -> Iterator[HoujinCSVRecord]:
     """CSV or CSV 内包 zip から HoujinCSVRecord を yield。
 
-    encoding は 'utf-8' (Unicode CSV) / 'cp932' (Shift-JIS CSV) を想定。
+    encoding は 'utf-8' (Unicode CSV) / 'cp932' (Shift-JIS CSV)。
+    誤指定時は自動で他候補に fallback して mojibake を防ぐ。
+
+    国税庁 zip の命名規則:
+      - 00_zenkoku_all_YYYYMMDD.zip   → UTF-8
+      - 00_zenkoku_sjis_YYYYMMDD.zip  → Shift-JIS (cp932)
     """
     p = Path(csv_path)
     if p.suffix.lower() == ".zip":
@@ -98,11 +145,11 @@ def iter_records(csv_path: str | Path, *, encoding: str = "utf-8") -> Iterator[H
                 if not name.lower().endswith(".csv"):
                     continue
                 with zf.open(name) as bf:
-                    text = bf.read().decode(encoding, errors="replace")
+                    text, _ = _decode_bytes(bf.read(), encoding)
                     for rec in _iter_csv_text(text):
                         yield rec
     else:
-        text = p.read_text(encoding=encoding, errors="replace")
+        text, _ = _decode_bytes(p.read_bytes(), encoding)
         for rec in _iter_csv_text(text):
             yield rec
 
@@ -139,13 +186,17 @@ CREATE TABLE IF NOT EXISTS houjin_registry (
   process           TEXT,
   update_date       TEXT,
   name              TEXT NOT NULL,
+  -- 正規化済の法人名 (株式会社/㈱/(株) 等の表記ゆれ吸収、canonical_key で生成)。
+  -- LIKE 検索精度のため索引付き。
+  normalized_name   TEXT,
   prefecture        TEXT,
   city              TEXT,
   street            TEXT,
   imported_at       TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
-CREATE INDEX IF NOT EXISTS idx_houjin_name ON houjin_registry(name);
-CREATE INDEX IF NOT EXISTS idx_houjin_pref ON houjin_registry(prefecture);
+CREATE INDEX IF NOT EXISTS idx_houjin_name            ON houjin_registry(name);
+CREATE INDEX IF NOT EXISTS idx_houjin_normalized_name ON houjin_registry(normalized_name);
+CREATE INDEX IF NOT EXISTS idx_houjin_pref            ON houjin_registry(prefecture);
 """
 
 
@@ -161,6 +212,16 @@ class HoujinCSVIndex:
         conn = sqlite3.connect(self.db_path)
         try:
             conn.executescript(_SCHEMA)
+            # 過去 schema の DB に normalized_name が無い場合は追加 (後方互換)
+            cols = {
+                r[1] for r in conn.execute("PRAGMA table_info(houjin_registry)").fetchall()
+            }
+            if "normalized_name" not in cols:
+                conn.execute("ALTER TABLE houjin_registry ADD COLUMN normalized_name TEXT")
+                conn.execute(
+                    "CREATE INDEX IF NOT EXISTS idx_houjin_normalized_name "
+                    "ON houjin_registry(normalized_name)"
+                )
             conn.commit()
         finally:
             conn.close()
@@ -174,11 +235,20 @@ class HoujinCSVIndex:
         encoding: str = "utf-8",
         batch_size: int = 5000,
     ) -> int:
-        """CSV を SQLite に upsert。戻り値 = 処理行数。"""
+        """CSV を SQLite に upsert。戻り値 = 処理行数。
+
+        `normalized_name` は canonical_key (normalize.py) で生成して
+        検索時の表記ゆれを吸収する。
+        """
+        from pizza_delivery.normalize import canonical_key
+
         total = 0
         batch: list[tuple] = []
         conn = sqlite3.connect(self.db_path)
         try:
+            # bulk insert の高速化
+            conn.execute("PRAGMA journal_mode = WAL")
+            conn.execute("PRAGMA synchronous = NORMAL")
             for rec in iter_records(csv_path, encoding=encoding):
                 batch.append(
                     (
@@ -186,6 +256,7 @@ class HoujinCSVIndex:
                         rec.process,
                         rec.update_date,
                         rec.name,
+                        canonical_key(rec.name),
                         rec.prefecture,
                         rec.city,
                         rec.street,
@@ -208,12 +279,14 @@ class HoujinCSVIndex:
         conn.executemany(
             """
             INSERT INTO houjin_registry
-              (corporate_number, process, update_date, name, prefecture, city, street)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+              (corporate_number, process, update_date, name, normalized_name,
+               prefecture, city, street)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(corporate_number) DO UPDATE SET
               process=excluded.process,
               update_date=excluded.update_date,
               name=excluded.name,
+              normalized_name=excluded.normalized_name,
               prefecture=excluded.prefecture,
               city=excluded.city,
               street=excluded.street,

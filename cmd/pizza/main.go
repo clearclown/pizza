@@ -93,6 +93,18 @@ func main() {
 		if err := cmdHoujinSearch(os.Args[2:]); err != nil {
 			log.Fatalf("pizza houjin-search: %v", err)
 		}
+	case "jfa-sync":
+		if err := cmdJFASync(os.Args[2:]); err != nil {
+			log.Fatalf("pizza jfa-sync: %v", err)
+		}
+	case "jfa-export":
+		if err := cmdJFAExport(os.Args[2:]); err != nil {
+			log.Fatalf("pizza jfa-export: %v", err)
+		}
+	case "integrate":
+		if err := cmdIntegrate(os.Args[2:]); err != nil {
+			log.Fatalf("pizza integrate: %v", err)
+		}
 	case "version":
 		fmt.Println("pi-zza v0.1.0 (Phase 6)")
 	case "areas":
@@ -124,6 +136,9 @@ Subcommands:
   pizza megafranchisee   brand 横断で事業会社別 total 店舗数を集計 (operator 主語 CSV+YAML)
   pizza houjin-import    国税庁 法人番号 CSV/zip を local SQLite に取込 (Layer D Ground Truth)
   pizza houjin-search    local 法人番号 index を operator 名で検索
+  pizza jfa-sync         日本フランチャイズチェーン協会 会員企業一覧を scrape + ORM 登録
+  pizza jfa-export       ORM 登録済のブランド×事業会社リストを CSV 出力
+  pizza integrate        JFA / 国税庁 CSV / pipeline operator を ORM に統合 (総合 FC 事業会社リスト)
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -388,10 +403,21 @@ func cmdRegistryExpand(args []string) error {
 	return cmd.Run()
 }
 
+// runDeliveryPython は services/delivery を uv project として Python を実行する。
+// CWD はユーザーの working directory のまま (絶対パス変換が不要になる)。
+func runDeliveryPython(scriptOrModule ...string) *exec.Cmd {
+	args := append([]string{"run", "--project", "services/delivery"}, scriptOrModule...)
+	cmd := exec.Command("uv", args...)
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	cmd.Env = os.Environ()
+	return cmd
+}
+
 // cmdHoujinImport は 国税庁 法人番号 CSV (or zip) を local SQLite に取込む。
 // APP_ID 不要で完全オフライン。Layer D (operator 実在検証) の Ground Truth。
 //
-//	pizza houjin-import --csv 13_20260331.zip --encoding utf-8
+//	pizza houjin-import --csv 13_20260331.zip --encoding cp932
 func cmdHoujinImport(args []string) error {
 	fs := flag.NewFlagSet("houjin-import", flag.ExitOnError)
 	csvPath := fs.String("csv", "", "国税庁 CSV または zip ファイル (必須)")
@@ -403,23 +429,12 @@ func cmdHoujinImport(args []string) error {
 	if *csvPath == "" {
 		return errors.New("--csv は必須 (国税庁 CSV/zip パス)")
 	}
-	deliveryDir := "services/delivery"
-	if _, err := os.Stat(deliveryDir); os.IsNotExist(err) {
-		return fmt.Errorf("houjin-import: %s が見つかりません", deliveryDir)
+	pyArgs := []string{"python", "-m", "pizza_delivery.houjin_csv", "import",
+		"--csv", *csvPath, "--encoding", *encoding}
+	if *dbPath != "" {
+		pyArgs = append(pyArgs, "--db", *dbPath)
 	}
-	script := fmt.Sprintf(
-		"from pizza_delivery.houjin_csv import HoujinCSVIndex;"+
-			"idx = HoujinCSVIndex(%q if %q else None);"+
-			"n = idx.ingest_csv(%q, encoding=%q);"+
-			"print(f'✅ ingested {n} records → {idx.db_path}')",
-		*dbPath, *dbPath, *csvPath, *encoding,
-	)
-	cmd := exec.Command("uv", "run", "python", "-c", script)
-	cmd.Dir = deliveryDir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Env = os.Environ()
-	return cmd.Run()
+	return runDeliveryPython(pyArgs...).Run()
 }
 
 // cmdHoujinSearch は local 法人番号 index を operator 名で検索する。
@@ -437,21 +452,83 @@ func cmdHoujinSearch(args []string) error {
 	if *name == "" {
 		return errors.New("--name は必須")
 	}
-	deliveryDir := "services/delivery"
-	script := fmt.Sprintf(
-		"from pizza_delivery.houjin_csv import HoujinCSVIndex;"+
-			"idx = HoujinCSVIndex(%q if %q else None);"+
-			"rows = idx.search_by_name(%q, limit=%d);"+
-			"print(f'found {len(rows)} match(es) in local index');"+
-			"[print(f'  {r.corporate_number}  {r.name}  [{r.process}]  {r.address}') for r in rows]",
-		*dbPath, *dbPath, *name, *limit,
-	)
-	cmd := exec.Command("uv", "run", "python", "-c", script)
-	cmd.Dir = deliveryDir
-	cmd.Stdout = os.Stdout
-	cmd.Stderr = os.Stderr
-	cmd.Env = os.Environ()
-	return cmd.Run()
+	pyArgs := []string{"python", "-m", "pizza_delivery.houjin_csv", "search",
+		"--name", *name, "--limit", strconv.Itoa(*limit)}
+	if *dbPath != "" {
+		pyArgs = append(pyArgs, "--db", *dbPath)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdJFASync は JFA (日本フランチャイズチェーン協会) 会員企業一覧を
+// Web scrape して ORM DB (var/pizza-registry.sqlite) に upsert する。
+//
+//	pizza jfa-sync
+//	pizza jfa-sync --url https://www.jfa-fc.or.jp/particle/22.html
+func cmdJFASync(args []string) error {
+	fs := flag.NewFlagSet("jfa-sync", flag.ExitOnError)
+	url := fs.String("url", "", "JFA 会員一覧 URL (default: 公式 particle/22.html)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.jfa_fetcher", "sync"}
+	if *url != "" {
+		pyArgs = append(pyArgs, "--url", *url)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdIntegrate は 3 ソース (JFA / 国税庁 CSV / pipeline operator_stores) を
+// ORM に統合、または総合 CSV を出力。
+//
+//	pizza integrate run                           # 統合実行
+//	pizza integrate export --out var/all.csv      # 全体 CSV
+func cmdIntegrate(args []string) error {
+	fs := flag.NewFlagSet("integrate", flag.ExitOnError)
+	mode := fs.String("mode", "run", "run | export")
+	out := fs.String("out", "var/fc-operators-unified.csv", "export 先 (mode=export 時)")
+	source := fs.String("source", "", "export 時 source フィルタ (空で全件)")
+	pipelineDB := fs.String("pipeline-db", "var/pizza.sqlite", "pipeline 側 SQLite")
+	houjinDB := fs.String("houjin-db", "", "Houjin CSV index (空で default)")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	var pyArgs []string
+	switch *mode {
+	case "run":
+		pyArgs = []string{"python", "-m", "pizza_delivery.integrate", "run",
+			"--pipeline-db", *pipelineDB}
+		if *houjinDB != "" {
+			pyArgs = append(pyArgs, "--houjin-db", *houjinDB)
+		}
+	case "export":
+		pyArgs = []string{"python", "-m", "pizza_delivery.integrate", "export",
+			"--out", *out}
+		if *source != "" {
+			pyArgs = append(pyArgs, "--source", *source)
+		}
+	default:
+		return fmt.Errorf("unknown mode %q (run|export)", *mode)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdJFAExport は ORM 登録済のブランド×事業会社 link を CSV に出力。
+//
+//	pizza jfa-export --out var/jfa-members.csv
+func cmdJFAExport(args []string) error {
+	fs := flag.NewFlagSet("jfa-export", flag.ExitOnError)
+	outPath := fs.String("out", "var/jfa-members.csv", "CSV 出力パス")
+	source := fs.String("source", "", "source filter (空で全件、jfa のみなら 'jfa')")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.jfa_fetcher", "export",
+		"--out", *outPath}
+	if *source != "" {
+		pyArgs = append(pyArgs, "--source", *source)
+	}
+	return runDeliveryPython(pyArgs...).Run()
 }
 
 // cmdMegaFranchisee は brand を跨いだ事業会社集計 (Phase 19)。

@@ -363,33 +363,72 @@ class ResearchPipeline:
             confirmed = sum(1 for v in vresults if v.confirmed)
             log(f"[verify] {confirmed}/{len(vresults)} verified")
 
-        # 3.5. Layer D: 法人番号 API による operator 実在確認 (optional)
+        # 3.5. Layer D: operator 実在確認 (optional)
+        # - self.houjin_client が inject 済 → 旧 Web-API 直叩き経路 (後方互換テスト用)
+        # - そうでなければ VerifyPipeline で 3 経路 (web / csv / gbiz) の fallback
         houjin_verifications: dict[str, dict] = {}
-        if req.verify_houjin and self.houjin_client is not None and chain_report.operators:
-            from pizza_delivery.houjin_bangou import verify_operator
+        if req.verify_houjin and chain_report.operators:
+            if self.houjin_client is not None:
+                from pizza_delivery.houjin_bangou import verify_operator
 
-            log(
-                f"[houjin] verifying {len(chain_report.operators)} operators "
-                "against 国税庁 法人番号 API..."
-            )
-            for op in chain_report.operators:
-                search = await self.houjin_client.search_by_name(op.operator_name)
-                v = verify_operator(op.operator_name, search)
-                if v["exists"]:
-                    houjin_verifications[op.operator_name] = {
-                        "verification_score": float(v["name_similarity"]),
-                        "corporate_number": v["best_match_number"],
-                        "verification_source": "houjin_bangou_nta",
-                    }
+                log(
+                    f"[houjin] verifying {len(chain_report.operators)} operators "
+                    "against 国税庁 法人番号 API..."
+                )
+                for op in chain_report.operators:
+                    search = await self.houjin_client.search_by_name(op.operator_name)
+                    v = verify_operator(op.operator_name, search)
+                    if v["exists"]:
+                        houjin_verifications[op.operator_name] = {
+                            "verification_score": float(v["name_similarity"]),
+                            "corporate_number": v["best_match_number"],
+                            "verification_source": "houjin_bangou_nta",
+                        }
+                    else:
+                        houjin_verifications[op.operator_name] = {
+                            "verification_score": -1.0,
+                            "corporate_number": "",
+                            "verification_source": "houjin_bangou_nta",
+                        }
+                hits = sum(
+                    1 for v in houjin_verifications.values() if v["verification_score"] > 0
+                )
+                log(f"[houjin] {hits}/{len(houjin_verifications)} verified")
+            else:
+                from pizza_delivery.verify_pipeline import VerifyPipeline
+
+                vpipe = VerifyPipeline()
+                paths = vpipe.available_paths()
+                if not paths:
+                    log("[verify_pipeline] no Layer D backend available (skip)")
                 else:
-                    # 非実在 flag: score=-1
-                    houjin_verifications[op.operator_name] = {
-                        "verification_score": -1.0,
-                        "corporate_number": "",
-                        "verification_source": "houjin_bangou_nta",
-                    }
-            hits = sum(1 for v in houjin_verifications.values() if v["verification_score"] > 0)
-            log(f"[houjin] {hits}/{len(houjin_verifications)} operators verified as existing")
+                    log(
+                        f"[verify_pipeline] paths={paths} "
+                        f"verifying {len(chain_report.operators)} operators..."
+                    )
+                    for op in chain_report.operators:
+                        v = await vpipe.verify(op.operator_name)
+                        if v["exists"]:
+                            houjin_verifications[op.operator_name] = {
+                                "verification_score": float(v["name_similarity"]),
+                                "corporate_number": v["best_match_number"],
+                                "verification_source": v.get("source", "unknown"),
+                            }
+                        else:
+                            houjin_verifications[op.operator_name] = {
+                                "verification_score": -1.0,
+                                "corporate_number": "",
+                                "verification_source": v.get("source", "unknown"),
+                            }
+                    hits = sum(
+                        1
+                        for v in houjin_verifications.values()
+                        if v["verification_score"] > 0
+                    )
+                    log(
+                        f"[verify_pipeline] {hits}/{len(houjin_verifications)} "
+                        f"operators verified as existing"
+                    )
 
         # 4. Persist to SQLite
         log("[persist] writing to operator_stores + store_evidence...")
