@@ -229,3 +229,8 @@ CREATE TABLE IF NOT EXISTS retry_queue (
 -- status='pending' を高速検索（バッチ処理時に使用）
 CREATE INDEX IF NOT EXISTS idx_retry_queue_status ON retry_queue(status);
 CREATE INDEX IF NOT EXISTS idx_retry_queue_place  ON retry_queue(place_id);
+
+-- Layer D verification columns (PR#10)
+ALTER TABLE operator_stores ADD COLUMN verification_score REAL DEFAULT 0.0;
+ALTER TABLE operator_stores ADD COLUMN corporate_number TEXT;
+ALTER TABLE operator_stores ADD COLUMN verification_source TEXT;
