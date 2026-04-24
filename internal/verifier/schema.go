@@ -28,6 +28,7 @@ type Candidate struct {
 	// Furigana は商号フリガナ。
 	// TODO(phase2): 国税庁CSVのCOL_FURIGANA=7を houjin_csv.py で取り込んだら有効化。
 	// TODO(phase2): check if houjin_csv.py imports furigana column (COL_FURIGANA=7).
+	// TODO(phase2): if available, add furigana to SearchByName query and Candidate struct.
 	// 現在は空文字（CSVには存在するが未インポート）。
 	Furigana string
 	// Prefecture は都道府県名。
