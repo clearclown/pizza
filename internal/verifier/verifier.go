@@ -239,6 +239,8 @@ func (c *Client) Count(ctx context.Context) (int, error) {
 // -- 検証ロジック -----------------------------------------------------------
 
 // VerifyResult は企業名検証の結果。
+// verifier の責務は「社名→法人番号の名寄せのみ」。
+// IsCentral/IsBrandHQ 判定は L2(internal/kitchen) の責務。
 type VerifyResult struct {
 	// InputName は入力された企業名（正規化前）。
 	InputName string
@@ -256,6 +258,26 @@ type VerifyResult struct {
 	NameSimilarity float64
 	// Source は常に "houjin_csv"。
 	Source string
+
+	// --- 以下は Phase 2 で追加したフィールド（PR#8 FU） ---
+
+	// MatchLevel は名寄せ結果の種別。
+	// MatchExact | MatchPartial | MatchAmbiguous | MatchNotFound | MatchAPIError
+	MatchLevel string
+	// FallbackLevel はどの検索戦略でヒットしたかの記録（デバッグ・チューニング用）。
+	// "exact" | "prefix" | "substring" | "not_found" | "api_error"
+	FallbackLevel string
+	// Candidates は MatchAmbiguous 時の複数候補。ResolveAmbiguous() が選別する。
+	Candidates []Candidate
+	// HumanReviewRequired は自動解決不能な場合に true。
+	// パイプラインは止めず、下流が review_queue に積む（PR#10）。
+	HumanReviewRequired bool
+	// HumanReviewReason は HumanReviewRequired=true の理由。
+	// "score_too_close" | "no_address_match" | "multiple_furigana_match"
+	HumanReviewReason string
+	// ResolvedBy は ambiguous 解決に使った戦略の記録。
+	// "address" | "furigana" | "score" | ""
+	ResolvedBy string
 }
 
 // Verify は企業名をローカルSQLiteで検証し、正式社名・法人番号を返す。
