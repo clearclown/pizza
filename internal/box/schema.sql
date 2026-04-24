@@ -11,6 +11,11 @@ CREATE TABLE IF NOT EXISTS operators (
     updated_at      TEXT NOT NULL
 );
 
+-- Layer D: 国税庁法人番号検証結果カラム（PR#10で追加）
+ALTER TABLE operator_stores ADD COLUMN verification_score REAL DEFAULT 0.0;
+ALTER TABLE operator_stores ADD COLUMN corporate_number TEXT;
+ALTER TABLE operator_stores ADD COLUMN verification_source TEXT;
+
 -- operator_brands: ブランド別店舗数（複数ブランド対応、B方式）
 CREATE TABLE IF NOT EXISTS operator_brands (
     houjin_bangou TEXT NOT NULL REFERENCES operators(houjin_bangou),
