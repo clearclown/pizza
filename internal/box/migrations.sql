@@ -210,3 +210,22 @@ CREATE TABLE IF NOT EXISTS review_queue (
 
 CREATE INDEX IF NOT EXISTS idx_review_queue_status ON review_queue(resolved);
 CREATE INDEX IF NOT EXISTS idx_review_queue_place  ON review_queue(place_id);
+
+-- retry_queue: L3 browser-use による自動リトライキュー（PR#10 で実装）
+-- VerifyWithRetry() が not_found/api_error 時に積む。bridge.go が処理。
+CREATE TABLE IF NOT EXISTS retry_queue (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    operator_name   TEXT NOT NULL,          -- 元の検索名
+    raw_name        TEXT NOT NULL,          -- RawName（L3取得前の名前）
+    refined_name    TEXT,                   -- RefinedName（L3取得後、nullable）
+    place_id        TEXT,                   -- 対象店舗 place_id（nullable）
+    retry_count     INTEGER NOT NULL DEFAULT 0,
+    status          TEXT NOT NULL DEFAULT 'pending',  -- pending | done | failed
+    fail_reason     TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+-- status='pending' を高速検索（バッチ処理時に使用）
+CREATE INDEX IF NOT EXISTS idx_retry_queue_status ON retry_queue(status);
+CREATE INDEX IF NOT EXISTS idx_retry_queue_place  ON retry_queue(place_id);
