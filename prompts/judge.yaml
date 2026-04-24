@@ -1,0 +1,131 @@
+version: "1.0"
+
+rules:
+  evidence:
+    require_urls: true
+    min_urls: 1
+    refuse_if_empty: true
+    url_must_resolve: true    # テスト時は CI オプションで false に上書き可
+    quote_required: true      # store_count_source_text の原文引用を必須化
+
+  source_priority:
+    - edinet
+    - chuusho_kaiji
+    - corporate_site
+    - gmaps_cluster:
+        standalone_allowed: false  # 単独時 confidence=0.0 強制reject
+  unknown_source: "error"          # リスト外ソースはエラー（サイレント通過禁止）
+
+  confidence_rules:
+    edinet:         { base: 1.0 }
+    chuusho_kaiji:  { base: 0.9 }
+    corporate_site: { base: 0.7 }
+    gmaps_cluster:
+      base:          0.5
+      standalone_max: 0.0   # standalone_allowed: false の実装側担保
+
+  confidence_penalty:
+    gmaps_only:             { multiplier: 0.80 }
+    no_corporate_site:      { multiplier: 0.90 }
+    fallback_level_address: { multiplier: 0.85 }
+    brand_total_unit:       { multiplier: 0.85 }
+    combine:                multiply
+    floor:                  0.0  # マイナスにならない
+
+  hallucination_guards:
+    no_inference:              true   # 「おそらく〜」禁止
+    no_extrapolation:          true   # 文書に書かれていない数値の補完禁止
+    source_must_contain_claim: true   # 主張はソースに明記されていること
+
+    refuse_phrases:
+      # 日本語（体言止め + 丁寧形の両方）
+      - "と思われます"
+      - "と考えられます"
+      - "推測されます"
+      - "と思われる"
+      - "可能性がある"
+      - "おそらく"
+      - "不明ですが"
+      - "確認できませんでしたが"
+      # 英語
+      - "probably"
+      - "likely"
+      - "assumed"
+
+  output_schema:
+    fields:
+      source_url:
+        type: string
+        required: true
+        description: "クロール元URL。空文字・null は即却下"
+      corporate_name_from_source:
+        type: string
+        required: true
+        description: "source_urlのページから直接抽出した社名。LLM推測禁止"
+      store_count_claim:
+        type: integer
+        required: true
+        description: "主張する店舗数"
+      store_count_source_text:
+        type: string
+        required: true
+        max_length: 50
+        description: "店舗数が記載された原文抜粋（50文字以内）。LLMの解釈禁止"
+      confidence:
+        type: float
+        required: true
+        min: 0.0
+        max: 1.0
+        description: "source_urlなし → 強制0.0"
+      is_mega_franchisee:
+        type: boolean
+        required: false
+        description: "store_count_claim >= 20 かつ confidence >= 0.5"
+      houjin_bangou:
+        type: string
+        required: false
+        description: "L4で補完。L3では空でよい"
+      count_source:
+        type: string
+        required: false
+        enum: [edinet, chuusho_kaiji, corporate_site, gmaps_cluster]
+      count_unit:
+        type: string
+        required: false
+        enum: [franchisee, brand_total, unknown]
+
+  validation:
+    - if: "source_url == '' or source_url == null"
+      then: { confidence: 0.0, reject: true, reason: "source_url_empty" }
+    - if: "len(store_count_source_text) == 0 or len(store_count_source_text) > 50"
+      then: { confidence: 0.0, reject: true, reason: "source_text_invalid" }
+    - if: "corporate_name_from_source == ''"
+      then: { reject: true, reason: "corporate_name_missing" }
+    - if: "count_source == 'gmaps_cluster' and no_other_source"
+      then: { confidence_multiplier: 0.8, requires_l3_verification: true }
+
+  ci_checks:
+    - required_fields_present       # output_schema.required の全フィールドが存在
+    - source_url_not_empty          # source_url != "" && != null
+    - source_url_resolves           # HTTP HEAD 200/206 (url_must_resolve=false でスキップ)
+    - store_count_source_text_len   # 1 <= len <= 50
+    - confidence_range              # 0.0 <= confidence <= 1.0
+    - refuse_phrases_absent         # LLM出力に refuse_phrases が含まれていない
+    - gmaps_requires_l3             # CountSource=gmaps_cluster → RequiresL3Verification=true
+    - unknown_source_rejected       # count_source が source_priority に含まれない場合はエラー
+
+  brand_hq_review:
+    when: is_brand_hq == true
+    require_second_source:               true
+    min_confidence:                      0.8
+    require_operator_distinct_from_brand: true  # 運営者≠本部の証拠が必要
+
+  judge_panel:
+    enabled: true
+    min_agreement: 0.6  # パネル過半数一致で採用（3モデルなら2/3以上）
+
+hallucination_instruction: |
+  提供されたURLのページテキストのみを根拠として回答してください。
+  URLに記載のない情報は「不明」と返してください。
+  「〜と思われる」「〜の可能性がある」は禁止です。
+  store_count_source_text は必ずページから引用してください。創作禁止。

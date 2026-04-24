@@ -1,0 +1,9 @@
+id,case_type,description,phone_match,address_cluster,name_prefix,expected_signal_score,expected_is_same_operator
+1,true_positive,全シグナル一致（Phone+Address+NamePrefix）,true,true,○○フーズ,6,true
+2,true_positive,Phone+NamePrefix（AddressなしでもOK）,true,false,○○フーズ,5,true
+3,true_positive,Address+NamePrefix（Phoneなし）,false,true,○○フーズ,4,true
+4,true_negative,NamePrefix単独（閾値未達）,false,false,○○フーズ,3,false
+5,true_negative,Phone+Address（NamePrefixなし）,true,true,,3,false
+6,true_negative,Phone単独,true,false,,2,false
+7,false_positive_central,IsCentral=true（0120コールセンター）+NamePrefix,false,false,○○フーズ,3,false
+8,false_positive_brand,本部名NamePrefix（ブランド名そのもの）,false,false,,0,false
