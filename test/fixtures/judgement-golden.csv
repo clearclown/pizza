@@ -1,31 +1,11 @@
-place_id,brand,name,official_url,true_operation_type,true_franchisor_name,true_franchisee_name,true_is_franchise,true_operator,notes
-ChIJ_sbux_shinjuku_east,スターバックス コーヒー,スターバックス コーヒー 新宿駅東口店,https://store.starbucks.co.jp/,direct,スターバックス コーヒー ジャパン株式会社,,false,スターバックス コーヒー ジャパン株式会社,"全店直営 (2026 時点)"
-ChIJ_sbux_ginza,スターバックス コーヒー,スターバックス コーヒー 銀座松屋通り店,https://store.starbucks.co.jp/,direct,スターバックス コーヒー ジャパン株式会社,,false,スターバックス コーヒー ジャパン株式会社,"全店直営"
-ChIJ_muji_shinjuku,無印良品,無印良品 新宿,https://www.muji.com/jp/,direct,株式会社良品計画,,false,株式会社良品計画,"良品計画の全店直営"
-ChIJ_uniqlo_shinjuku,ユニクロ,ユニクロ 新宿ビックロ店,https://www.uniqlo.com/jp/,direct,株式会社ユニクロ,,false,株式会社ユニクロ,"ファーストリテイリング 全店直営"
-ChIJ_gu_shibuya,ジーユー,ジーユー 渋谷店,https://www.gu-global.com/jp/,direct,株式会社ジーユー,,false,株式会社ジーユー,"ファーストリテイリング全店直営"
-ChIJ_zara_ginza,ザラ,ZARA 銀座,https://www.zara.com/jp/,direct,株式会社インディテックスジャパン,,false,株式会社インディテックスジャパン,"Inditex 全店直営"
-ChIJ_hm_shibuya,H&M,H&M 渋谷店,https://www2.hm.com/ja_jp/,direct,エイチ アンド エム ヘネス アンド マウリッツ ジャパン株式会社,,false,エイチ アンド エム ヘネス アンド マウリッツ ジャパン株式会社,"H&M 全店直営"
-ChIJ_ito_yokado_shinjuku,イトーヨーカドー,イトーヨーカドー 新宿花園店,https://www.itoyokado.co.jp/,direct,株式会社イトーヨーカ堂,,false,株式会社イトーヨーカ堂,"セブン&アイ直営大型 GMS"
-ChIJ_life_shinjuku,ライフ,ライフ 新宿店,https://www.lifecorp.jp/,direct,株式会社ライフコーポレーション,,false,株式会社ライフコーポレーション,"ライフコーポレーション直営"
-ChIJ_maruetsu_shinjuku,マルエツ,マルエツ 新宿店,https://www.maruetsu.co.jp/,direct,株式会社マルエツ,,false,株式会社マルエツ,"マルエツ直営スーパー"
-ChIJ_seveneleven_shinjuku,セブン-イレブン,セブン-イレブン 新宿東口店,https://www.sej.co.jp/,franchisee,株式会社セブン-イレブン・ジャパン,,true,,"FC 大多数 (個別 franchisee は店舗ごとに異なる、ほとんど中小企業)"
-ChIJ_familymart_shinjuku,ファミリーマート,ファミリーマート 新宿南口店,https://www.family.co.jp/,franchisee,株式会社ファミリーマート,,true,,"FC 大多数"
-ChIJ_lawson_shinjuku,ローソン,ローソン 新宿駅南口店,https://www.lawson.co.jp/,franchisee,株式会社ローソン,,true,,"FC 大多数"
-ChIJ_anytime_shinjuku6,エニタイムフィットネス,エニタイムフィットネス 新宿6丁目店,https://www.anytimefitness.co.jp/shinjuku6/,franchisee,株式会社ファストフィットネスジャパン,,true,,"24h ジム大手 FC。各店運営会社は異なる (例: 株式会社AFJ Project 等)"
-ChIJ_anytime_ikebukuro,エニタイムフィットネス,エニタイムフィットネス 池袋西口店,https://www.anytimefitness.co.jp/ikebukuro-west/,franchisee,株式会社ファストフィットネスジャパン,,true,,"同 FC"
-ChIJ_komeda_ikebukuro,コメダ珈琲店,コメダ珈琲店 池袋東口店,https://www.komeda.co.jp/,franchisee,株式会社コメダ,,true,,"大多数が FC (一部直営)"
-ChIJ_komeda_shinjuku,コメダ珈琲店,コメダ珈琲店 新宿西口店,https://www.komeda.co.jp/,franchisee,株式会社コメダ,,true,,"FC 主体"
-ChIJ_hottomotto_shinjuku,ほっともっと,ほっともっと 新宿高田馬場店,https://www.hottomotto.com/,franchisee,株式会社プレナス,,true,,"FC 加盟店多数"
-ChIJ_hottomotto_shibuya,ほっともっと,ほっともっと 渋谷道玄坂店,https://www.hottomotto.com/,franchisee,株式会社プレナス,,true,,"同"
-ChIJ_ikinari_shinjuku,いきなりステーキ,いきなりステーキ 新宿西口店,https://ikinaristeak.com/,mixed,株式会社ペッパーフードサービス,,true,,"直営と FC 加盟店 混在"
-ChIJ_gusto_shinjuku,ガスト,ガスト 新宿三丁目店,https://www.skylark.co.jp/gusto/,direct,株式会社すかいらーくレストランツ,,false,株式会社すかいらーくレストランツ,"すかいらーくグループ直営"
-ChIJ_saizeriya_shinjuku,サイゼリヤ,サイゼリヤ 新宿センタービル店,https://www.saizeriya.co.jp/,direct,株式会社サイゼリヤ,,false,株式会社サイゼリヤ,"全店直営"
-ChIJ_mcdonalds_shinjuku,マクドナルド,マクドナルド 新宿南口店,https://www.mcdonalds.co.jp/,mixed,日本マクドナルド株式会社,,true,,"直営と FC 混在 (直営 ~70% / FC ~30%)"
-ChIJ_yoshinoya_shinjuku,吉野家,吉野家 新宿西口店,https://www.yoshinoya.com/,mixed,株式会社吉野家,,true,,"直営 FC 混在 (直営多め)"
-ChIJ_mosburger_shinjuku,モスバーガー,モスバーガー 新宿東口店,https://www.mos.jp/,franchisee,株式会社モスフードサービス,,true,,"FC 多数"
-ChIJ_doutor_shinjuku,ドトールコーヒー,ドトールコーヒー 新宿南口店,https://www.doutor.co.jp/,franchisee,株式会社ドトールコーヒー,,true,,"FC 多め"
-ChIJ_matsuya_shinjuku,松屋,松屋 新宿西口店,https://www.matsuyafoods.co.jp/,direct,株式会社松屋フーズ,,false,株式会社松屋フーズ,"直営主体"
-ChIJ_royalhost_shinjuku,ロイヤルホスト,ロイヤルホスト 新宿靖国通り店,https://www.royalhost.jp/,direct,ロイヤルホールディングス株式会社,,false,ロイヤルホールディングス株式会社,"直営が主"
-ChIJ_bamiyan_shinjuku,バーミヤン,バーミヤン 新宿三丁目店,https://www.skylark.co.jp/bamiyan/,direct,株式会社すかいらーくレストランツ,,false,株式会社すかいらーくレストランツ,"すかいらーくグループ直営"
-ChIJ_karaoke_bigecho_shinjuku,ビッグエコー,ビッグエコー 新宿東口店,https://big-echo.jp/,mixed,株式会社第一興商,,true,,"直営と FC 混在 (店舗により異なる)"
+id,case_type,description,source_url,corporate_name_from_source,source_has_claim,store_count_claim,store_count_source_text,expected_confidence_min,expected_confidence_max,expected_is_mega,expected_reject,expected_source_text_contains
+1,true_positive,EDINET明記・確実なメガジー,TODO_REAL_URL,TODO_COMPANY,true,28,全国28店舗を展開,0.85,1.0,true,false,店舗
+2,true_positive,企業サイト明記・メガジー,TODO_REAL_URL,TODO_COMPANY,true,22,現在22店舗を運営しております,0.65,0.85,true,false,運営
+3,true_positive,gmaps+企業サイト複数ソース,TODO_REAL_URL,TODO_COMPANY,true,21,グループ全体で21店舗,0.60,0.80,true,false,店舗
+4,true_negative,10店未満・明記あり,TODO_REAL_URL,TODO_COMPANY,true,8,現在8店舗を展開中,0.70,0.90,false,false,店舗
+5,true_negative,店舗数記載なし,TODO_REAL_URL,TODO_COMPANY,false,0,,0.0,0.0,false,true,
+6,false_positive_hq,本部名混入・直営疑い,TODO_REAL_URL,TODO_COMPANY,true,450,全国450店舗,0.0,0.5,false,false,
+7,source_claim_violation,URL有・主張未記載,TODO_REAL_URL,TODO_COMPANY,false,25,,0.0,0.0,false,true,
+8,source_claim_violation,URL有・別ページ推論,TODO_REAL_URL,TODO_COMPANY,false,20,グループ企業を含む店舗数,0.0,0.0,false,true,グループ
+9,ambiguous_expression,約20店の曖昧表現,TODO_REAL_URL,TODO_COMPANY,partial,20,約20店舗を運営,0.0,0.5,false,false,約
+10,no_url,evidence_urls空,,TODO_COMPANY,false,0,,0.0,0.0,false,true,
