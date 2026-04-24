@@ -193,3 +193,20 @@ CREATE VIEW mega_franchisees_legacy AS
   AND COALESCE(NULLIF(franchisee_name, ''), operator_name) IS NOT NULL
   AND COALESCE(NULLIF(franchisee_name, ''), operator_name) != ''
   GROUP BY COALESCE(NULLIF(franchisee_name, ''), operator_name);
+
+-- review_queue: 人間レビューが必要な法人名寄せ結果を保持（自動解決不能ケース）
+-- HumanReviewRequired=true 時にパイプラインが積む。人間が確認後に resolved=1 に更新。
+CREATE TABLE IF NOT EXISTS review_queue (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    operator_name   TEXT NOT NULL,          -- 入力された事業者名
+    place_id        TEXT,                   -- 対象店舗 place_id（nullable）
+    match_level     TEXT,                   -- MatchAmbiguous | MatchNotFound 等
+    reason          TEXT,                   -- HumanReviewReason（score_too_close 等）
+    candidates_json TEXT,                   -- Candidates[] の JSON シリアライズ
+    resolved        INTEGER NOT NULL DEFAULT 0,  -- 0: pending / 1: resolved
+    resolved_at     TEXT,                   -- 解決日時
+    created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+
+CREATE INDEX IF NOT EXISTS idx_review_queue_status ON review_queue(resolved);
+CREATE INDEX IF NOT EXISTS idx_review_queue_place  ON review_queue(place_id);
