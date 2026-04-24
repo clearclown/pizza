@@ -1,33 +1,34 @@
-// Package verifier は国税庁法人番号APIを使って企業名を検証・正規化する。
+// Package verifier は国税庁法人番号CSVから生成したローカルSQLiteを使って
+// 企業名を検証・正規化する。APIキー不要・オフライン動作。
 //
-// APIドキュメント: https://www.houjin-bangou.nta.go.jp/webapi/
+// # セットアップ
 //
-// 環境変数:
-//   - HOUJIN_BANGOU_APP_ID: 法人番号APIのアプリケーションID（Pythonサービスと共用）
+//  1. 国税庁 全件CSVをダウンロード:
+//     https://www.houjin-bangou.nta.go.jp/download/
+//     → 「全件データ (Unicode版 zip)」を入手
 //
-// APIレスポンスはXML(type=12)形式。
-// Python側の services/delivery/pizza_delivery/houjin_bangou.py と同一ロジックをGoで実装。
+//  2. Pythonでインポート:
+//     cd services/delivery
+//     uv run python -m pizza_delivery.houjin_csv import --csv /path/to/00_zenkoku_all_YYYYMMDD.zip
+//     → var/houjin/registry.sqlite に取り込まれる (~577万件, 1-2分)
+//
+//  3. Go から参照:
+//     c := verifier.New()  // or verifier.NewWithDB("var/houjin/registry.sqlite")
+//     result := c.Verify(ctx, "株式会社モスストアカンパニー")
+//
+// Python側: services/delivery/pizza_delivery/houjin_csv.py と同一スキーマを参照。
 package verifier
 
 import (
 	"context"
-	"encoding/xml"
+	"database/sql"
 	"fmt"
-	"io"
-	"net/http"
-	"net/url"
 	"os"
+	"path/filepath"
+	"runtime"
 	"strings"
-	"time"
-	"unicode/utf8"
-)
 
-const (
-	// baseURL は法人番号APIのベースURL (v4)。
-	baseURL = "https://api.houjin-bangou.nta.go.jp/4"
-
-	// defaultTimeout はHTTPクライアントのデフォルトタイムアウト。
-	defaultTimeout = 10 * time.Second
+	_ "modernc.org/sqlite" // CGO不要のSQLiteドライバ
 )
 
 // activeProcessCodes はアクティブ（廃業していない）と判断するprocessコード。
@@ -38,32 +39,27 @@ var activeProcessCodes = map[string]bool{
 	"21": true, "22": true, "31": true,
 }
 
-// -- XML レスポンス構造体 --------------------------------------------------
-
-// xmlCorpList は法人番号API XMLレスポンスのルート要素。
-type xmlCorpList struct {
-	XMLName      xml.Name       `xml:"corporateInfoList"`
-	LastUpdate   string         `xml:"lastUpdateDate"`
-	Count        int            `xml:"count"`
-	Corporations []xmlCorporate `xml:"corporateInfo"`
-}
-
-// xmlCorporate は1法人のXML要素。
-type xmlCorporate struct {
-	CorporateNumber string `xml:"corporateNumber"`
-	Name            string `xml:"name"`
-	PrefectureName  string `xml:"prefectureName"`
-	CityName        string `xml:"cityName"`
-	StreetNumber    string `xml:"streetNumber"`
-	Process         string `xml:"process"`
-	UpdateDate      string `xml:"updateDate"`
-	CloseDate       string `xml:"closeDate"`
-	CloseCause      string `xml:"closeCause"`
+// defaultDBPath はvar/houjin/registry.sqliteのパスを返す。
+// Pythonの houjin_csv.py の _default_db_path() と同等。
+func defaultDBPath() string {
+	// __file__ から repo root を探す (Go ランタイムでは実行バイナリ基準)
+	// 環境変数 PIZZA_ROOT を優先、なければ実行ファイルから遡る
+	if root := os.Getenv("PIZZA_ROOT"); root != "" {
+		return filepath.Join(root, "var", "houjin", "registry.sqlite")
+	}
+	// go test 実行時は package dir が cwd になる
+	_, file, _, ok := runtime.Caller(0)
+	if ok {
+		// internal/verifier/verifier.go → ../../.. が repo root
+		root := filepath.Join(filepath.Dir(file), "..", "..", "..")
+		return filepath.Clean(filepath.Join(root, "var", "houjin", "registry.sqlite"))
+	}
+	return filepath.Join("var", "houjin", "registry.sqlite")
 }
 
 // -- ドメインモデル ----------------------------------------------------------
 
-// Corporation は法人番号APIから取得した法人情報。
+// Corporation はローカルSQLiteから取得した法人情報。
 type Corporation struct {
 	// CorporateNumber は13桁の法人番号。
 	CorporateNumber string
@@ -75,124 +71,169 @@ type Corporation struct {
 	Process string
 	// UpdateDate は更新日。
 	UpdateDate string
-	// CloseDate は廃業日 (空なら現役)。
-	CloseDate string
 }
 
 // IsActive は法人が廃業していないかを返す。
 func (c *Corporation) IsActive() bool {
-	return activeProcessCodes[c.Process] && c.CloseDate == ""
+	return activeProcessCodes[c.Process]
 }
 
 // -- エラー定義 -------------------------------------------------------------
 
-// ErrNoAppID は HOUJIN_BANGOU_APP_ID が未設定の場合に返る。
-var ErrNoAppID = fmt.Errorf("verifier: HOUJIN_BANGOU_APP_ID が未設定です。https://www.houjin-bangou.nta.go.jp/webapi/ でトークンを取得してください")
+// ErrDBNotFound はSQLiteファイルが存在しない場合に返る。
+var ErrDBNotFound = fmt.Errorf("verifier: var/houjin/registry.sqlite が見つかりません。\n" +
+	"セットアップ手順: https://github.com/clearclown/pizza#法人番号csv\n" +
+	"  cd services/delivery\n" +
+	"  uv run python -m pizza_delivery.houjin_csv import --csv /path/to/00_zenkoku_all_YYYYMMDD.zip")
 
 // ErrNotFound は検索結果が0件だった場合に返る。
 var ErrNotFound = fmt.Errorf("verifier: 法人が見つかりませんでした")
 
+// ErrDBEmpty はSQLiteが空（CSVが未インポート）の場合に返る。
+var ErrDBEmpty = fmt.Errorf("verifier: registry.sqlite が空です。houjin_csv import を先に実行してください")
+
 // -- クライアント -----------------------------------------------------------
 
-// Client は法人番号APIクライアント。
+// Client は法人番号ローカルSQLiteクライアント。
 type Client struct {
-	appID      string
-	httpClient *http.Client
-	baseURL    string // テスト用にオーバーライド可能
+	dbPath string
 }
 
-// New は環境変数 HOUJIN_BANGOU_APP_ID からIDを読み込んでClientを生成する。
-// IDが未設定の場合は ErrNoAppID を返す。
+// New はデフォルトのSQLiteパス (var/houjin/registry.sqlite) でClientを生成する。
+// DBが存在しない場合は ErrDBNotFound を返す。
 func New() (*Client, error) {
-	appID := os.Getenv("HOUJIN_BANGOU_APP_ID")
-	if appID == "" {
-		return nil, ErrNoAppID
+	return NewWithDB("")
+}
+
+// NewWithDB は指定したSQLiteパスでClientを生成する。
+// path が空の場合はデフォルトパスを使用。
+// DBが存在しない場合は ErrDBNotFound を返す。
+func NewWithDB(path string) (*Client, error) {
+	if path == "" {
+		path = defaultDBPath()
 	}
-	return NewWithAppID(appID), nil
-}
-
-// NewWithAppID は指定したappIDでClientを生成する。テスト・DI用。
-func NewWithAppID(appID string) *Client {
-	return &Client{
-		appID:   appID,
-		baseURL: baseURL,
-		httpClient: &http.Client{
-			Timeout: defaultTimeout,
-		},
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		return nil, ErrDBNotFound
 	}
+	return &Client{dbPath: path}, nil
 }
 
-// SetBaseURL はベースURLを上書きする。テスト用モックサーバー向け。
-func (c *Client) SetBaseURL(u string) {
-	c.baseURL = u
+// NewWithDBUnchecked はDBファイルの存在確認なしでClientを生成する。テスト用。
+func NewWithDBUnchecked(path string) *Client {
+	return &Client{dbPath: path}
 }
 
-// SearchByName は企業名で法人を検索し、一致する法人一覧を返す。
+// -- 検索 ------------------------------------------------------------------
+
+// SearchByName は法人名でSQLiteを検索し、一致する法人一覧を返す。
 //
-// name: 検索したい企業名（部分一致）
-func (c *Client) SearchByName(ctx context.Context, name string) ([]Corporation, error) {
+// 3段階fallback (Python houjin_csv.py の search_by_name と同等):
+//  1. exact match → index が即ヒット O(log N)
+//  2. prefix LIKE → index が使える
+//  3. substring LIKE → O(N) だが最終手段
+func (c *Client) SearchByName(ctx context.Context, name string, limit int) ([]Corporation, error) {
 	name = strings.TrimSpace(name)
 	if name == "" {
 		return nil, fmt.Errorf("verifier: 検索名が空です")
 	}
+	if limit <= 0 {
+		limit = 20
+	}
 
-	params := url.Values{}
-	params.Set("id", c.appID)
-	params.Set("name", name)
-	params.Set("type", "12") // XML UTF-8
-	params.Set("history", "0")
-
-	endpoint := fmt.Sprintf("%s/name?%s", c.baseURL, params.Encode())
-
-	req, err := http.NewRequestWithContext(ctx, http.MethodGet, endpoint, nil)
+	db, err := sql.Open("sqlite", c.dbPath)
 	if err != nil {
-		return nil, fmt.Errorf("verifier: リクエスト生成エラー: %w", err)
+		return nil, fmt.Errorf("verifier: DB接続エラー: %w", err)
+	}
+	defer db.Close()
+
+	// テーブル存在確認
+	var cnt int
+	if err := db.QueryRowContext(ctx,
+		"SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='houjin_registry'",
+	).Scan(&cnt); err != nil || cnt == 0 {
+		return nil, ErrDBEmpty
 	}
 
-	resp, err := c.httpClient.Do(req)
+	activeCodes := sortedKeys(activeProcessCodes)
+	placeholders := strings.Repeat("?,", len(activeCodes))
+	placeholders = placeholders[:len(placeholders)-1]
+
+	baseQ := fmt.Sprintf(
+		"SELECT corporate_number, process, update_date, name, prefecture, city, street "+
+			"FROM houjin_registry WHERE %%s AND process IN (%s) LIMIT ?",
+		placeholders,
+	)
+
+	// Step 1: exact match
+	args := append([]any{name}, stringsToAny(activeCodes)...)
+	args = append(args, limit)
+	corps, err := queryCorps(ctx, db, fmt.Sprintf(baseQ, "name = ?"), args)
 	if err != nil {
-		return nil, fmt.Errorf("verifier: APIリクエストエラー: %w", err)
+		return nil, err
 	}
-	defer resp.Body.Close()
-
-	if resp.StatusCode != http.StatusOK {
-		body, _ := io.ReadAll(resp.Body)
-		return nil, fmt.Errorf("verifier: APIエラー status=%d body=%s", resp.StatusCode, string(body))
+	if len(corps) > 0 {
+		return corps, nil
 	}
 
-	return parseXMLResponse(resp.Body)
+	// Step 2: prefix LIKE
+	args[0] = name + "%"
+	corps, err = queryCorps(ctx, db, fmt.Sprintf(baseQ, "name LIKE ?"), args)
+	if err != nil {
+		return nil, err
+	}
+	if len(corps) > 0 {
+		return corps, nil
+	}
+
+	// Step 3: substring LIKE (fallback)
+	args[0] = "%" + name + "%"
+	corps, err = queryCorps(ctx, db, fmt.Sprintf(baseQ, "name LIKE ?"), args)
+	if err != nil {
+		return nil, err
+	}
+	if len(corps) > 0 {
+		return corps, nil
+	}
+
+	return nil, ErrNotFound
 }
 
-// parseXMLResponse はAPIのXMLレスポンスをパースしてCorporation配列を返す。
-func parseXMLResponse(r io.Reader) ([]Corporation, error) {
-	body, err := io.ReadAll(r)
+func queryCorps(ctx context.Context, db *sql.DB, q string, args []any) ([]Corporation, error) {
+	rows, err := db.QueryContext(ctx, q, args...)
 	if err != nil {
-		return nil, fmt.Errorf("verifier: レスポンス読み込みエラー: %w", err)
+		return nil, fmt.Errorf("verifier: クエリエラー: %w", err)
 	}
+	defer rows.Close()
 
-	// UTF-8でない場合の安全対策
-	if !utf8.Valid(body) {
-		return nil, fmt.Errorf("verifier: レスポンスがUTF-8ではありません")
+	var corps []Corporation
+	for rows.Next() {
+		var c Corporation
+		var pref, city, street string
+		if err := rows.Scan(
+			&c.CorporateNumber, &c.Process, &c.UpdateDate, &c.Name,
+			&pref, &city, &street,
+		); err != nil {
+			return nil, fmt.Errorf("verifier: scanエラー: %w", err)
+		}
+		c.Address = pref + city + street
+		corps = append(corps, c)
 	}
+	return corps, rows.Err()
+}
 
-	var list xmlCorpList
-	if err := xml.Unmarshal(body, &list); err != nil {
-		return nil, fmt.Errorf("verifier: XMLパースエラー: %w", err)
+// Count はSQLiteの登録件数を返す。
+func (c *Client) Count(ctx context.Context) (int, error) {
+	db, err := sql.Open("sqlite", c.dbPath)
+	if err != nil {
+		return 0, fmt.Errorf("verifier: DB接続エラー: %w", err)
 	}
+	defer db.Close()
 
-	corps := make([]Corporation, 0, len(list.Corporations))
-	for _, x := range list.Corporations {
-		corps = append(corps, Corporation{
-			CorporateNumber: x.CorporateNumber,
-			Name:            x.Name,
-			Address:         x.PrefectureName + x.CityName + x.StreetNumber,
-			Process:         x.Process,
-			UpdateDate:      x.UpdateDate,
-			CloseDate:       x.CloseDate,
-		})
+	var n int
+	if err := db.QueryRowContext(ctx, "SELECT COUNT(*) FROM houjin_registry").Scan(&n); err != nil {
+		return 0, fmt.Errorf("verifier: countエラー: %w", err)
 	}
-
-	return corps, nil
+	return n, nil
 }
 
 // -- 検証ロジック -----------------------------------------------------------
@@ -201,11 +242,11 @@ func parseXMLResponse(r io.Reader) ([]Corporation, error) {
 type VerifyResult struct {
 	// InputName は入力された企業名（正規化前）。
 	InputName string
-	// OfficialName は法人番号APIで確認された正式社名。
+	// OfficialName は法人番号CSVで確認された正式社名。
 	OfficialName string
 	// CorporateNumber は13桁の法人番号。
 	CorporateNumber string
-	// IsVerified は法人番号APIで実在が確認されたか。
+	// IsVerified はCSVで実在が確認されたか。
 	IsVerified bool
 	// IsActive は廃業していないか。
 	IsActive bool
@@ -213,21 +254,22 @@ type VerifyResult struct {
 	Address string
 	// NameSimilarity は入力名と正式社名の類似度 [0.0, 1.0]。
 	NameSimilarity float64
+	// Source は常に "houjin_csv"。
+	Source string
 }
 
-// Verify は企業名を法人番号APIで検証し、正式社名・法人番号を返す。
+// Verify は企業名をローカルSQLiteで検証し、正式社名・法人番号を返す。
 //
-// APIエラー・法人未発見の場合は IsVerified=false で返す（エラーにしない）。
+// DBエラー・法人未発見の場合は IsVerified=false で返す（エラーにしない）。
 // これにより呼び出し元のパイプラインが中断しない。
 func (c *Client) Verify(ctx context.Context, name string) VerifyResult {
-	result := VerifyResult{InputName: name}
+	result := VerifyResult{InputName: name, Source: "houjin_csv"}
 
-	corps, err := c.SearchByName(ctx, name)
+	corps, err := c.SearchByName(ctx, name, 20)
 	if err != nil {
 		return result
 	}
 
-	// アクティブな法人の中から最もよく一致するものを選ぶ
 	bestScore := 0.0
 	var best *Corporation
 	for i := range corps {
@@ -258,7 +300,6 @@ func (c *Client) Verify(ctx context.Context, name string) VerifyResult {
 // -- 名寄せロジック ---------------------------------------------------------
 
 // nameSimilarity は2つの法人名の類似度を [0.0, 1.0] で返す。
-// canonical化後の完全一致→1.0、包含関係→0.9、その他はbi-gram Jaccard。
 // Python側の _name_similarity() と同等のロジック。
 func nameSimilarity(a, b string) float64 {
 	ka, kb := canonicalKey(a), canonicalKey(b)
@@ -274,10 +315,9 @@ func nameSimilarity(a, b string) float64 {
 	return bigramJaccard(ka, kb)
 }
 
-// canonicalKey は法人名を正規化する（株式会社/㈱/（株）などを除去・小文字化）。
+// canonicalKey は法人名を正規化する（株式会社/㈱/(株)等を除去・小文字化）。
+// Python側の normalize.canonical_key() と同等。
 func canonicalKey(name string) string {
-	s := name
-	// よくある略称・表記を統一
 	replacer := strings.NewReplacer(
 		"株式会社", "",
 		"㈱", "",
@@ -291,8 +331,7 @@ func canonicalKey(name string) string {
 		" ", "",
 		"　", "",
 	)
-	s = replacer.Replace(s)
-	return strings.ToLower(strings.TrimSpace(s))
+	return strings.ToLower(strings.TrimSpace(replacer.Replace(name)))
 }
 
 // bigramJaccard はbi-gramのJaccard類似度を計算する。
@@ -320,4 +359,22 @@ func bigramJaccard(a, b string) float64 {
 		return 0.0
 	}
 	return float64(intersection) / float64(union)
+}
+
+// -- ユーティリティ ---------------------------------------------------------
+
+func sortedKeys(m map[string]bool) []string {
+	keys := make([]string, 0, len(m))
+	for k := range m {
+		keys = append(keys, k)
+	}
+	return keys
+}
+
+func stringsToAny(ss []string) []any {
+	out := make([]any, len(ss))
+	for i, s := range ss {
+		out[i] = s
+	}
+	return out
 }
