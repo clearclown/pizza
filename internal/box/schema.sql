@@ -70,3 +70,20 @@ CREATE INDEX IF NOT EXISTS idx_nta_cache_expires ON nta_cache(expires_at);
 
 -- クリーンアップ用クエリ（起動時またはバッチで実行）:
 -- DELETE FROM nta_cache WHERE expires_at < datetime('now');
+
+-- =============================================================================
+-- Phase 2 実装者へ
+-- =============================================================================
+--
+-- stores → operator_brands 集約クエリ（verifier 通過後に実行）:
+-- 詳細は internal/box/box.go の upsertOperatorBrands 定数を参照。
+--
+-- Aggregate() 実装時の集約クエリ（internal/verifier/aggregate.go Phase 2）:
+--   SELECT houjin_bangou, SUM(store_count) as total
+--   FROM operator_brands
+--   WHERE houjin_bangou = ?
+--   GROUP BY houjin_bangou;
+--
+-- is_mega の判定は operator_totals VIEW が担当（閾値変更時は VIEW のみ修正）:
+--   SELECT * FROM operator_totals WHERE is_mega = 1;
+-- =============================================================================
