@@ -130,6 +130,17 @@ rules:
     enabled: true
     min_agreement: 0.6  # パネル過半数一致で採用（3モデルなら2/3以上）
 
+hard_rules:
+  gmaps_cluster_requires_l3:
+    condition: "count_source == 'gmaps_cluster'"
+    action: "RequiresL3Verification = true"
+    override: true  # confidence が高くても L3 強制
+
+  unknown_source_rejected:
+    condition: "count_source not in source_priority"
+    action: "error"
+    override: true  # source_priority 外のソースはサイレント通過禁止
+
 hallucination_instruction: |
   提供されたURLのページテキストのみを根拠として回答してください。
   URLに記載のない情報は「不明」と返してください。
