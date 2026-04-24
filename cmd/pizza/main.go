@@ -34,6 +34,7 @@ import (
 	"github.com/clearclown/pizza/internal/menu"
 	"github.com/clearclown/pizza/internal/oven"
 	"github.com/clearclown/pizza/internal/toppings"
+	"github.com/clearclown/pizza/internal/verifier"
 
 	"github.com/joho/godotenv"
 	"google.golang.org/grpc"
@@ -162,6 +163,7 @@ Flags for 'bake':
   --no-kitchen      Firecrawl 呼び出しを skip
   --with-judge      delivery-service gRPC に判定を委譲する
   --judge-mode      judge 経路 (mock|live|panel)、delivery-service の DELIVERY_MODE と一致させる想定
+  --verify-houjin   国税庁法人番号 CSV で operator 実在確認 (Layer D, オフライン動作)
 
 Flags for 'research':
   --brand           対象ブランド (空で全ブランド)
@@ -221,6 +223,7 @@ func cmdBake(args []string) error {
 	noKitchen := fs.Bool("no-kitchen", false, "skip Firecrawl Markdown fetch")
 	withJudge := fs.Bool("with-judge", false, "connect to delivery-service gRPC and run judgements")
 	judgeMode := fs.String("judge-mode", "", "delivery-service の mode ヒント (mock|live|panel), env DELIVERY_MODE にも反映")
+	verifyHoujin := fs.Bool("verify-houjin", false, "国税庁法人番号 CSV で operator 実在確認 (Layer D, HOUJIN_BANGOU_APP_ID 不要)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -291,13 +294,25 @@ func cmdBake(args []string) error {
 		}
 	}
 
+	// Layer D: Verifier (国税庁法人番号 CSV — オフライン動作)
+	var verifierBackend oven.VerifierBackend
+	if *verifyHoujin {
+		vc, verr := verifier.New()
+		if verr != nil {
+			log.Printf("⚠️  verifier disabled: %v", verr)
+		} else {
+			verifierBackend = vc
+		}
+	}
+
 	// Pipeline
 	p := &oven.Pipeline{
-		Seed:    seed,
-		Kitchen: kitchen,
-		Judge:   judge,
-		Box:     store,
-		Workers: cfg.MaxConcurrency,
+		Seed:     seed,
+		Kitchen:  kitchen,
+		Judge:    judge,
+		Verifier: verifierBackend,
+		Box:      store,
+		Workers:  cfg.MaxConcurrency,
 	}
 
 	fmt.Printf("🍕 Baking: brand=%q area=%q cell_km=%.1f\n", *query, *area, *cellKm)
@@ -310,6 +325,9 @@ func cmdBake(args []string) error {
 		fmt.Printf("   Judge enabled (%s)\n", cfg.DeliveryServiceAddr)
 	} else {
 		fmt.Printf("   Judge disabled (no --with-judge)\n")
+	}
+	if verifierBackend != nil {
+		fmt.Printf("   Verifier enabled (Layer D: 国税庁法人番号 CSV)\n")
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Minute)
@@ -338,12 +356,13 @@ func cmdBake(args []string) error {
 	}
 
 	fmt.Printf("\n✅ Done in %.1fs\n", report.ElapsedSec)
-	fmt.Printf("   Cells:       %d\n", report.CellsGenerated)
-	fmt.Printf("   Stores:      %d\n", report.StoresFound)
-	fmt.Printf("   Markdowns:   %d\n", report.MarkdownsFetched)
-	fmt.Printf("   Judgements:  %d\n", report.JudgementsMade)
-	fmt.Printf("   CSV:         %s\n", *outPath)
-	fmt.Printf("   DB:          %s\n", *dbPath)
+	fmt.Printf("   Cells:         %d\n", report.CellsGenerated)
+	fmt.Printf("   Stores:        %d\n", report.StoresFound)
+	fmt.Printf("   Markdowns:     %d\n", report.MarkdownsFetched)
+	fmt.Printf("   Judgements:    %d\n", report.JudgementsMade)
+	fmt.Printf("   Verifications: %d\n", report.VerificationsRun)
+	fmt.Printf("   CSV:           %s\n", *outPath)
+	fmt.Printf("   DB:            %s\n", *dbPath)
 	return nil
 }
 

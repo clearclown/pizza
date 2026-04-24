@@ -20,6 +20,7 @@ import (
 	"strings"
 
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
+	"github.com/clearclown/pizza/internal/verifier"
 	_ "modernc.org/sqlite" // pure-Go SQLite driver (no CGO)
 )
 
@@ -315,6 +316,30 @@ func (s *Store) UpsertOperatorStore(ctx context.Context, in *OperatorStoreInput)
 	`, in.OperatorName, in.PlaceID, in.Brand, in.OperatorType, in.Confidence, via)
 	if err != nil {
 		return fmt.Errorf("box: upsert operator_stores: %w", err)
+	}
+	return nil
+}
+
+// UpsertVerification は verifier 結果を operator_stores の Layer D カラムに書き込む。
+// verification_score / corporate_number / verification_source を更新する。
+func (s *Store) UpsertVerification(ctx context.Context, operatorName, placeID string, vr verifier.VerifyResult) error {
+	score := vr.NameSimilarity
+	if !vr.IsVerified {
+		score = -1.0
+	}
+	source := "houjin_bangou_nta"
+	if !vr.IsVerified {
+		source = "none"
+	}
+	_, err := s.db.ExecContext(ctx, `
+		UPDATE operator_stores
+		SET verification_score = ?,
+		    corporate_number = ?,
+		    verification_source = ?
+		WHERE operator_name = ? AND place_id = ?
+	`, score, vr.CorporateNumber, source, operatorName, placeID)
+	if err != nil {
+		return fmt.Errorf("box: upsert verification %s/%s: %w", operatorName, placeID, err)
 	}
 	return nil
 }
