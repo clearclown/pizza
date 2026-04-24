@@ -137,6 +137,24 @@ func buildRules(cfg JudgeConfig, skipURLResolve bool) []ValidationRule {
 				o.RequiresL3Verification = true
 			},
 		},
+		{
+			// unknown_source: "error" — source_priority 外のソースはサイレント通過禁止
+			Name: "unknown_source_rejected",
+			Check: func(o Output) bool {
+				if o.CountSource == "" {
+					return false // 未指定は別ルールで処理
+				}
+				validSources := map[string]bool{
+					"edinet": true, "chuusho_kaiji": true,
+					"corporate_site": true, "gmaps_cluster": true,
+				}
+				return !validSources[o.CountSource]
+			},
+			Action: func(o *Output) {
+				o.Reject = true
+				o.RejectReason = fmt.Sprintf("unknown_source: %q not in source_priority", o.CountSource)
+			},
+		},
 	}
 }
 
