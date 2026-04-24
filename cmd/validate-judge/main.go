@@ -331,6 +331,27 @@ func main() {
 				fmt.Printf("FAIL (unexpected reject: %s)\n", output.RejectReason)
 				ok = false
 			}
+			// source_has_claim 別追加検証
+			switch row.SourceHasClaim {
+			case "true":
+				// 主張有り → source_text が決して空にならないはず
+				if output.StoreCountSourceText == "" && !row.ExpectedReject {
+					fmt.Printf("FAIL (source_has_claim=true but store_count_source_text is empty)\n")
+					ok = false
+				}
+			case "false":
+				// 主張なし → reject 指定行は confidence > 0.0 なら FAIL
+				if row.ExpectedReject && output.Confidence > 0.0 && !output.Reject {
+					fmt.Printf("FAIL (source_has_claim=false + expected_reject but confidence=%.2f)\n", output.Confidence)
+					ok = false
+				}
+			case "partial":
+				// 曖昧表現 → confidence < 0.5 を期待
+				if output.Confidence >= 0.5 && !output.Reject {
+					fmt.Printf("FAIL (source_has_claim=partial but confidence=%.2f >= 0.5)\n", output.Confidence)
+					ok = false
+				}
+			}
 			if ok {
 				fmt.Println("PASS")
 			} else {
