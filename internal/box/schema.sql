@@ -87,3 +87,53 @@ CREATE INDEX IF NOT EXISTS idx_nta_cache_expires ON nta_cache(expires_at);
 -- is_mega の判定は operator_totals VIEW が担当（閾値変更時は VIEW のみ修正）:
 --   SELECT * FROM operator_totals WHERE is_mega = 1;
 -- =============================================================================
+
+-- operator_stores: 確定した (operator, place_id) のマップ
+-- - 1 operator が複数 store を運営する関係を表現
+CREATE TABLE IF NOT EXISTS operator_stores (
+    operator_name        TEXT NOT NULL,
+    place_id             TEXT NOT NULL,
+    brand                TEXT,
+    operator_type        TEXT,                     -- direct | franchisee | unknown
+    confidence           REAL DEFAULT 0.0,
+    discovered_via       TEXT DEFAULT 'per_store', -- per_store | chain_discovery | manual | cross_llm_consensus
+    verification_score   REAL DEFAULT 0.0,         -- 0.0 未検証 / >0 法人名類似度 / -1 非実在
+    corporate_number     TEXT,                     -- 13 桁 法人番号 (国税庁)
+    verification_source  TEXT,                     -- houjin_bangou_nta | manual | none
+    confirmed_at         TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    PRIMARY KEY (operator_name, place_id),
+    FOREIGN KEY (place_id) REFERENCES stores(place_id)
+);
+
+CREATE INDEX IF NOT EXISTS idx_operator_stores_name  ON operator_stores(operator_name);
+CREATE INDEX IF NOT EXISTS idx_operator_stores_brand ON operator_stores(brand);
+CREATE INDEX IF NOT EXISTS idx_operator_stores_via   ON operator_stores(discovered_via);
+
+-- review_queue: 人間レビューが必要な法人名寄せ結果を保持（自動解決不能ケース）
+CREATE TABLE IF NOT EXISTS review_queue (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    operator_name   TEXT NOT NULL,
+    place_id        TEXT,
+    match_level     TEXT,
+    reason          TEXT,
+    candidates_json TEXT,
+    resolved        INTEGER NOT NULL DEFAULT 0,
+    resolved_at     TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_review_queue_status ON review_queue(resolved);
+
+-- retry_queue: L3 browser-use による自動リトライキュー
+CREATE TABLE IF NOT EXISTS retry_queue (
+    id              INTEGER PRIMARY KEY AUTOINCREMENT,
+    operator_name   TEXT NOT NULL,
+    raw_name        TEXT NOT NULL,
+    refined_name    TEXT,
+    place_id        TEXT,
+    retry_count     INTEGER NOT NULL DEFAULT 0,
+    status          TEXT NOT NULL DEFAULT 'pending',
+    fail_reason     TEXT,
+    created_at      TEXT NOT NULL DEFAULT (datetime('now')),
+    updated_at      TEXT NOT NULL DEFAULT (datetime('now'))
+);
+CREATE INDEX IF NOT EXISTS idx_retry_queue_status ON retry_queue(status);
