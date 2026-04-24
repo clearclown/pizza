@@ -1,4 +1,4 @@
-operator_name,corp,hq_prefecture,head_office,representative,url,source,brand_count,brands,total_stores
+name,corp,hq,head_office,representative,url,source,brand_count,brands,total_stores
 "株式会社プライムウィル",7140001071598,"兵庫県","兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階","加藤 道信",https://primewill.co.jp/,manual_megajii_2026_04_24,8,"魅力屋,ミスタードーナツ,コメダ珈琲,いきなりステーキ,串家物語,BABY FACE,かつや,Gong cha",208
 "株式会社グローバルノースジャパン",4420001009770,"秋田県","秋田県秋田市中通2-2-3","松宮 隆治",https://www.north-japan.net/,manual_megajii_2026_04_24,7,"丸亀製麺,かつや,からやま,築地銀だこ,コメダ珈琲,ピザハット,ミスタードーナツ",224
 "株式会社エイコス",3190001000218,"三重県","三重県津市新町1-12-17","永橋 康弘",https://www.eicos.co.jp/index.html,manual_megajii_2026_04_24,7,"ブックオフ,モスバーガー,タリーズコーヒー,ザ,ダイソー,サーティワン,個別指導VAN",203
