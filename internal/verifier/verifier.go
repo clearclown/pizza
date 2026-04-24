@@ -400,3 +400,6 @@ func stringsToAny(ss []string) []any {
 	}
 	return out
 }
+
+// TODO(phase3): implement retry flow with L3 browser-use
+// func (v *Client) VerifyWithRetry(ctx context.Context, item RetryQueueItem) (VerifyResult, error)
