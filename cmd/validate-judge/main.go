@@ -25,7 +25,8 @@ import (
 type JudgeConfig struct {
 	Rules struct {
 		Evidence struct {
-			URLMustResolve bool `yaml:"url_must_resolve"`
+			URLMustResolve bool     `yaml:"url_must_resolve"`
+			SkipDomains    []string `yaml:"skip_domains"`
 		} `yaml:"evidence"`
 		HallucinationGuards struct {
 			RefusePhrases []string `yaml:"refuse_phrases"`
@@ -114,6 +115,12 @@ func buildRules(cfg JudgeConfig, skipURLResolve bool) []ValidationRule {
 			Check: func(o Output) bool {
 				if skipURLResolve || o.SourceURL == "" {
 					return false // チェックしない
+				}
+				// skip_domains: API エンドポイントは HEAD チェック不要
+				for _, d := range cfg.Rules.Evidence.SkipDomains {
+					if strings.Contains(o.SourceURL, d) {
+						return false
+					}
 				}
 				client := &http.Client{Timeout: 5 * time.Second}
 				resp, err := client.Head(o.SourceURL)

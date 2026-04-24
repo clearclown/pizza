@@ -6,6 +6,9 @@ rules:
     min_urls: 1
     refuse_if_empty: true
     url_must_resolve: true    # テスト時は CI オプションで false に上書き可
+    skip_domains:              # これらのドメインは HEAD チェック不要（API エンドポイント）
+      - disclosure.edinet-api.go.jp
+      - api.edinet-fsa.go.jp
     quote_required: true      # store_count_source_text の原文引用を必須化
 
   source_priority:
