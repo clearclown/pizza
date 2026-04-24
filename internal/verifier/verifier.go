@@ -315,6 +315,8 @@ func (c *Client) Verify(ctx context.Context, name string) VerifyResult {
 	result.IsActive = best.IsActive()
 	result.Address = best.Address
 	result.NameSimilarity = bestScore
+	// TODO(phase2): set MatchLevel based on SearchByName fallback level (exact/prefix/substring)
+	// TODO(phase2): populate Candidates when len(corps) > 1 for ResolveAmbiguous()
 
 	return result
 }
