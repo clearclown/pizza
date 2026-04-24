@@ -332,7 +332,7 @@ func nameSimilarity(a, b string) float64 {
 		return 1.0
 	}
 	if strings.Contains(ka, kb) || strings.Contains(kb, ka) {
-		return 0.9
+		return 0.9 // TODO(phase2): move to config (name_similarity_threshold)
 	}
 	return bigramJaccard(ka, kb)
 }
