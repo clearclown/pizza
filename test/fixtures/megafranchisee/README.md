@@ -148,6 +148,61 @@ sqlite3 -csv -header var/pizza-registry.sqlite "
     --top 0
 ```
 
+## `megajii-raw-2026-04-24.csv`
+
+**192 rows** — 人手 TSV (`var/external/megajii-manual.tsv`) を `pizza import-megajii-csv
+--save-db` で SQLite 化した `megajii_rows` table をそのまま CSV dump。
+LLM 処理を通していない**生データ snapshot**。
+
+### 生成手順
+```bash
+./bin/pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
+    --save-db var/external/megajii.sqlite --dry-run
+sqlite3 -csv -header var/external/megajii.sqlite \
+    "SELECT line, section, raw_name, industry, store_count, representative,
+            address, revenue_current_jpy, website_url, raw_brands, brand_name
+     FROM megajii_rows ORDER BY line" \
+  > test/fixtures/megafranchisee/megajii-raw-2026-04-24.csv
+```
+
+### 列定義
+| 列 | 説明 |
+|---|---|
+| line | 元 TSV の行番号 (PRIMARY KEY) |
+| section | megajii (多業態メガジー) / franchisor (本部) |
+| raw_name | 元 TSV の企業名 (クレンジング前) |
+| industry / store_count / representative / address | BC 誌掲載値そのまま |
+| revenue_current_jpy | 当期売上 (千円 → 円に変換済) |
+| raw_brands | 加盟ブランド (中点区切り) |
+| brand_name | franchisor 行のみ、自社ブランド名 |
+
+## `cleanse-by-brand-2026-04-24.csv`
+
+**58 rows** — `pizza cleanse --brand <14 brand>` の JSON proposals を合算。
+pipeline DB の operator_name を Gemini canonicalize → 国税庁 verify した結果の snapshot。
+
+### 生成手順
+```bash
+LLM_PROVIDER=gemini ./bin/pizza cleanse --brand <brand> \
+    --out var/phase27/orchestrate/cleanse/<brand>.json
+# 14 brand 全実行後、JSON を merge して CSV 化 (scripts/merge-cleanse.py 相当)
+```
+
+### 列定義
+| 列 | 説明 |
+|---|---|
+| brand | 対象ブランド |
+| raw_name | pipeline operator_stores の元名前 |
+| canonical | Gemini が正規化した canonical 名 |
+| corp | 国税庁 CSV で verified された 13 桁法人番号 (空 = 未検証) |
+| verified | True = 国税庁一致、False = 未一致 |
+| reason | verified / not_in_houjin / not_legal_entity 等 |
+| confidence | LLM 信頼度 (0-1) |
+
+### 使い所
+- LLM クレンジングの回帰テスト (同 DB / TSV で同結果が返るべき)
+- verified=True の corp を pipeline `operator_stores.corporate_number` に back-fill したか検証
+
 ## `import-megajii-dry-proposals-2026-04-24.csv`
 
 192 行 TSV (人手集計メガジー 179 + 本部 13) に対する import-megajii-csv dry-run の
