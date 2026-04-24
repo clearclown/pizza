@@ -1,6 +1,10 @@
 # PI-ZZA 🍕 — Process Integration & Zonal Search Agent
 
 <p align="center">
+  <img src="docs/assets/banner.jpg" alt="PI-ZZA banner" width="100%">
+</p>
+
+<p align="center">
   <a href="https://github.com/clearclown/pizza/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/clearclown/pizza/actions/workflows/ci.yml/badge.svg"></a>
   <a href="https://github.com/clearclown/pizza/blob/main/LICENSE"><img alt="License: MIT" src="https://img.shields.io/badge/License-MIT-yellow.svg"></a>
   <img alt="Go" src="https://img.shields.io/badge/Go-1.22%2B-00ADD8?logo=go&logoColor=white">
