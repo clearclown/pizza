@@ -110,6 +110,8 @@ rules:
       then: { confidence: 0.0, reject: true, reason: "source_text_invalid" }
     - if: "corporate_name_from_source == ''"
       then: { reject: true, reason: "corporate_name_missing" }
+    - if: "count_source not in source_priority"
+      then: { error: true, reason: "unknown_source" }
     - if: "count_source == 'gmaps_cluster' and no_other_source"
       then: { confidence_multiplier: 0.8, requires_l3_verification: true }
 
