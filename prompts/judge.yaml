@@ -147,6 +147,12 @@ hard_rules:
     action: "error"
     override: true  # source_priority 外のソースはサイレント通過禁止
 
+system_prompt: |
+  提供されたURLのページテキストのみを根拠として回答してください。
+  URLに記載のない情報は「不明」と返してください。
+  「〜と思われる」「〜の可能性がある」は禁止です。
+  store_count_source_text は必ずページから引用してください。創作禁止。
+
 hallucination_instruction: |
   提供されたURLのページテキストのみを根拠として回答してください。
   URLに記載のない情報は「不明」と返してください。
