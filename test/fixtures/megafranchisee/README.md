@@ -1,71 +1,127 @@
-# Megafranchisee Pure-Pipeline Fixtures
+# Franchise Operator Fixtures
 
-**原則**: pizza pipeline (migrate → bake → research → audit → megafranchisee)
-からのみ生成された CSV。LLM に YAML を書かせた結果を貼り付ける **ハード
-コードは禁止**。
+**4 CSV** (計 2,344 rows)。すべて pizza pipeline から生成。手書きデータは
+`megajii-raw.csv` のみで、これは「人手集計 TSV の SQLite dump」であり生成元
+(`var/external/megajii-manual.tsv`) がユーザー提供 snapshot。
 
-## `operators-pure-pipeline-2026-04-23.csv`
+## ファイル構成
 
-### 生成手順 (完全再現可能)
+### 👑 `megajii-enriched.csv` (192 rows, 2026-04-24) — 人手 TSV master
+ユーザー提供の人手集計 TSV を軸に、`import-apply.json` の cleanse 結果 + ORM
+の brand_operator_link を JOIN した **最優先の master CSV**。
+
+1 行 = 1 社 (megajii section 179 + franchisor section 13)。すべて 17 列。
+
+### ⭐ `fc-operators-all.csv` (1,085 rows, 2026-04-24)
+**1 事業会社 1 行** の集約 CSV。これがメインの参照資料。
+
 ```bash
-# Registry は pre-pollution state (3dac0f9) に復元済
-rm -f var/pizza.sqlite
-
-# delivery-service 起動 (asyncio 永続 loop 修正版)
-cd services/delivery && ENABLE_BROWSER_FALLBACK=1 DELIVERY_MODE=panel \
-    uv run python -m pizza_delivery serve --port 50053 &
-
-# pipeline (bake は 10 分 timeout で打ち切り、research verify=True)
-./bin/pizza scan --brand "モスバーガー" --areas "東京都" --cell-km 3.0 \
-    --with-judge --judge-mode panel --with-verify \
-    --max-research 300
-
-# 集計 (本部除外)
-./bin/pizza megafranchisee --min-total 1 --min-brands 1 --top 0 \
-    --out-csv test/fixtures/megafranchisee/operators-pure-pipeline-2026-04-23.csv
+# 生成 (ORM 由来、pizza は内部の sqlite に書き込み済)
+sqlite3 -csv -header var/pizza-registry.sqlite "
+  SELECT oc.name AS operator_name, oc.corporate_number AS corp,
+         oc.prefecture AS hq_prefecture, oc.head_office,
+         oc.representative_name AS representative, oc.website_url AS url,
+         oc.source,
+         COUNT(DISTINCT fb.id) AS brand_count,
+         GROUP_CONCAT(DISTINCT fb.name) AS brands,
+         COALESCE(SUM(bol.estimated_store_count),0) AS total_stores
+  FROM operator_company oc
+  LEFT JOIN brand_operator_link bol ON bol.operator_id = oc.id
+  LEFT JOIN franchise_brand fb ON bol.brand_id = fb.id
+  GROUP BY oc.id
+  ORDER BY brand_count DESC, total_stores DESC
+" > test/fixtures/megafranchisee/fc-operators-all.csv
 ```
 
-### 出力サマリ
-- 合計 **26 operators**
-- うち Anytime 14 社 (Phase 10.3 既検証)
-- ローソン 4 / ファミマ 4 / マクドナルド 3 / モス 1 (registry seed)
-- 本部 (株式会社モスフードサービス、ドムドムフードサービス) は blocklist
-  で自動除外
+列: `operator_name, corp, hq_prefecture, head_office, representative, url, source, brand_count, brands, total_stores`
 
-### 注意 (pipeline の既知制約)
-- Mos 東京都 E2E で per_store 抽出は本部 (モスフードサービス 284 件) と
-  別ブランド誤認 (ドムドムフードサービス 1 件) のみで止まる。**SPA 制約**
-  により個別 FC 名は公開 HTML に存在しない。これは PI-ZZA のバグではなく
-  Mos の情報開示水準の問題
-- audit 突合で coverage% 向上には registry に FC を追加する必要があるが、
-  **ハードコード貼り付け禁止** のため、今後は以下のいずれかで育てる:
-  1. pipeline が per_store で実抽出した operator (本 CSV の chain_verified 列)
-  2. 人間が手動でファクトチェックした操作会社 (法人番号 + 公式 URL 必須)
-  3. Houjin API 連動の自動検証 (API キー取得後)
-
-### 列定義
+### `megajii-enriched.csv` 列定義
 | 列 | 説明 |
 |---|---|
-| operator_name | 事業会社名 (正規化済) |
-| total_stores | 全 brand 合計店舗数 |
-| brand_count | 運営 brand 数 |
-| brands_breakdown | "brand:N; brand:M" 降順 |
-| corporate_number | gBizINFO 検証済の 13 桁法人番号 (空可) |
-| operator_types | franchisee / franchisor / unknown |
-| discovered_vias | registry / registry_mbo / chain_verified / per_store |
+| line, section | 元 TSV の行番号 / (megajii/franchisor) |
+| input_name | 元 TSV の企業名 |
+| canonical_name | Gemini cleanse 後の canonical 名 (空なら input と同じ) |
+| corp | 13 桁法人番号 (国税庁 verified、空なら未検証) |
+| verified | True = corp 付き、False = 未検証 |
+| hq_prefecture / head_office | ORM 経由で houjin JOIN 補完済 |
+| representative | TSV 由来の代表者名 |
+| declared_stores | TSV 原本の宣言店舗数 (BC 誌等) |
+| revenue_current_jpy / revenue_previous_jpy | 当期 / 前期売上 (円) |
+| website_url | 公式 HP |
+| brands_raw | 元 TSV の加盟ブランド文字列 (中点区切り) |
+| brands_orm | ORM で実際に link された brand list (パイプ区切り) |
+| orm_brand_count | brands_orm の数 |
+| orm_total_stores | ORM link の estimated_store_count 合計 |
+| gap_stores | orm_total_stores − declared_stores (+ = ORM 過剰、- = 不足) |
 
-### 生成時の環境
-- registry YAML: 3dac0f9 (Phase 10.3 直後の state、LLM 貼り付け汚染なし)
-- delivery-service: asyncio 永続 loop + panel mode
-- Places API: 実データ (Google Cloud key 設定済)
-- CrossVerifier: anthropic (claude-haiku-4-5) で各 per_store 結果を検証
+### 生成手順 (再現)
+```bash
+# 1. 人手 TSV を SQLite 化
+./bin/pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
+    --save-db var/external/megajii.sqlite --dry-run
 
-## 絶対に守ること (再汚染防止)
+# 2. 人手 TSV を LLM クレンジング + ORM 書込
+LLM_PROVIDER=anthropic ./bin/pizza import-megajii-csv \
+    --csv var/external/megajii-manual.tsv \
+    --out var/phase27/orchestrate/import-apply.json
 
-- `franchisee_registry.yaml` を LLM で作成した YAML で直接編集しない
-- Web search agent の出力を信頼せず、必ず:
-  - gBizINFO 法人番号 → URL で実ページ存在確認
-  - 店舗数 → 公式サイト or 決算資料で裏取り
-  - ブランド加盟 → 公式 IR or 当該ブランドの FC 公表情報で確認
-- この fixture は **pipeline の出力そのもの**。次回更新も pipeline から
-  生成し、手編集しない
+# 3. 3 DB JOIN + CSV 生成 (Python 小スクリプト、README 末尾参照)
+```
+
+### `fc-links.csv` (1,037 rows, 2026-04-24)
+**brand × operator の flat link table**。1 operator が複数 brand 運営なら複数行。
+
+```bash
+./bin/pizza integrate --mode export --out test/fixtures/megafranchisee/fc-links.csv
+```
+
+列: `brand_name, industry, operator_name, corporate_number, head_office, prefecture, operator_type, estimated_store_count, source, source_url, note`
+
+### `megajii-raw.csv` (192 rows, 2026-04-24)
+**人手 TSV の SQLite dump**。LLM/クレンジング前の生データ snapshot。
+
+```bash
+./bin/pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
+    --save-db var/external/megajii.sqlite --dry-run
+sqlite3 -csv -header var/external/megajii.sqlite \
+    "SELECT line, section, raw_name, industry, store_count, representative,
+            address, revenue_current_jpy, website_url, raw_brands, brand_name
+     FROM megajii_rows ORDER BY line" \
+  > test/fixtures/megafranchisee/megajii-raw.csv
+```
+
+### `operators-pure-pipeline-2026-04-23.csv` (26 rows, 前日 snapshot)
+東京都 Mos 調査完走時点の pipeline-only メガジー。Phase 27 以前の状態保全。
+
+## 現状の既知制約
+
+### 偏り / 不足 (2026-04-24 時点)
+- **operator 総数 1,085 は実態の推定 20-30%**。BC 誌 top 500 FC 運営会社のうち ORM 化は約 1/5
+- **エニタイムフィットネス** 公表 957 店舗に対し ORM 29 operator (実態は 100-200 社)
+- **モスバーガー** 公表 1,266 店舗に対し ORM 18 operator (Phase 21 既知 13 社 + 他)
+- **空 prefecture 524/1,085 (48%)** — houjin JOIN で一部補完済、残は法人番号未取得 operator
+- **pipeline observed stores は関東偏重** (東京+神奈川+埼玉+千葉 で全 5,721 stores の 61%)
+
+### 崩れ
+- `pizza bench` 大阪 scan は Places API daily quota 切れで空振り
+- `stores.address` 集計と公表店舗数の不一致あり (別業態店の誤拾 or place_id 重複)
+
+### 再生成手順 (ゼロから再現)
+```bash
+pizza migrate --with-registry
+pizza jfa-sync
+pizza houjin-import --csv <国税庁 zip>
+pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
+    --save-db var/external/megajii.sqlite
+pizza cleanse --brand <14 brand 全て>
+pizza integrate --mode run
+pizza integrate --mode export --out fc-links.csv
+# fc-operators-all.csv は ORM 直接 SQL
+```
+
+## 絶対に守ること
+
+- `franchise_brand` に「企業名」「外食」「食品製造販売」等の業種名を入れない
+  (JFA scrape の header 誤取り込み対策、purge 済)
+- 手書きで YAML/CSV に operator を追加しない。必ず pipeline 経由で
+- corporate_number 空 operator は `source` に `_unverified` を付ける

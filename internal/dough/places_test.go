@@ -74,7 +74,7 @@ func TestPlacesClient_SearchText_requiresAPIKey(t *testing.T) {
 	t.Parallel()
 	c := &dough.PlacesClient{APIKey: "", BaseURL: "http://unused"}
 	_, err := c.SearchText(context.Background(), &dough.SearchTextRequest{TextQuery: "x"})
-	assert.ErrorContains(t, err, "APIKey is empty")
+	assert.ErrorContains(t, err, "no API key")
 }
 
 func TestPlacesClient_SearchText_requiresTextQuery(t *testing.T) {
