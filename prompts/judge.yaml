@@ -17,6 +17,7 @@ rules:
     - corporate_site
     - gmaps_cluster:
         standalone_allowed: false  # 単独時 confidence=0.0 強制reject
+        standalone_max: 0.0        # confidence 上限の数値保証
   unknown_source: "error"          # リスト外ソースはエラー（サイレント通過禁止）
 
   confidence_rules:
