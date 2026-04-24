@@ -11,6 +11,7 @@ import (
 	"github.com/clearclown/pizza/internal/box"
 	"github.com/clearclown/pizza/internal/grid"
 	"github.com/clearclown/pizza/internal/oven"
+	"github.com/clearclown/pizza/internal/verifier"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
@@ -160,4 +161,46 @@ func TestPipeline_Bake_requiresBackends(t *testing.T) {
 	t.Parallel()
 	_, err := (&oven.Pipeline{}).Bake(context.Background(), &pb.SearchStoresInGridRequest{Brand: "b"})
 	assert.ErrorContains(t, err, "Seed")
+}
+
+// fakeVerifier は VerifierBackend の mock。常に IsVerified=true を返す。
+type fakeVerifier struct{}
+
+func (fakeVerifier) Verify(_ context.Context, name string) verifier.VerifyResult {
+	return verifier.VerifyResult{
+		InputName:       name,
+		OfficialName:    name,
+		CorporateNumber: "1234567890123",
+		IsVerified:      true,
+		IsActive:        true,
+		NameSimilarity:  1.0,
+		Source:          "houjin_csv",
+		MatchLevel:      verifier.MatchExact,
+	}
+}
+
+func TestBakeVerifierPhase(t *testing.T) {
+	t.Parallel()
+	b, err := box.Open("")
+	require.NoError(t, err)
+	t.Cleanup(func() { _ = b.Close() })
+
+	p := &oven.Pipeline{
+		Seed: &inProcSeed{stores: []*pb.Store{
+			{PlaceId: "v1", Brand: "B", Name: "S1", Location: &pb.LatLng{}},
+			{PlaceId: "v2", Brand: "B", Name: "S2", Location: &pb.LatLng{}},
+		}},
+		Judge:    fakeJudge{},
+		Verifier: fakeVerifier{},
+		Box:      b,
+	}
+
+	report, err := p.Bake(context.Background(), &pb.SearchStoresInGridRequest{
+		Brand:   "B",
+		Polygon: tokyoSquarePolygon(),
+		CellKm:  1.0,
+	})
+	require.NoError(t, err)
+	assert.Equal(t, 2, report.JudgementsMade)
+	assert.Greater(t, report.VerificationsRun, 0, "verifier phase should have run at least once")
 }

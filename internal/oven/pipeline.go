@@ -13,6 +13,7 @@ import (
 
 	pb "github.com/clearclown/pizza/gen/go/pizza/v1"
 	"github.com/clearclown/pizza/internal/grid"
+	"github.com/clearclown/pizza/internal/verifier"
 )
 
 // ErrNotImplemented は未実装関数が呼ばれたときに返る。
@@ -39,32 +40,41 @@ type JudgeBackend interface {
 	JudgeFranchiseType(ctx context.Context, req *pb.JudgeFranchiseTypeRequest) (*pb.JudgeFranchiseTypeResponse, error)
 }
 
+// VerifierBackend は Layer D — 国税庁法人番号 CSV バックエンドの抽象。
+// nil なら Verify フェーズを skip。
+type VerifierBackend interface {
+	Verify(ctx context.Context, name string) verifier.VerifyResult
+}
+
 // BoxStore は M4 ストレージの永続化 interface。
 type BoxStore interface {
 	UpsertStore(ctx context.Context, s *pb.Store) error
 	UpsertMarkdown(ctx context.Context, d *pb.MarkdownDoc) error
 	UpsertJudgement(ctx context.Context, j *pb.JudgeResult) error
+	UpsertVerification(ctx context.Context, operatorName, placeID string, vr verifier.VerifyResult) error
 	ExportCSV(ctx context.Context, brand string) ([]byte, error)
 }
 
 // Pipeline は PI-ZZA のメインオーケストレータ。
 type Pipeline struct {
-	Seed    SearchBackend  // 必須
-	Kitchen KitchenBackend // nil なら Markdown 取得を skip
-	Judge   JudgeBackend   // nil なら FC 判定を skip
-	Box     BoxStore       // 必須
-	Workers int            // Kitchen 並列度 (default 4)
+	Seed     SearchBackend   // 必須
+	Kitchen  KitchenBackend  // nil なら Markdown 取得を skip
+	Judge    JudgeBackend    // nil なら FC 判定を skip
+	Verifier VerifierBackend // nil なら Verify フェーズを skip (Layer D)
+	Box      BoxStore        // 必須
+	Workers  int             // Kitchen 並列度 (default 4)
 }
 
 // BakeReport は Bake の実行結果サマリ。
 type BakeReport struct {
-	Brand            string
-	CellsGenerated   int
-	StoresFound      int
-	MarkdownsFetched int
-	JudgementsMade   int
-	CSV              []byte
-	ElapsedSec       float64
+	Brand             string
+	CellsGenerated    int
+	StoresFound       int
+	MarkdownsFetched  int
+	JudgementsMade    int
+	VerificationsRun  int
+	CSV               []byte
+	ElapsedSec        float64
 }
 
 // Bake はパイプライン全体を実行する。
@@ -117,6 +127,7 @@ func (p *Pipeline) Bake(ctx context.Context, req *pb.SearchStoresInGridRequest) 
 	}
 
 	// Delivery → Judge → Box (逐次。Phase 3 で並列化検討)
+	var judgeResults []*pb.JudgeResult
 	if p.Judge != nil {
 		for _, st := range stores {
 			if err := ctx.Err(); err != nil {
@@ -130,8 +141,15 @@ func (p *Pipeline) Bake(ctx context.Context, req *pb.SearchStoresInGridRequest) 
 			if err := p.Box.UpsertJudgement(ctx, jres); err != nil {
 				return report, fmt.Errorf("upsert judgement: %w", err)
 			}
+			judgeResults = append(judgeResults, jres)
 			report.JudgementsMade++
 		}
+	}
+
+	// Verifier → operator_stores に法人番号を記録 (Layer D)
+	if p.Verifier != nil {
+		verified := p.runVerifierPhase(ctx, judgeResults)
+		report.VerificationsRun = verified
 	}
 
 	// CSV export
@@ -221,4 +239,26 @@ func (p *Pipeline) runJudgeOne(ctx context.Context, st *pb.Store) (*pb.JudgeResu
 		r.PlaceId = st.GetPlaceId()
 	}
 	return r, nil
+}
+
+// runVerifierPhase は judgeResults の OperatorName を国税庁法人番号 CSV で検証し、
+// operator_stores の Layer D カラムを更新する。エラーは warn で継続。
+func (p *Pipeline) runVerifierPhase(ctx context.Context, judgeResults []*pb.JudgeResult) int {
+	var count int
+	for _, jres := range judgeResults {
+		opName := jres.GetOperatorName()
+		if opName == "" {
+			continue
+		}
+		vr := p.Verifier.Verify(ctx, opName)
+		if !vr.IsVerified {
+			continue
+		}
+		if err := p.Box.UpsertVerification(ctx, opName, jres.GetPlaceId(), vr); err != nil {
+			// 検証書き込みエラーは warn で継続
+			continue
+		}
+		count++
+	}
+	return count
 }
