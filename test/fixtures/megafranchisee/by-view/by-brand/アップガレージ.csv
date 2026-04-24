@@ -1,0 +1,7 @@
+operator,corp,hq,head_office,representative,url,stores_declared,source
+"株式会社ホットマン",3370001002204,"宮城県","宮城県仙台市太白区西多賀四丁目4番17号","伊藤 信幸",http://www.yg-hotman.com/company/message.php,124,manual_megajii_2026_04_24
+"株式会社アップガレージグループ",7020001105153,"神奈川県","神奈川県横浜市青葉区榎が丘7-22","河野 映彦",https://www.upgarage-g.co.jp/,111,manual_megajii_2026_04_24
+"株式会社アップガレージグループ企業","","","","","",1,pipeline
+"株式会社サイン・ハウス",6010902006286,"神奈川県","神奈川県川崎市中原区中丸子１３番地２","","",1,pipeline
+"株式会社ハードオフコーポレーション",6110001012853,"新潟県","新潟県新発田市新栄町３丁目１番１３号","",https://www.hardoff.co.jp,1,pipeline
+"株式会社アップガレージグループ",7020001105153,"神奈川県","神奈川県横浜市青葉区榎が丘7-22","河野 映彦",https://www.upgarage-g.co.jp/,0,jfa
