@@ -6,6 +6,12 @@
 
 ## ファイル構成
 
+### 👑 `megajii-enriched.csv` (192 rows, 2026-04-24) — 人手 TSV master
+ユーザー提供の人手集計 TSV を軸に、`import-apply.json` の cleanse 結果 + ORM
+の brand_operator_link を JOIN した **最優先の master CSV**。
+
+1 行 = 1 社 (megajii section 179 + franchisor section 13)。すべて 17 列。
+
 ### ⭐ `fc-operators-all.csv` (1,085 rows, 2026-04-24)
 **1 事業会社 1 行** の集約 CSV。これがメインの参照資料。
 
@@ -28,6 +34,39 @@ sqlite3 -csv -header var/pizza-registry.sqlite "
 ```
 
 列: `operator_name, corp, hq_prefecture, head_office, representative, url, source, brand_count, brands, total_stores`
+
+### `megajii-enriched.csv` 列定義
+| 列 | 説明 |
+|---|---|
+| line, section | 元 TSV の行番号 / (megajii/franchisor) |
+| input_name | 元 TSV の企業名 |
+| canonical_name | Gemini cleanse 後の canonical 名 (空なら input と同じ) |
+| corp | 13 桁法人番号 (国税庁 verified、空なら未検証) |
+| verified | True = corp 付き、False = 未検証 |
+| hq_prefecture / head_office | ORM 経由で houjin JOIN 補完済 |
+| representative | TSV 由来の代表者名 |
+| declared_stores | TSV 原本の宣言店舗数 (BC 誌等) |
+| revenue_current_jpy / revenue_previous_jpy | 当期 / 前期売上 (円) |
+| website_url | 公式 HP |
+| brands_raw | 元 TSV の加盟ブランド文字列 (中点区切り) |
+| brands_orm | ORM で実際に link された brand list (パイプ区切り) |
+| orm_brand_count | brands_orm の数 |
+| orm_total_stores | ORM link の estimated_store_count 合計 |
+| gap_stores | orm_total_stores − declared_stores (+ = ORM 過剰、- = 不足) |
+
+### 生成手順 (再現)
+```bash
+# 1. 人手 TSV を SQLite 化
+./bin/pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
+    --save-db var/external/megajii.sqlite --dry-run
+
+# 2. 人手 TSV を LLM クレンジング + ORM 書込
+LLM_PROVIDER=anthropic ./bin/pizza import-megajii-csv \
+    --csv var/external/megajii-manual.tsv \
+    --out var/phase27/orchestrate/import-apply.json
+
+# 3. 3 DB JOIN + CSV 生成 (Python 小スクリプト、README 末尾参照)
+```
 
 ### `fc-links.csv` (1,037 rows, 2026-04-24)
 **brand × operator の flat link table**。1 operator が複数 brand 運営なら複数行。
