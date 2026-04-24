@@ -34,6 +34,23 @@ type JudgeConfig struct {
 	} `yaml:"rules"`
 }
 
+// SourcePriorityNames は source_priority から許可ソース名一覧を返す。
+// エントリは string または map[string]any (gmaps_cluster 等) の混在を処理する。
+func (c JudgeConfig) SourcePriorityNames() map[string]bool {
+	out := make(map[string]bool)
+	for _, entry := range c.Rules.SourcePriority {
+		switch v := entry.(type) {
+		case string:
+			out[v] = true
+		case map[string]any:
+			for name := range v {
+				out[name] = true
+			}
+		}
+	}
+	return out
+}
+
 // Output は LLM の judge 出力構造体。
 type Output struct {
 	SourceURL                string  `json:"source_url"`
@@ -139,16 +156,13 @@ func buildRules(cfg JudgeConfig, skipURLResolve bool) []ValidationRule {
 		},
 		{
 			// unknown_source: "error" — source_priority 外のソースはサイレント通過禁止
+			// 許可リストは judge.yaml の source_priority から動的に取得（ハードコードなし）。
 			Name: "unknown_source_rejected",
 			Check: func(o Output) bool {
 				if o.CountSource == "" {
 					return false // 未指定は別ルールで処理
 				}
-				validSources := map[string]bool{
-					"edinet": true, "chuusho_kaiji": true,
-					"corporate_site": true, "gmaps_cluster": true,
-				}
-				return !validSources[o.CountSource]
+				return !cfg.SourcePriorityNames()[o.CountSource]
 			},
 			Action: func(o *Output) {
 				o.Reject = true
