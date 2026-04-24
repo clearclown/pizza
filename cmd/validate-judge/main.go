@@ -230,17 +230,23 @@ func parseGolden(path string) ([]GoldenRow, error) {
 		if len(rec) < 12 {
 			continue
 		}
-		cMin, _ := strconv.ParseFloat(rec[7], 64)
-		cMax, _ := strconv.ParseFloat(rec[8], 64)
-		isMega := rec[9] == "true"
-		reject := rec[10] == "true"
+		// CSV列順: id,case_type,description,source_url,corporate_name_from_source,
+		//   source_has_claim,store_count_claim,store_count_source_text,
+		//   expected_confidence_min,expected_confidence_max,expected_is_mega,expected_reject,expected_source_text_contains
+		if len(rec) < 13 {
+			continue
+		}
+		cMin, _ := strconv.ParseFloat(rec[8], 64)
+		cMax, _ := strconv.ParseFloat(rec[9], 64)
+		isMega := rec[10] == "true"
+		reject := rec[11] == "true"
 		rows = append(rows, GoldenRow{
 			ID: rec[0], CaseType: rec[1], Description: rec[2],
-			SourceURL: rec[3], SourceHasClaim: rec[4],
-			StoreCountClaim: rec[5], StoreCountSourceText: rec[6],
+			SourceURL: rec[3], SourceHasClaim: rec[5],
+			StoreCountClaim: rec[6], StoreCountSourceText: rec[7],
 			ExpectedConfidenceMin: cMin, ExpectedConfidenceMax: cMax,
 			ExpectedIsMega: isMega, ExpectedReject: reject,
-			ExpectedSourceTextContains: rec[11],
+			ExpectedSourceTextContains: rec[12],
 		})
 	}
 	return rows, nil
