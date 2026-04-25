@@ -159,11 +159,20 @@ class Fetcher(Protocol):
 
 @dataclass
 class OperatorSpider:
-    """operator の official_url を起点に店舗一覧を discover する。"""
+    """operator の official_url を起点に店舗一覧を discover する。
 
-    fetcher: Fetcher
+    fetcher 未指定時は Phase 26 で default にした ScraplingEvidenceFetcher を
+    遅延 import で組み立てる (SPA 対応 / StealthyFetcher 自動 fallback)。
+    """
+
+    fetcher: Fetcher | None = None
     max_follow_links: int = 3  # /stores や /locations など店舗一覧 link を何個辿るか
     timeout: float = 20.0
+
+    def __post_init__(self) -> None:
+        if self.fetcher is None:
+            from pizza_delivery.scrapling_fetcher import ScraplingFetcher
+            self.fetcher = ScraplingFetcher()
 
     async def discover(
         self, *, operator_name: str, official_url: str

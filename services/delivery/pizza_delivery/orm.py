@@ -123,6 +123,14 @@ class OperatorCompany(Base):
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now()
     )
 
+    # Phase 25 fields (DB は _ensure_phase25_columns で migration、ORM は ここで mapping)
+    representative_name: Mapped[str] = mapped_column(String(80), default="")
+    representative_title: Mapped[str] = mapped_column(String(40), default="")
+    revenue_current_jpy: Mapped[int] = mapped_column(Integer, default=0)
+    revenue_previous_jpy: Mapped[int] = mapped_column(Integer, default=0)
+    revenue_observed_at: Mapped[str] = mapped_column(String(20), default="")
+    website_url: Mapped[str] = mapped_column(Text, default="")
+
     links: Mapped[list["BrandOperatorLink"]] = relationship(
         back_populates="operator", cascade="all, delete-orphan"
     )
