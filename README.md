@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="docs/assets/pizza-banner.jpg" alt="PI-ZZA" width="720">
-</p>
+
 
 # PI-ZZA 🍕 — Process Integration & Zonal Search Agent
 
