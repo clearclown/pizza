@@ -107,6 +107,17 @@ _BRAND_TO_TAGS: dict[str, list[str]] = {
     "ウエルシア": ["shop=chemist", "shop=pharmacy"],
     "スギ薬局": ["shop=chemist", "shop=pharmacy"],
     "ツルハ": ["shop=chemist", "shop=pharmacy"],
+    # Phase 27: 14-brand 補強 (Places quota 切れ時の OSM 代替経路)
+    "カーブス": ["leisure=fitness_centre"],
+    "業務スーパー": ["shop=supermarket"],
+    "Itto個別指導学院": ["amenity=school"],  # 学習塾は OSM tag 標準なし
+    "シャトレーゼ": ["shop=confectionery", "shop=bakery"],
+    "ハードオフ": ["shop=second_hand"],
+    "オフハウス": ["shop=second_hand"],
+    "Kids Duo": ["amenity=kindergarten", "amenity=childcare"],
+    "アップガレージ": ["shop=car_parts"],
+    "カルビ丼とスン豆腐専門店韓丼": ["amenity=restaurant"],
+    "Brand off": ["shop=second_hand", "shop=jewelry"],
 }
 
 
@@ -140,6 +151,12 @@ class OverpassClient:
                 resp = await client.post(
                     self.base_url,
                     data={"data": query},
+                    headers={
+                        # Overpass API は無 User-Agent や application/* 期待が無いと
+                        # 406 Not Acceptable を返すことがある。fair-use policy 準拠。
+                        "User-Agent": "PI-ZZA/0.27 (https://github.com/clearclown/pizza)",
+                        "Accept": "application/json",
+                    },
                 )
             if resp.status_code != 200:
                 _logger.warning(
