@@ -17,7 +17,7 @@
   <img src="docs/banner.jpg" alt="PI-ZZA banner" width="720">
 </p>
 
-> **「精度の高いデータ、おまち！」**
+> Process Integration & Zonal Search Agent
 > PI-ZZA は、Google Maps の網羅的検索と AI による自律ブラウジングを組み合わせた、次世代のロケーション・インテリジェンス・ツールです。
 
 ---
