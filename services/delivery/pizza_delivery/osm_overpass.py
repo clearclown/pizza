@@ -35,6 +35,7 @@ class OSMPlace:
     lat: float
     lng: float
     tags: dict[str, str] = field(default_factory=dict)
+    osm_type: str = "node"
 
     @property
     def address(self) -> str:
@@ -141,7 +142,7 @@ class OverpassClient:
         tag: str,
         bbox: tuple[float, float, float, float],
     ) -> list[OSMPlace]:
-        """OSM tag + bbox (min_lat, min_lng, max_lat, max_lng) で node を取得。"""
+        """OSM tag + bbox (min_lat, min_lng, max_lat, max_lng) で n/w/r を取得。"""
         query = self._build_query(tag, bbox)
         kwargs: dict[str, Any] = {"timeout": self.timeout}
         if self.transport is not None:
@@ -172,16 +173,23 @@ class OverpassClient:
 
         out: list[OSMPlace] = []
         for el in data.get("elements", []) or []:
-            if el.get("type") != "node":
+            osm_type = str(el.get("type") or "")
+            if osm_type not in {"node", "way", "relation"}:
                 continue
             tags = el.get("tags") or {}
+            center = el.get("center") or {}
+            lat = el.get("lat", center.get("lat"))
+            lon = el.get("lon", center.get("lon"))
+            if lat is None or lon is None:
+                continue
             out.append(
                 OSMPlace(
                     osm_id=int(el.get("id", 0)),
                     name=str(tags.get("name", "") or ""),
-                    lat=float(el.get("lat") or 0.0),
-                    lng=float(el.get("lon") or 0.0),
+                    lat=float(lat),
+                    lng=float(lon),
                     tags=tags,
+                    osm_type=osm_type,
                 )
             )
         return out
@@ -196,8 +204,8 @@ class OverpassClient:
         min_lat, min_lng, max_lat, max_lng = bbox
         return (
             f'[out:json][timeout:30];'
-            f'node[{tag}]({min_lat},{min_lng},{max_lat},{max_lng});'
-            f'out body;'
+            f'nwr[{tag}]({min_lat},{min_lng},{max_lat},{max_lng});'
+            f'out center tags;'
         )
 
 

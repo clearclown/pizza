@@ -70,6 +70,16 @@ _SAMPLE_RESPONSE = {
                 "addr:postcode": "160-0023",
             },
         },
+        {
+            "type": "way",
+            "id": 3,
+            "center": {"lat": 35.0, "lon": 139.0},
+            "tags": {
+                "name": "エニタイムフィットネス Way店",
+                "leisure": "fitness_centre",
+                "addr:full": "東京都港区芝1-1-1",
+            },
+        },
     ],
 }
 
@@ -89,13 +99,15 @@ async def test_overpass_query_by_tag_parses_response() -> None:
         tag="leisure=fitness_centre",
         bbox=(35.5, 139.5, 35.9, 140.0),
     )
-    assert len(places) == 2
+    assert len(places) == 3
     assert all(isinstance(p, OSMPlace) for p in places)
     assert places[0].name == "エニタイムフィットネス 東京駅前店"
     assert places[0].lat == pytest.approx(35.6812)
     assert places[0].lng == pytest.approx(139.7671)
     # address が組み立てられる
     assert "丸の内" in places[0].address
+    assert places[2].osm_type == "way"
+    assert places[2].lat == pytest.approx(35.0)
 
 
 @pytest.mark.asyncio

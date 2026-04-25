@@ -60,6 +60,11 @@ def _mock_error_response(request: httpx.Request) -> httpx.Response:
 # ─── Tests ─────────────────────────────────────────────────────────────
 
 
+@pytest.fixture(autouse=True)
+def _allow_paid_google_api_for_mocked_tests(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PIZZA_ENABLE_PAID_GOOGLE_APIS", "1")
+
+
 @pytest.mark.asyncio
 async def test_search_text_parses_places(monkeypatch: pytest.MonkeyPatch) -> None:
     _orig_client = httpx.AsyncClient

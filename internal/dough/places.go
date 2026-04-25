@@ -16,6 +16,7 @@ import (
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"sync/atomic"
 	"time"
 
@@ -39,21 +40,28 @@ func (e *ErrAPI) Error() string {
 	return fmt.Sprintf("places api error: status=%d body=%s", e.Status, e.Body)
 }
 
+// paidGoogleAPIsAllowed is a local cost guard. PI-ZZA can now proceed through
+// OSM and official-page sources, so live Google Maps Platform calls must be an
+// explicit opt-in rather than an accidental consequence of a key in .env.
+func paidGoogleAPIsAllowed() bool {
+	return os.Getenv("PIZZA_ENABLE_PAID_GOOGLE_APIS") == "1"
+}
+
 // PlacesClient は Google Places API (New) の REST クライアント。
 //
 // Phase 27 bugfix: Multi-key pool 対応。複数の GCP project の key を
 // round-robin することで実質 throughput を 2x/3x にスケール。
 // APIKeys が指定されていればそちらを優先、空なら APIKey fallback。
 type PlacesClient struct {
-	APIKey     string        // 単一 key (backward compat)
-	APIKeys    []string      // Phase 27: key pool (優先、あれば round-robin)
-	BaseURL    string        // 空なら DefaultPlacesBaseURL
-	HTTPClient *http.Client  // 空なら &http.Client{Timeout: 30s}
-	FieldMask  string        // 空なら DefaultFieldMask
-	Language   string        // "ja" など
-	Region     string        // "JP" など
+	APIKey     string       // 単一 key (backward compat)
+	APIKeys    []string     // Phase 27: key pool (優先、あれば round-robin)
+	BaseURL    string       // 空なら DefaultPlacesBaseURL
+	HTTPClient *http.Client // 空なら &http.Client{Timeout: 30s}
+	FieldMask  string       // 空なら DefaultFieldMask
+	Language   string       // "ja" など
+	Region     string       // "JP" など
 
-	keyIdx uint64            // round-robin カウンタ (atomic)
+	keyIdx uint64 // round-robin カウンタ (atomic)
 }
 
 // selectAPIKey は round-robin で次の API key を返す。
@@ -154,13 +162,13 @@ type SearchTextResponse struct {
 
 // PlaceRaw は Places API の 1 件分の素データ。
 type PlaceRaw struct {
-	ID                      string      `json:"id"`
-	DisplayName             DisplayName `json:"displayName"`
-	FormattedAddress        string      `json:"formattedAddress"`
-	Location                Location    `json:"location"`
-	NationalPhoneNumber     string      `json:"nationalPhoneNumber,omitempty"`
-	InternationalPhoneNumber string     `json:"internationalPhoneNumber,omitempty"`
-	WebsiteURI              string      `json:"websiteUri,omitempty"`
+	ID                       string      `json:"id"`
+	DisplayName              DisplayName `json:"displayName"`
+	FormattedAddress         string      `json:"formattedAddress"`
+	Location                 Location    `json:"location"`
+	NationalPhoneNumber      string      `json:"nationalPhoneNumber,omitempty"`
+	InternationalPhoneNumber string      `json:"internationalPhoneNumber,omitempty"`
+	WebsiteURI               string      `json:"websiteUri,omitempty"`
 }
 
 // DisplayName は多言語対応の名前。
@@ -178,6 +186,11 @@ func (c *PlacesClient) SearchText(ctx context.Context, req *SearchTextRequest) (
 	}
 	if req == nil || req.TextQuery == "" {
 		return nil, errors.New("dough: SearchText requires non-empty TextQuery")
+	}
+	if c.BaseURL == "" || c.BaseURL == DefaultPlacesBaseURL {
+		if !paidGoogleAPIsAllowed() {
+			return nil, errors.New("dough: paid Google Places API disabled; set PIZZA_ENABLE_PAID_GOOGLE_APIS=1 to opt in")
+		}
 	}
 	body, err := json.Marshal(req)
 	if err != nil {

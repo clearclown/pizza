@@ -10,6 +10,11 @@ import pytest
 from pizza_delivery.places_client import PlacesClient, PlacesAPIError
 
 
+@pytest.fixture(autouse=True)
+def _allow_paid_google_api_for_mocked_tests(monkeypatch: pytest.MonkeyPatch) -> None:
+    monkeypatch.setenv("PIZZA_ENABLE_PAID_GOOGLE_APIS", "1")
+
+
 def test_get_place_details_parses_response() -> None:
     def handler(request: httpx.Request) -> httpx.Response:
         assert "places/" in str(request.url)

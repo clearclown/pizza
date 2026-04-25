@@ -1,10 +1,25 @@
 # Franchise Operator Fixtures
 
-**4 CSV** (計 2,344 rows)。すべて pizza pipeline から生成。手書きデータは
+主要 CSV 群。すべて pizza pipeline から生成。手書きデータは
 `megajii-raw.csv` のみで、これは「人手集計 TSV の SQLite dump」であり生成元
 (`var/external/megajii-manual.tsv`) がユーザー提供 snapshot。
 
 ## ファイル構成
+
+### `operator-centric-master-14brand-complete.csv` (510 rows, 2026-04-25)
+**事業会社 1 行**を主キーに、14 brand の店舗数・検証状態・リスク・根拠 URL・求人候補
+を横持ちした全量 master。未確認候補や 1 店舗候補も捨てず、
+`quality_best_tier` / `risk_level` / `risk_flags_all` に明示する。失敗 URL や
+未確認 URL も `all_evidence_urls` / `failed_or_unverified_urls` に同梱するため、
+この 1 CSV だけでレビューできる。
+
+```bash
+uv run --project services/delivery python -m pizza_delivery.operator_master_export \
+  --min-total 1 \
+  --out test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv \
+  --evidence-out /tmp/operator-centric-evidence-14brand-all.csv \
+  --excluded-out /tmp/operator-centric-excluded-below1-14brand.csv
+```
 
 ### 👑 `megajii-enriched.csv` (192 rows, 2026-04-24) — 人手 TSV master
 ユーザー提供の人手集計 TSV を軸に、`import-apply.json` の cleanse 結果 + ORM

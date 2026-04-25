@@ -173,8 +173,9 @@ pizza serve          # delivery-service 起動 (gRPC)
 ## 6. 環境変数 (`.env`)
 
 ```
-GOOGLE_MAPS_API_KEY=     # Places API (Seed)
-PIZZA_API_KEYS=          # 複数 GCP project key の round-robin pool
+GOOGLE_MAPS_API_KEY=     # Places API (Seed) — 通常は空。課金 API なので明示 opt-in 時のみ設定
+PIZZA_ENABLE_PAID_GOOGLE_APIS=0  # 1 の時だけ Google Maps Platform 有料 API を許可
+PIZZA_API_KEYS=          # 複数 GCP project key の round-robin pool (原則使わない)
 ANTHROPIC_API_KEY=       # Claude (cleanser, critic, panel)
 GEMINI_API_KEY=          # Gemini Flash (cleanser, panel worker)
 OPENAI_API_KEY=          # 補助

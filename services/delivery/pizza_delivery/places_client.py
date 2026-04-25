@@ -93,9 +93,21 @@ class PlacesClient:
         if not self.api_key:
             self.api_key = os.getenv("GOOGLE_MAPS_API_KEY", "")
 
+    def _ensure_paid_google_enabled(self) -> None:
+        """Block accidental Google Maps Platform spend unless explicitly enabled."""
+        if self.base_url.rstrip("/") != DEFAULT_BASE_URL.rstrip("/"):
+            return
+        if os.getenv("PIZZA_ENABLE_PAID_GOOGLE_APIS") == "1":
+            return
+        raise PlacesAPIError(
+            0,
+            "paid Google Places API disabled; set PIZZA_ENABLE_PAID_GOOGLE_APIS=1 to opt in",
+        )
+
     def _headers(self) -> dict[str, str]:
         if not self.api_key:
             raise PlacesAPIError(0, "GOOGLE_MAPS_API_KEY not set")
+        self._ensure_paid_google_enabled()
         return {
             "Content-Type": "application/json",
             "X-Goog-Api-Key": self.api_key,
@@ -177,6 +189,7 @@ class PlacesClient:
                 "internationalPhoneNumber,websiteUri,location,businessStatus,"
                 "types,primaryType,primaryTypeDisplayName"
             )
+        self._ensure_paid_google_enabled()
         url = f"{self.base_url.rstrip('/')}/places/{place_id}"
         headers = {
             "X-Goog-Api-Key": self.api_key,

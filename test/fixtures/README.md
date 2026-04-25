@@ -9,7 +9,8 @@ fixtures/
 ├── direct-only/              # 全店直営のサンプル
 ├── single-franchisee/        # 単一加盟 FC サンプル
 ├── mega-franchisee/          # 20 店舗以上のメガジーサンプル
-└── judgement-golden.csv      # §3.3 Classification Accuracy の正解 100 件
+├── classification-golden.csv # §3.3 Classification Accuracy の人工テストデータ
+└── judgement-golden.csv      # judge prompt / メガジー証跡ルールの検証データ
 ```
 
 ## 現状 (Phase 0)
@@ -18,7 +19,7 @@ fixtures/
 
 ## Golden set の基準 (Phase 3 で作成)
 
-`judgement-golden.csv` のスキーマ:
+`classification-golden.csv` のスキーマ:
 
 ```csv
 place_id,brand,name,url,true_is_franchise,true_operator,notes

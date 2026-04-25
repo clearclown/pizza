@@ -191,7 +191,8 @@ pizza scan --brand X --areas 東京都 --with-judge --judge-mode panel --with-ki
 ## 🔑 環境変数 (.env)
 
 ```
-GOOGLE_MAPS_API_KEY=     # Places API (Seed)
+GOOGLE_MAPS_API_KEY=     # Places API (Seed) — 通常は空。課金 API なので明示 opt-in 時のみ設定
+PIZZA_ENABLE_PAID_GOOGLE_APIS=0  # 1 の時だけ Google Maps Platform 有料 API を許可
 ANTHROPIC_API_KEY=       # Claude critic (LLM 判定、cleanser)
 GEMINI_API_KEY=          # Expert Panel worker
 OPENAI_API_KEY=          # optional

@@ -14,6 +14,7 @@ import pytest
 
 from pizza_delivery.operator_spider import (
     OperatorSpider,
+    ScraplingOperatorFetcher,
     StoreCandidate,
     extract_store_candidates_from_html,
 )
@@ -84,6 +85,13 @@ def test_extract_store_candidates_rejects_non_japanese_addresses() -> None:
 
 
 # ─── OperatorSpider with mock fetcher ────────────────────────────────
+
+
+def test_default_spider_uses_async_scrapling_adapter() -> None:
+    """default fetcher は OperatorSpider の async fetch protocol を満たす。"""
+    spider = OperatorSpider()
+    assert isinstance(spider.fetcher, ScraplingOperatorFetcher)
+    assert hasattr(spider.fetcher, "fetch")
 
 
 @dataclass

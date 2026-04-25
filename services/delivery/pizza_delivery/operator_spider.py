@@ -15,6 +15,7 @@ LLM 不使用。正規表現 + BeautifulSoup (必要なら lxml) で決定論。
 
 from __future__ import annotations
 
+import asyncio
 import re
 from dataclasses import dataclass, field
 from typing import Any, Protocol
@@ -154,6 +155,30 @@ class Fetcher(Protocol):
     async def fetch(self, url: str, *, timeout: float = 20.0) -> str: ...
 
 
+@dataclass
+class ScraplingOperatorFetcher:
+    """OperatorSpider 用 Scrapling adapter。
+
+    `ScraplingFetcher` は同期 API (`fetch_auto`) なので、OperatorSpider の
+    async fetcher protocol に合わせて thread 経由で実行する。
+    """
+
+    def fetch_auto(self, url: str, *, timeout: float = 20.0) -> str:
+        from pizza_delivery.scrapling_fetcher import ScraplingFetcher
+
+        fetcher = ScraplingFetcher(
+            timeout_static_sec=timeout,
+            timeout_dynamic_sec=max(timeout, 8.0),
+        )
+        return fetcher.fetch_auto(url) or ""
+
+    async def fetch(self, url: str, *, timeout: float = 20.0) -> str:
+        html = await asyncio.to_thread(self.fetch_auto, url, timeout=timeout)
+        if not html:
+            raise RuntimeError(f"empty response: {url}")
+        return html
+
+
 # ─── Spider ───────────────────────────────────────────────────────────
 
 
@@ -171,8 +196,7 @@ class OperatorSpider:
 
     def __post_init__(self) -> None:
         if self.fetcher is None:
-            from pizza_delivery.scrapling_fetcher import ScraplingFetcher
-            self.fetcher = ScraplingFetcher()
+            self.fetcher = ScraplingOperatorFetcher()
 
     async def discover(
         self, *, operator_name: str, official_url: str

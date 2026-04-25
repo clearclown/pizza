@@ -74,7 +74,7 @@ cd pizza
 make bootstrap
 
 # 3. 環境変数
-cp .env.example .env              # GOOGLE_MAPS_API_KEY を最低限設定
+cp .env.example .env              # Google Maps Platform はデフォルト無効
 
 # 4. gRPC コード生成 + Go バイナリビルド
 make proto
@@ -83,7 +83,8 @@ make build
 # 5. テスト
 make test                         # Go 9 pkg ok + Python 185 pass + 6 live skipped
 
-# 6. PI-ZZA を焼く (最小: Places API 1 本で動く)
+# 6. PI-ZZA を焼く (有料 Places API を使う場合だけ明示 opt-in)
+PIZZA_ENABLE_PAID_GOOGLE_APIS=1   # 必要な時だけ設定
 ./bin/pizza bake --query "エニタイムフィットネス" --area "新宿"
 
 # 6b. Expert Panel (Gemini Flash × 2 + Claude critic) で判定

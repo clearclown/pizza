@@ -14,7 +14,7 @@ import (
 func goldenPath(t *testing.T) string {
 	t.Helper()
 	_, thisFile, _, _ := runtime.Caller(0)
-	return filepath.Join(filepath.Dir(thisFile), "judgement-golden.csv")
+	return filepath.Join(filepath.Dir(thisFile), "classification-golden.csv")
 }
 
 func TestLoadGolden_parsesAllRows(t *testing.T) {
