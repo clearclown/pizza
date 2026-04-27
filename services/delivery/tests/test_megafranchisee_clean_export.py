@@ -94,7 +94,7 @@ def test_normalize_target_link_row_applies_mos_fact_check_overrides() -> None:
     assert jrff["source_url"] == "https://www.jrff.co.jp/section-mos/"
 
 
-def test_dedupe_link_rows_drops_weak_unknown_and_keeps_stronger_duplicate() -> None:
+def test_dedupe_link_rows_drops_unvetted_chain_unknown_and_keeps_stronger_duplicate() -> None:
     rows = [
         {
             "brand_name": "モスバーガー",
@@ -129,6 +129,17 @@ def test_dedupe_link_rows_drops_weak_unknown_and_keeps_stronger_duplicate() -> N
             "source_url": "",
             "note": "discovered_via=chain_verified",
         },
+        {
+            "brand_name": "業務スーパー",
+            "operator_name": "株式会社ワッツオンラインショップ現在地から探す都道府県から探す北海道岩手県秋",
+            "corporate_number": "",
+            "head_office": "",
+            "operator_type": "unknown",
+            "estimated_store_count": "5",
+            "source": "pipeline",
+            "source_url": "",
+            "note": "discovered_via=chain_discovery",
+        },
     ]
 
     out = _dedupe_link_rows(rows)
@@ -136,6 +147,66 @@ def test_dedupe_link_rows_drops_weak_unknown_and_keeps_stronger_duplicate() -> N
     assert len(out) == 1
     assert out[0]["operator_name"] == "同一会社"
     assert out[0]["estimated_store_count"] == "6"
+
+
+def test_dedupe_link_rows_collapses_source_and_corp_duplicates_by_display_name() -> None:
+    rows = [
+        {
+            "brand_name": "モスバーガー",
+            "operator_name": "株式会社モスフードサービス",
+            "corporate_number": "5010701019713",
+            "head_office": "東京都",
+            "operator_type": "franchisor",
+            "estimated_store_count": "1318",
+            "source": "jfa_disclosure",
+            "source_url": "https://www.jfa-fc.or.jp/fc-g-misc/pdf/152-1.pdf",
+            "note": "",
+        },
+        {
+            "brand_name": "モスバーガー",
+            "operator_name": "株式会社モスフードサービス",
+            "corporate_number": "5010701019713",
+            "head_office": "東京都",
+            "operator_type": "franchisor",
+            "estimated_store_count": "1266",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
+        {
+            "brand_name": "モスバーガー",
+            "operator_name": "株式会社三栄本社",
+            "corporate_number": "1111111111111",
+            "head_office": "",
+            "operator_type": "franchisee",
+            "estimated_store_count": "26",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
+        {
+            "brand_name": "モスバーガー",
+            "operator_name": "株式会社三栄本社",
+            "corporate_number": "2222222222222",
+            "head_office": "",
+            "operator_type": "franchisee",
+            "estimated_store_count": "4",
+            "source": "pipeline",
+            "source_url": "",
+            "note": "",
+        },
+    ]
+
+    out = _dedupe_link_rows(rows)
+
+    mos_rows = [r for r in out if r["operator_name"] == "株式会社モスフードサービス"]
+    assert len(mos_rows) == 1
+    assert mos_rows[0]["source"] == "jfa_disclosure"
+    assert mos_rows[0]["estimated_store_count"] == "1318"
+    sanei_rows = [r for r in out if r["operator_name"] == "株式会社三栄本社"]
+    assert len(sanei_rows) == 1
+    assert sanei_rows[0]["corporate_number"] == "1111111111111"
+    assert sanei_rows[0]["estimated_store_count"] == "26"
 
 
 def test_export_writes_14brand_only_ranking(tmp_path) -> None:

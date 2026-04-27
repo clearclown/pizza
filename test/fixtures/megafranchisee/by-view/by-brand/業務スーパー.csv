@@ -6,33 +6,9 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 業務スーパー,食品スーパー,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,67,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,62,manual_megajii_2026_04_24,,
-業務スーパー,食品スーパー,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,34,pipeline,,discovered_via=operator_spider_address_match
 業務スーパー,食品スーパー,株式会社Ｇ＆Ｌマート,1010101004708,東京都八王子市田町２番５号,東京都,franchisee,25,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,グランマルシェ食品株式会社,4120001091601,大阪府大阪市中央区本町4丁目5-16 本町スクウェアビルII 3F,大阪府,franchisee,24,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,株式会社オーシャンシステム,5010801014837,,,franchisee,18,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,18,pipeline,,discovered_via=operator_spider_address_match
-業務スーパー,食品スーパー,株式会社アオキスーパー,1180001029202,,,unknown,11,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社廣岡エバグリーン廣甚,,,,unknown,11,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,29お知らせスーパーサンシ株式会社,,,,unknown,9,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,株式会社スーパーバリュー,2030001044306,埼玉県上尾市宮本町５番１８号,埼玉県,unknown,9,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社ゼンリン,6430001008943,,,unknown,8,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,佐竹食品株式会社,6120901006607,大阪府吹田市朝日町１４番１９号,大阪府,unknown,6,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社ワッツオンラインショップ現在地から探す都道府県から探す北海道岩手県秋,,,,unknown,5,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,株式会社ひらせいホームセンター,1110001004748,新潟県新潟市西区寺尾台2丁目3番3号,新潟県,franchisee,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社スーパーアルプス,2010101001836,東京都八王子市滝山町２丁目３５１番地,東京都,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社ベイシア,3070001004866,,,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社マルハチ本部,,,,unknown,4,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,株式会社三和,1400001013281,北海道北見市美山町南１丁目１番地１７,北海道,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,ナガヤ株式会社,5080101013434,,,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社サンベルクス,1011801030720,東京都足立区花畑５丁目１４番１号,東京都,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社マキヤ静岡県富士市大渕2373,,,,unknown,3,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,株式会社神戸物産,5140001044630,兵庫県加古川市加古川町平野125番1,兵庫県,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,全日本食品株式会社,9011801009121,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,島屋株式会社,3060001023314,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社マツモト,1430001025992,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社伊藤ハム,,,,unknown,2,pipeline,,discovered_via=chain_discovery
-業務スーパー,食品スーパー,株式会社八百彦商店,3150001013611,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 業務スーパー,食品スーパー,株式会社大創産業,7240001022681,広島県東広島市西条吉行東１丁目４番１４号,広島県,direct,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-業務スーパー,食品スーパー,株式会社山信商店,3410001003346,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 業務スーパー,食品スーパー,株式会社チャレンジ,3220002015129,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
 業務スーパー,食品スーパー,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=業務スーパー; href=https://www.kanseki.co.jp/store/gyoumusuper/; page=https://www.kanseki.co.jp/store/gyoumusuper/

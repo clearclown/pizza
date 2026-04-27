@@ -166,7 +166,7 @@ pizza serve          # delivery-service 起動 (gRPC)
 | `fc-operators-all.csv` | 802 | all-brand audit 用 1 operator 1 行集約 |
 | `fc-operators-14brand-only.csv` ⭐ | 461 | 14 対象ブランドだけの 1 operator 1 行集約 |
 | `fc-links.csv` | 1,432 | all-brand brand × operator flat |
-| `fc-links-14brand-only.csv` | 469 | 14 対象ブランドだけの brand × operator flat |
+| `fc-links-14brand-only.csv` | 410 | 14 対象ブランドだけの brand × operator flat |
 | `jfa-disclosures.csv` | 103 | JFA 情報開示書面 PDF index |
 | `spider-matches.csv` | 57 | pipeline spider-matched snapshot |
 | `megajii-raw.csv` | 192 | 生 TSV snapshot |

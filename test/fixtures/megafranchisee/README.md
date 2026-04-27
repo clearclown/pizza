@@ -95,12 +95,13 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 (開店告知・休業/閉店・求人/採用・社員インタビュー文脈は自動反映から除外)。
 店舗数根拠は別ソースが必要なので `estimated_store_count=0` のまま保持する。
 
-### `fc-links-14brand-only.csv` (469 rows, 2026-04-27)
+### `fc-links-14brand-only.csv` (410 rows, 2026-04-27)
 **14 対象ブランドだけ**に絞った brand × operator flat link table。
 コンビニ / 自動車用品 / 外食など対象外ブランドは含めない。
-同一 brand × operator × source の重複は、法人番号・本社住所・根拠 URL・店舗数
-の強い行に集約する。`unknown` かつ `chain_discovery` / `chain_verified` 由来の
-1 店舗 pipeline 行は、14 ブランド向け公開 CSV から除外する。
+同一 brand × operator 表示名の重複は、店舗数・source 優先度・法人番号・
+本社住所・根拠 URL の強い 1 行に集約する。`unknown` かつ
+`chain_discovery` / `chain_verified` 由来で、運営根拠 URL のない pipeline 行は、
+14 ブランド向け公開 CSV から除外する。
 
 ```bash
 ./bin/pizza integrate --mode export --out test/fixtures/megafranchisee/fc-links.csv
@@ -127,10 +128,10 @@ sqlite3 -csv -header var/external/megajii.sqlite \
 ## 現状の既知制約
 
 ### 偏り / 不足 (2026-04-26 時点)
-- **brand link 付き operator 801 / 20+店舗 operator 214 / 2+業態かつ20+店舗 128**
+- **brand link 付き operator 802 / 20+店舗 operator 213 / 2+業態かつ20+店舗 122**
 - **エニタイムフィットネス** 公表 957 店舗に対し ORM 33 operator (実態は 100-200 社)
-- **モスバーガー** 公表 1,318 店舗に対し ORM 179 operator (JFA 開示書面 + pipeline 反映後)
-- **空 prefecture 852/1,413 (60%)** — JFA disclosure 由来 franchisor が増えたため、houjin hydrate 余地あり
+- **モスバーガー** 公表 1,318 店舗に対し ORM 173 operator (JFA 開示書面 + pipeline 反映後)
+- **空 prefecture 643/1,432 (45%)** — JFA disclosure 由来 franchisor が増えたため、houjin hydrate 余地あり
 - **pipeline observed stores は関東偏重** (東京+神奈川+埼玉+千葉 で全 5,721 stores の 61%)
 
 ### 崩れ

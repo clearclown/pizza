@@ -226,47 +226,53 @@ def _link_name_key(name: str) -> str:
 
 
 def _is_weak_unknown_link(row: dict[str, str]) -> bool:
-    """Drop low-evidence user-facing links that only came from chain discovery."""
+    """Drop unvetted user-facing links that only came from chain discovery."""
     if (row.get("source") or "") != "pipeline":
         return False
     if (row.get("operator_type") or "") != "unknown":
         return False
     if row.get("source_url"):
         return False
-    try:
-        count = int(row.get("estimated_store_count") or 0)
-    except ValueError:
-        count = 0
-    if count > 1:
-        return False
     note = row.get("note") or ""
     return "chain_discovery" in note or "chain_verified" in note
 
 
-def _link_row_score(row: dict[str, str]) -> tuple[int, int, int, int, str]:
+def _source_priority(source: str) -> int:
+    return {
+        "jfa_disclosure": 80,
+        "official_franchisee_page": 75,
+        "operator_official_brand_link": 70,
+        "manual_megajii_2026_04_24": 60,
+        "pipeline": 50,
+        "jfa": 40,
+    }.get(source or "", 0)
+
+
+def _link_row_score(row: dict[str, str]) -> tuple[int, int, int, int, int, int, str]:
     try:
         count = int(row.get("estimated_store_count") or 0)
     except ValueError:
         count = 0
     return (
+        1 if count > 0 else 0,
+        count,
+        _source_priority(row.get("source") or ""),
         1 if row.get("corporate_number") else 0,
         1 if row.get("head_office") else 0,
         1 if row.get("source_url") else 0,
-        count,
         row.get("note") or "",
     )
 
 
 def _dedupe_link_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
-    """Keep the strongest row per target brand/operator/source."""
-    best: dict[tuple[str, str, str], dict[str, str]] = {}
+    """Keep the strongest row per target brand/operator display name."""
+    best: dict[tuple[str, str], dict[str, str]] = {}
     for row in rows:
         if _is_weak_unknown_link(row):
             continue
         key = (
             row.get("brand_name") or "",
             _link_name_key(row.get("operator_name") or ""),
-            row.get("source") or "",
         )
         current = best.get(key)
         if current is None or _link_row_score(row) > _link_row_score(current):

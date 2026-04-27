@@ -1,8 +1,5 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
 コメダ珈琲,コーヒーショップ,株式会社コメダ,4010401102571,愛知県名古屋市東区葵3丁目12番23号,愛知県,franchisor,1008,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/47-1.pdf,method=brand_store_count_row; fc_stores=986; rc_stores=22; total_stores=1008; observed_at=2025-02; raw_brand=コメダ珈琲店
-コメダ珈琲,コーヒーショップ,株式会社コメダ,4010401102571,愛知県名古屋市東区葵3丁目12番23号,愛知県,franchisor,945,manual_megajii_2026_04_24,,
-コメダ珈琲,コーヒーショップ,株式会社コメダホールディングス,2180001116676,愛知県名古屋市東区葵３丁目１２番２３号,愛知県,unknown,148,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-コメダ珈琲,コーヒーショップ,株式会社コメダホールディングスコメダ,,,,unknown,148,pipeline,,discovered_via=chain_discovery
 コメダ珈琲,コーヒーショップ,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,
 コメダ珈琲,コーヒーショップ,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,
 コメダ珈琲,コーヒーショップ,株式会社三油商会,9180001036158,愛知県名古屋市中区丸の内二丁目1番5号,愛知県,franchisee,31,manual_megajii_2026_04_24,,
@@ -19,7 +16,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 コメダ珈琲,コーヒーショップ,株式会社カワマートホールディングス,5490001004830,高知県四万十市有岡31番地1,高知県,franchisee,20,manual_megajii_2026_04_24,,
 コメダ珈琲,コーヒーショップ,株式会社ユウショク,3500001006133,愛媛県松山市平井町甲1436-1,愛媛県,franchisee,20,manual_megajii_2026_04_24,,
 コメダ珈琲,コーヒーショップ,中央物流株式会社,2030001005431,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-コメダ珈琲,コーヒーショップ,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,3,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 コメダ珈琲,コーヒーショップ,アットホームプラス株式会社,8010801017399,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,アーネストカーゴ株式会社,9030001034597,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,エクシト株式会社,1030001116700,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -30,5 +26,4 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 コメダ珈琲,コーヒーショップ,新進タクシー株式会社,2011401002953,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,日翔フーズ株式会社,1021001024506,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,有限会社日光商事,2080002010863,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-コメダ珈琲,コーヒーショップ,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 コメダ珈琲,コーヒーショップ,興永産業株式会社,9030001042666,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
