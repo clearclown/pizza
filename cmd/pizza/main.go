@@ -177,6 +177,10 @@ func main() {
 		if err := cmdOperatorBrandDiscovery(os.Args[2:]); err != nil {
 			log.Fatalf("pizza operator-brand-discovery: %v", err)
 		}
+	case "extended-fc-brand-export":
+		if err := cmdExtendedFCBrandExport(os.Args[2:]); err != nil {
+			log.Fatalf("pizza extended-fc-brand-export: %v", err)
+		}
 	case "osm-fetch-all":
 		if err := cmdOSMFetchAll(os.Args[2:]); err != nil {
 			log.Fatalf("pizza osm-fetch-all: %v", err)
@@ -237,6 +241,7 @@ Subcommands:
   pizza edinet-sync      EDINET 有価証券報告書 → 関係会社・FC 契約先 → 国税庁 verify → ORM 登録
   pizza operator-spider  ORM 登録済 operator 公式 HP → 店舗一覧 scrape → 住所 match → operator 確定
   pizza operator-brand-discovery  operator 公式HPの事業/ブランドlink → FC brand link を追加収集
+  pizza extended-fc-brand-export  追加FCブランド seed → 既存 evidence に通して監査/FC専用CSV出力
   pizza osm-fetch-all    OSM Overpass 全国 fetch + operator:ja tag capture
   pizza areas     利用可能エリア一覧
   pizza version
@@ -1281,6 +1286,39 @@ func cmdOperatorBrandDiscovery(args []string) error {
 	}
 	if *dryRun {
 		pyArgs = append(pyArgs, "--dry-run")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdExtendedFCBrandExport はユーザー提供の追加 FC ブランド seed を既存 ORM/JFA/manual/
+// pipeline evidence に通し、監査表と FC 運営会社専用表を生成する。
+//
+//	pizza extended-fc-brand-export
+//	pizza extended-fc-brand-export --seed test/fixtures/megafranchisee/fc-brand-seeds-2026-04-27.tsv
+func cmdExtendedFCBrandExport(args []string) error {
+	fs := flag.NewFlagSet("extended-fc-brand-export", flag.ExitOnError)
+	seed := fs.String("seed", "test/fixtures/megafranchisee/fc-brand-seeds-2026-04-27.tsv", "追加 FC brand seed TSV")
+	fcLinks := fs.String("fc-links", "test/fixtures/megafranchisee/fc-links.csv", "all-brand brand/operator link CSV")
+	ormDB := fs.String("orm-db", "var/pizza-registry.sqlite", "registry ORM SQLite")
+	houjinDB := fs.String("houjin-db", "var/houjin/registry.sqlite", "国税庁 CSV SQLite")
+	out := fs.String("out", "test/fixtures/megafranchisee/extended-brand-links.csv", "監査用 full link CSV")
+	summaryOut := fs.String("summary-out", "test/fixtures/megafranchisee/extended-brand-summary.csv", "追加 brand 取得状況 summary CSV")
+	byBrandDir := fs.String("by-brand-dir", "test/fixtures/megafranchisee/by-view/extended-by-brand", "監査用 brand 別出力 dir")
+	fcOut := fs.String("fc-out", "test/fixtures/megafranchisee/extended-fc-operator-links.csv", "FC 運営会社専用 CSV")
+	fcByBrandDir := fs.String("fc-by-brand-dir", "test/fixtures/megafranchisee/by-view/extended-fc-by-brand", "FC 運営会社 brand 別出力 dir")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.extended_fc_brand_export",
+		"--seed", *seed,
+		"--fc-links", *fcLinks,
+		"--orm-db", *ormDB,
+		"--houjin-db", *houjinDB,
+		"--out", *out,
+		"--summary-out", *summaryOut,
+		"--by-brand-dir", *byBrandDir,
+		"--fc-out", *fcOut,
+		"--fc-by-brand-dir", *fcByBrandDir,
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }
