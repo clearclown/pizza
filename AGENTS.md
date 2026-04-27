@@ -90,10 +90,12 @@ pizza deep-research # Gemini + Claude critic + houjin 4-Gate
 ### top-down (operator → brand)
 ```bash
 pizza jfa-sync         # JFA 協会員 scrape → ORM
+pizza jfa-disclosure-sync # JFA 情報開示書面 PDF → 本部店舗数を ORM
 pizza houjin-import    # 国税庁 CSV → SQLite (5.7M)
 pizza edinet-sync      # 有報関係会社 → ORM (要 EDINET_API_KEY)
 pizza import-megajii-csv  # 人手 TSV → ORM (LLM cleansing 済)
 pizza osm-fetch-all    # OSM Overpass 全国 fetch (Places 不要、無料代替)
+pizza official-franchisee-sources # 公式FC/運営会社/本部PR本文 → ORM
 ```
 
 ### クレンジング & 統合
@@ -104,6 +106,7 @@ pizza integrate      # pipeline ↔ ORM 双方向 (mode=run | export)
 pizza fc-directory   # ORM operator 全件 CSV
 pizza megafranchisee # cross-brand 集計
 pizza brand-profile  # 14 brand profile (6 source 融合)
+pizza coverage-export # 14 brand × 47 都道府県 coverage CSV
 ```
 
 ### 設定
@@ -122,9 +125,11 @@ pizza serve          # delivery-service 起動 (gRPC)
 | Google Places API (New) | - | 店舗位置・住所・phone | **daily quota 切れリスク** |
 | 国税庁法人番号 CSV | 5,766,406 | 法人番号 verify (truth set) | substring LIKE は遅い |
 | JFA 協会員 scrape | 826 | brand × operator link | 運営 brand 部分掲載 |
+| JFA 情報開示書面 PDF | 103 | franchisor 公表店舗数 / source_url | PDF 表抽出できたもののみ |
 | 人手集計 TSV (BC誌等) | 192 | メガジー master | top 500 のうち 40% のみ |
 | OSM Overpass | brand 別 100-3000 | Places 代替 | recall 20-100%、tag 依存 |
 | operator 公式 HP (Scrapling) | - | operator-spider 経由 | SPA 非公開多 |
+| 公式FC/運営会社/本部PR本文 | 11 | 薄い brand の operator evidence | 本文 gate + 国税庁照合 |
 
 ### 未活用 (要追加調査)
 | Source | 状態 |
@@ -140,17 +145,17 @@ pizza serve          # delivery-service 起動 (gRPC)
 | 経路 | 状態 |
 |---|---|
 | 公式 brand HP の店舗住所 × 国税庁 同住所法人 | 部分実装 (address-reverse) |
-| OSM の `operator:ja` tag 直 capture | **未実装** (osm_fetch_all 改修候補) |
+| OSM の `operator:ja` tag 直 capture | 実装済 (未検証 source、法人番号は国税庁照合時のみ付与) |
 
 ---
 
 ## 5. 主要 DB / 成果物
 
 ### Database (var/)
-| ファイル | 内容 | 行数 (2026-04-25) |
+| ファイル | 内容 | 行数 (2026-04-27) |
 |---|---|--:|
-| `var/pizza.sqlite` | pipeline (stores / operator_stores) | 8,307 stores |
-| `var/pizza-registry.sqlite` | ORM (franchise_brand / operator_company / brand_operator_link) | 1,150 operators / 1,033 links |
+| `var/pizza.sqlite` | pipeline (stores / operator_stores) | 10,612 stores |
+| `var/pizza-registry.sqlite` | ORM (franchise_brand / operator_company / brand_operator_link) | 1,422 operators / 1,432 links |
 | `var/houjin/registry.sqlite` | 国税庁 法人番号 5.7M | 5,766,406 |
 | `var/external/megajii.sqlite` | 人手 TSV SQLite 化 | 192 |
 
@@ -158,11 +163,12 @@ pizza serve          # delivery-service 起動 (gRPC)
 | ファイル | 行 | 役割 |
 |---|--:|---|
 | `megajii-enriched.csv` 👑 | 192 | 人手 TSV master + ORM fusion (17 列) |
-| `fc-operators-all.csv` ⭐ | 1,150 | 1 operator 1 行集約 |
-| `fc-links.csv` | 1,033 | brand × operator flat |
+| `fc-operators-all.csv` ⭐ | 1,005 | 1 operator 1 行集約 |
+| `fc-links.csv` | 1,432 | brand × operator flat |
+| `jfa-disclosures.csv` | 103 | JFA 情報開示書面 PDF index |
 | `spider-matches.csv` | 57 | pipeline spider-matched snapshot |
 | `megajii-raw.csv` | 192 | 生 TSV snapshot |
-| `by-view/megajii-ranking.csv` | 126 | 2+業態メガジー ランキング |
+| `by-view/megajii-ranking.csv` | 123 | 2+業態メガジー ランキング |
 | `by-view/by-brand/*.csv` | 14 ファイル | brand 別 operator 一覧 |
 | `by-view/tokyo-entering-operators.csv` | 32 | 東京進出 FC 社 |
 | `by-view/unverified-63-focus.csv` | 63 | 手動確認候補 |
@@ -190,7 +196,7 @@ ENABLE_BROWSER_FALLBACK=1
 
 ---
 
-## 7. 現在地 (2026-04-25 11:30 JST)
+## 7. 現在地 (2026-04-27 12:40 JST)
 
 ### 完了
 - ✅ 14 brand 全 cleanse (Claude / Gemini fallback) → 1,651 corp 付与
@@ -200,14 +206,17 @@ ENABLE_BROWSER_FALLBACK=1
   - ハードオフ recall **99.6%** (240/241 公表) を実証
 - ✅ `pizza import-megajii-csv` (人手 TSV → Gemini canonicalize + Claude critic + houjin verify + ORM upsert)
 - ✅ `pizza purge --cross-brand-threshold` (cross-brand pollution 削除)
-- ✅ test/fixtures/megafranchisee/ に 6 CSV + by-view/ 派生 17 CSV
+- ✅ `pizza jfa-disclosure-sync` (JFA 情報開示書面 103 PDF link、14 件店舗数抽出)
+- ✅ `pizza coverage-export` (14 brand × 47 都道府県 658 row、pref 近傍座標推定付き)
+- ✅ OSM 14 brand 補完 (Google API 不使用、国内 bbox + 近接重複除外 + not:brand 除外)
+- ✅ `pizza official-franchisee-sources` (Brand off / 韓丼の公式FC・運営会社・本部PR evidence 11 link)
+- ✅ test/fixtures/megafranchisee/ に 7 CSV + by-view/ 派生 17 CSV
 
 ### 進行中
-- 🔄 post-osm-v2 pipeline (PID 6176): cleanse 残 → spider → integrate
-- 🔄 全国 bench (3/14 brand 完走、Places quota 切れで 11 brand 待機)
+- 🔄 14 brand operator 未確定店舗の追加調査 (求人/公式/住所逆引き)
+- 🔄 全国 bench (3/14 brand 完走、Places quota 切れで 11 brand 待機、Google API は明示 opt-in 時のみ)
 
 ### 待機中
-- ⏳ Places API daily quota 復旧 (~22:00 JST 頃)
 - ⏳ Gemini 2.5 Pro daily quota
 - ⏳ ユーザー提供 BC誌 top 500 追加 TSV
 - ⏳ EDINET_API_KEY / GBIZ_API_TOKEN 設定
@@ -221,7 +230,7 @@ ENABLE_BROWSER_FALLBACK=1
 | Places API daily quota | 1 日に途中で切れる、回復 18-24h 待ち |
 | Gemini 2.5 Pro daily quota | 同様、Claude にfallback wrapper 実装済 |
 | Mos shop-detail SPA 非公開 | per_store extractor が本部名しか取れない (Phase 21 既知) |
-| OSM の brand:ja tag は brand 依存 | Itto / Brand off は未マッピング |
+| OSM の brand:ja tag は brand 依存 | brand により recall が低い、operator tag は少ない |
 | `LIKE '%X%'` (substring) は houjin DB で O(N) | fc-directory が遅い、FTS5 化未対応 |
 | BC 誌 top 500 のうち 192 社のみ取込 | 残 308 社は人手 TSV 提供待ち |
 

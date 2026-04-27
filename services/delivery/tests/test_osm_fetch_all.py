@@ -6,8 +6,11 @@ import sqlite3
 from pathlib import Path
 
 from pizza_delivery.commands.osm_fetch_all import (
+    _is_japan_place,
+    _matches_brand,
     _operator_from_osm_tags,
     _osm_place_id,
+    _split_brands,
     _upsert_operator_from_osm,
     _upsert_store,
 )
@@ -82,9 +85,45 @@ def test_operator_from_osm_tags_rejects_franchisor_group_prefix() -> None:
     ) == ""
 
 
+def test_matches_brand_accepts_osm_aliases() -> None:
+    assert _matches_brand(
+        "MOS Burger",
+        {"brand:en": "MOS Burger"},
+        "モスバーガー",
+    )
+    assert _matches_brand("コメダ珈琲店", {}, "コメダ珈琲")
+
+
+def test_matches_brand_rejects_itto_substring_noise() -> None:
+    assert not _matches_brand("NITTO CAMERA", {}, "Itto個別指導学院")
+    assert not _matches_brand("PITTORE SQUARE", {}, "Itto個別指導学院")
+    assert _matches_brand("ITTO個別指導学院", {}, "Itto個別指導学院")
+
+
+def test_matches_brand_rejects_not_brand_tags() -> None:
+    assert not _matches_brand(
+        "ハネルカフェ 鵜沼店",
+        {"brand": "モスバーガー", "not:brand:wikidata": "Q1204169"},
+        "モスバーガー",
+    )
+
+
+def test_is_japan_place_rejects_korea_inside_old_bbox() -> None:
+    assert _is_japan_place(35.6, 139.7, {})
+    assert _is_japan_place(26.2, 127.7, {"addr:country": "JP"})
+    assert not _is_japan_place(37.5, 126.7, {})
+    assert not _is_japan_place(35.6, 139.7, {"addr:country": "KR"})
+
+
 def test_osm_place_id_keeps_node_backward_compatibility() -> None:
     assert _osm_place_id(123, "node") == "osm:123"
     assert _osm_place_id(123, "way") == "osm:way:123"
+
+
+def test_split_brands_defaults_to_14_target_brands() -> None:
+    assert len(_split_brands("")) == 14
+    assert "モスバーガー" in _split_brands("")
+    assert _split_brands("モスバーガー, TSUTAYA ") == ["モスバーガー", "TSUTAYA"]
 
 
 def test_upsert_store_and_operator_from_osm(tmp_path: Path) -> None:
@@ -119,5 +158,50 @@ def test_upsert_store_and_operator_from_osm(tmp_path: Path) -> None:
             "osm_operator_tag_unverified",
             "osm_operator_tag",
         )
+    finally:
+        conn.close()
+
+
+def test_upsert_store_skips_nearby_same_brand_duplicate(tmp_path: Path) -> None:
+    conn = _setup_db(tmp_path / "p.sqlite")
+    try:
+        assert _upsert_store(
+            conn,
+            brand="モスバーガー",
+            name="モスバーガー 既存店",
+            address="東京都千代田区丸の内1-1-1",
+            lat=35.0000,
+            lng=139.0000,
+            osm_id=123,
+            osm_type="node",
+        )
+        assert not _upsert_store(
+            conn,
+            brand="モスバーガー",
+            name="モスバーガー OSM重複候補",
+            address="東京都千代田区丸の内1-1-2",
+            lat=35.0005,
+            lng=139.0005,
+            osm_id=124,
+            osm_type="node",
+        )
+        row = conn.execute("SELECT COUNT(*) FROM stores").fetchone()
+        assert row == (1,)
+    finally:
+        conn.close()
+
+
+def test_operator_from_osm_is_not_inserted_without_matching_store(tmp_path: Path) -> None:
+    conn = _setup_db(tmp_path / "p.sqlite")
+    try:
+        assert not _upsert_operator_from_osm(
+            conn,
+            brand="モスバーガー",
+            operator_name="株式会社テスト運営",
+            osm_id=999,
+            osm_type="node",
+        )
+        row = conn.execute("SELECT COUNT(*) FROM operator_stores").fetchone()
+        assert row == (0,)
     finally:
         conn.close()

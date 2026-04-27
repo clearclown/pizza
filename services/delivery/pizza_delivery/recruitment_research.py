@@ -556,14 +556,19 @@ async def _llm_page_critic(
     return "error", last_error or "llm_failed"
 
 
-async def _fetch_evidence_url(url: str) -> str:
+async def _fetch_evidence_url(url: str, *, fetcher_mode: str = "static") -> str:
     from pizza_delivery.scrapling_fetcher import ScraplingFetcher
 
     fetcher = ScraplingFetcher(timeout_static_sec=10.0, timeout_dynamic_sec=8.0)
-    html = await asyncio.to_thread(fetcher.fetch_static, url)
+    mode = os.getenv("PIZZA_FETCHER", fetcher_mode)
+    html = await asyncio.to_thread(fetcher.fetch_with_mode, url, mode)
     # 求人サイトは bot block/SPA が多く、全国実行で dynamic fetch が詰まりやすい。
     # 明示的に有効化された時だけ短 timeout の dynamic fallback を使う。
-    if (not html or len(html) < 500) and os.getenv("ENABLE_RECRUITMENT_DYNAMIC_FETCH") == "1":
+    if (
+        (not html or len(html) < 500)
+        and mode == "static"
+        and os.getenv("ENABLE_RECRUITMENT_DYNAMIC_FETCH") == "1"
+    ):
         html = await asyncio.to_thread(fetcher.fetch_dynamic, url) or html or ""
     return html or ""
 
@@ -576,12 +581,13 @@ async def _find_recruitment_evidence(
     address: str = "",
     brand: str = "",
     llm_page_critic: bool = False,
+    fetcher_mode: str = "static",
 ) -> tuple[RecruitmentEvidence, list[RecruitmentEvidenceAttempt]]:
     last = RecruitmentEvidence(reject_reason="no_urls")
     attempts: list[RecruitmentEvidenceAttempt] = []
     for url in candidate.evidence_urls[:5]:
         try:
-            html = await _fetch_evidence_url(url)
+            html = await _fetch_evidence_url(url, fetcher_mode=fetcher_mode)
         except Exception as e:
             last = RecruitmentEvidence(url=url, reject_reason=f"fetch_error:{e}")
             attempts.append(RecruitmentEvidenceAttempt(
@@ -689,6 +695,7 @@ async def research_one_store(
     *,
     franchisor_blocklist: set[str] | None = None,
     llm_page_critic: bool = False,
+    fetcher_mode: str = "static",
 ) -> RecruitmentProposal:
     p = RecruitmentProposal(
         place_id=place_id,
@@ -723,6 +730,7 @@ async def research_one_store(
             address=address,
             brand=brand,
             llm_page_critic=llm_page_critic,
+            fetcher_mode=fetcher_mode,
         )
         p.evidence_attempts.extend(attempts)
         p.evidence = ev
@@ -851,6 +859,7 @@ async def recruitment_research_brand(
     dry_run: bool = False,
     concurrency: int = 2,
     llm_page_critic: bool = False,
+    fetcher_mode: str = "static",
 ) -> tuple[RecruitmentStats, list[RecruitmentProposal]]:
     rows = _load_target_rows(db_path, brand, max_stores, offset=offset)
     stats = RecruitmentStats(target_stores=len(rows))
@@ -868,6 +877,7 @@ async def recruitment_research_brand(
                 brand,
                 franchisor_blocklist=block,
                 llm_page_critic=llm_page_critic,
+                fetcher_mode=fetcher_mode,
             )
 
     proposals = await asyncio.gather(*(_task(r) for r in rows))
@@ -898,6 +908,7 @@ async def recruitment_research_many(
     store_concurrency: int = 2,
     brand_concurrency: int = 3,
     llm_page_critic: bool = False,
+    fetcher_mode: str = "static",
 ) -> tuple[dict[str, RecruitmentStats], list[RecruitmentProposal]]:
     """複数ブランドを横断並列で処理する。"""
     sem = asyncio.Semaphore(max(1, brand_concurrency))
@@ -914,6 +925,7 @@ async def recruitment_research_many(
                 dry_run=dry_run,
                 concurrency=store_concurrency,
                 llm_page_critic=llm_page_critic,
+                fetcher_mode=fetcher_mode,
             )
             return b, stats, proposals
 
@@ -1147,6 +1159,12 @@ def _main() -> None:
         action="store_true",
         help="Scraplingで取得したHTML snippetをLLMに判定させる fallback を使う",
     )
+    ap.add_argument(
+        "--fetcher",
+        default=os.getenv("PIZZA_FETCHER", "static"),
+        choices=["static", "dynamic", "camofox", "auto"],
+        help="求人 evidence URL の取得方式",
+    )
     ap.add_argument("--out", default="", help="proposal JSON 出力")
     ap.add_argument(
         "--export-sidecars-from",
@@ -1189,6 +1207,7 @@ def _main() -> None:
         store_concurrency=args.concurrency,
         brand_concurrency=args.brand_concurrency,
         llm_page_critic=args.llm_page_critic,
+        fetcher_mode=args.fetcher,
     ))
     all_stats: dict[str, Any] = {b: asdict(stats_by_brand[b]) for b in brands}
     for b in brands:

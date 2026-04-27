@@ -303,16 +303,22 @@ class HoujinCSVIndex:
         *,
         limit: int = 20,
         active_only: bool = True,
+        allow_substring: bool = True,
     ) -> list[HoujinCSVRecord]:
         """法人名で検索。性能優先 2 段階:
 
           1. **exact match** (`name = ?`) — index が即ヒット、O(log N)
-          2. miss なら **prefix LIKE** (`name LIKE 'X%'`) — index が使える
-          3. それでも miss なら substring LIKE (O(N) だが最終手段)
+          2. **normalized exact** (`normalized_name = ?`) — 全角/半角や
+             株式会社前後の空白を吸収
+          3. miss なら **prefix LIKE** (`name LIKE 'X%'`) — index が使える
+          4. それでも miss なら substring LIKE (O(N) だが最終手段)
 
         大量一括 hydrate で 577 万行を 500 回 LIKE '%...%' 走らせると
         分単位になるため、段階的 fallback で高速化する。
+        `allow_substring=False` にすると全表走査を禁止し、大量照合で詰まらない。
         """
+        from pizza_delivery.normalize import canonical_key
+
         if not name or not name.strip():
             return []
         q_base = (
@@ -336,15 +342,35 @@ class HoujinCSVIndex:
             if rows:
                 return [_rec(r) for r in rows]
 
-            # Step 2: prefix
+            # Step 2: normalized exact
+            key = canonical_key(n)
+            if key:
+                rows = conn.execute(
+                    q_base + "WHERE normalized_name = ?" + active_clause + " LIMIT ?",
+                    [key] + active_args + [limit],
+                ).fetchall()
+                if rows:
+                    return [_rec(r) for r in rows]
+
+            # Step 3: prefix
             rows = conn.execute(
                 q_base + "WHERE name LIKE ?" + active_clause + " LIMIT ?",
                 [n + "%"] + active_args + [limit],
             ).fetchall()
             if rows:
                 return [_rec(r) for r in rows]
+            if key:
+                rows = conn.execute(
+                    q_base + "WHERE normalized_name LIKE ?" + active_clause + " LIMIT ?",
+                    [key + "%"] + active_args + [limit],
+                ).fetchall()
+                if rows:
+                    return [_rec(r) for r in rows]
 
-            # Step 3: substring (fallback、遅い)
+            if not allow_substring:
+                return []
+
+            # Step 4: substring (fallback、遅い)
             rows = conn.execute(
                 q_base + "WHERE name LIKE ?" + active_clause + " LIMIT ?",
                 ["%" + n + "%"] + active_args + [limit],
@@ -429,6 +455,7 @@ def _main() -> None:
     p_search.add_argument("--name", required=True)
     p_search.add_argument("--limit", type=int, default=10)
     p_search.add_argument("--db", default="")
+    p_search.add_argument("--no-substring", action="store_true", help="遅い部分一致 LIKE を使わない")
 
     p_count = sub.add_parser("count", help="登録件数")
     p_count.add_argument("--db", default="")
@@ -440,7 +467,7 @@ def _main() -> None:
         n = idx.ingest_csv(args.csv, encoding=args.encoding)
         print(f"✅ ingested {n} records → {idx.db_path}")
     elif args.cmd == "search":
-        for r in idx.search_by_name(args.name, limit=args.limit):
+        for r in idx.search_by_name(args.name, limit=args.limit, allow_substring=not args.no_substring):
             print(f"  {r.corporate_number}  {r.name}  [{r.process}]  {r.address}")
     elif args.cmd == "count":
         print(idx.count())

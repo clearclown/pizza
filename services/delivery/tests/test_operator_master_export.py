@@ -6,6 +6,8 @@ from pizza_delivery.operator_master_export import (
     BucketStore,
     build_rows,
     load_component_csv,
+    load_hydration_matches,
+    load_priority_csv,
     load_recruitment_sidecar,
 )
 
@@ -82,3 +84,35 @@ def test_operator_master_can_export_unverified_single_store_candidates_when_min_
     assert rows_min1[0]["recruitment_candidate_url_count"] == 1
     assert rows_min1[0]["recruitment_reject_reasons"] == "operator_missing:1"
     assert evidence[0].url == "https://jobs.example/sample"
+
+
+def test_operator_master_uses_hydration_matches_to_merge_unverified_priority_rows(tmp_path) -> None:
+    priority = tmp_path / "priority.csv"
+    hydration = tmp_path / "hydration.csv"
+    _write(priority, [
+        {
+            "brand": "TSUTAYA",
+            "operator_name": "Vidaway",
+            "corporate_number": "",
+            "brand_estimated_store_count": "26",
+            "operator_total_stores_est": "26",
+            "operator_brand_count": "1",
+            "sources": "manual_megajii",
+        },
+    ])
+    _write(hydration, [
+        {
+            "operator_name": "Vidaway",
+            "status": "accepted_unique",
+            "corporate_number": "2010401061159",
+        },
+    ])
+
+    store = BucketStore()
+    evidence = []
+    load_priority_csv(store, evidence, priority, load_hydration_matches(hydration))
+    rows, _ = build_rows(store, min_total=20)
+
+    assert rows[0]["operator_name"] == "Vidaway"
+    assert rows[0]["primary_corporate_number"] == "2010401061159"
+    assert rows[0]["risk_level"] == "verified"

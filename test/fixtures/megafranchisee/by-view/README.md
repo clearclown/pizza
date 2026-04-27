@@ -25,9 +25,12 @@ LEFT JOIN franchise_brand fb ON bol.brand_id = fb.id
 WHERE EXISTS (...) GROUP BY oc.id ORDER BY tokyo_stores_observed DESC;
 ```
 
-### `megajii-ranking.csv` (125 社)
-ORM で 2+ 業態 link されている operator を brand_count / total_stores 降順。
-BC誌メガジー相当。
+### `megajii-ranking.csv` (123 社)
+ORM で **店舗数根拠ありの 2+ 業態** かつ total_stores 20+ の operator を
+total_stores / brand_count 降順。brand alias は CSV 集約時に canonical 化し、
+同一 operator × brand の複数 source は最大店舗数だけを採用する。
+`operator_official_brand_link` のような 0 店舗 evidence は、業態 evidence として
+保持するが、この厳密ランキングの `brand_count` には入れない。
 
 ### `by-brand/<brand>.csv` (14 ファイル)
 各 brand の FC 運営会社 list。店舗数 (declared) 降順。ORM の brand_operator_link
@@ -35,20 +38,20 @@ BC誌メガジー相当。
 
 | brand | 社数 (link rows) |
 |---|--:|
-| TSUTAYA | 23 |
-| シャトレーゼ | 16 |
-| モスバーガー | 20 |
-| 業務スーパー | 21 |
-| エニタイムフィットネス | 29 |
-| コメダ珈琲 | 19 |
-| オフハウス | 12 |
-| Itto個別指導学院 | 7 |
-| ハードオフ | 11 |
-| カーブス | 13 |
-| アップガレージ | 5 |
-| Kids Duo | 4 |
-| Brand off | 4 |
-| カルビ丼とスン豆腐専門店韓丼 | 2 |
+| TSUTAYA | 33 |
+| シャトレーゼ | 19 |
+| モスバーガー | 185 |
+| 業務スーパー | 68 |
+| エニタイムフィットネス | 37 |
+| コメダ珈琲 | 36 |
+| オフハウス | 17 |
+| Itto個別指導学院 | 8 |
+| ハードオフ | 17 |
+| カーブス | 103 |
+| アップガレージ | 8 |
+| Kids Duo | 7 |
+| Brand off | 6 |
+| カルビ丼とスン豆腐専門店韓丼 | 10 |
 
 ### `unverified-63-focus.csv` (63 社)
 人手 TSV の **未 verified** (corp 空) 63 社のフォーカスリスト。手動確認 / 再検索

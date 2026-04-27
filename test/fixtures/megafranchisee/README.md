@@ -6,7 +6,7 @@
 
 ## ファイル構成
 
-### `operator-centric-master-14brand-complete.csv` (510 rows, 2026-04-25)
+### `operator-centric-master-14brand-complete.csv` (527 rows, 2026-04-27)
 **事業会社 1 行**を主キーに、14 brand の店舗数・検証状態・リスク・根拠 URL・求人候補
 を横持ちした全量 master。未確認候補や 1 店舗候補も捨てず、
 `quality_best_tier` / `risk_level` / `risk_flags_all` に明示する。失敗 URL や
@@ -27,24 +27,48 @@ uv run --project services/delivery python -m pizza_delivery.operator_master_expo
 
 1 行 = 1 社 (megajii section 179 + franchisor section 13)。すべて 17 列。
 
-### ⭐ `fc-operators-all.csv` (1,085 rows, 2026-04-24)
+### ⭐ `fc-operators-all.csv` (1,005 rows, 2026-04-27)
 **1 事業会社 1 行** の集約 CSV。これがメインの参照資料。
+同一 operator × canonical brand に複数 source がある場合は、店舗数の最大値だけを
+`total_stores` に採用する (`manual_megajii` + `jfa_disclosure` の二重計上防止)。
+同名 operator の法人番号あり/なし重複は CSV 生成時に 1 行へ畳み込む。
 
 ```bash
 # 生成 (ORM 由来、pizza は内部の sqlite に書き込み済)
 sqlite3 -csv -header var/pizza-registry.sqlite "
+  WITH brand_norm AS (
+    SELECT id AS brand_id,
+           CASE name
+             WHEN 'モスバーガーチェーン' THEN 'モスバーガー'
+             WHEN '珈琲所コメダ珈琲店' THEN 'コメダ珈琲'
+             WHEN 'コメダ珈琲店' THEN 'コメダ珈琲'
+             ELSE name
+           END AS brand_name
+    FROM franchise_brand
+  ),
+  link_best AS (
+    SELECT bol.operator_id, bn.brand_name,
+           MAX(bol.estimated_store_count) AS brand_stores
+    FROM brand_operator_link bol
+    JOIN brand_norm bn ON bn.brand_id = bol.brand_id
+    GROUP BY bol.operator_id, bn.brand_name
+  ),
+  source_rollup AS (
+    SELECT operator_id, GROUP_CONCAT(DISTINCT source) AS sources
+    FROM brand_operator_link GROUP BY operator_id
+  )
   SELECT oc.name AS operator_name, oc.corporate_number AS corp,
          oc.prefecture AS hq_prefecture, oc.head_office,
          oc.representative_name AS representative, oc.website_url AS url,
-         oc.source,
-         COUNT(DISTINCT fb.id) AS brand_count,
-         GROUP_CONCAT(DISTINCT fb.name) AS brands,
-         COALESCE(SUM(bol.estimated_store_count),0) AS total_stores
+         COALESCE(sr.sources, oc.source) AS source,
+         COUNT(DISTINCT lb.brand_name) AS brand_count,
+         GROUP_CONCAT(DISTINCT lb.brand_name) AS brands,
+         COALESCE(SUM(lb.brand_stores),0) AS total_stores
   FROM operator_company oc
-  LEFT JOIN brand_operator_link bol ON bol.operator_id = oc.id
-  LEFT JOIN franchise_brand fb ON bol.brand_id = fb.id
+  JOIN link_best lb ON lb.operator_id = oc.id
+  LEFT JOIN source_rollup sr ON sr.operator_id = oc.id
   GROUP BY oc.id
-  ORDER BY brand_count DESC, total_stores DESC
+  ORDER BY total_stores DESC, brand_count DESC, operator_name
 " > test/fixtures/megafranchisee/fc-operators-all.csv
 ```
 
@@ -83,8 +107,17 @@ LLM_PROVIDER=anthropic ./bin/pizza import-megajii-csv \
 # 3. 3 DB JOIN + CSV 生成 (Python 小スクリプト、README 末尾参照)
 ```
 
-### `fc-links.csv` (1,037 rows, 2026-04-24)
+### `jfa-disclosures.csv` (103 rows, 2026-04-26)
+JFA 情報開示書面 index の live PDF link 一覧。HTML comment 内の旧 link は除外。
+PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
+`brand_operator_link.source = jfa_disclosure` として取り込む。
+
+### `fc-links.csv` (1,432 rows, 2026-04-27)
 **brand × operator の flat link table**。1 operator が複数 brand 運営なら複数行。
+2026-04-27 追加の `operator_official_brand_link` は、operator 公式 HP の
+事業/店舗/ブランドページ上の anchor だけを根拠にした evidence link
+(開店告知・休業/閉店・求人/採用・社員インタビュー文脈は自動反映から除外)。
+店舗数根拠は別ソースが必要なので `estimated_store_count=0` のまま保持する。
 
 ```bash
 ./bin/pizza integrate --mode export --out test/fixtures/megafranchisee/fc-links.csv
@@ -110,11 +143,11 @@ sqlite3 -csv -header var/external/megajii.sqlite \
 
 ## 現状の既知制約
 
-### 偏り / 不足 (2026-04-24 時点)
-- **operator 総数 1,085 は実態の推定 20-30%**。BC 誌 top 500 FC 運営会社のうち ORM 化は約 1/5
-- **エニタイムフィットネス** 公表 957 店舗に対し ORM 29 operator (実態は 100-200 社)
-- **モスバーガー** 公表 1,266 店舗に対し ORM 18 operator (Phase 21 既知 13 社 + 他)
-- **空 prefecture 524/1,085 (48%)** — houjin JOIN で一部補完済、残は法人番号未取得 operator
+### 偏り / 不足 (2026-04-26 時点)
+- **brand link 付き operator 801 / 20+店舗 operator 214 / 2+業態かつ20+店舗 128**
+- **エニタイムフィットネス** 公表 957 店舗に対し ORM 33 operator (実態は 100-200 社)
+- **モスバーガー** 公表 1,318 店舗に対し ORM 179 operator (JFA 開示書面 + pipeline 反映後)
+- **空 prefecture 852/1,413 (60%)** — JFA disclosure 由来 franchisor が増えたため、houjin hydrate 余地あり
 - **pipeline observed stores は関東偏重** (東京+神奈川+埼玉+千葉 で全 5,721 stores の 61%)
 
 ### 崩れ
@@ -125,6 +158,7 @@ sqlite3 -csv -header var/external/megajii.sqlite \
 ```bash
 pizza migrate --with-registry
 pizza jfa-sync
+pizza jfa-disclosure-sync --fetch-pdfs
 pizza houjin-import --csv <国税庁 zip>
 pizza import-megajii-csv --csv var/external/megajii-manual.tsv \
     --save-db var/external/megajii.sqlite

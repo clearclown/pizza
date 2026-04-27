@@ -23,13 +23,46 @@
 </p>
 
 > **「精度の高いデータ、おまち！」**
-> PI-ZZA は、Google Maps の網羅的検索と AI による自律ブラウジングを組み合わせた、次世代のロケーション・インテリジェンス・ツールです。
+> PI-ZZA は、OSM Overpass / JFA / 国税庁法人番号 CSV / 公式ページ / 任意の Google Places を組み合わせ、FC 事業会社を根拠付きで集計するロケーション・インテリジェンス・ツールです。
 
 ---
 
 ## 🍕 プロジェクト概要
 
 フランチャイズ (FC) 業界における**メガフランチャイジー（20 店舗以上の運営会社）**の特定や、**直営・FC の判別**といった、人間が数週間かけて行う泥臭いリサーチ業務を、AI エージェントが数時間で完遂させることを目的としています。
+
+対象は、カーブス / モスバーガー / 業務スーパー / Itto個別指導学院 / エニタイムフィットネス / コメダ珈琲 / シャトレーゼ / ハードオフ / オフハウス / Kids Duo / アップガレージ / カルビ丼とスン豆腐専門店韓丼 / Brand off / TSUTAYA の **14 ブランド × 47 都道府県**。LLM は名称正規化・批評・抽出補助に限定し、ground truth は pipeline が取得した外部 source と国税庁法人番号 CSV で検証します。
+
+## 📊 現在のメガジー成果物 (2026-04-27)
+
+主要成果物は [test/fixtures/megafranchisee/](./test/fixtures/megafranchisee/) に固定スナップショットとして出力します。Google API は任意で、OSM / JFA / 公式ページ / 国税庁 CSV の経路だけでも更新できます。
+
+| ファイル | 行数 | 役割 |
+|---|--:|---|
+| [`operator-centric-master-14brand-complete.csv`](./test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv) | 527 | 14 ブランド横持ちの operator-centric master |
+| [`fc-operators-all.csv`](./test/fixtures/megafranchisee/fc-operators-all.csv) | 1,005 | 1 事業会社 1 行の集約 master |
+| [`fc-links.csv`](./test/fixtures/megafranchisee/fc-links.csv) | 1,432 | brand × operator の根拠付き flat link |
+| [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 123 | 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
+| [`jfa-disclosures.csv`](./test/fixtures/megafranchisee/jfa-disclosures.csv) | 103 | JFA 情報開示書面 PDF index |
+
+採用 source は `jfa` / `jfa_disclosure` / `manual_megajii_*` / `pipeline` / `osm_overpass` / `official_franchisee_page` / `operator_official_brand_link` などで provenance を保持します。法人番号は `var/houjin/registry.sqlite` の国税庁 CSV で照合できた場合だけ付与します。
+
+再生成の基本コマンド:
+
+```bash
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza osm-fetch-all
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza jfa-sync
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza jfa-disclosure-sync --fetch-pdfs
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza official-franchisee-sources
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza integrate --mode export \
+  --out test/fixtures/megafranchisee/fc-links.csv
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
+  python -m pizza_delivery.megafranchisee_clean_export
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
+  python -m pizza_delivery.operator_master_export \
+  --min-total 1 \
+  --out test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv
+```
 
 ## 🧩 アーキテクチャ — 4 つのトッピング
 
@@ -81,7 +114,7 @@ make proto
 make build
 
 # 5. テスト
-make test                         # Go 9 pkg ok + Python 185 pass + 6 live skipped
+make test                         # Go pkg + pytest 640 pass / 6 skipped (2026-04-27)
 
 # 6. PI-ZZA を焼く (有料 Places API を使う場合だけ明示 opt-in)
 PIZZA_ENABLE_PAID_GOOGLE_APIS=1   # 必要な時だけ設定
@@ -156,7 +189,7 @@ pizza/
 | **API 契約** | Protocol Buffers, [buf](https://buf.build) |
 | **AI エージェント** | [browser-use](https://github.com/browser-use/browser-use), Anthropic / OpenAI / Gemini SDK |
 | **Crawler** | [Firecrawl](https://github.com/mendableai/firecrawl) (REST, セルフホストまたは SaaS) |
-| **Maps** | [gosom/google-maps-scraper](https://github.com/gosom/google-maps-scraper), Google Maps Places API |
+| **Maps / Open Data** | OSM Overpass, JFA, 国税庁法人番号 CSV, [gosom/google-maps-scraper](https://github.com/gosom/google-maps-scraper), Google Maps Places API |
 | **Python** | 3.11+, [uv](https://github.com/astral-sh/uv), pytest, ruff |
 | **BI** | Streamlit + SQLite |
 | **CI** | GitHub Actions (ci / buf / codeql / release-please / upstream-sync) |
@@ -164,20 +197,20 @@ pizza/
 
 ---
 
-## 🚦 実装状況 (Phase 2 時点)
+## 🚦 実装状況 (Phase 28 時点)
 
 | 機能 | 状態 | 実測 |
 |---|---|---|
-| M1 Seed — Places API (New) で店舗抽出 | 🟢 | 新宿 25 セル → 72 店舗 / 5.4s |
-| M2 Kitchen — Firecrawl REST client | 🟢 | unit test 9/9、live は Firecrawl 稼働時 |
-| M3 Delivery — browser-use + LLM 判定 | 🟢 | mock / live 切替 (`DELIVERY_MODE`) |
-| M4 Box — SQLite + CSV + Streamlit UI | 🟢 | `streamlit run cmd/box-ui/app.py` で可視化 |
-| Oven Pipeline.Bake | 🟢 | Seed → Kitchen → Judge → Box の in-process 統合 |
-| CLI `pizza bake` | 🟢 | `.env` 自動読込 + `--with-judge` でフル統合 |
-| Classification 精度 ≥90% | 🟡 | golden 10 サンプル、mock baseline 60%、Phase 3 で LLM 精度改善 |
-| E2E testcontainers-go | 🟡 | skeleton のみ |
+| 14 ブランド operator-centric master | 🟢 | 527 operator、14 ブランド全 CSV export |
+| FC operator directory | 🟢 | 1,005 operator / 1,432 brand links |
+| 厳密メガジーランキング | 🟢 | 123 社、2+業態かつ20+店舗、0 店舗 evidence は除外 |
+| OSM Overpass 全国補完 | 🟢 | Google API 不使用の店舗取得経路 |
+| JFA 協会員 / 情報開示書面 | 🟢 | 協会員 scrape + PDF index 103 件 |
+| 公式ページ source 追加 | 🟢 | 公式FC・運営会社・本部PR本文を国税庁照合付きで ORM 化 |
+| Places API scan | 🟡 | 有料 API は `PIZZA_ENABLE_PAID_GOOGLE_APIS=1` の明示 opt-in 時のみ |
+| EDINET / gBizINFO | 🟡 | API key 設定後に補完可能 |
 
-詳細な状況: [docs/phase1-audit.md](./docs/phase1-audit.md)
+詳細な fixture 仕様: [test/fixtures/megafranchisee/README.md](./test/fixtures/megafranchisee/README.md)
 
 ## 📚 ドキュメント
 

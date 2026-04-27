@@ -193,11 +193,11 @@ def _parse_detail_page(brand: str, url: str, html: str) -> RecruitPage:
     return out
 
 
-async def _fetch_html(url: str, timeout: float) -> str:
+async def _fetch_html(url: str, timeout: float, *, fetcher_mode: str = "static") -> str:
     from pizza_delivery.scrapling_fetcher import ScraplingFetcher
 
     fetcher = ScraplingFetcher(timeout_static_sec=timeout, timeout_dynamic_sec=timeout)
-    return await asyncio.to_thread(fetcher.fetch_static, url) or ""
+    return await asyncio.to_thread(fetcher.fetch_with_mode, url, fetcher_mode) or ""
 
 
 def _load_unknown_store_index(db_path: str | Path, brand: str) -> list[dict]:
@@ -296,13 +296,14 @@ async def _crawl_brand_details(
     *,
     max_pages: int,
     timeout: float,
+    fetcher_mode: str = "static",
 ) -> tuple[CrawlStats, list[str]]:
     stats = CrawlStats()
     seen: set[str] = set()
     urls: list[str] = []
     for page_no in range(1, max_pages + 1):
         url = start_url if page_no == 1 else f"{start_url}?page={page_no}"
-        html = await _fetch_html(url, timeout)
+        html = await _fetch_html(url, timeout, fetcher_mode=fetcher_mode)
         if not html:
             break
         stats.list_pages_fetched += 1
@@ -329,9 +330,10 @@ async def crawl_official_recruitment(
     request_delay: float = 0.0,
     max_empty_streak: int = 30,
     dry_run: bool = False,
+    fetcher_mode: str = "static",
 ) -> tuple[CrawlStats, list[RecruitPage]]:
     stats, detail_urls = await _crawl_brand_details(
-        brand, start_url, max_pages=max_pages, timeout=timeout,
+        brand, start_url, max_pages=max_pages, timeout=timeout, fetcher_mode=fetcher_mode,
     )
     if max_details > 0:
         detail_urls = detail_urls[:max_details]
@@ -340,7 +342,7 @@ async def crawl_official_recruitment(
 
     async def one(url: str) -> RecruitPage:
         async with sem:
-            html = await _fetch_html(url, timeout)
+            html = await _fetch_html(url, timeout, fetcher_mode=fetcher_mode)
             if request_delay > 0:
                 await asyncio.sleep(request_delay)
         p = _parse_detail_page(brand, url, html)
@@ -438,6 +440,12 @@ def _main() -> None:
     ap.add_argument("--concurrency", type=int, default=16)
     ap.add_argument("--timeout", type=float, default=8.0)
     ap.add_argument(
+        "--fetcher",
+        default="static",
+        choices=["static", "dynamic", "camofox", "auto"],
+        help="list/detail page の取得方式",
+    )
+    ap.add_argument(
         "--request-delay", type=float, default=0.0,
         help="detail fetch ごとの sleep 秒。429 回避用",
     )
@@ -462,6 +470,7 @@ def _main() -> None:
             request_delay=args.request_delay,
             max_empty_streak=args.max_empty_streak,
             dry_run=args.dry_run,
+            fetcher_mode=args.fetcher,
         ))
         all_pages.extend(pages)
         print(f"✅ official-recruitment-crawl {'dry-run' if args.dry_run else 'apply'} brand={brand}")

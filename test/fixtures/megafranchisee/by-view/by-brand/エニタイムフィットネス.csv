@@ -1,31 +1,38 @@
-operator,corp,hq,head_office,representative,url,stores_declared,source
-"株式会社Fast Fitness Japan","","東京都","東京都新宿区西新宿6丁目3番1号 新宿アイランドウイング10階","山部清明",https://www.anytimefitness.co.jp/,957,manual_megajii_2026_04_24
-"KOHATAホールディングス","","神奈川県","神奈川県川崎市多摩区登戸2121-1 GINZAFOREST301-2","木幡 義幸",https://khd.life/,71,manual_megajii_2026_04_24
-"株式会社KOHATAホールディングス",8020001111919,"神奈川県","神奈川県川崎市多摩区登戸２１２１番地１ＧＩＮＺＡＦＯＲＥＳＴ３０１－２","","",67,pipeline
-"株式会社ケー・アンド・アイ",1040001065517,"千葉県","千葉県柏市柏4丁目8-14 柏染谷ビル1階","坂巻 龍治",https://www.kk-kandi.com/,67,manual_megajii_2026_04_24
-"株式会社タカ・コーポレーション",1120901029447,"大阪府","大阪府豊中市上野西３丁目５番３９号","","",67,pipeline
-"株式会社ビッグワンホールディングス",6060001006885,"栃木県","栃木県さくら市櫻野505番地","大村 一夫",https://bigone.co.jp/,67,manual_megajii_2026_04_24
-"東食品株式会社",6010401001739,"東京都","東京都港区南青山7-3-1","鈴木 勝",https://azumashokuhin.jp/business/index.html,50,pipeline
-"東食品株式会社",6010401001739,"東京都","東京都港区南青山7-3-1","鈴木 勝",https://azumashokuhin.jp/business/index.html,43,manual_megajii_2026_04_24
-"株式会社アクト・ティ",9011501000140,"東京都","東京都北区王子1-9-15 リバティビルディング8F","田村 直",https://www.act-t.com/,28,manual_megajii_2026_04_24
-"株式会社東急レクリエーション",8011101014005,"東京都","東京都渋谷区桜丘町24-4","木村 知郎","",25,manual_megajii_2026_04_24
-"東北テレメディア開発株式会社",4370001004372,"宮城県","宮城県仙台市若林区沖野2丁目5-5","渋谷 潤","",23,manual_megajii_2026_04_24
-"ワイ・テイ・ワイ産業株式会社",3120101008002,"大阪府","大阪府堺市堺区市之町西2丁1-15","日高 健吾","",22,manual_megajii_2026_04_24
-"株式会社ラ・ヴィーチェ",1050001047381,"茨城県","茨城県つくば市梅園２丁目８番１７号","","",22,pipeline
-"川勝商事株式会社",1120001042383,"大阪府","大阪府大阪市福島区玉川１丁目８番１０号ＵＧビル２Ｆ","","",20,pipeline
-"株式会社ダイレクト・ショップ",1160001008455,"滋賀県","滋賀県彦根市西今町1番地","松澤 恒雄",https://directshop.jp/company/,20,manual_megajii_2026_04_24
-"株式会社アトラクト",3180001058546,"愛知県","愛知県名古屋市中区栄３丁目１８番１号ナディアパークビジネスセンタービル１８階","","",19,pipeline
-"株式会社エムデジ",6430001050730,"北海道","北海道小樽市新光１丁目１１番１号","","",17,pipeline
-"株式会社アズ",8120001073612,"大阪府","大阪府大阪市中央区粉川町１番２号","","",13,pipeline
-"株式会社glob",2240001041216,"広島県","広島県福山市王子町１丁目３番５号","","",10,pipeline
-"株式会社さくらホーム",3430001027962,"北海道","北海道札幌市西区八軒五条東３丁目７番３４号","","",8,pipeline
-"株式会社さくらホーム","","","","","",8,pipeline
-"株式会社ベイスオブスポーツ",6360001019114,"沖縄県","沖縄県那覇市宮城１丁目１８－１","","",8,pipeline
-"株式会社フィットベイト",7040001099451,"千葉県","千葉県船橋市印内町６０６番地１","","",6,pipeline
-"株式会社トピーレック",4010601024954,"東京都","東京都江東区南砂６丁目７番１５号","","",5,pipeline
-"株式会社ペルゴラ",6140001061476,"兵庫県","兵庫県姫路市中地１８８番地の１","","",4,pipeline
-"株式会社サンパーク",4120901006550,"大阪府","大阪府吹田市岸部北５丁目１１番１号","","",3,pipeline
-"株式会社アルペンクイックフィットネス","","","","","",1,pipeline
-"株式会社アーミーフィットネスジャパン",7030001034491,"埼玉県","埼玉県さいたま市見沼区大和田町２丁目１５５３番地１－４０９号","","",1,pipeline
-"株式会社エイゼン",2430001077273,"北海道","北海道札幌市白石区東札幌二条５丁目２番１号","","",1,pipeline
-"株式会社湘南開発",6040002073695,"千葉県","千葉県市原市姉崎西１丁目２番１３号","","",1,pipeline
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
+エニタイムフィットネス,,株式会社Ｆａｓｔ　Ｆｉｔｎｅｓｓ　Ｊａｐａｎ,8030001054043,東京都新宿区西新宿６丁目３番１号,東京都,franchisor,957,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社KOHATAホールディングス,8020001111919,神奈川県川崎市多摩区登戸２１２１番地１ＧＩＮＺＡＦＯＲＥＳＴ３０１－２,神奈川県,franchisee,71,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社KOHATAホールディングス,8020001111919,神奈川県川崎市多摩区登戸２１２１番地１ＧＩＮＺＡＦＯＲＥＳＴ３０１－２,神奈川県,franchisee,67,pipeline,,discovered_via=registry
+エニタイムフィットネス,,株式会社ケー・アンド・アイ,1040001065517,千葉県柏市柏4丁目8-14 柏染谷ビル1階,千葉県,franchisee,67,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社タカ・コーポレーション,1120901029447,大阪府豊中市上野西３丁目５番３９号,大阪府,franchisee,67,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,franchisee,67,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,franchisee,50,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,franchisee,43,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,28,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社東急レクリエーション,8011101014005,東京都渋谷区桜丘町24-4,東京都,franchisee,25,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,東北テレメディア開発株式会社,4370001004372,宮城県仙台市若林区沖野2丁目5-5,宮城県,franchisee,23,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,ワイ・テイ・ワイ産業株式会社,3120101008002,大阪府堺市堺区市之町西2丁1-15,大阪府,franchisee,22,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社ラ・ヴィーチェ,1050001047381,茨城県つくば市梅園２丁目８番１７号,茨城県,franchisee,22,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,川勝商事株式会社,1120001042383,大阪府大阪市福島区玉川１丁目８番１０号ＵＧビル２Ｆ,大阪府,franchisee,20,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ダイレクト・ショップ,1160001008455,滋賀県彦根市西今町1番地,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社アトラクト,3180001058546,愛知県名古屋市中区栄３丁目１８番１号ナディアパークビジネスセンタービル１８階,愛知県,franchisee,19,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社エムデジ,6430001050730,北海道小樽市新光１丁目１１番１号,北海道,franchisee,17,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アズ,8120001073612,大阪府大阪市中央区粉川町１番２号,大阪府,franchisee,13,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社glob,2240001041216,広島県福山市王子町１丁目３番５号,広島県,franchisee,10,pipeline,,discovered_via=registry
+エニタイムフィットネス,,株式会社さくらホーム,3430001027962,北海道札幌市西区八軒五条東３丁目７番３４号,北海道,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社さくらホーム,,,,franchisee,8,pipeline,,discovered_via=registry
+エニタイムフィットネス,,株式会社ベイスオブスポーツ,6360001019114,沖縄県那覇市宮城１丁目１８－１,沖縄県,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社フィットベイト,7040001099451,千葉県船橋市印内町６０６番地１,千葉県,unknown,6,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社フィットベイト,,,,unknown,6,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社トピーレック,4010601024954,東京都江東区南砂６丁目７番１５号,東京都,franchisee,5,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ペルゴラ,6140001061476,兵庫県姫路市中地１８８番地の１,兵庫県,franchisee,4,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,3,pipeline,,discovered_via=operator_spider_address_match
+エニタイムフィットネス,,株式会社サンパーク,4120901006550,大阪府吹田市岸部北５丁目１１番１号,大阪府,franchisee,3,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アルペンクイックフィットネス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社アーミーフィットネスジャパン,7030001034491,埼玉県さいたま市見沼区大和田町２丁目１５５３番地１－４０９号,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アーミーフィットネスジャパン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社エイゼン,2430001077273,北海道札幌市白石区東札幌二条５丁目２番１号,北海道,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社エイゼン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社湘南開発,6040002073695,千葉県市原市姉崎西１丁目２番１３号,千葉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社湘南開発,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,glob,,広島県福山市王子町1-3-5,広島県,unknown,0,operator_official_brand_link,https://www.glob.co.jp/businesscontent/yuzuan/,anchor=エニタイムフィットネス; href=https://www.glob.co.jp/businesscontent/anytimefitness/; page=https://www.glob.co.jp/businesscontent/yuzuan/
+エニタイムフィットネス,,ペルゴ,,愛媛県姫路市中地188-1,愛媛県,unknown,0,operator_official_brand_link,https://www.pergo.co.jp/brand/vansan,anchor=エニタイムフィットネス; href=https://www.pergo.co.jp/brand/anytime; page=https://www.pergo.co.jp/brand/vansan

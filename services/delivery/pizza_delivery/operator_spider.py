@@ -283,27 +283,101 @@ class BrandCandidate:
     href: str = ""
 
 
-# 既知 FC ブランド名辞書 (正規表現 alternation 用)。
-# これらが anchor text に出てきたら「この operator が運営している可能性」と判断。
-_KNOWN_FC_BRANDS: tuple[str, ...] = (
-    # フィットネス
-    "エニタイムフィットネス", "Anytime Fitness",
-    "chocoZAP", "チョコザップ",
-    "FIT PLACE24", "24GYM", "JOYFIT",
-    "ファストジム24", "ゴールドジム", "CLUB PILATES",
-    "CYCLEBAR", "ONEPERSON",
-    # コンビニ
-    "セブン-イレブン", "セブンイレブン", "ファミリーマート", "ローソン",
-    "ミニストップ", "デイリーヤマザキ",
-    # 飲食
-    "マクドナルド", "モスバーガー", "KFC", "ケンタッキー",
-    "コメダ珈琲", "ドトール", "スターバックス", "タリーズ",
-    "すき家", "吉野家", "松屋", "ガスト", "サイゼリヤ",
-    # 小売
-    "TSUTAYA", "ブックオフ", "ゲオ", "セカンドストリート",
-    # その他
-    "洋服の青山", "ゴンチャ", "餃子の王将",
+# 既知 FC ブランド名辞書。
+# anchor text / 画像 alt に出てきたら「この operator が運営している可能性」と判断。
+# 値は ORM に入れる canonical brand 名。14 対象ブランドは表記ゆれをここで吸収する。
+_FC_BRAND_ALIAS_TO_CANONICAL: dict[str, str] = {
+    # 14 対象ブランド
+    "カーブス": "カーブス",
+    "Curves": "カーブス",
+    "モスバーガー": "モスバーガー",
+    "MOS BURGER": "モスバーガー",
+    "業務スーパー": "業務スーパー",
+    "Itto個別指導学院": "Itto個別指導学院",
+    "ITTO個別指導学院": "Itto個別指導学院",
+    "ITTO": "Itto個別指導学院",
+    "エニタイムフィットネス": "エニタイムフィットネス",
+    "Anytime Fitness": "エニタイムフィットネス",
+    "ANYTIME FITNESS": "エニタイムフィットネス",
+    "コメダ珈琲店": "コメダ珈琲",
+    "コメダ珈琲": "コメダ珈琲",
+    "シャトレーゼ": "シャトレーゼ",
+    "ハードオフ": "ハードオフ",
+    "HARD OFF": "ハードオフ",
+    "オフハウス": "オフハウス",
+    "OFF HOUSE": "オフハウス",
+    "Kids Duo": "Kids Duo",
+    "KIDS DUO": "Kids Duo",
+    "キッズデュオ": "Kids Duo",
+    "アップガレージ": "アップガレージ",
+    "UP GARAGE": "アップガレージ",
+    "カルビ丼とスン豆腐専門店韓丼": "カルビ丼とスン豆腐専門店韓丼",
+    "韓丼": "カルビ丼とスン豆腐専門店韓丼",
+    "Brand off": "Brand off",
+    "BRAND OFF": "Brand off",
+    "ブランドオフ": "Brand off",
+    "TSUTAYA": "TSUTAYA",
+    # その他の大口 FC / 複数業態検出用
+    "chocoZAP": "chocoZAP",
+    "チョコザップ": "chocoZAP",
+    "FIT PLACE24": "FIT PLACE24",
+    "24GYM": "24GYM",
+    "JOYFIT": "JOYFIT",
+    "ファストジム24": "ファストジム24",
+    "ゴールドジム": "ゴールドジム",
+    "CLUB PILATES": "CLUB PILATES",
+    "CYCLEBAR": "CYCLEBAR",
+    "ONEPERSON": "ONEPERSON",
+    "セブン-イレブン": "セブン-イレブン",
+    "セブンイレブン": "セブン-イレブン",
+    "ファミリーマート": "ファミリーマート",
+    "ローソン": "ローソン",
+    "ミニストップ": "ミニストップ",
+    "デイリーヤマザキ": "デイリーヤマザキ",
+    "マクドナルド": "マクドナルド",
+    "KFC": "ケンタッキー",
+    "ケンタッキー": "ケンタッキー",
+    "ドトール": "ドトール",
+    "スターバックス": "スターバックス",
+    "タリーズ": "タリーズ",
+    "すき家": "すき家",
+    "吉野家": "吉野家",
+    "ガスト": "ガスト",
+    "サイゼリヤ": "サイゼリヤ",
+    "ブックオフ": "ブックオフ",
+    "BOOKOFF": "ブックオフ",
+    "ゲオ": "ゲオ",
+    "GEO": "ゲオ",
+    "セカンドストリート": "セカンドストリート",
+    "2nd STREET": "セカンドストリート",
+    "洋服の青山": "洋服の青山",
+    "ゴンチャ": "ゴンチャ",
+    "餃子の王将": "餃子の王将",
+}
+
+_KNOWN_FC_BRANDS: tuple[str, ...] = tuple(
+    sorted(_FC_BRAND_ALIAS_TO_CANONICAL, key=len, reverse=True)
 )
+
+
+def canonical_fc_brand_name(name: str) -> str:
+    """operator 公式サイト上の表記ゆれを ORM canonical brand 名へ寄せる。"""
+    raw = (name or "").strip()
+    return _FC_BRAND_ALIAS_TO_CANONICAL.get(raw, raw)
+
+
+def _alias_in_anchor(alias: str, anchor_fold: str) -> bool:
+    """英数字 alias は単語境界で見る。例: ITTO が KITTO に誤ヒットしないようにする。"""
+    alias_fold = alias.casefold()
+    if not re.search(r"[A-Za-z0-9]", alias):
+        return alias_fold in anchor_fold
+    return bool(
+        re.search(
+            rf"(?<![A-Za-z0-9]){re.escape(alias_fold)}(?![A-Za-z0-9])",
+            anchor_fold,
+            flags=re.IGNORECASE,
+        )
+    )
 
 
 def extract_brand_candidates_from_html(
@@ -316,33 +390,52 @@ def extract_brand_candidates_from_html(
     """
     if not html:
         return []
-    link_re = re.compile(
-        r'<a\s+[^>]*href="([^"]+)"[^>]*>([^<]+)</a>',
-        re.IGNORECASE | re.DOTALL,
-    )
+    links: list[tuple[str, str]] = []
+    try:
+        from bs4 import BeautifulSoup  # type: ignore
+
+        soup = BeautifulSoup(html, "html.parser")
+        for a in soup.find_all("a", href=True):
+            href = str(a.get("href") or "")
+            anchor = a.get_text(" ", strip=True)
+            if not anchor:
+                alt_parts: list[str] = []
+                for img in a.find_all("img"):
+                    alt = str(img.get("alt") or img.get("title") or "").strip()
+                    if alt:
+                        alt_parts.append(alt)
+                anchor = " ".join(alt_parts)
+            links.append((href, anchor))
+    except Exception:
+        link_re = re.compile(
+            r'<a\s+[^>]*href="([^"]+)"[^>]*>([^<]+)</a>',
+            re.IGNORECASE | re.DOTALL,
+        )
+        links = [(m.group(1), m.group(2)) for m in link_re.finditer(html)]
+
     out: list[BrandCandidate] = []
     seen: set[str] = set()
-    for m in link_re.finditer(html):
-        href = m.group(1)
-        anchor = re.sub(r"\s+", " ", m.group(2).strip())
+    for href, raw_anchor in links:
+        anchor = re.sub(r"\s+", " ", raw_anchor.strip())
         if not anchor:
             continue
+        anchor_fold = anchor.casefold()
         for brand in _KNOWN_FC_BRANDS:
-            if brand in anchor:
-                key = f"{brand}|{href}"
+            if _alias_in_anchor(brand, anchor_fold):
+                canonical = canonical_fc_brand_name(brand)
+                key = f"{canonical}|{href}"
                 if key in seen:
                     continue
                 seen.add(key)
                 abs_url = urljoin(base_url, href) if base_url else href
                 out.append(
                     BrandCandidate(
-                        brand_name=brand,
+                        brand_name=canonical,
                         source_url=base_url,
                         anchor_text=anchor,
                         href=abs_url,
                     )
                 )
-                break
     return out
 
 

@@ -219,6 +219,32 @@ def _read_csv(path: str | Path) -> list[dict[str, str]]:
         return list(csv.DictReader(f))
 
 
+def load_hydration_matches(path: str | Path) -> dict[str, str]:
+    """review-houjin-hydrate の accepted match を name → corp にする。"""
+    out: dict[str, str] = {}
+    for row in _read_csv(path):
+        status = row.get("status", "")
+        corp = row.get("corporate_number", "")
+        name = row.get("operator_name", "")
+        if not status.startswith("accepted") or not corp or not name:
+            continue
+        out[canonical_key(name)] = corp
+    return out
+
+
+def _hydrated_corp(
+    name: str,
+    corp: str = "",
+    hydration: dict[str, str] | None = None,
+) -> str:
+    corp = (corp or "").strip()
+    if corp:
+        return corp
+    if not hydration:
+        return ""
+    return hydration.get(canonical_key(name), "")
+
+
 def _split_multi(value: str) -> list[str]:
     parts: list[str] = []
     for sep in (" / ", ";", "|"):
@@ -297,9 +323,15 @@ def _add_evidence(
     ))
 
 
-def load_priority_csv(store: BucketStore, evidence: list[EvidenceRow], path: str | Path) -> None:
+def load_priority_csv(
+    store: BucketStore,
+    evidence: list[EvidenceRow],
+    path: str | Path,
+    hydration: dict[str, str] | None = None,
+) -> None:
     for row in _read_csv(path):
-        b = store.get(row.get("operator_name", ""), row.get("corporate_number", ""))
+        name = row.get("operator_name", "")
+        b = store.get(name, _hydrated_corp(name, row.get("corporate_number", ""), hydration))
         if b is None:
             continue
         brand = row.get("brand", "")
@@ -347,9 +379,14 @@ def load_priority_csv(store: BucketStore, evidence: list[EvidenceRow], path: str
             )
 
 
-def load_directory_csv(store: BucketStore, path: str | Path) -> None:
+def load_directory_csv(
+    store: BucketStore,
+    path: str | Path,
+    hydration: dict[str, str] | None = None,
+) -> None:
     for row in _read_csv(path):
-        b = store.get(row.get("operator_name", ""), row.get("corporate_number", ""))
+        name = row.get("operator_name", "")
+        b = store.get(name, _hydrated_corp(name, row.get("corporate_number", ""), hydration))
         if b is None:
             continue
         _merge_set(b.head_offices, row.get("head_office", ""))
@@ -370,9 +407,15 @@ def load_directory_csv(store: BucketStore, path: str | Path) -> None:
                 bb.store_count = max(bb.store_count, cnt)
 
 
-def load_component_csv(store: BucketStore, evidence: list[EvidenceRow], path: str | Path) -> None:
+def load_component_csv(
+    store: BucketStore,
+    evidence: list[EvidenceRow],
+    path: str | Path,
+    hydration: dict[str, str] | None = None,
+) -> None:
     for row in _read_csv(path):
-        b = store.get(row.get("operator_name", ""), row.get("corporate_number", ""))
+        name = row.get("operator_name", "")
+        b = store.get(name, _hydrated_corp(name, row.get("corporate_number", ""), hydration))
         if b is None:
             continue
         brand = row.get("brand", "")
@@ -400,9 +443,17 @@ def load_component_csv(store: BucketStore, evidence: list[EvidenceRow], path: st
             )
 
 
-def load_recruitment_ranking_csv(store: BucketStore, path: str | Path) -> None:
+def load_recruitment_ranking_csv(
+    store: BucketStore,
+    path: str | Path,
+    hydration: dict[str, str] | None = None,
+) -> None:
     for row in _read_csv(path):
-        b = store.get(row.get("operator_name", ""), _first_corporate_number(row.get("corporate_numbers", "")))
+        name = row.get("operator_name", "")
+        b = store.get(
+            name,
+            _hydrated_corp(name, _first_corporate_number(row.get("corporate_numbers", "")), hydration),
+        )
         if b is None:
             continue
         _merge_set(b.recruitment_statuses, row.get("status", ""))
@@ -836,6 +887,7 @@ def export_operator_master(
     directory_csv: str | Path = "var/phase27/deliverable/fc-operators-directory-14brand.csv",
     component_csv: str | Path = "var/phase27/deliverable/brand-operator-components-orm-14brand-10plus.csv",
     recruitment_ranking_csv: str | Path = "var/phase27/top-operators-chateraise-itto-kandon-review.csv",
+    hydration_csv: str | Path = "var/phase28/nationwide-coverage/mega-franchisee-review-houjin-matches.csv",
     recruitment_sidecars: list[tuple[str | Path, str]] | None = None,
     orm_db: str | Path = "var/pizza-registry.sqlite",
     pipeline_db: str | Path = "var/pizza.sqlite",
@@ -843,12 +895,13 @@ def export_operator_master(
 ) -> tuple[list[dict[str, Any]], list[EvidenceRow], list[dict[str, Any]]]:
     store = BucketStore()
     evidence: list[EvidenceRow] = []
+    hydration = load_hydration_matches(hydration_csv)
     load_orm_db(store, evidence, orm_db)
     load_pipeline_db(store, evidence, pipeline_db)
-    load_directory_csv(store, directory_csv)
-    load_component_csv(store, evidence, component_csv)
-    load_priority_csv(store, evidence, priority_csv)
-    load_recruitment_ranking_csv(store, recruitment_ranking_csv)
+    load_directory_csv(store, directory_csv, hydration)
+    load_component_csv(store, evidence, component_csv, hydration)
+    load_priority_csv(store, evidence, priority_csv, hydration)
+    load_recruitment_ranking_csv(store, recruitment_ranking_csv, hydration)
     if recruitment_sidecars is None:
         recruitment_sidecars = [
             ("var/phase27/recruitment-research-chateraise-combined-candidates.csv", "candidate"),
@@ -889,6 +942,7 @@ def _main() -> None:
     ap.add_argument("--directory-csv", default="var/phase27/deliverable/fc-operators-directory-14brand.csv")
     ap.add_argument("--component-csv", default="var/phase27/deliverable/brand-operator-components-orm-14brand-10plus.csv")
     ap.add_argument("--recruitment-ranking-csv", default="var/phase27/top-operators-chateraise-itto-kandon-review.csv")
+    ap.add_argument("--hydration-csv", default="var/phase28/nationwide-coverage/mega-franchisee-review-houjin-matches.csv")
     ap.add_argument("--orm-db", default="var/pizza-registry.sqlite")
     ap.add_argument("--pipeline-db", default="var/pizza.sqlite")
     args = ap.parse_args()
@@ -900,6 +954,7 @@ def _main() -> None:
         directory_csv=args.directory_csv,
         component_csv=args.component_csv,
         recruitment_ranking_csv=args.recruitment_ranking_csv,
+        hydration_csv=args.hydration_csv,
         orm_db=args.orm_db,
         pipeline_db=args.pipeline_db,
         min_total=args.min_total,
