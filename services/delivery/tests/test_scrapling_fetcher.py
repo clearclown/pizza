@@ -160,3 +160,53 @@ def test_build_google_lookup_url_name_and_brand() -> None:
     url = build_google_lookup_url(name="モス六本木店", brand="モスバーガー")
     assert "google.com/search" in url
     assert "hl=ja" in url
+
+
+def test_fetch_camofox_uses_rest_evaluate(monkeypatch) -> None:
+    calls = []
+
+    class FakeResponse:
+        def __init__(self, payload):
+            self.payload = payload
+
+        def raise_for_status(self) -> None:
+            return None
+
+        def json(self):
+            return self.payload
+
+    class FakeClient:
+        def __init__(self, *args, **kwargs):
+            calls.append(("client", kwargs))
+
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *args):
+            return None
+
+        def post(self, url, json):
+            calls.append(("post", url, json))
+            if url.endswith("/tabs"):
+                return FakeResponse({"tabId": "tab-1", "url": json["url"]})
+            if url.endswith("/evaluate"):
+                return FakeResponse({"result": "<html><body>運営会社: 株式会社サンプル</body></html>"})
+            return FakeResponse({"ok": True})
+
+    def fake_request(method, url, **kwargs):
+        calls.append(("request", method, url, kwargs))
+        return FakeResponse({"ok": True})
+
+    import httpx
+
+    monkeypatch.setattr(httpx, "Client", FakeClient)
+    monkeypatch.setattr(httpx, "request", fake_request)
+
+    from pizza_delivery.scrapling_fetcher import ScraplingFetcher
+
+    html = ScraplingFetcher(camofox_base_url="http://camofox.test").fetch_camofox("https://example.com")
+
+    assert "株式会社サンプル" in html
+    assert any(call[0] == "post" and call[1] == "http://camofox.test/tabs" for call in calls)
+    assert any(call[0] == "post" and call[1].endswith("/tabs/tab-1/evaluate") for call in calls)
+    assert any(call[0] == "request" and call[1] == "DELETE" for call in calls)

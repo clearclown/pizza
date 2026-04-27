@@ -35,6 +35,7 @@ from sqlalchemy import (
     UniqueConstraint,
     create_engine,
     func,
+    inspect,
     text,
 )
 from sqlalchemy.orm import (
@@ -78,6 +79,7 @@ class FranchiseBrand(Base):
     master_franchisor_corp: Mapped[str] = mapped_column(String(13), default="")
     jfa_member: Mapped[bool] = mapped_column(default=False)
     source: Mapped[str] = mapped_column(String(40), default="manual", index=True)
+    fc_recruitment_url: Mapped[str] = mapped_column(Text, default="")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now()
     )
@@ -183,22 +185,55 @@ class DataSource(Base):
 # ─── helper ────────────────────────────────────────────────
 
 
+_PHASE25_COLUMNS = {
+    "operator_company": {
+        "representative_name": "VARCHAR(80) DEFAULT ''",
+        "representative_title": "VARCHAR(40) DEFAULT ''",
+        "revenue_current_jpy": "INTEGER DEFAULT 0",
+        "revenue_previous_jpy": "INTEGER DEFAULT 0",
+        "revenue_observed_at": "VARCHAR(20) DEFAULT ''",
+        "website_url": "TEXT DEFAULT ''",
+    },
+    "franchise_brand": {
+        "fc_recruitment_url": "TEXT DEFAULT ''",
+    },
+}
+
+
+def _ensure_phase25_columns(engine) -> None:
+    """既存 registry DB に Phase 25 追加列を後方互換で足す。"""
+    insp = inspect(engine)
+    existing_tables = set(insp.get_table_names())
+    with engine.begin() as conn:
+        for table, columns in _PHASE25_COLUMNS.items():
+            if table not in existing_tables:
+                continue
+            existing = {c["name"] for c in insp.get_columns(table)}
+            for name, ddl in columns.items():
+                if name not in existing:
+                    conn.execute(text(f"ALTER TABLE {table} ADD COLUMN {name} {ddl}"))
+
+
 def make_session(engine=None) -> Session:
     """ORM session factory。テストでは in-memory engine を渡す。"""
     engine = engine or default_engine()
     Base.metadata.create_all(engine)
+    _ensure_phase25_columns(engine)
     SessionLocal = sessionmaker(bind=engine, expire_on_commit=False)
     return SessionLocal()
 
 
 def create_all(engine=None) -> None:
     """スキーマを作成 (テストや初期化用)。"""
-    Base.metadata.create_all(engine or default_engine())
+    engine = engine or default_engine()
+    Base.metadata.create_all(engine)
+    _ensure_phase25_columns(engine)
 
 
 def upsert_brand(sess: Session, name: str, *, source: str = "manual",
                  industry: str = "", master_franchisor_name: str = "",
-                 master_franchisor_corp: str = "", jfa_member: bool = False) -> FranchiseBrand:
+                 master_franchisor_corp: str = "", jfa_member: bool = False,
+                 fc_recruitment_url: str = "") -> FranchiseBrand:
     """name でブランドを upsert して ORM インスタンスを返す。"""
     brand = sess.query(FranchiseBrand).filter_by(name=name).one_or_none()
     if brand is None:
@@ -212,6 +247,8 @@ def upsert_brand(sess: Session, name: str, *, source: str = "manual",
         brand.master_franchisor_corp = master_franchisor_corp
     if jfa_member:
         brand.jfa_member = True
+    if fc_recruitment_url:
+        brand.fc_recruitment_url = fc_recruitment_url
     return brand
 
 
@@ -225,6 +262,12 @@ def upsert_operator(
     kind: str = "",
     source: str = "manual",
     note: str = "",
+    representative_name: str = "",
+    representative_title: str = "",
+    revenue_current_jpy: int = 0,
+    revenue_previous_jpy: int = 0,
+    revenue_observed_at: str = "",
+    website_url: str = "",
 ) -> OperatorCompany:
     """corporate_number (あれば) 優先で upsert。無ければ name 一致で探す。"""
     op: OperatorCompany | None = None
@@ -247,6 +290,18 @@ def upsert_operator(
         op.kind = kind
     if note:
         op.note = note
+    if representative_name:
+        op.representative_name = representative_name
+    if representative_title:
+        op.representative_title = representative_title
+    if revenue_current_jpy:
+        op.revenue_current_jpy = revenue_current_jpy
+    if revenue_previous_jpy:
+        op.revenue_previous_jpy = revenue_previous_jpy
+    if revenue_observed_at:
+        op.revenue_observed_at = revenue_observed_at
+    if website_url:
+        op.website_url = website_url
     return op
 
 

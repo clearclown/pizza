@@ -1,4 +1,4 @@
-// Package fixtures — golden dataset の内部整合性バリデータ。
+// Package fixtures — classification golden dataset の内部整合性バリデータ。
 //
 // docs/operator-definition.md の契約に基づき、以下を自動検証する:
 //  - 必須列の存在
@@ -29,7 +29,7 @@ var ValidOperationTypes = map[string]bool{
 	"unknown":    true,
 }
 
-// GoldenRow は judgement-golden.csv の 1 行を表す。
+// GoldenRow は classification-golden.csv の 1 行を表す。
 type GoldenRow struct {
 	PlaceID           string
 	Brand             string

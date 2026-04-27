@@ -97,6 +97,14 @@ func main() {
 		if err := cmdJFASync(os.Args[2:]); err != nil {
 			log.Fatalf("pizza jfa-sync: %v", err)
 		}
+	case "jfa-disclosure-sync":
+		if err := cmdJFADisclosureSync(os.Args[2:]); err != nil {
+			log.Fatalf("pizza jfa-disclosure-sync: %v", err)
+		}
+	case "anytime-official-sync":
+		if err := cmdAnytimeOfficialSync(os.Args[2:]); err != nil {
+			log.Fatalf("pizza anytime-official-sync: %v", err)
+		}
 	case "jfa-export":
 		if err := cmdJFAExport(os.Args[2:]); err != nil {
 			log.Fatalf("pizza jfa-export: %v", err)
@@ -121,6 +129,14 @@ func main() {
 		if err := cmdFCDirectory(os.Args[2:]); err != nil {
 			log.Fatalf("pizza fc-directory: %v", err)
 		}
+	case "coverage-export":
+		if err := cmdCoverageExport(os.Args[2:]); err != nil {
+			log.Fatalf("pizza coverage-export: %v", err)
+		}
+	case "review-houjin-hydrate":
+		if err := cmdReviewHoujinHydrate(os.Args[2:]); err != nil {
+			log.Fatalf("pizza review-houjin-hydrate: %v", err)
+		}
 	case "cleanse":
 		if err := cmdCleanse(os.Args[2:]); err != nil {
 			log.Fatalf("pizza cleanse: %v", err)
@@ -137,6 +153,18 @@ func main() {
 		if err := cmdDeepResearch(os.Args[2:]); err != nil {
 			log.Fatalf("pizza deep-research: %v", err)
 		}
+	case "recruitment-research":
+		if err := cmdRecruitmentResearch(os.Args[2:]); err != nil {
+			log.Fatalf("pizza recruitment-research: %v", err)
+		}
+	case "official-recruitment-crawl":
+		if err := cmdOfficialRecruitmentCrawl(os.Args[2:]); err != nil {
+			log.Fatalf("pizza official-recruitment-crawl: %v", err)
+		}
+	case "official-franchisee-sources":
+		if err := cmdOfficialFranchiseeSources(os.Args[2:]); err != nil {
+			log.Fatalf("pizza official-franchisee-sources: %v", err)
+		}
 	case "edinet-sync":
 		if err := cmdEdinetSync(os.Args[2:]); err != nil {
 			log.Fatalf("pizza edinet-sync: %v", err)
@@ -144,6 +172,14 @@ func main() {
 	case "operator-spider":
 		if err := cmdOperatorSpider(os.Args[2:]); err != nil {
 			log.Fatalf("pizza operator-spider: %v", err)
+		}
+	case "operator-brand-discovery":
+		if err := cmdOperatorBrandDiscovery(os.Args[2:]); err != nil {
+			log.Fatalf("pizza operator-brand-discovery: %v", err)
+		}
+	case "osm-fetch-all":
+		if err := cmdOSMFetchAll(os.Args[2:]); err != nil {
+			log.Fatalf("pizza osm-fetch-all: %v", err)
 		}
 	case "import-megajii-csv":
 		if err := cmdImportMegajiiCSV(os.Args[2:]); err != nil {
@@ -181,18 +217,27 @@ Subcommands:
   pizza houjin-import    国税庁 法人番号 CSV/zip を local SQLite に取込 (Layer D Ground Truth)
   pizza houjin-search    local 法人番号 index を operator 名で検索
   pizza jfa-sync         日本フランチャイズチェーン協会 会員企業一覧を scrape + ORM 登録
+  pizza jfa-disclosure-sync  JFA 情報開示書面 PDF から本部店舗数を ORM 登録
+  pizza anytime-official-sync  エニタイム公式店舗一覧 → stores 補完 + false positive 監査
   pizza jfa-export       ORM 登録済のブランド×事業会社リストを CSV 出力
   pizza integrate        JFA / 国税庁 CSV / pipeline operator を ORM に統合 (総合 FC 事業会社リスト)
   pizza evaluate         truth (JFA) × pipeline の突合 metric を算出 (brand/operator/link recall)
   pizza enrich           Places Details (phone) + browser-use 逆引きで operator 一括特定
   pizza brand-profile    複数ブランドを 2 階層並列で prof iling (JFA + gBiz + 公式 HP + cross-brand)
   pizza fc-directory     都道府県別 FC 運営事業会社ディレクトリ (ORM + 国税庁 CSV 融合)
+  pizza coverage-export  14 brand × 47 都道府県の店舗/operator coverage CSV を出力
+  pizza review-houjin-hydrate  review対象メガジーを国税庁CSV SQLiteで高速hydrate
   pizza cleanse          operator_stores の dirty 名を LLM canonicalize + 国税庁検証で cleanse
   pizza purge            operator_stores から 国税庁未登録 garbage operator を削除 (ハルシネ防止)
   pizza address-reverse  店舗住所 → 国税庁 CSV 同住所 株式会社 逆引きで operator 候補抽出
   pizza deep-research    operator 不明店舗を Gemini research + Claude 監視 + 国税庁 3 段検証
+  pizza recruitment-research  求人・採用ページ search + 本文 gate + 国税庁 verify
+  pizza official-recruitment-crawl  公式求人 jobfind ページ → 募集者 + 店舗 match + 国税庁 verify
+  pizza official-franchisee-sources  公式FC/運営会社/本部PR本文 → operator link + 国税庁 verify
   pizza edinet-sync      EDINET 有価証券報告書 → 関係会社・FC 契約先 → 国税庁 verify → ORM 登録
   pizza operator-spider  ORM 登録済 operator 公式 HP → 店舗一覧 scrape → 住所 match → operator 確定
+  pizza operator-brand-discovery  operator 公式HPの事業/ブランドlink → FC brand link を追加収集
+  pizza osm-fetch-all    OSM Overpass 全国 fetch + operator:ja tag capture
   pizza areas     利用可能エリア一覧
   pizza version
   pizza help
@@ -502,6 +547,7 @@ func cmdHoujinSearch(args []string) error {
 	name := fs.String("name", "", "operator 名 (部分一致)")
 	limit := fs.Int("limit", 10, "上限件数")
 	dbPath := fs.String("db", "", "local sqlite index")
+	noSubstring := fs.Bool("no-substring", false, "遅い部分一致 LIKE を使わない")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -512,6 +558,9 @@ func cmdHoujinSearch(args []string) error {
 		"--name", *name, "--limit", strconv.Itoa(*limit)}
 	if *dbPath != "" {
 		pyArgs = append(pyArgs, "--db", *dbPath)
+	}
+	if *noSubstring {
+		pyArgs = append(pyArgs, "--no-substring")
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }
@@ -534,6 +583,71 @@ func cmdJFASync(args []string) error {
 	return runDeliveryPython(pyArgs...).Run()
 }
 
+// cmdJFADisclosureSync は JFA 情報開示書面 index/PDF を ORM DB に upsert する。
+//
+//	pizza jfa-disclosure-sync
+//	pizza jfa-disclosure-sync --fetch-pdfs --brands モスバーガーチェーン,カーブス
+func cmdJFADisclosureSync(args []string) error {
+	fs := flag.NewFlagSet("jfa-disclosure-sync", flag.ExitOnError)
+	url := fs.String("url", "", "JFA 情報開示書面 URL (default: 公式 particle/3614.html)")
+	brands := fs.String("brands", "", "対象ブランド名のカンマ区切り filter")
+	fetchPDFs := fs.Bool("fetch-pdfs", false, "PDF 本文から店舗数も抽出")
+	maxPDFs := fs.Int("max-pdfs", 0, "処理する PDF 数の上限 (0 なら制限なし)")
+	rateLimitSec := fs.Float64("rate-limit-sec", 0.5, "PDF fetch 間隔 seconds")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.jfa_disclosure", "sync"}
+	if *url != "" {
+		pyArgs = append(pyArgs, "--url", *url)
+	}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
+	if *fetchPDFs {
+		pyArgs = append(pyArgs, "--fetch-pdfs")
+	}
+	if *maxPDFs > 0 {
+		pyArgs = append(pyArgs, "--max-pdfs", strconv.Itoa(*maxPDFs))
+	}
+	pyArgs = append(pyArgs, "--rate-limit-sec", fmt.Sprintf("%.3f", *rateLimitSec))
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdAnytimeOfficialSync は Google API を使わず、エニタイム公式の
+// 都道府県別店舗一覧から pipeline stores を補完する。
+func cmdAnytimeOfficialSync(args []string) error {
+	fs := flag.NewFlagSet("anytime-official-sync", flag.ExitOnError)
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	out := fs.String("out", "var/phase28/anytime/anytime-official-stores.csv", "公式店舗 CSV")
+	falseOut := fs.String("false-positive-out", "var/phase28/anytime/anytime-false-positive-stores.csv", "非エニタイム混入候補 CSV")
+	nonOfficialOut := fs.String("non-official-out", "var/phase28/anytime/anytime-non-official-stores.csv", "公式一覧外の旧店舗候補 CSV")
+	apply := fs.Bool("apply", false, "stores に upsert する")
+	purgeFalse := fs.Bool("purge-false-positives", false, "非エニタイム混入候補を stores/operator_stores から削除する")
+	purgeNonOfficial := fs.Bool("purge-non-official", false, "公式一覧外のエニタイム旧店舗行を stores/operator_stores から削除する")
+	sleepSec := fs.Float64("sleep-sec", 0.2, "公式ページ取得間隔 秒")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.anytime_official",
+		"--db", *dbPath,
+		"--out", *out,
+		"--false-positive-out", *falseOut,
+		"--non-official-out", *nonOfficialOut,
+		"--sleep-sec", fmt.Sprintf("%.3f", *sleepSec),
+	}
+	if *apply {
+		pyArgs = append(pyArgs, "--apply")
+	}
+	if *purgeFalse {
+		pyArgs = append(pyArgs, "--purge-false-positives")
+	}
+	if *purgeNonOfficial {
+		pyArgs = append(pyArgs, "--purge-non-official")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
 // cmdIntegrate は 3 ソース (JFA / 国税庁 CSV / pipeline operator_stores) を
 // ORM に統合、または総合 CSV を出力。
 //
@@ -546,6 +660,7 @@ func cmdIntegrate(args []string) error {
 	source := fs.String("source", "", "export 時 source フィルタ (空で全件)")
 	pipelineDB := fs.String("pipeline-db", "var/pizza.sqlite", "pipeline 側 SQLite")
 	houjinDB := fs.String("houjin-db", "", "Houjin CSV index (空で default)")
+	skipHoujin := fs.Bool("skip-houjin", false, "run 時に国税庁 hydrate を skip")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -556,6 +671,9 @@ func cmdIntegrate(args []string) error {
 			"--pipeline-db", *pipelineDB}
 		if *houjinDB != "" {
 			pyArgs = append(pyArgs, "--houjin-db", *houjinDB)
+		}
+		if *skipHoujin {
+			pyArgs = append(pyArgs, "--skip-houjin")
 		}
 	case "export":
 		pyArgs = []string{"python", "-m", "pizza_delivery.integrate", "export",
@@ -664,10 +782,19 @@ func cmdFCDirectory(args []string) error {
 		"Phase 26: 当該都道府県に店舗を持つ operator (本社所在地不問)")
 	pipelineDB := fs.String("pipeline-db", "var/pizza.sqlite",
 		"stores-in-prefecture 用の pipeline SQLite")
+	brands := fs.String("brands", "", "カンマ区切りブランド filter (空で全ブランド)")
 	out := fs.String("out", "var/fc-directory.csv", "CSV 出力パス")
 	outJSON := fs.String("out-json", "", "JSON 出力 (debug 用、空で skip)")
+	componentOut := fs.String("component-out", "",
+		"qualified operator の brand 別 component CSV 出力")
+	minTotal := fs.Int("min-total", 0,
+		"operator 合計 estimated_store_count の下限 (0 で無効)")
+	minBrands := fs.Int("min-brands", 0,
+		"operator brand_count の下限 (0 で無効)")
 	excludeZero := fs.Bool("exclude-zero-stores", false,
 		"estimated_store_count=0 の operator を除外")
+	includeFranchisor := fs.Bool("include-franchisor", false,
+		"本部・直営 link も directory に含める")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -679,11 +806,88 @@ func cmdFCDirectory(args []string) error {
 	if *storesInPref != "" {
 		pyArgs = append(pyArgs, "--stores-in-prefecture", *storesInPref)
 	}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
 	if *outJSON != "" {
 		pyArgs = append(pyArgs, "--out-json", *outJSON)
 	}
+	if *componentOut != "" {
+		pyArgs = append(pyArgs, "--component-out", *componentOut)
+	}
+	if *minTotal > 0 {
+		pyArgs = append(pyArgs, "--min-total", strconv.Itoa(*minTotal))
+	}
+	if *minBrands > 0 {
+		pyArgs = append(pyArgs, "--min-brands", strconv.Itoa(*minBrands))
+	}
 	if *excludeZero {
 		pyArgs = append(pyArgs, "--exclude-zero-stores")
+	}
+	if *includeFranchisor {
+		pyArgs = append(pyArgs, "--include-franchisor")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdCoverageExport は 14 brand × 47 都道府県の店舗/operator coverage CSV を出力する。
+//
+//	pizza coverage-export --out-dir var/phase28/nationwide-coverage
+func cmdCoverageExport(args []string) error {
+	fs := flag.NewFlagSet("coverage-export", flag.ExitOnError)
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	brands := fs.String("brands", "", "カンマ区切り brand list (空なら14ブランド)")
+	outDir := fs.String("out-dir", "var/phase28/nationwide-coverage", "CSV 出力先 directory")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.coverage_exports",
+		"--db", *dbPath,
+		"--out-dir", *outDir}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdReviewHoujinHydrate は review 対象メガジーを国税庁 CSV SQLite の
+// normalized_name 完全一致 + 本社住所で高速照合する。
+//
+//	pizza review-houjin-hydrate --apply
+func cmdReviewHoujinHydrate(args []string) error {
+	fs := flag.NewFlagSet("review-houjin-hydrate", flag.ExitOnError)
+	reviewCSV := fs.String("review-csv", "var/phase28/nationwide-coverage/mega-franchisee-review-min20.csv", "review 対象 CSV")
+	houjinDB := fs.String("houjin-db", "var/houjin/registry.sqlite", "国税庁 CSV SQLite")
+	ormDB := fs.String("orm-db", "var/pizza-registry.sqlite", "registry ORM SQLite")
+	out := fs.String("out", "var/phase28/nationwide-coverage/mega-franchisee-review-houjin-matches.csv", "照合結果 CSV")
+	apply := fs.Bool("apply", false, "accepted match を ORM に反映する")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.megafranchisee_review_hydrate",
+		"--review-csv", *reviewCSV,
+		"--houjin-db", *houjinDB,
+		"--orm-db", *ormDB,
+		"--out", *out,
+	}
+	if *apply {
+		pyArgs = append(pyArgs, "--apply")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdOSMFetchAll は Overpass API から全国店舗を補完し、OSM operator tag が
+// ある場合は operator_stores に provenance 付きで保存する。
+func cmdOSMFetchAll(args []string) error {
+	fs := flag.NewFlagSet("osm-fetch-all", flag.ExitOnError)
+	brands := fs.String("brands", "", "カンマ区切り brand list (空なら14ブランド)")
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.commands.osm_fetch_all", "--db", *dbPath}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }
@@ -823,6 +1027,148 @@ func cmdDeepResearch(args []string) error {
 	return runDeliveryPython(pyArgs...).Run()
 }
 
+// cmdRecruitmentResearch は求人・採用ページを search し、本文 gate と国税庁 CSV
+// exact verify を通ったものだけ operator_stores に反映する。
+//
+//	pizza recruitment-research --brands "モスバーガー,業務スーパー" --max-stores 20
+//	pizza recruitment-research --max-stores 0 --dry-run --out var/recruitment.json
+func cmdRecruitmentResearch(args []string) error {
+	fs := flag.NewFlagSet("recruitment-research", flag.ExitOnError)
+	brand := fs.String("brand", "", "対象ブランド")
+	brands := fs.String("brands", "", "カンマ区切りブランド (空なら14ブランド)")
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	maxStores := fs.Int("max-stores", 20,
+		"各ブランドの Gemini 呼出上限 (0 で全件)")
+	offset := fs.Int("offset", 0, "各ブランドの未特定店舗リストの先頭から skip する件数")
+	dryRun := fs.Bool("dry-run", false, "提案のみ")
+	concurrency := fs.Int("concurrency", 2, "Gemini 並列数")
+	brandConcurrency := fs.Int("brand-concurrency", 3, "ブランド横断並列数")
+	llmPageCritic := fs.Bool("llm-page-critic", false,
+		"Scrapling 取得済み HTML snippet を LLM で本文限定判定する")
+	fetcher := fs.String("fetcher", "static",
+		"求人 evidence URL 取得方式: static | dynamic | camofox | auto")
+	out := fs.String("out", "", "proposal JSON 出力")
+	exportSidecarsFrom := fs.String("export-sidecars-from", "",
+		"既存 proposal JSON から取捨選択用 sidecar CSV を再生成")
+	applyFrom := fs.String("apply-from", "",
+		"既存 proposal JSON の accepted row だけを DB に反映")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	if *applyFrom != "" {
+		return runDeliveryPython("python", "-m", "pizza_delivery.recruitment_research",
+			"--db", *dbPath, "--apply-from", *applyFrom).Run()
+	}
+	if *exportSidecarsFrom != "" {
+		return runDeliveryPython("python", "-m", "pizza_delivery.recruitment_research",
+			"--export-sidecars-from", *exportSidecarsFrom).Run()
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.recruitment_research",
+		"--db", *dbPath,
+		"--max-stores", strconv.Itoa(*maxStores),
+		"--offset", strconv.Itoa(*offset),
+		"--concurrency", strconv.Itoa(*concurrency),
+		"--brand-concurrency", strconv.Itoa(*brandConcurrency),
+		"--fetcher", *fetcher}
+	if *brand != "" {
+		pyArgs = append(pyArgs, "--brand", *brand)
+	}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
+	if *dryRun {
+		pyArgs = append(pyArgs, "--dry-run")
+	}
+	if *llmPageCritic {
+		pyArgs = append(pyArgs, "--llm-page-critic")
+	}
+	if *out != "" {
+		pyArgs = append(pyArgs, "--out", *out)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdOfficialRecruitmentCrawl は公式 jobfind/Recop 系採用ページを直接巡回し、
+// detail 本文の「募集者」表示と店舗住所 match、国税庁 exact verify を通したもの
+// だけ operator_stores に追加する。検索 snippet や LLM 知識は使わない。
+//
+//	pizza official-recruitment-crawl --sources "モスバーガー=https://mos-recruit.net/jobfind-pc/area/All" --dry-run
+func cmdOfficialRecruitmentCrawl(args []string) error {
+	fs := flag.NewFlagSet("official-recruitment-crawl", flag.ExitOnError)
+	dbPath := fs.String("db", "var/pizza.sqlite", "pipeline SQLite")
+	sources := fs.String("sources", "",
+		"'brand=url,brand2=url2'。空なら実装済み公式求人 sources")
+	maxPages := fs.Int("max-pages", 999, "各 source の list page 上限")
+	maxDetails := fs.Int("max-details", 0, "detail page 上限 (0 で全件)")
+	concurrency := fs.Int("concurrency", 16, "detail fetch 並列数")
+	timeout := fs.Float64("timeout", 8.0, "fetch timeout 秒")
+	fetcher := fs.String("fetcher", "static",
+		"list/detail page 取得方式: static | dynamic | camofox | auto")
+	requestDelay := fs.Float64("request-delay", 0.0,
+		"detail fetch ごとの sleep 秒 (429 回避用)")
+	maxEmptyStreak := fs.Int("max-empty-streak", 30,
+		"operator 抽出なし detail が連続したら停止 (0 で無効)")
+	dryRun := fs.Bool("dry-run", false, "DB update なし")
+	out := fs.String("out", "", "detail 判定 CSV 出力")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.official_recruitment_crawl",
+		"--db", *dbPath,
+		"--max-pages", strconv.Itoa(*maxPages),
+		"--max-details", strconv.Itoa(*maxDetails),
+		"--concurrency", strconv.Itoa(*concurrency),
+		"--timeout", fmt.Sprintf("%.3f", *timeout),
+		"--fetcher", *fetcher,
+		"--request-delay", fmt.Sprintf("%.3f", *requestDelay),
+		"--max-empty-streak", strconv.Itoa(*maxEmptyStreak)}
+	if *sources != "" {
+		pyArgs = append(pyArgs, "--sources", *sources)
+	}
+	if *dryRun {
+		pyArgs = append(pyArgs, "--dry-run")
+	}
+	if *out != "" {
+		pyArgs = append(pyArgs, "--out", *out)
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdOfficialFranchiseeSources は公式FC募集ページ・公式運営会社ページ・本部PR本文
+// から operator evidence を直接抽出し、国税庁CSVで照合して ORM に登録する。
+// 検索 snippet や LLM 知識は使わない。
+//
+//	pizza official-franchisee-sources --brands "Brand off,カルビ丼とスン豆腐専門店韓丼" --clean-registry
+func cmdOfficialFranchiseeSources(args []string) error {
+	fs := flag.NewFlagSet("official-franchisee-sources", flag.ExitOnError)
+	brands := fs.String("brands", "", "カンマ区切り brand filter")
+	ormDB := fs.String("orm-db", "var/pizza-registry.sqlite", "registry ORM SQLite")
+	houjinDB := fs.String("houjin-db", "var/houjin/registry.sqlite", "国税庁 CSV SQLite")
+	out := fs.String("out", "var/phase28/nationwide-coverage/official-franchisee-sources.csv", "evidence CSV 出力")
+	timeout := fs.Float64("timeout", 15.0, "fetch timeout 秒")
+	cleanRegistry := fs.Bool("clean-registry", false,
+		"対象 brand の pipeline structural garbage/重複corp空 link を削除")
+	dryRun := fs.Bool("dry-run", false, "DB update なし")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.official_franchisee_sources",
+		"--orm-db", *ormDB,
+		"--houjin-db", *houjinDB,
+		"--out", *out,
+		"--timeout", fmt.Sprintf("%.3f", *timeout)}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
+	if *cleanRegistry {
+		pyArgs = append(pyArgs, "--clean-registry")
+	}
+	if *dryRun {
+		pyArgs = append(pyArgs, "--dry-run")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
 // cmdEdinetSync は EDINET 有価証券報告書 から FC 本部の関係会社 / 重要契約先 を
 // 抽出して ORM に登録する。モスフードサービス (E03384) 等の listed FC 本部に有効。
 // EDINET_API_KEY env var 必要 (https://disclosure2dl.edinet-fsa.go.jp/ で無料登録)。
@@ -895,6 +1241,50 @@ func cmdOperatorSpider(args []string) error {
 	return runDeliveryPython(pyArgs...).Run()
 }
 
+// cmdOperatorBrandDiscovery は ORM 登録済 operator の公式 HP から
+// 事業/ブランド一覧 link を巡回し、既知 FC brand との link を ORM に追加する。
+// 店舗数はこの経路では増やさず estimated_store_count=0 の evidence link に留める。
+//
+//	pizza operator-brand-discovery --min-total 20 --dry-run
+//	pizza operator-brand-discovery --fetcher camofox --concurrency 6
+func cmdOperatorBrandDiscovery(args []string) error {
+	fs := flag.NewFlagSet("operator-brand-discovery", flag.ExitOnError)
+	ormDB := fs.String("orm-db", "var/pizza-registry.sqlite", "registry ORM SQLite")
+	out := fs.String("out", "var/phase28/nationwide-coverage/operator-brand-discovery.csv", "discovery CSV 出力")
+	minTotal := fs.Int("min-total", 20, "対象 operator の最低 estimated total stores")
+	limit := fs.Int("limit", 0, "処理上限 operator 数 (0 で全件)")
+	concurrency := fs.Int("concurrency", 8, "公式サイト fetch 並列数")
+	timeout := fs.Float64("timeout", 8.0, "fetch timeout 秒")
+	fetcher := fs.String("fetcher", "static", "取得方式: static | dynamic | camofox | auto")
+	maxFollowLinks := fs.Int("max-follow-links", 4, "事業/ブランド link の追従上限")
+	brands := fs.String("brands", "", "カンマ区切り brand filter (空なら既知FC全体)")
+	allowExternalLinks := fs.Bool("allow-external-links", false,
+		"operator公式上の外部 href brand anchor も自動反映する")
+	dryRun := fs.Bool("dry-run", false, "DB update なし")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.operator_brand_discovery",
+		"--orm-db", *ormDB,
+		"--out", *out,
+		"--min-total", strconv.Itoa(*minTotal),
+		"--limit", strconv.Itoa(*limit),
+		"--concurrency", strconv.Itoa(*concurrency),
+		"--timeout", fmt.Sprintf("%.3f", *timeout),
+		"--fetcher", *fetcher,
+		"--max-follow-links", strconv.Itoa(*maxFollowLinks)}
+	if *brands != "" {
+		pyArgs = append(pyArgs, "--brands", *brands)
+	}
+	if *allowExternalLinks {
+		pyArgs = append(pyArgs, "--allow-external-links")
+	}
+	if *dryRun {
+		pyArgs = append(pyArgs, "--dry-run")
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
 // cmdImportMegajiiCSV は人手集計 TSV (メガジー + 本部) を LLM+国税庁 verify で
 // ORM に取込む。
 //
@@ -963,6 +1353,7 @@ func cmdMegaFranchisee(args []string) error {
 	dbPath := fs.String("db", "", "SQLite DB path (default var/pizza.sqlite)")
 	minTotal := fs.Int("min-total", 2, "候補にする最低合計店舗数")
 	minBrands := fs.Int("min-brands", 1, "複数ブランド運営だけ残したいなら >=2")
+	brandsCSV := fs.String("brands", "", "カンマ区切りブランド filter (空で全ブランド)")
 	outCSV := fs.String("out-csv", "var/megajii/operators.csv", "operator 主語 CSV")
 	outYAML := fs.String("out-yaml", "", "operator 主語 YAML (省略可)")
 	includeHQ := fs.Bool("include-franchisor", false, "本部・直営も集計に含める")
@@ -1011,19 +1402,34 @@ func cmdMegaFranchisee(args []string) error {
 	if *outYAML != "" {
 		yamlStmt = fmt.Sprintf("export_cross_brand_to_yaml(ops, out_path=%q);", *outYAML)
 	}
+	brandFilterExpr := "None"
+	if *brandsCSV != "" {
+		parts := strings.Split(*brandsCSV, ",")
+		quoted := make([]string, 0, len(parts))
+		for _, p := range parts {
+			p = strings.TrimSpace(p)
+			if p == "" {
+				continue
+			}
+			quoted = append(quoted, strconv.Quote(p))
+		}
+		if len(quoted) > 0 {
+			brandFilterExpr = "{" + strings.Join(quoted, ",") + "}"
+		}
+	}
 	topExpr := fmt.Sprintf("ops[:%d]", *top)
 	if *top == 0 {
 		topExpr = "ops"
 	}
 	script := fmt.Sprintf(
 		"from pizza_delivery.registry_expander import aggregate_cross_brand_operators, export_cross_brand_to_csv, export_cross_brand_to_yaml;"+
-			"ops = aggregate_cross_brand_operators(db_path=%q, min_total_stores=%d, min_brands=%d, exclude_franchisor=%s);"+
+			"ops = aggregate_cross_brand_operators(db_path=%q, min_total_stores=%d, min_brands=%d, exclude_franchisor=%s, brands_filter=%s);"+
 			"ops.sort(key=lambda o: %s);"+
 			"export_cross_brand_to_csv(ops, out_path=%q);"+
 			"%s"+
 			"print(f'✅ {len(ops)} operators');"+
 			"[print(f'  {o.total_stores:4d} 店  {o.brand_count} 業態  {o.name}  ({\", \".join(f\"{b}:{n}\" for b,n in sorted(o.brand_counts.items(), key=lambda kv:-kv[1]))})') for o in %s]",
-		*dbPath, *minTotal, *minBrands, excludeHQ, sortKey, *outCSV, yamlStmt, topExpr,
+		*dbPath, *minTotal, *minBrands, excludeHQ, brandFilterExpr, sortKey, *outCSV, yamlStmt, topExpr,
 	)
 	cmd := exec.Command("uv", "run", "python", "-c", script)
 	cmd.Dir = deliveryDir
@@ -1038,12 +1444,14 @@ func cmdMegaFranchisee(args []string) error {
 //
 //	pizza bench --brands "エニタイムフィットネス,モスバーガー,TSUTAYA" \
 //	            --areas "東京都" --cell-km 3.0
+//
 // _SPARSE_PREFS は人口密度の低い県 (低 FC 店舗密度)。
 // 巨大 area + sparse cells で Places API call を無駄にしない様、大きな cell を使う。
 //
 // 基準 (人口密度 人/km² 2020年国勢調査):
-//   北海道 (67), 岩手 (78), 秋田 (75), 高知 (95), 島根 (98), 山形 (111),
-//   青森 (117), 鹿児島 (160), 福島 (122), 沖縄 (622、しかし面積広く分布疎)
+//
+//	北海道 (67), 岩手 (78), 秋田 (75), 高知 (95), 島根 (98), 山形 (111),
+//	青森 (117), 鹿児島 (160), 福島 (122), 沖縄 (622、しかし面積広く分布疎)
 var _SPARSE_PREFS = map[string]bool{
 	"北海道": true, "岩手県": true, "秋田県": true,
 	"青森県": true, "山形県": true, "福島県": true,
@@ -1117,15 +1525,15 @@ func cmdBench(args []string) error {
 
 	// サマリ record
 	type BenchResult struct {
-		Brand     string `json:"brand"`
-		Areas     string `json:"areas"`
-		Stores    int32  `json:"stores_found"`
+		Brand      string  `json:"brand"`
+		Areas      string  `json:"areas"`
+		Stores     int32   `json:"stores_found"`
 		ElapsedSec float32 `json:"elapsed_sec"`
-		APICalls  int    `json:"api_calls"`
-		RejBrand  int    `json:"rejected_brand_filter"`
-		RejPoly   int    `json:"rejected_polygon"`
-		RejDup    int    `json:"rejected_duplicate"`
-		CellsCap  int    `json:"cells_hit_cap"`
+		APICalls   int     `json:"api_calls"`
+		RejBrand   int     `json:"rejected_brand_filter"`
+		RejPoly    int     `json:"rejected_polygon"`
+		RejDup     int     `json:"rejected_duplicate"`
+		CellsCap   int     `json:"cells_hit_cap"`
 	}
 	var results []BenchResult
 

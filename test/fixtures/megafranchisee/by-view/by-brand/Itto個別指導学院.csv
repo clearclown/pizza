@@ -1,8 +1,9 @@
-operator,corp,hq,head_office,representative,url,stores_declared,source
-"自分みらい教育株式会社","","愛知県","愛知県名古屋市中村区名駅4丁目6番17号 名古屋ビルディング12F","笠原翠",https://jibunmirai.co.jp/,1046,manual_megajii_2026_04_24
-"WEグループホールディングス","","愛知県","愛知県大府市中央町7丁目336番地","安倍 康一",https://we-hd.net/,237,manual_megajii_2026_04_24
-"株式会社リックプレイス",9010601030568,"東京都","東京都中央区東日本橋3-11-11","石塚 信司",https://www.licplace.co.jp/,195,manual_megajii_2026_04_24
-"株式会社ITTO","","","","","",149,pipeline
-"株式会社YZコンサルティング","","埼玉県","埼玉県熊谷市筑波2-48-1","清水 裕司",http://www.yz-itto.jp/,44,manual_megajii_2026_04_24
-"アイ・ディー・エー株式会社",8120001059826,"大阪府","大阪府大阪市北区梅田3-4-5","井田 貴俊",https://www.igroup.co.jp/business/ida.html,31,manual_megajii_2026_04_24
-"株式会社ITTO高校生専門","","","","","",1,pipeline
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
+Itto個別指導学院,,自分みらい教育株式会社,,愛知県名古屋市中村区名駅4丁目6番17号 名古屋ビルディング12F,愛知県,franchisor,1046,manual_megajii_2026_04_24,,
+Itto個別指導学院,,ＷＥグループホールディングス株式会社,9180001164900,愛知県大府市中央町７丁目３３６番地,愛知県,franchisee,237,manual_megajii_2026_04_24,,
+Itto個別指導学院,,株式会社リックプレイス,9010601030568,東京都中央区東日本橋3-11-11,東京都,franchisee,195,manual_megajii_2026_04_24,,
+Itto個別指導学院,,株式会社ITTO,,,,unknown,149,pipeline,,discovered_via=chain_discovery
+Itto個別指導学院,,株式会社ＹＺコンサルティング,6030001062881,埼玉県熊谷市筑波２丁目４８番地１－６階,埼玉県,franchisee,44,manual_megajii_2026_04_24,,
+Itto個別指導学院,,アイ・ディー・エー株式会社,8120001059826,大阪府大阪市北区梅田3-4-5,大阪府,franchisee,31,manual_megajii_2026_04_24,,
+Itto個別指導学院,,株式会社ITTO高校生専門,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+ITTO個別指導学院,学習塾事業、英会話事業、通訳・翻訳事業、法人語学研修事業 等,NOVAホールディングス株式会社,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,

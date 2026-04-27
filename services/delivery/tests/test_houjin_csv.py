@@ -142,6 +142,33 @@ def test_search_empty_name_returns_empty(tmp_path: Path) -> None:
     assert idx.search_by_name("   ") == []
 
 
+def test_search_by_name_can_disable_substring_scan(tmp_path: Path) -> None:
+    db = tmp_path / "registry.sqlite"
+    csv = tmp_path / "sample.csv"
+    csv.write_text(_SAMPLE_ROW_MOS, encoding="utf-8")
+    idx = HoujinCSVIndex(db)
+    idx.ingest_csv(csv)
+
+    assert idx.search_by_name("モスストア", allow_substring=False) == []
+    assert len(idx.search_by_name("モスストア")) == 1
+
+
+def test_search_by_name_hits_normalized_exact(tmp_path: Path) -> None:
+    db = tmp_path / "registry.sqlite"
+    csv = tmp_path / "sample.csv"
+    csv.write_text(
+        "1,8030001054043,01,0,2024-01,2024-01,"
+        "株式会社Ｆａｓｔ　Ｆｉｔｎｅｓｓ　Ｊａｐａｎ,カ,101,東京都,新宿区,A,,,,,,,,,,,,\n",
+        encoding="utf-8",
+    )
+    idx = HoujinCSVIndex(db)
+    idx.ingest_csv(csv)
+
+    r = idx.search_by_name("株式会社Fast Fitness Japan", allow_substring=False)
+    assert len(r) == 1
+    assert r[0].corporate_number == "8030001054043"
+
+
 # ─── verify_operator_via_csv ────────────────────────────────────
 
 

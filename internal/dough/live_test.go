@@ -23,6 +23,9 @@ func TestLive_PlacesClient_searchTextReturnsRealStores(t *testing.T) {
 	if apiKey == "" {
 		t.Skip("GOOGLE_MAPS_API_KEY not set; skipping live test")
 	}
+	if os.Getenv("PIZZA_ENABLE_PAID_GOOGLE_APIS") != "1" {
+		t.Skip("paid Google Places API disabled; set PIZZA_ENABLE_PAID_GOOGLE_APIS=1")
+	}
 
 	c := &dough.PlacesClient{APIKey: apiKey, Language: "ja", Region: "JP"}
 	resp, err := c.SearchText(context.Background(), &dough.SearchTextRequest{
@@ -46,6 +49,9 @@ func TestLive_Searcher_endToEndWithRealAPI(t *testing.T) {
 	apiKey := os.Getenv("GOOGLE_MAPS_API_KEY")
 	if apiKey == "" {
 		t.Skip("GOOGLE_MAPS_API_KEY not set; skipping live test")
+	}
+	if os.Getenv("PIZZA_ENABLE_PAID_GOOGLE_APIS") != "1" {
+		t.Skip("paid Google Places API disabled; set PIZZA_ENABLE_PAID_GOOGLE_APIS=1")
 	}
 
 	// 新宿駅周辺 (約 1km 四方)

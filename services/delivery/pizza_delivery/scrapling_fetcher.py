@@ -17,6 +17,7 @@ browser-use が 1 店舗 30-60s 取るのに対し、Scrapling Fetcher は静的
 from __future__ import annotations
 
 import logging
+import os
 import re
 from dataclasses import dataclass, field
 from typing import Any
@@ -91,6 +92,9 @@ class ScraplingFetcher:
     timeout_static_sec: float = 15.0
     timeout_dynamic_sec: float = 30.0
     prefer_stealthy: bool = False
+    camofox_base_url: str = ""
+    camofox_user: str = "pizza"
+    camofox_preset: str = "japan"
 
     def fetch_static(self, url: str) -> str | None:
         """Fetcher で静的 HTML を取得。成功で html str、失敗で None。"""
@@ -122,13 +126,91 @@ class ScraplingFetcher:
             logger.debug("fetch_dynamic failed: %s %s", url, e)
             return None
 
+    def fetch_camofox(self, url: str) -> str | None:
+        """camofox-browser REST API で JS レンダリング後の HTML を取得する。
+
+        `camofox-browser` server は別プロセスで起動済みの前提。未起動なら
+        例外を握って None を返し、呼び出し側の fallback を邪魔しない。
+        """
+        base_url = (self.camofox_base_url or os.getenv("CAMOFOX_BASE_URL") or "http://localhost:9377").rstrip("/")
+        api_key = os.getenv("CAMOFOX_API_KEY", "")
+        user_id = os.getenv("CAMOFOX_USER", self.camofox_user)
+        preset = os.getenv("CAMOFOX_PRESET", self.camofox_preset)
+        session_key = os.getenv("CAMOFOX_SESSION_KEY", "pizza-fetch")
+        timeout = max(self.timeout_dynamic_sec, self.timeout_static_sec, 5.0)
+        headers = {"Authorization": f"Bearer {api_key}"} if api_key else {}
+        tab_id = ""
+        try:
+            import httpx
+
+            with httpx.Client(timeout=timeout, headers=headers) as client:
+                created = client.post(
+                    f"{base_url}/tabs",
+                    json={
+                        "userId": user_id,
+                        "sessionKey": session_key,
+                        "preset": preset,
+                        "url": url,
+                    },
+                )
+                created.raise_for_status()
+                data = created.json()
+                tab_id = str(data.get("tabId") or data.get("targetId") or "")
+                if not tab_id:
+                    return None
+                client.post(
+                    f"{base_url}/tabs/{tab_id}/wait",
+                    json={"userId": user_id, "state": "domcontentloaded", "timeout": int(timeout * 1000)},
+                )
+                evaluated = client.post(
+                    f"{base_url}/tabs/{tab_id}/evaluate",
+                    json={"userId": user_id, "expression": "document.documentElement.outerHTML"},
+                )
+                evaluated.raise_for_status()
+                result = evaluated.json().get("result")
+                return str(result) if result else None
+        except Exception as e:
+            logger.debug("fetch_camofox failed: %s %s", url, e)
+            return None
+        finally:
+            if tab_id:
+                try:
+                    import httpx
+
+                    httpx.request(
+                        "DELETE",
+                        f"{base_url}/tabs/{tab_id}",
+                        headers=headers,
+                        json={"userId": user_id},
+                        timeout=3.0,
+                    )
+                except Exception:
+                    pass
+
     def fetch_auto(self, url: str) -> str | None:
         """静的 → 動的 の順に試行 (高速優先)。"""
+        if os.getenv("PIZZA_FETCHER") == "camofox" or os.getenv("PIZZA_USE_CAMOFOX") == "1":
+            html = self.fetch_camofox(url)
+            if html:
+                return html
         html = self.fetch_static(url)
         if html and _looks_rendered(html):
             return html
         # SPA の場合 静的取得は skeleton のみなので dynamic へ
         return self.fetch_dynamic(url) or html
+
+    def fetch_with_mode(self, url: str, mode: str = "auto") -> str | None:
+        """CLI から指定された fetcher mode で HTML を取得する。"""
+        normalized = (mode or "auto").strip().lower()
+        if normalized == "static":
+            return self.fetch_static(url)
+        if normalized == "dynamic":
+            return self.fetch_dynamic(url)
+        if normalized == "camofox":
+            return self.fetch_camofox(url)
+        if normalized == "auto":
+            return self.fetch_auto(url)
+        raise ValueError(f"unknown fetcher mode: {mode}")
 
 
 def _body_to_text(body: Any) -> str:

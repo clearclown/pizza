@@ -1,5 +1,8 @@
-operator,corp,hq,head_office,representative,url,stores_declared,source
-"株式会社やる気スイッチグループホールディングス",1010001099583,"東京都","東京都中央区八丁堀2丁目24番2号 八丁堀第一生命ビル","高橋 直司",https://www.yarukiswitch.jp/,130,manual_megajii_2026_04_24
-"株式会社Kids-UP","","","","","",9,pipeline
-"株式会社ベネフィット・ワン",8011001045281,"東京都","東京都新宿区西新宿３丁目７番１号","","",5,pipeline
-"株式会社リロクラブ",2011101032251,"東京都","東京都新宿区新宿４丁目２番１８号","","",1,pipeline
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
+Kids Duo,学習塾・カルチャースクール,株式会社やる気スイッチグループ,,,,franchisor,218,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/76-5.pdf,method=year_store_count_table; fc_stores=135; rc_stores=83; total_stores=218; observed_at=2024年度
+Kids Duo,学習塾・カルチャースクール,株式会社やる気スイッチグループホールディングス,1010001099583,東京都中央区八丁堀2丁目24番2号 八丁堀第一生命ビル,東京都,franchisor,130,manual_megajii_2026_04_24,,
+Kids Duo,学習塾・カルチャースクール,株式会社Kids-UP,,,,unknown,9,pipeline,,discovered_via=chain_discovery
+Kids Duo,学習塾・カルチャースクール,株式会社ベネフィット・ワン,8011001045281,東京都新宿区西新宿３丁目７番１号,東京都,unknown,5,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社ベネフィット・ワン,,,,unknown,5,pipeline,,discovered_via=chain_discovery
+Kids Duo,学習塾・カルチャースクール,株式会社リロクラブ,2011101032251,東京都新宿区新宿４丁目２番１８号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社リロクラブ,,,,unknown,1,pipeline,,discovered_via=chain_discovery

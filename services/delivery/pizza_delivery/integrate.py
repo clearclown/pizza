@@ -250,6 +250,7 @@ def integrate_all(
     pipeline_db_path: str | Path,
     houjin_db_path: str | Path | None = None,
     orm_session: Session | None = None,
+    skip_houjin: bool = False,
 ) -> IntegrationStats:
     """3 ソースを ORM に統合する total run。
 
@@ -265,10 +266,11 @@ def integrate_all(
         except Exception as e:
             stats.errors.append(f"pipeline import: {e}")
 
-        try:
-            stats.houjin_hydrated = hydrate_corporate_numbers(sess, houjin_db_path)
-        except Exception as e:
-            stats.errors.append(f"houjin hydrate: {e}")
+        if not skip_houjin:
+            try:
+                stats.houjin_hydrated = hydrate_corporate_numbers(sess, houjin_db_path)
+            except Exception as e:
+                stats.errors.append(f"houjin hydrate: {e}")
     finally:
         if orm_session is None:
             sess.close()
@@ -351,6 +353,10 @@ def _main() -> None:
     p_run = sub.add_parser("run", help="3 ソース統合を実行")
     p_run.add_argument("--pipeline-db", default="var/pizza.sqlite")
     p_run.add_argument("--houjin-db", default="", help="空で default var/houjin/registry.sqlite")
+    p_run.add_argument(
+        "--skip-houjin", action="store_true",
+        help="pipeline operator import のみ実行し、国税庁 hydrate は後で回す",
+    )
 
     p_export = sub.add_parser("export", help="総合 CSV 出力")
     p_export.add_argument("--out", required=True)
@@ -363,6 +369,7 @@ def _main() -> None:
         stats = integrate_all(
             pipeline_db_path=args.pipeline_db,
             houjin_db_path=houjin,
+            skip_houjin=args.skip_houjin,
         )
         print("✅ integration complete")
         print(f"   pipeline_operators_added = {stats.brand_links_added}")

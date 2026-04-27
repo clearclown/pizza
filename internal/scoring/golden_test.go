@@ -1,6 +1,6 @@
 // golden_test.go — §3.3 Classification Accuracy のベンチマーク雛形。
 //
-// test/fixtures/judgement-golden.csv の正解データに対し、
+// test/fixtures/classification-golden.csv の正解データに対し、
 // 予測結果の一致率を測定する。Phase 2 では mock 予測 (全部 is_franchise=true)
 // に対するベースラインを記録するだけで、Phase 3 の本判定で数値を改善する。
 package scoring_test
@@ -19,7 +19,7 @@ import (
 
 func loadGolden(t *testing.T) []scoring.JudgementSample {
 	t.Helper()
-	f, err := os.Open("../../test/fixtures/judgement-golden.csv")
+	f, err := os.Open("../../test/fixtures/classification-golden.csv")
 	require.NoError(t, err)
 	defer f.Close()
 

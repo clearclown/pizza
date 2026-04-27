@@ -213,6 +213,41 @@ def test_aggregate_cross_brand_min_brands_filter(tmp_path: Path) -> None:
     assert "単一社" not in names
 
 
+def test_aggregate_cross_brand_min_total_keeps_small_side_brand(tmp_path: Path) -> None:
+    """Mos 1 + Anytime 30 のような低件数 side brand も内訳に残す。"""
+    db = tmp_path / "t.db"
+    rows = [
+        ("株式会社クロスフィット", "m1", "モスバーガー", "franchisee", "1234567890123", "per_store"),
+    ]
+    rows.extend(
+        (
+            "株式会社クロスフィット",
+            f"a{i}",
+            "エニタイムフィットネス",
+            "franchisee",
+            "1234567890123",
+            "per_store",
+        )
+        for i in range(30)
+    )
+    _seed_with_corp(str(db), rows)
+
+    ops = aggregate_cross_brand_operators(
+        db_path=str(db),
+        min_total_stores=10,
+        min_brands=1,
+    )
+
+    assert len(ops) == 1
+    op = ops[0]
+    assert op.total_stores == 31
+    assert op.brand_count == 2
+    assert op.brand_counts == {
+        "エニタイムフィットネス": 30,
+        "モスバーガー": 1,
+    }
+
+
 def test_aggregate_cross_brand_normalizes_operator_names(tmp_path: Path) -> None:
     """㈱ / (株) / 株式会社 の表記ゆれで別 operator にならない。"""
     db = tmp_path / "t.db"

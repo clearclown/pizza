@@ -8,6 +8,8 @@ import pytest
 from pizza_delivery.osm_overpass import (
     OSMPlace,
     OverpassClient,
+    brand_to_osm_name_pattern,
+    brand_to_osm_names,
     brand_to_osm_tags,
 )
 
@@ -37,6 +39,12 @@ def test_brand_to_osm_tags(brand: str, expected_tag: str) -> None:
 
 def test_brand_to_osm_tags_unknown_returns_empty() -> None:
     assert brand_to_osm_tags("完全に未知のブランド") == []
+
+
+def test_brand_to_osm_names_includes_aliases() -> None:
+    assert "MOS BURGER" in brand_to_osm_names("モスバーガー")
+    assert "コメダ珈琲店" in brand_to_osm_names("コメダ珈琲")
+    assert brand_to_osm_name_pattern("Brand off")
 
 
 # ─── OverpassClient (MockTransport で閉じて test) ────────────────────
@@ -70,6 +78,16 @@ _SAMPLE_RESPONSE = {
                 "addr:postcode": "160-0023",
             },
         },
+        {
+            "type": "way",
+            "id": 3,
+            "center": {"lat": 35.0, "lon": 139.0},
+            "tags": {
+                "name": "エニタイムフィットネス Way店",
+                "leisure": "fitness_centre",
+                "addr:full": "東京都港区芝1-1-1",
+            },
+        },
     ],
 }
 
@@ -89,13 +107,39 @@ async def test_overpass_query_by_tag_parses_response() -> None:
         tag="leisure=fitness_centre",
         bbox=(35.5, 139.5, 35.9, 140.0),
     )
-    assert len(places) == 2
+    assert len(places) == 3
     assert all(isinstance(p, OSMPlace) for p in places)
     assert places[0].name == "エニタイムフィットネス 東京駅前店"
     assert places[0].lat == pytest.approx(35.6812)
     assert places[0].lng == pytest.approx(139.7671)
     # address が組み立てられる
     assert "丸の内" in places[0].address
+    assert places[2].osm_type == "way"
+    assert places[2].lat == pytest.approx(35.0)
+
+
+def test_overpass_build_query_adds_brand_name_filter() -> None:
+    client = OverpassClient()
+    query = client._build_query(
+        "amenity=fast_food",
+        (24.0, 122.0, 46.0, 154.0),
+        name_pattern=brand_to_osm_name_pattern("モスバーガー"),
+    )
+    assert '["amenity"="fast_food"]' in query
+    assert '["name"~' in query
+    assert '["brand:ja"~' in query
+    assert "MOS" in query
+
+
+def test_overpass_build_key_pattern_query_uses_single_indexed_key() -> None:
+    client = OverpassClient()
+    query = client._build_key_pattern_query(
+        key="brand:ja",
+        pattern="モスバーガー",
+        bbox=(24.0, 122.0, 46.0, 154.0),
+    )
+    assert 'nwr["brand:ja"~"モスバーガー"]' in query
+    assert '["amenity"' not in query
 
 
 @pytest.mark.asyncio

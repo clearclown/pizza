@@ -14,6 +14,7 @@ import pytest
 
 from pizza_delivery.operator_spider import (
     OperatorSpider,
+    ScraplingOperatorFetcher,
     StoreCandidate,
     extract_store_candidates_from_html,
 )
@@ -84,6 +85,13 @@ def test_extract_store_candidates_rejects_non_japanese_addresses() -> None:
 
 
 # ─── OperatorSpider with mock fetcher ────────────────────────────────
+
+
+def test_default_spider_uses_async_scrapling_adapter() -> None:
+    """default fetcher は OperatorSpider の async fetch protocol を満たす。"""
+    spider = OperatorSpider()
+    assert isinstance(spider.fetcher, ScraplingOperatorFetcher)
+    assert hasattr(spider.fetcher, "fetch")
 
 
 @dataclass
@@ -206,6 +214,28 @@ def test_extract_brand_candidates_handles_empty() -> None:
     from pizza_delivery.operator_spider import extract_brand_candidates_from_html
 
     assert extract_brand_candidates_from_html("") == []
+
+
+def test_extract_brand_candidates_canonicalizes_target_aliases_and_image_alt() -> None:
+    from pizza_delivery.operator_spider import extract_brand_candidates_from_html
+
+    html = """
+    <a href="/brands/anytime"><img alt="Anytime Fitness"></a>
+    <a href="/brands/brand-off">BRAND OFF</a>
+    <a href="/brands/itto">ITTO個別指導学院</a>
+    """
+    out = extract_brand_candidates_from_html(html, base_url="https://a.example/")
+    brands = {c.brand_name for c in out}
+    assert "エニタイムフィットネス" in brands
+    assert "Brand off" in brands
+    assert "Itto個別指導学院" in brands
+
+
+def test_extract_brand_candidates_does_not_match_itto_inside_kitto() -> None:
+    from pizza_delivery.operator_spider import extract_brand_candidates_from_html
+
+    html = '<a href="/kitto">KITTO</a>'
+    assert extract_brand_candidates_from_html(html, base_url="https://a.example/") == []
 
 
 @pytest.mark.asyncio

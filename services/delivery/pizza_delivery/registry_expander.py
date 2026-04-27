@@ -193,6 +193,40 @@ def _load_known_franchisor_names() -> set[str]:
                 names.add(mf)
     except Exception:
         pass
+
+    # ORM 移行後の master_franchisor も参照する。JFA 由来の広い業種行は
+    # ノイズが多いため、対象ブランド周辺に限定して本部名を block する。
+    target_brands = {
+        "カーブス", "モスバーガー", "業務スーパー", "Itto個別指導学院",
+        "ITTO個別指導学院", "エニタイムフィットネス", "コメダ珈琲",
+        "珈琲所コメダ珈琲店", "シャトレーゼ", "ハードオフ", "HARD OFF",
+        "オフハウス", "OFF HOUSE", "Kids Duo", "アップガレージ",
+        "カルビ丼とスン豆腐専門店韓丼", "Brand off", "TSUTAYA",
+    }
+    try:
+        db = Path(__file__).resolve().parents[3] / "var" / "pizza-registry.sqlite"
+        if db.exists():
+            conn = sqlite3.connect(db)
+            try:
+                placeholders = ",".join("?" * len(target_brands))
+                rows = conn.execute(
+                    "SELECT DISTINCT master_franchisor_name "
+                    "FROM franchise_brand "
+                    f"WHERE name IN ({placeholders}) "
+                    "  AND master_franchisor_name != ''",
+                    sorted(target_brands),
+                ).fetchall()
+                names.update(r[0] for r in rows if r and r[0])
+                rows = conn.execute(
+                    "SELECT DISTINCT name FROM operator_company "
+                    "WHERE kind='franchisor' AND name != ''"
+                ).fetchall()
+                names.update(r[0] for r in rows if r and r[0])
+            finally:
+                conn.close()
+    except Exception:
+        pass
+
     # 明示ブロックリスト (別ブランドの本部が per_store で誤抽出されたとき用)
     names.update({
         "株式会社ドムドムフードサービス",
@@ -210,6 +244,7 @@ def aggregate_cross_brand_operators(
     min_brands: int = 1,
     exclude_franchisor: bool = True,
     normalize_names: bool = True,
+    brands_filter: set[str] | None = None,
     extra_franchisor_blocklist: set[str] | None = None,
 ) -> list[CrossBrandOperator]:
     """operator_stores を brand 指定なしで集計 (1 operator = 1 行)。
@@ -238,6 +273,13 @@ def aggregate_cross_brand_operators(
         filt = ""
         if exclude_franchisor:
             filt = " AND COALESCE(operator_type,'') NOT IN ('franchisor','direct')"
+        args: list[str] = []
+        brand_clause = ""
+        if brands_filter:
+            brands = sorted(b for b in brands_filter if b)
+            if brands:
+                brand_clause = " AND brand IN (" + ",".join("?" * len(brands)) + ")"
+                args.extend(brands)
         rows = conn.execute(
             "SELECT operator_name, brand, "
             "       COUNT(DISTINCT place_id) AS n, "
@@ -246,9 +288,11 @@ def aggregate_cross_brand_operators(
             "       COALESCE(MAX(discovered_via),'') AS dv "
             "FROM operator_stores "
             "WHERE operator_name != ''"
+            + brand_clause
             + filt
             + " GROUP BY operator_name, brand "
-            + "ORDER BY operator_name, n DESC"
+            + "ORDER BY operator_name, n DESC",
+            args,
         ).fetchall()
     finally:
         conn.close()
