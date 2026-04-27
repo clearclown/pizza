@@ -27,49 +27,24 @@ uv run --project services/delivery python -m pizza_delivery.operator_master_expo
 
 1 行 = 1 社 (megajii section 179 + franchisor section 13)。すべて 17 列。
 
-### ⭐ `fc-operators-all.csv` (1,005 rows, 2026-04-27)
-**1 事業会社 1 行** の集約 CSV。これがメインの参照資料。
+### `fc-operators-all.csv` (802 rows, 2026-04-27)
+**1 事業会社 1 行** の all-brand audit CSV。14 対象ブランド以外も含むため、
+ユーザー向けの 14 ブランド結果には使わない。
 同一 operator × canonical brand に複数 source がある場合は、店舗数の最大値だけを
 `total_stores` に採用する (`manual_megajii` + `jfa_disclosure` の二重計上防止)。
 同名 operator の法人番号あり/なし重複は CSV 生成時に 1 行へ畳み込む。
 
+### ⭐ `fc-operators-14brand-only.csv` (461 rows, 2026-04-27)
+**14 対象ブランドだけ**に絞った 1 事業会社 1 行 CSV。`target_brands` と
+`total_stores` は、カーブス / モスバーガー / 業務スーパー /
+Itto個別指導学院 / エニタイムフィットネス / コメダ珈琲 / シャトレーゼ /
+ハードオフ / オフハウス / Kids Duo / アップガレージ /
+カルビ丼とスン豆腐専門店韓丼 / Brand off / TSUTAYA のみを集計する。
+
 ```bash
-# 生成 (ORM 由来、pizza は内部の sqlite に書き込み済)
-sqlite3 -csv -header var/pizza-registry.sqlite "
-  WITH brand_norm AS (
-    SELECT id AS brand_id,
-           CASE name
-             WHEN 'モスバーガーチェーン' THEN 'モスバーガー'
-             WHEN '珈琲所コメダ珈琲店' THEN 'コメダ珈琲'
-             WHEN 'コメダ珈琲店' THEN 'コメダ珈琲'
-             ELSE name
-           END AS brand_name
-    FROM franchise_brand
-  ),
-  link_best AS (
-    SELECT bol.operator_id, bn.brand_name,
-           MAX(bol.estimated_store_count) AS brand_stores
-    FROM brand_operator_link bol
-    JOIN brand_norm bn ON bn.brand_id = bol.brand_id
-    GROUP BY bol.operator_id, bn.brand_name
-  ),
-  source_rollup AS (
-    SELECT operator_id, GROUP_CONCAT(DISTINCT source) AS sources
-    FROM brand_operator_link GROUP BY operator_id
-  )
-  SELECT oc.name AS operator_name, oc.corporate_number AS corp,
-         oc.prefecture AS hq_prefecture, oc.head_office,
-         oc.representative_name AS representative, oc.website_url AS url,
-         COALESCE(sr.sources, oc.source) AS source,
-         COUNT(DISTINCT lb.brand_name) AS brand_count,
-         GROUP_CONCAT(DISTINCT lb.brand_name) AS brands,
-         COALESCE(SUM(lb.brand_stores),0) AS total_stores
-  FROM operator_company oc
-  JOIN link_best lb ON lb.operator_id = oc.id
-  LEFT JOIN source_rollup sr ON sr.operator_id = oc.id
-  GROUP BY oc.id
-  ORDER BY total_stores DESC, brand_count DESC, operator_name
-" > test/fixtures/megafranchisee/fc-operators-all.csv
+# 生成 (ORM 由来、all-brand / 14-brand-only / by-view をまとめて更新)
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
+  python -m pizza_delivery.megafranchisee_clean_export
 ```
 
 列: `operator_name, corp, hq_prefecture, head_office, representative, url, source, brand_count, brands, total_stores`
@@ -113,11 +88,16 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 `brand_operator_link.source = jfa_disclosure` として取り込む。
 
 ### `fc-links.csv` (1,432 rows, 2026-04-27)
-**brand × operator の flat link table**。1 operator が複数 brand 運営なら複数行。
+**all-brand の brand × operator flat link table**。JFA / manual_megajii の
+広義 source を保持する監査用で、14 対象ブランド以外も含む。
 2026-04-27 追加の `operator_official_brand_link` は、operator 公式 HP の
 事業/店舗/ブランドページ上の anchor だけを根拠にした evidence link
 (開店告知・休業/閉店・求人/採用・社員インタビュー文脈は自動反映から除外)。
 店舗数根拠は別ソースが必要なので `estimated_store_count=0` のまま保持する。
+
+### `fc-links-14brand-only.csv` (554 rows, 2026-04-27)
+**14 対象ブランドだけ**に絞った brand × operator flat link table。
+コンビニ / 自動車用品 / 外食など対象外ブランドは含めない。
 
 ```bash
 ./bin/pizza integrate --mode export --out test/fixtures/megafranchisee/fc-links.csv

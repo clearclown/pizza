@@ -163,12 +163,14 @@ pizza serve          # delivery-service 起動 (gRPC)
 | ファイル | 行 | 役割 |
 |---|--:|---|
 | `megajii-enriched.csv` 👑 | 192 | 人手 TSV master + ORM fusion (17 列) |
-| `fc-operators-all.csv` ⭐ | 1,005 | 1 operator 1 行集約 |
-| `fc-links.csv` | 1,432 | brand × operator flat |
+| `fc-operators-all.csv` | 802 | all-brand audit 用 1 operator 1 行集約 |
+| `fc-operators-14brand-only.csv` ⭐ | 461 | 14 対象ブランドだけの 1 operator 1 行集約 |
+| `fc-links.csv` | 1,432 | all-brand brand × operator flat |
+| `fc-links-14brand-only.csv` | 554 | 14 対象ブランドだけの brand × operator flat |
 | `jfa-disclosures.csv` | 103 | JFA 情報開示書面 PDF index |
 | `spider-matches.csv` | 57 | pipeline spider-matched snapshot |
 | `megajii-raw.csv` | 192 | 生 TSV snapshot |
-| `by-view/megajii-ranking.csv` | 123 | 2+業態メガジー ランキング |
+| `by-view/megajii-ranking.csv` | 22 | 14対象ブランド内の 2+業態メガジー ランキング |
 | `by-view/by-brand/*.csv` | 14 ファイル | brand 別 operator 一覧 |
 | `by-view/tokyo-entering-operators.csv` | 32 | 東京進出 FC 社 |
 | `by-view/unverified-63-focus.csv` | 63 | 手動確認候補 |

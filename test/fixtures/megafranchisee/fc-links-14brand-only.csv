@@ -1,0 +1,555 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
+カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1996,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/217-1.pdf,method=history_store_count; total_stores=1996; observed_at=2025-08
+カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1965,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,1318,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/152-1.pdf,method=fc_rc_total_table; fc_stores=1273; rc_stores=45; total_stores=1318; observed_at=2024年度; raw_brand=モスバーガーチェーン
+モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,1266,manual_megajii_2026_04_24,,
+業務スーパー,,株式会社神戸物産,5140001044630,兵庫県加古川市加古川町平野125番1,兵庫県,franchisor,1054,manual_megajii_2026_04_24,,
+Itto個別指導学院,,自分みらい教育株式会社,,愛知県名古屋市中村区名駅4丁目6番17号 名古屋ビルディング12F,愛知県,franchisor,1046,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社コメダ,4010401102571,愛知県名古屋市東区葵3丁目12番23号,愛知県,franchisor,1008,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/47-1.pdf,method=brand_store_count_row; fc_stores=986; rc_stores=22; total_stores=1008; observed_at=2025-02; raw_brand=コメダ珈琲店
+エニタイムフィットネス,,株式会社Ｆａｓｔ　Ｆｉｔｎｅｓｓ　Ｊａｐａｎ,8030001054043,東京都新宿区西新宿６丁目３番１号,東京都,franchisor,957,manual_megajii_2026_04_24,,
+珈琲所コメダ珈琲店,,株式会社コメダ,4010401102571,愛知県名古屋市東区葵3丁目12番23号,愛知県,franchisor,945,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社シャトレーゼ,4090001007288,山梨県甲府市下曽根町3440番地1,山梨県,franchisor,774,manual_megajii_2026_04_24,,
+業務スーパー,,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社モスストアカンパニー,3010701019707,東京都品川区大崎２丁目１番１号,東京都,franchisee,266,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,unknown,255,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,,ハードオフコーポレーション株式会社,,新潟県新発田市新栄町3-1-13,新潟県,franchisor,241,manual_megajii_2026_04_24,,
+Itto個別指導学院,,ＷＥグループホールディングス株式会社,9180001164900,愛知県大府市中央町７丁目３３６番地,愛知県,franchisee,237,manual_megajii_2026_04_24,,
+シャトレーゼ,,ＪＲ九州リテール株式会社,1290001013566,福岡県福岡市博多区博多駅東１丁目１番１４号,福岡県,franchisee,223,manual_megajii_2026_04_24,,
+Kids Duo,学習塾・カルチャースクール,株式会社やる気スイッチグループ,,,,franchisor,218,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/76-5.pdf,method=year_store_count_table; fc_stores=135; rc_stores=83; total_stores=218; observed_at=2024年度
+モスバーガー,ハンバーガー,株式会社モスストアカンパニー,,,,franchisee,209,pipeline,,discovered_via=registry
+オフハウス,,ハードオフコーポレーション株式会社,,新潟県新発田市新栄町3-1-13,新潟県,franchisor,197,manual_megajii_2026_04_24,,
+Itto個別指導学院,,株式会社リックプレイス,9010601030568,東京都中央区東日本橋3-11-11,東京都,franchisee,195,manual_megajii_2026_04_24,,
+Itto個別指導学院,,株式会社ITTO,,,,unknown,149,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,,,,unknown,149,pipeline,,discovered_via=chain_discovery
+コメダ珈琲,コーヒーショップ,株式会社コメダホールディングスコメダ,,,,unknown,148,pipeline,,discovered_via=chain_discovery
+コメダ珈琲,コーヒーショップ,株式会社コメダホールディングス,2180001116676,愛知県名古屋市東区葵３丁目１２番２３号,愛知県,unknown,148,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+シャトレーゼ,,株式会社シャトレーゼ企業,,,,unknown,147,pipeline,,discovered_via=chain_discovery
+Kids Duo,学習塾・カルチャースクール,株式会社やる気スイッチグループホールディングス,1010001099583,東京都中央区八丁堀2丁目24番2号 八丁堀第一生命ビル,東京都,franchisor,130,manual_megajii_2026_04_24,,
+アップガレージ,自動車・自転車関係小売,株式会社ホットマン,3370001002204,宮城県仙台市太白区西多賀四丁目4番17号,宮城県,franchisee,124,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ホットマン,3370001002204,宮城県仙台市太白区西多賀四丁目4番17号,宮城県,franchisee,124,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,120,manual_megajii_2026_04_24,,
+ハードオフ,,ありがとうサービス,,愛媛県今治市八町西3丁目6-30,愛媛県,franchisee,114,manual_megajii_2026_04_24,,
+オフハウス,,ありがとうサービス,,愛媛県今治市八町西3丁目6-30,愛媛県,franchisee,114,manual_megajii_2026_04_24,,
+オフハウス,,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,112,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+オフハウス,,株式会社ハードオフコーポレーション,,,,unknown,112,pipeline,,discovered_via=chain_discovery
+アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,111,manual_megajii_2026_04_24,,
+ハードオフ,,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,98,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,,株式会社ハードオフコーポレーション,,,,unknown,98,pipeline,,discovered_via=chain_discovery
+ハードオフ,,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,franchisee,91,manual_megajii_2026_04_24,,
+オフハウス,,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,franchisee,91,manual_megajii_2026_04_24,,
+Brand off,,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,86,official_franchisee_page,https://www.brandoff.co.jp/company/,official company profile; houjin_unique_name_inactive_fallback
+業務スーパー,,株式会社良知経営,5020001140788,神奈川県川崎市宮前区宮崎二丁目6番地10 宮崎台ガーデンオフィス2階,神奈川県,franchisee,83,manual_megajii_2026_04_24,,
+TSUTAYA,,NICリテールズ,,東京都千代田区神田駿河台四丁目3番地,東京都,franchisee,82,manual_megajii_2026_04_24,,
+TSUTAYA,,エムシーアイ,,大阪府大阪市中央区安土町3-5-6 ナカヒロビル6F,大阪府,franchisee,82,manual_megajii_2026_04_24,,
+シャトレーゼ,,エムシーアイ,,大阪府大阪市中央区安土町3-5-6 ナカヒロビル6F,大阪府,franchisee,82,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ひらせいホームセンター,1110001004748,新潟県新潟市西区寺尾台2丁目3番3号,新潟県,franchisee,73,manual_megajii_2026_04_24,,
+業務スーパー,,株式会社ひらせいホームセンター,1110001004748,新潟県新潟市西区寺尾台2丁目3番3号,新潟県,franchisee,73,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社KOHATAホールディングス,8020001111919,神奈川県川崎市多摩区登戸２１２１番地１ＧＩＮＺＡＦＯＲＥＳＴ３０１－２,神奈川県,franchisee,71,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社トップカルチャー,1110001003592,新潟市西区小針4丁目9番1号,新潟県,franchisee,69,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,大和フーヅ株式会社,5010401089998,埼玉県熊谷市筑波3-193 熊谷通運ビル5F,埼玉県,franchisee,69,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社KOHATAホールディングス,8020001111919,神奈川県川崎市多摩区登戸２１２１番地１ＧＩＮＺＡＦＯＲＥＳＴ３０１－２,神奈川県,franchisee,67,pipeline,,discovered_via=registry
+エニタイムフィットネス,,株式会社タカ・コーポレーション,1120901029447,大阪府豊中市上野西３丁目５番３９号,大阪府,franchisee,67,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,franchisee,67,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,franchisee,67,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社ケー・アンド・アイ,1040001065517,千葉県柏市柏4丁目8-14 柏染谷ビル1階,千葉県,franchisee,67,manual_megajii_2026_04_24,,
+ハードオフ,,株式会社エコプラス,3370801000679,宮城県名取市上余田字千刈田308,宮城県,franchisee,67,manual_megajii_2026_04_24,,
+オフハウス,,株式会社エコプラス,3370801000679,宮城県名取市上余田字千刈田308,宮城県,franchisee,67,manual_megajii_2026_04_24,,
+業務スーパー,,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,
+ハードオフ,,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,
+業務スーパー,,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,67,manual_megajii_2026_04_24,,
+ハードオフ,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,franchisee,66,manual_megajii_2026_04_24,,
+オフハウス,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,franchisee,66,manual_megajii_2026_04_24,,
+オフハウス,,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,franchisee,65,manual_megajii_2026_04_24,,
+ハードオフ,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,65,manual_megajii_2026_04_24,,
+オフハウス,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,65,manual_megajii_2026_04_24,,
+カルビ丼とスン豆腐専門店韓丼,,株式会社やる気,9130001015983,京都府京都市伏見区羽束師志水町121-1,京都府,franchisor,65,manual_megajii_2026_04_24,,
+シャトレーゼ,,タカサワ通商株式会社,5100001012698,長野県長野市南千歳1-15-3,長野県,franchisee,64,manual_megajii_2026_04_24,,
+業務スーパー,,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,62,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,62,manual_megajii_2026_04_24,,
+シャトレーゼ,,サンパーク,,大阪府吹田市岸部北5-11-1,大阪府,franchisee,58,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,franchisee,50,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+Itto個別指導学院,,株式会社ＹＺコンサルティング,6030001062881,埼玉県熊谷市筑波２丁目４８番地１－６階,埼玉県,franchisee,44,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,franchisee,43,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社フジタコーポレーション,9430001054035,北海道苫小牧市若草町5-3-5,北海道,franchisee,43,manual_megajii_2026_04_24,,
+業務スーパー,,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,34,pipeline,,discovered_via=operator_spider_address_match
+モスバーガー,ハンバーガー,オリックスレンタカー・カメイ株式会社,1370001007493,宮城県仙台市青葉区国分町3-1-18,宮城県,franchisee,32,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,
+Itto個別指導学院,,アイ・ディー・エー株式会社,8120001059826,大阪府大阪市北区梅田3-4-5,大阪府,franchisee,31,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社三油商会,9180001036158,愛知県名古屋市中区丸の内二丁目1番5号,愛知県,franchisee,31,manual_megajii_2026_04_24,,
+シャトレーゼ,,eatabell,,和歌山県和歌山市梶取171-1ウインドービル4Ｆ,和歌山県,franchisee,31,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社キノシタ,4080001014780,静岡県焼津市大覚寺３丁目１５番地の１０,静岡県,franchisee,30,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,29,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ヤスサキ,4210001004215,福井県福井市松城町１２０１番地１,福井県,franchisee,29,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社カゴハラゴルフ,6030001084562,埼玉県熊谷市三ヶ尻364,埼玉県,franchisee,29,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社細山田商事,9340001003876,鹿児島市中央町35番地31,鹿児島県,franchisee,28,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,28,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,28,manual_megajii_2026_04_24,,
+オフハウス,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,franchisee,28,manual_megajii_2026_04_24,,
+TSUTAYA,,ニューコ・ワン株式会社,9330001006327,熊本市中央区安政町1-2 カリーノ下通5F,熊本県,franchisee,27,manual_megajii_2026_04_24,,
+Brand off,,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,27,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社Ｖｉｄａｗａｙ,2010401061159,神奈川県横浜市瀬谷区下瀬谷２丁目１８番１３号,神奈川県,franchisee,26,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,Do Frontier,,愛知県名古屋市名東区高社1丁目258番地,愛知県,franchisee,26,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社三栄本社,7390001000722,山形市深町1-9-10,山形県,franchisee,26,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社三栄本社,7390001000722,山形市深町1-9-10,山形県,franchisee,26,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,
+シャトレーゼ,,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社東急レクリエーション,8011101014005,東京都渋谷区桜丘町24-4,東京都,franchisee,25,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社トークインコーポレーション,8080002010783,静岡県静岡市清水区春日2丁目3-37,静岡県,franchisee,25,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,"圭OFFICE,HD",,千葉県柏市北柏4丁目1-10 103,千葉県,franchisee,25,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,タイホウコーポレーション株式会社,1180001037667,愛知県名古屋市中区上前津2丁目4-10 タイホウグループ本社ビル,愛知県,franchisee,25,manual_megajii_2026_04_24,,
+業務スーパー,,株式会社Ｇ＆Ｌマート,1010101004708,東京都八王子市田町２番５号,東京都,franchisee,25,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社カリーノビジネスサポート,6330001010570,熊本県熊本市中央区安政町1-2 カリーノ下通7F,熊本県,franchisee,24,manual_megajii_2026_04_24,,
+ハードオフ,,浜松ホーエー株式会社,4080401004167,静岡県浜松市中央区中央3丁目2-19 Nビル3F,静岡県,franchisee,24,manual_megajii_2026_04_24,,
+オフハウス,,浜松ホーエー株式会社,4080401004167,静岡県浜松市中央区中央3丁目2-19 Nビル3F,静岡県,franchisee,24,manual_megajii_2026_04_24,,
+業務スーパー,,グランマルシェ食品株式会社,4120001091601,大阪府大阪市中央区本町4丁目5-16 本町スクウェアビルII 3F,大阪府,franchisee,24,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,東北テレメディア開発株式会社,4370001004372,宮城県仙台市若林区沖野2丁目5-5,宮城県,franchisee,23,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社ラ・ヴィーチェ,1050001047381,茨城県つくば市梅園２丁目８番１７号,茨城県,franchisee,22,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+コメダ珈琲,コーヒーショップ,大興産業株式会社,5170001007824,和歌山県岩出市高瀬７４番地の１ダイコービル,和歌山県,franchisee,22,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,ステラ株式会社,2260001010730,岡山県岡山市北区西古松237-126 松本ビル1F,岡山県,franchisee,22,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社ｉ・ライフソリューションズ,1290001061318,福岡県福岡市博多区上呉服町１番１０号,福岡県,franchisee,22,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社アクティブホールディングス,2320002008214,大分県大分市中島西2-1-3,大分県,franchisee,22,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社アクティブホールディングス,2320002008214,大分県大分市中島西2-1-3,大分県,franchisee,22,manual_megajii_2026_04_24,,
+シャトレーゼ,,ビックエル株式会社,5210001002779,福井県福井市新保3-2218,福井県,franchisee,22,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,ワイ・テイ・ワイ産業株式会社,3120101008002,大阪府堺市堺区市之町西2丁1-15,大阪府,franchisee,22,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社明文堂プランナー,4230001007620,富山県下新川郡朝日町沼保909-2,富山県,franchisee,21,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社ティ・プロジェクト,2310001005733,長崎県佐世保市黒神町732-1,長崎県,franchisee,21,manual_megajii_2026_04_24,,
+モスバーガー,ハンバーガー,株式会社フレックス,3270001000688,鳥取県鳥取市湖山町北１丁目４５４番地５,鳥取県,franchisee,21,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,川勝商事株式会社,1120001042383,大阪府大阪市福島区玉川１丁目８番１０号ＵＧビル２Ｆ,大阪府,franchisee,20,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ダイレクト・ショップ,1160001008455,滋賀県彦根市西今町1番地,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
+TSUTAYA,,株式会社ダイレクト・ショップ,1160001008455,滋賀県彦根市西今町1番地,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,株式会社エーガールズ,9240001050904,広島県三原市城町1丁目12-5 エムセックビル4F,広島県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,学習塾・カルチャースクール,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,20,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社カワマートホールディングス,5490001004830,高知県四万十市有岡31番地1,高知県,franchisee,20,manual_megajii_2026_04_24,,
+シャトレーゼ,,株式会社カワマートホールディングス,5490001004830,高知県四万十市有岡31番地1,高知県,franchisee,20,manual_megajii_2026_04_24,,
+コメダ珈琲,コーヒーショップ,株式会社ユウショク,3500001006133,愛媛県松山市平井町甲1436-1,愛媛県,franchisee,20,manual_megajii_2026_04_24,,
+エニタイムフィットネス,,株式会社アトラクト,3180001058546,愛知県名古屋市中区栄３丁目１８番１号ナディアパークビジネスセンタービル１８階,愛知県,franchisee,19,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+業務スーパー,,株式会社オーシャンシステム,5010801014837,,,franchisee,18,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,18,pipeline,,discovered_via=operator_spider_address_match
+エニタイムフィットネス,,株式会社エムデジ,6430001050730,北海道小樽市新光１丁目１１番１号,北海道,franchisee,17,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,フレックスシステム株式会社,4430001059410,,,franchisee,17,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,株式会社フレックス,3270001000688,鳥取県鳥取市湖山町北１丁目４５４番地５,鳥取県,franchisee,14,pipeline,,discovered_via=operator_spider_address_match
+カーブス,学習塾・カルチャースクール,株式会社ハイ・スタンダード,5010401135835,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社モバイルフィット,3500001014094,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社アズ,8120001073612,大阪府大阪市中央区粉川町１番２号,大阪府,franchisee,13,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+TSUTAYA,,スターバックスコーヒージャパン株式会社,7011001031943,,,unknown,11,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社アオキスーパー,1180001029202,,,unknown,11,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社廣岡エバグリーン廣甚,,,,unknown,11,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社glob,2240001041216,広島県福山市王子町１丁目３番５号,広島県,franchisee,10,pipeline,,discovered_via=registry
+モスバーガー,ハンバーガー,株式会社アドバンス,1430001076383,,,franchisee,10,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社Kids-UP,,,,unknown,9,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社スーパーバリュー,2030001044306,埼玉県上尾市宮本町５番１８号,埼玉県,unknown,9,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,29お知らせスーパーサンシ株式会社,,,,unknown,9,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社スーパーバリュー,,,,unknown,9,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,株式会社はっけん,7240001034009,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社トップライジング,9021001048745,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社フルハウス,1430001059594,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社さくらホーム,3430001027962,北海道札幌市西区八軒五条東３丁目７番３４号,北海道,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社ベイスオブスポーツ,6360001019114,沖縄県那覇市宮城１丁目１８－１,沖縄県,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社さくらホーム,,,,franchisee,8,pipeline,,discovered_via=registry
+業務スーパー,,株式会社ゼンリン,6430001008943,,,unknown,8,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,学習塾・カルチャースクール,オー・シー・エム東海株式会社,9190001001284,,,franchisee,8,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+業務スーパー,,佐竹食品株式会社,6120901006607,大阪府吹田市朝日町１４番１９号,大阪府,unknown,6,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社フィットベイト,7040001099451,千葉県船橋市印内町６０６番地１,千葉県,unknown,6,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+業務スーパー,,佐竹食品株式会社,,,,unknown,6,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社フィットベイト,,,,unknown,6,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,ウィン株式会社,3040001090190,,,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社一柳,2040001065202,,,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社トピーレック,4010601024954,東京都江東区南砂６丁目７番１５号,東京都,franchisee,5,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社ベネフィット・ワン,8011001045281,東京都新宿区西新宿３丁目７番１号,東京都,unknown,5,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ワッツオンラインショップ現在地から探す都道府県から探す北海道岩手県秋,,,,unknown,5,pipeline,,discovered_via=chain_discovery
+モスバーガー,ハンバーガー,株式会社エイ・ライン,2011301000999,東京都杉並区和泉３丁目１３番１９号,東京都,franchisee,5,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,5,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社ベネフィット・ワン,,,,unknown,5,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,モリススマイル株式会社,9140001104835,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社アルカス,2430001064214,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社エヌエス・リンク,7060001005928,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社レア・メンタル,1400001013315,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社ペルゴラ,6140001061476,兵庫県姫路市中地１８８番地の１,兵庫県,franchisee,4,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+業務スーパー,,株式会社スーパーアルプス,2010101001836,東京都八王子市滝山町２丁目３５１番地,東京都,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社三和,1400001013281,北海道北見市美山町南１丁目１番地１７,北海道,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ひらせいホームセンター,1110001004748,新潟県新潟市西区寺尾台2丁目3番3号,新潟県,franchisee,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社スーパーアルプス,,,,unknown,4,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社ベイシア,3070001004866,,,unknown,4,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社マルハチ本部,,,,unknown,4,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社三和,,,,unknown,4,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社寿奈賀,7070002014860,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社アドバンス,1430001076383,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社エメラルドフードサービス,7230001009770,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社クリエイティブジャパン,1430001035991,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ハトラス,3240001008957,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社マツバヤ,6380001016712,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社三栄本社,6450001001178,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社山浩商事,1360001012164,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社東光,1460401001021,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+エニタイムフィットネス,,株式会社サンパーク,4120901006550,大阪府吹田市岸部北５丁目１１番１号,大阪府,franchisee,3,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+業務スーパー,,株式会社サンベルクス,1011801030720,東京都足立区花畑５丁目１４番１号,東京都,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社マキヤ静岡県富士市大渕2373,,,,unknown,3,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社神戸物産,5140001044630,兵庫県加古川市加古川町平野125番1,兵庫県,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,ナガヤ株式会社,5080101013434,,,unknown,3,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,3,pipeline,,discovered_via=operator_spider_address_match
+コメダ珈琲,コーヒーショップ,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,3,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社サンベルクス,,,,unknown,3,pipeline,,discovered_via=chain_discovery
+ハードオフ,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,3,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,学習塾・カルチャースクール,ラロット株式会社,9040001091679,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,レッドライフ合同会社,6300003000705,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,三亜フードサービス有限会社,9080102006185,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,寺尾商事株式会社,4130001040227,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,小原井産業株式会社,3290801009992,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,有限会社らじん,9012802011181,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社アンビシャス,5460102007727,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社エムフードサービス,5430002039856,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ミキフードサービス,4310002018971,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社西村商事,7390002015414,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社アーミップ,7070001000052,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ウィンドベル,3380001027935,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ウイ・テック,6330001012682,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社エフアイ,1400001000338,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社エムエム,7450001010319,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社オレンジスペース,5120001212412,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社キートス,4450001010602,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ジェイエムカンパニー,1140001071744,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ソピュア,3040001045070,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社デリシア,2011701014418,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社フジケイ,8030001016472,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ヘルスプラン,2390001012689,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ミツヤ,6430001023331,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社モリモト,3430001017105,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社木馬,3030001046292,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社玉扇グローバル,9100001020978,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,中央物流株式会社,2030001005431,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カルビ丼とスン豆腐専門店韓丼,,株式会社ビリオンフーズハヤシ,7210001008527,福井県福井市開発町第８号２番地の３,福井県,franchisee,3,official_franchisee_page,https://www.birion.com/group/kandon/,official operator brand page; houjin_unique_name; stores=大宮店;鯖江店;丸山店
+TSUTAYA,,株式会社ビッグワン,9380001001240,福島県福島市森合字山ノ下１８番地,福島県,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社大創産業,7240001022681,広島県東広島市西条吉行東１丁目４番１４号,広島県,direct,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,有限会社エアーズ,8030002026611,埼玉県戸田市下前２丁目２番７号,埼玉県,franchisee,2,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,株式会社メイワ・エステート,6010501039217,東京都台東区東上野５丁目５番９号岡部ビル１０２号,東京都,franchisee,2,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,全日本食品株式会社,9011801009121,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,島屋株式会社,3060001023314,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,株式会社ティ・プロジェクト,2310001005733,長崎県佐世保市黒神町732-1,長崎県,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+TSUTAYA,,株式会社ビッグワン,,,,unknown,2,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社マツモト,1430001025992,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社伊藤ハム,,,,unknown,2,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社八百彦商店,3150001013611,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社大創産業,,,,direct,2,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社山信商店,3410001003346,,,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,アドカンパニー株式会社,9040001016470,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,モンド有限会社,4140002037403,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,三州紙業株式会社,9080001001725,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,丸友商事株式会社,1462501000448,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,国際貿易株式会社,3050001014909,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社まるとく商事,8360002004195,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社グラッド,3380002009016,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社コモンセンス,3070002002200,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社サン・プロジェクト,8400002008159,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ジンフードサービス,5180002082428,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ターフアンドハーツ,4030002044781,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社フクザキ,1110002023367,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社プラスユー,3150002008494,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社プログレス,1430002017279,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ヤギヤフード,6230002013582,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社山喜,2380002026508,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,有限会社戸田駒,4130002004057,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社真美商,8380002035107,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社長崎屋,1420002011290,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,栃尾石油株式会社,4140001050241,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ありがとうサービス,3140001046100,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社かがやき,5440001005866,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社やまもと,4430001054015,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社アオキエンタープライズ,4030001093185,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社エイト,1430001065857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社エヌシー・フードシステム,5030001050846,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社カナダハウス,7200001001045,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ガイアフードサービス,1180001092935,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社クライム,8430001067995,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社クリンプロ,8240001024041,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社サンウェッジ,6020001012978,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ジェイフード,7050001032857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社タカノ,2450001001850,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社タム,9460101000992,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ダイケイ,6050001017280,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ドゥ・カンパニー,3430001034934,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ニドム,5011101015550,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ヒューマン,3430001014052,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ビッグシーダー,8020001070041,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ピーコックサービス,9220001005439,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ファミリーフード,6240001031857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ファンオール,2120901032086,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社プライムネス,1460001004614,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ベルフーズ,3020001012048,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ベル・キャトル,4080001004682,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社メッカコーポレーション,5020001008102,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ヨシダコーポレーション,5380001006904,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ライフネス,4011001062784,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社リエゾン,8420001005221,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ロング・ウッド・アクティー,4030001047827,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ヴィアン,5010401003406,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社三佳,7070001003204,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社東山,4010401182762,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社田所商事,9350001001020,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社縁結商事,6040001046652,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社舟木食品,7380001011555,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社関屋コーポレーション,7320001006073,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社電陽社,3230001008322,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,関西ファーム株式会社,8160001008184,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,アットホームプラス株式会社,8010801017399,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,アーネストカーゴ株式会社,9030001034597,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,エクシト株式会社,1030001116700,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,エヌピーエムズ株式会社,9380001026312,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+Brand off,,株式会社ＴＧＭ,3370001023415,宮城県仙台市若林区中倉３丁目１７番５７号,宮城県,franchisee,2,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF LIFE仙台六丁の目店;BRAND OFF LIFE仙台中倉店
+モスバーガー,ハンバーガー,株式会社ドムドムフードサービス,8021001062020,東京都台東区浅草６丁目７番８号,東京都,unknown,1,pipeline,,discovered_via=chain_verified
+コメダ珈琲,コーヒーショップ,-0023東京都新宿区西新宿六丁目10番1号日土地西新宿ビル7階関係会社株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+シャトレーゼ,,お客さまへのお知らせ2026年1月24日スターバックスコーヒージャパン株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,とら醤油株式会社,7260001034601,岡山県倉敷市酒津２３６２番地,岡山県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Itto個別指導学院,,株式会社ITTO高校生専門,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社TSUTAYA南アルプスガーデン店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+オフハウス,,株式会社UPSTART 2,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社Vidaway,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社Vidaway TSUTAYA柏駅前店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社Vidaway創り手,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ企業,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+Brand off,,株式会社アリーモ,2010501046646,東京都台東区東上野２丁目１３番４号さかえビルＢ１,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アルペンクイックフィットネス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社アーミーフィットネスジャパン,7030001034491,埼玉県さいたま市見沼区大和田町２丁目１５５３番地１－４０９号,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社エイゼン,2430001077273,北海道札幌市白石区東札幌二条５丁目２番１号,北海道,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社ゴトー,1380001009662,福島県本宮市高木字井戸上４６番地２,福島県,franchisee,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+アップガレージ,自動車・自転車関係小売,株式会社サイン・ハウス,6010902006286,神奈川県川崎市中原区中丸子１３番地２,神奈川県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+アップガレージ,自動車・自転車関係小売,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社バンダイナムコアミューズメント,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+Kids Duo,学習塾・カルチャースクール,株式会社リロクラブ,2011101032251,東京都新宿区新宿４丁目２番１８号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社京北スーパー,2040001065524,千葉県柏市柏１丁目４番３号,千葉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+オフハウス,,株式会社大宮電化-埼玉県,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+ハードオフ,,株式会社大宮電化-埼玉県,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社戸田建設,6460101001085,北海道帯広市南町東一条７丁目１２番地１,北海道,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社東京都公安委員会許可第303310908618号,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社湘南開発,6040002073695,千葉県市原市姉崎西１丁目２番１３号,千葉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
+コメダ珈琲,コーヒーショップ,株式会社竹中工務店,3120001077469,大阪府大阪市中央区本町４丁目１番１３号,大阪府,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社精文館書店愛知県豊橋市,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+モスバーガー,ハンバーガー,大和フーヅ株式会社,5010401089998,埼玉県熊谷市筑波3-193 熊谷通運ビル5F,埼玉県,franchisee,1,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+オフハウス,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,Packcity Japan株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社Ｖｉｄａｗａｙ,2010401061159,神奈川県横浜市瀬谷区下瀬谷２丁目１８番１３号,神奈川県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match
+業務スーパー,,とら醤油株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,アルビス株式会社,6010001087022,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,採用情報宍倉株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,東京海上日動火災保険株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+モスバーガー,ハンバーガー,株式会社Ambition,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社おおたやホーム店舗案内会社案内採用,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社に,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社アレス,8430001073011,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+エニタイムフィットネス,,株式会社アーミーフィットネスジャパン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社イチコ,7011001002449,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+オフハウス,,株式会社インタースタッフ452 friends自社ローン専門店じしゃロン八千代店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社エイゼン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,株式会社コシダカ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社ゴトー,,,,franchisee,1,pipeline,,discovered_via=chain_discovery
+アップガレージ,自動車・自転車関係小売,株式会社サイン・ハウス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社スーパーあさ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社スーパーサンコー,4120001020592,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ツジ建装,5180001104067,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ハズイ食料品店経営理念会社概要人事制度サービスハズイ鮮度,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社フライフィッシュ,1021001075318,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ブリッジフォー,1010001257075,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ホームインプルーブメントひろせ,4320001002521,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社ヨシケイ福山外食・給食事業,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+モスバーガー,ハンバーガー,株式会社リプラス,2430001085268,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Kids Duo,学習塾・カルチャースクール,株式会社リロクラブ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社三杉屋,3120901021369,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,株式会社世羅高原農場,1240005011521,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社京北スーパー,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+TSUTAYA,,株式会社戸田建設,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+エニタイムフィットネス,,株式会社湘南開発,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+コメダ珈琲,コーヒーショップ,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+コメダ珈琲,コーヒーショップ,株式会社竹中工務店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+業務スーパー,,株式会社肉,7430001075124,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社西日本興産,7130001001548,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,玉千葉栃木群馬東海愛知岐阜静岡三重近畿奈良滋賀-ユニー株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+カーブス,学習塾・カルチャースクール,東京海上日動火災保険株式会社,2010001008824,東京都千代田区大手町２丁目６番４号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社にくよし,1450001010175,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社コシダカホールディングス,7070001003674,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,,株式会社スーパーあさの,2060001012012,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社バンダイナムコアミューズメントラボ,9010601053998,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+TSUTAYA,,株式会社 精文館書店,,,,franchisee,1,pipeline,,discovered_via=osm_operator_tag_unverified
+シャトレーゼ,,株式会社ノーブルフォレスト,,,,franchisee,1,pipeline,,discovered_via=osm_operator_tag_unverified
+モスバーガー,ハンバーガー,ヒューマンゲート株式会社,2180001165946,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+モスバーガー,ハンバーガー,合同会社Ｂｒａｎｄ．Ｎ,4400003003294,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,学習塾・カルチャースクール,平野産業株式会社,4420001013855,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+コメダ珈琲,コーヒーショップ,有限会社日光商事,2080002010863,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,学習塾・カルチャースクール,有限会社雄鳳,9290002046087,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+業務スーパー,,株式会社チャレンジ,3220002015129,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,学習塾・カルチャースクール,株式会社宇都宮建設,2330001009121,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+モスバーガー,ハンバーガー,Ｈｉｇｈ　Ｔｒｅｅ株式会社,2180001130470,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,学習塾・カルチャースクール,ひと・いきいきカンパニー株式会社,6240001017303,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,ゆうひパーク浜田株式会社,7280001004445,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,インベントクリエイション株式会社,2200002015222,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,エム・ジェイ・フードサービス株式会社,6130001043285,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,オホーツクソーテック株式会社,9450001009359,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,コサキ株式会社,5180301012878,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,サンフーズ有限会社,8011602004529,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,シンライフード有限会社,4500002003590,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,トヨ商事有限会社,7060002015777,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,ニッポンインシュア株式会社,7290001022124,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,マルシ株式会社,8010601036558,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,井原水産株式会社,3450001008853,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,合同会社オランジュ,3430003008754,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,合同会社サニーサイドアップ,8380003006032,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社しまへい,1200002023829,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,有限会社するが薬局,8080102010659,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社アイ・エフ・エフ,9110002010515,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社アダグローバルカンパニー,3140002067954,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社アーンジュコンパニョン,7170002004728,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社エィエムエィ九州,3350002005579,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社エムアンドケイエンタープライズ,2080402010736,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社エムワールド,9060002038768,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社エリナコーポレーション,7090002000495,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社オンショア,2120002047678,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社オーシャンフーズ,5430002031714,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ケイアンドエスフードサービス,8030002004617,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社コッペズ,6100002008397,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社サンデリック,3240002007041,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社シュートフーズ,6021002064843,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ジョイフードビジネス,3120002020048,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社スリーホワイ,8340002016738,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ゼア,6210002001903,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,有限会社タンバ,6011502009720,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ツェンティーフォー,7180002035565,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社トムズ,9440002003080,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社トライ,1430002029324,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ドリーマーフーズ,8360002021356,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ヒロアンドユウ,9230002005965,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社フジエースフード,5020002101062,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社マルイチ商事,6380002003486,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社ランシヨ,2130002015295,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社三翔,5430002022738,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社丸山銃砲火薬店,9420002019814,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社信愛フードサービス,8280002005581,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社吉田企画,8370302002550,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社守人フーヅ,5340002021419,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社愛フードサービス,6210002013642,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社武田商事,3430002012105,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社筑後フーズ,9290002047390,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,松井アルファス株式会社,1320201000261,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社いちい,5460302004103,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社おくう,8020001038204,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社イシグロ・ヘルスケア,7200001037568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社インテグリティ,9430001081343,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社インフィニティ,1450001005893,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社イーエン,7190001024568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ウィード,6370001022793,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社エフケイシー,7030001096904,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社カトー,3430001062480,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社カナディアンコーポレーション,7200001019062,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社キュー,8380001004921,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社クオーレ,5430001071125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社クリアスカイ,4040001102176,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社クリフ,7380001003949,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社クーバル,3120001161470,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社グリーンスポーツ企画,6110001018982,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社グローリアス,6011301021414,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社コクサコ,6020001002021,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社サツキ商事,5020001072973,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社サンセリテ,5430001085496,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社サンライズ,3460101002045,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社サークス,8410001007086,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ジョイサービス,7380001016942,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社スマイルフードサービス,1011101052102,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社セフティ,1020001132442,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社セルフカンパニー,2090001004493,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ダイコク,5430001073600,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ダンライ,6420001008762,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ディボート,3010601068151,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ディモラス,7080101018043,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社トゥルーハートサービス,1050001022599,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ナイスケア,8080001013688,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ニワ・コーポレーション,7070001017427,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ネクシア,6370001043609,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ハチマルフード,9180001106522,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ピエール,1010401096016,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社フジモリフードサービス,5080401020048,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ベストフード,8070001040824,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ベル商会,8030001097546,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ボルトン,4070001002943,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社マイテレホン,5360001009487,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ムーヴ・オン,4030003019493,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社モンテグッチ,6180002084472,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ヤマ一・フード,2150001006137,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ヨコハマ丸正,1020001030852,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ヨシダフードサービス,1300001001073,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ライフサポート,1430001032205,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社ラクオーレ,4011701016800,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社リノクレスト,2160001006697,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社レアス,9020001114722,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社七彩,2430001038011,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社三協メディケア,7400001012906,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社丸福山田屋,9370801000599,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社亀山社中,1010601031961,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社南陽商会,4100001024125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社四葉堂フーズ,9090001014965,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社壱林堂,3020001132291,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社多翔,5360001017688,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社大道,2430001034646,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社太田商事,3060001012770,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社心叶,3360001035485,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社日の出ネットワークス,9260001029426,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社本橋事務所,8011601017655,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社東武ストア,4011401004551,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社横浜サカイヤ薬局堂,3020001003914,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社清風,6370001038682,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社猫の散歩道,8013301038023,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社石橋,9380001017245,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社秋桜,8450001014748,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,株式会社藤田電気商会,5420001007658,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,学習塾・カルチャースクール,洋三プラスチックス工業有限会社,5180002085926,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,誠懸株式会社,2300001013027,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,都市フーズサービス有限会社,9040002008310,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,タキヒヨー株式会社,7180001037793,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,井田スクエア株式会社,8210001013897,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,安富産業株式会社,2011301007177,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,新進タクシー株式会社,2011401002953,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,日翔フーズ株式会社,1021001024506,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+コメダ珈琲,コーヒーショップ,興永産業株式会社,9030001042666,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カルビ丼とスン豆腐専門店韓丼,,大和物産株式会社,9050001023334,,,franchisee,1,pipeline,,discovered_via=recruitment_search_houjin_verified
+シャトレーゼ,,東京日食株式会社,6040001019311,,,franchisee,1,pipeline,,discovered_via=recruitment_search_houjin_verified
+Brand off,,株式会社ティー・クラウド,7440001001260,北海道函館市湯川町３丁目２６番３号,北海道,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_unique_name; stores=BRAND OFF クレア函館人見店
+Brand off,,株式会社サンライズトレーディング,5420002001305,青森県青森市大字平新田字池上５６番地１,青森県,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF 弘前ヒロロ店
+カルビ丼とスン豆腐専門店韓丼,,株式会社ナック,3390001001443,山形県山形市春日町１番４０号,山形県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000004.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼山形あかねヶ丘店; address=山形県山形市あかねヶ丘二丁目16-12
+カルビ丼とスン豆腐専門店韓丼,,東富商事株式会社,3180001020241,愛知県名古屋市中川区新家３丁目１４０７番地,愛知県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000005.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼豊田下市場店; address=愛知県豊田市前田町5丁目２
+カルビ丼とスン豆腐専門店韓丼,,ユウクリエイティブ株式会社,9070002031400,群馬県太田市飯塚町１４３４番地１,群馬県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000006.000050301.html,official franchisor press release; houjin_unique_name; stores=韓丼秋田中央店; address=秋田県秋田市高陽幸町8-19
+カルビ丼とスン豆腐専門店韓丼,,株式会社ライズコーポレーション,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000007.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼豊橋藤沢店; address=愛知県豊橋市神ノ輪88
+カルビ丼とスン豆腐専門店韓丼,,株式会社都商事,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000009.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼浜松原島店; address=静岡県浜松市東区原島町375番１
+カルビ丼とスン豆腐専門店韓丼,,株式会社ハリコム,4290001047446,福岡県八女市馬場５４番地の４,福岡県,franchisee,1,official_franchisee_page,https://harika-yame.jp/,official operator company profile; houjin_corp_number; stores=韓丼八女店
+アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+ITTO個別指導学院,学習塾事業、英会話事業、通訳・翻訳事業、法人語学研修事業 等,NOVAホールディングス株式会社,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+HARD OFF,パソコン・オーディオ・各種ソフト、家具・インテリア等リサイクル,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+モスバーガー,ハンバーガー,株式会社モスフードサービス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/9-1.pdf,method=none
+モスバーガー,ハンバーガー,株式会社JR九州ファーストフーズ,,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,,unknown,0,operator_official_brand_link,https://www.jrff.co.jp/,anchor=モスバーガー; href=https://www.jrff.co.jp/section-mos/; page=https://www.jrff.co.jp/
+カーブス,学習塾・カルチャースクール,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,unknown,0,operator_official_brand_link,https://www.chapondoux.com/storelist/store.html?id=78,anchor=カーブス; href=https://www.chapondoux.com/storelist/index.html; page=https://www.chapondoux.com/storelist/store.html?id=78
+エニタイムフィットネス,,glob,,広島県福山市王子町1-3-5,広島県,unknown,0,operator_official_brand_link,https://www.glob.co.jp/businesscontent/yuzuan/,anchor=エニタイムフィットネス; href=https://www.glob.co.jp/businesscontent/anytimefitness/; page=https://www.glob.co.jp/businesscontent/yuzuan/
+シャトレーゼ,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=シャトレーゼ; href=https://bigone.co.jp/store_category/chateraise/; page=https://bigone.co.jp/contents/cafe/
+カルビ丼とスン豆腐専門店韓丼,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=韓丼; href=https://bigone.co.jp/store_category/kandon/; page=https://bigone.co.jp/contents/cafe/
+オフハウス,,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,unknown,0,operator_official_brand_link,https://www.makiya-group.co.jp/potato/,anchor=HARD OFF / OFF HOUSE; href=https://www.makiya-group.co.jp/hardoff/; page=https://www.makiya-group.co.jp/potato/
+ハードオフ,,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,unknown,0,operator_official_brand_link,https://www.eco-nos.com/reuse/shop/off-house.html,anchor=ハードオフ; href=https://www.eco-nos.com/reuse/shop/hard-off.html; page=https://www.eco-nos.com/reuse/shop/off-house.html
+ハードオフ,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,unknown,0,operator_official_brand_link,https://eco-mtc.co.jp/property,anchor=ハードオフ; href=https://eco-mtc.co.jp/business; page=https://eco-mtc.co.jp/property
+業務スーパー,,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=業務スーパー; href=https://www.kanseki.co.jp/store/gyoumusuper/; page=https://www.kanseki.co.jp/store/gyoumusuper/
+ハードオフ,,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=ハードオフ・オフハウス; href=https://www.kanseki.co.jp/store/offhouse/; page=https://www.kanseki.co.jp/store/gyoumusuper/
+オフハウス,,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=ハードオフ・オフハウス; href=https://www.kanseki.co.jp/store/offhouse/; page=https://www.kanseki.co.jp/store/gyoumusuper/
+TSUTAYA,,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,unknown,0,operator_official_brand_link,https://azumashokuhin.jp/business/index.html,anchor=TSUTAYAユニット; href=https://azumashokuhin.jp/business/unit.html; page=https://azumashokuhin.jp/business/index.html
+エニタイムフィットネス,,ペルゴ,,愛媛県姫路市中地188-1,愛媛県,unknown,0,operator_official_brand_link,https://www.pergo.co.jp/brand/vansan,anchor=エニタイムフィットネス; href=https://www.pergo.co.jp/brand/anytime; page=https://www.pergo.co.jp/brand/vansan
+カーブス,学習塾・カルチャースクール,アルフォンソ株式会社,9070001000216,群馬県前橋市住吉町1-3-12 アルフォンソビル,群馬県,unknown,0,operator_official_brand_link,http://www.alfonso.co.jp/gongcha/shoplist.html,anchor=CURVES; href=http://www.alfonso.co.jp/curves/; page=http://www.alfonso.co.jp/gongcha/shoplist.html

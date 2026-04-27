@@ -25,10 +25,12 @@ LEFT JOIN franchise_brand fb ON bol.brand_id = fb.id
 WHERE EXISTS (...) GROUP BY oc.id ORDER BY tokyo_stores_observed DESC;
 ```
 
-### `megajii-ranking.csv` (123 社)
-ORM で **店舗数根拠ありの 2+ 業態** かつ total_stores 20+ の operator を
-total_stores / brand_count 降順。brand alias は CSV 集約時に canonical 化し、
-同一 operator × brand の複数 source は最大店舗数だけを採用する。
+### `megajii-ranking.csv` (22 社)
+ORM で **14 対象ブランド内の店舗数根拠あり 2+ 業態** かつ
+target total_stores 20+ の operator を total_stores / brand_count 降順。
+brand alias は CSV 集約時に canonical 化し、同一 operator × brand の複数
+source は最大店舗数だけを採用する。コンビニ / 自動車用品 / その他外食など
+14 対象外ブランドは `brands` と `total_stores` から除外する。
 `operator_official_brand_link` のような 0 店舗 evidence は、業態 evidence として
 保持するが、この厳密ランキングの `brand_count` には入れない。
 

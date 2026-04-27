@@ -35,9 +35,9 @@
 | ファイル | 行数 | 役割 |
 |---|--:|---|
 | [`operator-centric-master-14brand-complete.csv`](./test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv) | 527 | 14 ブランド横持ちの operator-centric master |
-| [`fc-operators-all.csv`](./test/fixtures/megafranchisee/fc-operators-all.csv) | 1,005 | 1 事業会社 1 行の集約 master |
-| [`fc-links.csv`](./test/fixtures/megafranchisee/fc-links.csv) | 1,432 | brand × operator の根拠付き flat link |
-| [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 123 | 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
+| [`fc-operators-14brand-only.csv`](./test/fixtures/megafranchisee/fc-operators-14brand-only.csv) | 461 | 14 対象ブランドだけの 1 事業会社 1 行 master |
+| [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 554 | 14 対象ブランドだけの brand × operator flat link |
+| [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 22 | 14 対象ブランド内で 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
 | [`jfa-disclosures.csv`](./test/fixtures/megafranchisee/jfa-disclosures.csv) | 103 | JFA 情報開示書面 PDF index |
 
 採用 source は `jfa` / `jfa_disclosure` / `manual_megajii_*` / `pipeline` / `osm_overpass` / `official_franchisee_page` / `operator_official_brand_link` などで provenance を保持します。法人番号は `var/houjin/registry.sqlite` の国税庁 CSV で照合できた場合だけ付与します。
@@ -197,8 +197,8 @@ pizza/
 | 機能 | 状態 | 実測 |
 |---|---|---|
 | 14 ブランド operator-centric master | 🟢 | 527 operator、14 ブランド全 CSV export |
-| FC operator directory | 🟢 | 1,005 operator / 1,432 brand links |
-| 厳密メガジーランキング | 🟢 | 123 社、2+業態かつ20+店舗、0 店舗 evidence は除外 |
+| FC operator directory | 🟢 | 14対象ブランド 461 operator / 554 brand links |
+| 厳密メガジーランキング | 🟢 | 22 社、14対象ブランド内で2+業態かつ20+店舗、対象外ブランドは除外 |
 | OSM Overpass 全国補完 | 🟢 | Google API 不使用の店舗取得経路 |
 | JFA 協会員 / 情報開示書面 | 🟢 | 協会員 scrape + PDF index 103 件 |
 | 公式ページ source 追加 | 🟢 | 公式FC・運営会社・本部PR本文を国税庁照合付きで ORM 化 |
