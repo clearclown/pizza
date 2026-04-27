@@ -1,12 +1,7 @@
-<p align="center">
-  <img src="docs/assets/pizza-banner.jpg" alt="PI-ZZA" width="720">
-</p>
+
 
 # PI-ZZA 🍕 — Process Integration & Zonal Search Agent
 
-<p align="center">
-  <img src="docs/assets/banner.jpg" alt="PI-ZZA banner" width="100%">
-</p>
 
 <p align="center">
   <a href="https://github.com/clearclown/pizza/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/clearclown/pizza/actions/workflows/ci.yml/badge.svg"></a>
@@ -22,7 +17,7 @@
   <img src="docs/banner.jpg" alt="PI-ZZA banner" width="720">
 </p>
 
-> **「精度の高いデータ、おまち！」**
+> Process Integration & Zonal Search Agent
 > PI-ZZA は、OSM Overpass / JFA / 国税庁法人番号 CSV / 公式ページ / 任意の Google Places を組み合わせ、FC 事業会社を根拠付きで集計するロケーション・インテリジェンス・ツールです。
 
 ---
