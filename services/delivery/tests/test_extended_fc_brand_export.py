@@ -6,6 +6,7 @@ from pathlib import Path
 
 from pizza_delivery.extended_fc_brand_export import (
     EXTENDED_LINK_FIELDS,
+    export_all_fc_operator_links,
     load_seed_brands,
     export_extended_brands,
 )
@@ -234,3 +235,75 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         "ミスタードーナツ": "singleton_expand",
     }
     assert len(list(csv.DictReader(all_fc_candidates.open(encoding="utf-8")))) == 2
+
+
+def test_all_fc_index_flags_repeated_operator_total_counts(tmp_path: Path) -> None:
+    links = tmp_path / "fc-links.csv"
+    rows = [
+        {
+            "brand_name": "ブランドA",
+            "industry": "",
+            "operator_name": "株式会社複数ブランド",
+            "corporate_number": "1111111111111",
+            "head_office": "",
+            "prefecture": "",
+            "operator_type": "franchisee",
+            "estimated_store_count": "100",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
+        {
+            "brand_name": "ブランドB",
+            "industry": "",
+            "operator_name": "株式会社複数ブランド",
+            "corporate_number": "1111111111111",
+            "head_office": "",
+            "prefecture": "",
+            "operator_type": "franchisee",
+            "estimated_store_count": "100",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
+        {
+            "brand_name": "ブランドC",
+            "industry": "",
+            "operator_name": "株式会社単独ブランド",
+            "corporate_number": "2222222222222",
+            "head_office": "",
+            "prefecture": "",
+            "operator_type": "franchisee",
+            "estimated_store_count": "50",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
+    ]
+    with links.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=EXTENDED_LINK_FIELDS[:11], lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+    index = tmp_path / "index.csv"
+    singletons = tmp_path / "singletons.csv"
+    stats = export_all_fc_operator_links(
+        fc_links_path=links,
+        all_fc_out=tmp_path / "all-fc.csv",
+        all_fc_by_brand_dir=tmp_path / "all-fc-by-brand",
+        all_fc_candidates_out=tmp_path / "candidates.csv",
+        all_fc_brand_index_out=index,
+        all_fc_singletons_out=singletons,
+        all_fc_min2_by_brand_dir=tmp_path / "all-fc-by-brand-min2",
+    )
+
+    assert stats["all_fc_brand_index_rows"] == 3
+    index_rows = {r["brand_name"]: r for r in csv.DictReader(index.open(encoding="utf-8"))}
+    assert index_rows["ブランドA"]["largest_operator_count_basis"] == (
+        "operator_total_repeated_not_brand_specific"
+    )
+    assert index_rows["ブランドA"]["review_status"] == "operator_total_count_review"
+    assert index_rows["ブランドC"]["largest_operator_count_basis"] == (
+        "operator_declared_total_single_brand_or_unverified_basis"
+    )
+    assert index_rows["ブランドC"]["review_status"] == "singleton_expand"

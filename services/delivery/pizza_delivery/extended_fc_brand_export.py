@@ -85,6 +85,8 @@ ALL_FC_BRAND_INDEX_FIELDS = [
     "estimated_store_sum",
     "max_operator_store_count",
     "largest_operator_name",
+    "largest_operator_scope_brand_count",
+    "largest_operator_count_basis",
     "sources",
     "review_status",
     "by_brand_csv",
@@ -93,6 +95,8 @@ ALL_FC_BRAND_INDEX_FIELDS = [
 ]
 ALL_FC_SINGLETON_FIELDS = [
     *BASE_LINK_FIELDS,
+    "operator_scope_brand_count",
+    "count_basis",
     "review_status",
     "by_brand_csv",
     "review_note",
@@ -506,7 +510,58 @@ def _store_count(row: dict[str, str]) -> int:
         return 0
 
 
-def _all_fc_review_status(row_count: int, max_count: int) -> str:
+def _operator_key(row: dict[str, str]) -> str:
+    return row.get("corporate_number") or canonical_key(row.get("operator_name") or "")
+
+
+def _operator_count_context(rows: list[dict[str, str]]) -> dict[str, dict[str, object]]:
+    context: dict[str, dict[str, object]] = {}
+    for row in rows:
+        key = _operator_key(row)
+        if not key:
+            continue
+        info = context.setdefault(key, {"brands": set(), "counts": {}})
+        brands = info["brands"]
+        counts = info["counts"]
+        assert isinstance(brands, set)
+        assert isinstance(counts, dict)
+        brands.add(row.get("brand_name") or "")
+        count = _store_count(row)
+        counts[count] = int(counts.get(count, 0)) + 1
+    return context
+
+
+def _operator_scope_brand_count(
+    row: dict[str, str], operator_context: dict[str, dict[str, object]]
+) -> int:
+    info = operator_context.get(_operator_key(row), {})
+    brands = info.get("brands", set())
+    return len({b for b in brands if b}) if isinstance(brands, set) else 1
+
+
+def _count_basis(
+    row: dict[str, str], operator_context: dict[str, dict[str, object]]
+) -> str:
+    info = operator_context.get(_operator_key(row), {})
+    counts = info.get("counts", {})
+    scope_brand_count = _operator_scope_brand_count(row, operator_context)
+    repeated_count_rows = 0
+    if isinstance(counts, dict):
+        repeated_count_rows = int(counts.get(_store_count(row), 0))
+    if (
+        row.get("source") == "manual_megajii_2026_04_24"
+        and scope_brand_count > 1
+        and repeated_count_rows > 1
+    ):
+        return "operator_total_repeated_not_brand_specific"
+    if row.get("source") == "manual_megajii_2026_04_24":
+        return "operator_declared_total_single_brand_or_unverified_basis"
+    return "source_estimated_or_store_matched_count"
+
+
+def _all_fc_review_status(row_count: int, max_count: int, count_basis: str = "") -> str:
+    if count_basis == "operator_total_repeated_not_brand_specific":
+        return "operator_total_count_review"
     if row_count <= 1 and max_count >= 100:
         return "singleton_high_store_count_expand"
     if row_count <= 1:
@@ -528,18 +583,29 @@ def _all_fc_brand_index_rows(
     min_operator_rows: int,
 ) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
+    operator_context = _operator_count_context(rows)
     for brand, brand_rows in _brand_groups(rows).items():
         counts = [_store_count(r) for r in brand_rows]
         largest = max(brand_rows, key=_store_count)
         row_count = len(brand_rows)
         max_count = max(counts) if counts else 0
         filename = f"{_safe_filename(brand)}.csv"
-        status = _all_fc_review_status(row_count, max_count)
+        count_basis = _count_basis(largest, operator_context)
+        status = _all_fc_review_status(row_count, max_count, count_basis)
         note = ""
+        if count_basis == "operator_total_repeated_not_brand_specific":
+            note = (
+                "largest operator count is repeated across multiple brands; treat as "
+                "operator-level footprint, not brand-specific store count"
+            )
         if row_count == 1:
-            note = "only_one_confirmed_franchisee_operator; keep as evidence, expand via official/JFA/recruiting/operator sources"
+            note = (
+                f"{note}; " if note else ""
+            ) + "only_one_confirmed_franchisee_operator; keep as evidence, expand via official/JFA/recruiting/operator sources"
         elif row_count == 2:
-            note = "two_confirmed_franchisee_operators; still thin for brand-level review"
+            note = (
+                f"{note}; " if note else ""
+            ) + "two_confirmed_franchisee_operators; still thin for brand-level review"
         out.append(
             {
                 "brand_name": brand,
@@ -550,6 +616,10 @@ def _all_fc_brand_index_rows(
                 "estimated_store_sum": str(sum(counts)),
                 "max_operator_store_count": str(max_count),
                 "largest_operator_name": largest.get("operator_name") or "",
+                "largest_operator_scope_brand_count": str(
+                    _operator_scope_brand_count(largest, operator_context)
+                ),
+                "largest_operator_count_basis": count_basis,
                 "sources": ",".join(
                     sorted({r.get("source", "") for r in brand_rows if r.get("source")})
                 ),
@@ -576,18 +646,29 @@ def _all_fc_singleton_rows(
     rows: list[dict[str, str]], *, all_fc_by_brand_dir: Path
 ) -> list[dict[str, str]]:
     out: list[dict[str, str]] = []
+    operator_context = _operator_count_context(rows)
     for brand, brand_rows in _brand_groups(rows).items():
         if len(brand_rows) != 1:
             continue
         row = dict(brand_rows[0])
         max_count = _store_count(row)
-        row["review_status"] = _all_fc_review_status(1, max_count)
+        basis = _count_basis(row, operator_context)
+        row["operator_scope_brand_count"] = str(
+            _operator_scope_brand_count(row, operator_context)
+        )
+        row["count_basis"] = basis
+        row["review_status"] = _all_fc_review_status(1, max_count, basis)
         row["by_brand_csv"] = _relative_csv_path(
             all_fc_by_brand_dir / f"{_safe_filename(brand)}.csv"
         )
-        row["review_note"] = (
-            "single confirmed franchisee/operator row; not a complete brand list yet"
-        )
+        note = "single confirmed franchisee/operator row; not a complete brand list yet"
+        if basis == "operator_total_repeated_not_brand_specific":
+            note = (
+                "estimated_store_count is repeated for this operator across multiple brands; "
+                "do not treat it as brand-specific; "
+                + note
+            )
+        row["review_note"] = note
         out.append(row)
     out.sort(key=lambda r: (-_store_count(r), r.get("brand_name") or ""))
     return out

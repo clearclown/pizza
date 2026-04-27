@@ -121,14 +121,18 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 ### `by-view/all-fc-brand-index.csv` (172 rows, 2026-04-27)
 `all-fc-operator-links.csv` を brand 単位で集計した index。`franchisee_rows` /
 `verified_franchisee_rows` / `estimated_store_sum` / `largest_operator_name` /
-`review_status` を持つ。`review_status=singleton_high_store_count_expand` は
-1 社しか確認できていないが、その 1 社の店舗数が 100 以上で、優先的に追加 source を
-当てるべきブランド。
+`largest_operator_count_basis` / `review_status` を持つ。
+`review_status=operator_total_count_review` は、同じ operator の同じ店舗数が
+複数ブランドに繰り返し出ており、ブランド別店舗数ではなく operator 全体 footprint
+として扱うべき行。`singleton_expand` / `thin_expand` は operator 件数そのものが
+薄いブランド。
 
 ### `by-view/all-fc-singleton-brands.csv` (109 rows, 2026-04-27)
 `all-fc-by-brand/*.csv` のうち operator 1 件だけのブランドをまとめた監査 CSV。
 1 件ファイルを消すと evidence が失われるため、canonical な `all-fc-by-brand` は残し、
 閲覧用には `by-view/all-fc-by-brand-min2/*.csv` (63 ファイル) を使う。
+`count_basis=operator_total_repeated_not_brand_specific` の行は、
+`estimated_store_count` をブランド別店舗数として読まない。
 
 ### `brand-fill-rate.csv` (433 rows, 2026-04-27)
 `fc-links.csv` を brand 単位で再集計し、本部公表店舗数 (`franchisor` / `direct`
