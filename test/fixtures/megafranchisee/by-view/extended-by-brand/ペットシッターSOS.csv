@@ -1,0 +1,2 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+ペットシッターSOS,,株式会社現代舎,6012801000452,東京都立川市柴崎町３丁目５番８号名取ビル,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ペットシッターSOS,株式会社現代舎,franchisor_seed

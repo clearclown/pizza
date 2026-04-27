@@ -1,0 +1,2 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+注文住宅の相談窓口,,株式会社あおぞらカンパニー,5120001231503,大阪府大阪市淀川区宮原１丁目１－１新大阪阪急ビル３階,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,注文住宅の相談窓口,株式会社あおぞらカンパニー,franchisor_seed

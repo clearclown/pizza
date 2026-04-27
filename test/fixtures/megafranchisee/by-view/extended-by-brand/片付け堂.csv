@@ -1,0 +1,3 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+片付け堂,,株式会社Loop,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,片付け堂,株式会社Loop,franchisor_seed
+片付け堂,不用品回収、遺品整理、解体事業,株式会社片付け堂,7010401135734,東京都中央区湊１丁目６番１１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,片付け堂,株式会社Loop,existing_link

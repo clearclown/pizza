@@ -1,0 +1,6 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+まいどおおきに食堂,食堂,株式会社キノシタ,4080001014780,静岡県焼津市大覚寺３丁目１５番地の１０,静岡県,franchisee,30,manual_megajii_2026_04_24,,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link
+まいどおおきに食堂,食堂,ビストワン,,大阪府東大阪市中鴻池町1-3-7-502,大阪府,franchisee,20,manual_megajii_2026_04_24,,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link
+まいどおおきに食堂,食堂,株式会社ユウショク,3500001006133,愛媛県松山市平井町甲1436-1,愛媛県,franchisee,20,manual_megajii_2026_04_24,,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link
+まいどおおきに食堂,,フジオフードグループ本社株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,まいどおおきに食堂,フジオフードグループ本社株式会社,franchisor_seed
+まいどおおきに食堂,食堂,株式会社フジオフードシステム,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link

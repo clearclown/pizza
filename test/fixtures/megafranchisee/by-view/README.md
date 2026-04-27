@@ -55,6 +55,33 @@ source は最大店舗数だけを採用する。コンビニ / 自動車用品 
 | Brand off | 4 |
 | カルビ丼とスン豆腐専門店韓丼 | 10 |
 
+### `extended-by-brand/<brand>.csv` (232 ファイル)
+追加 FC ブランド seed ごとの監査表。franchisor seed、本部 evidence、franchisee link
+を含む。`status` は `extended-brand-summary.csv` を参照する。
+
+### `extended-fc-by-brand/<brand>.csv` (38 ファイル)
+追加 FC ブランドのうち、既存 evidence から `operator_type=franchisee` が取れた
+ブランドだけの FC加盟/運営会社リスト。全体版は
+`../extended-fc-operator-links.csv`。
+
+| brand | FC operator rows |
+|---|--:|
+| かつや | 13 |
+| ファミリーマート | 13 |
+| ケンタッキーフライドチキン | 12 |
+| マクドナルド | 11 |
+| ローソン | 9 |
+| セブン-イレブン | 8 |
+| からやま | 5 |
+| 大阪王将 | 5 |
+| ホビーオフ | 4 |
+| 丸源ラーメン | 4 |
+| 長崎ちゃんぽんリンガーハット | 4 |
+| 鳥貴族 | 4 |
+| まいどおおきに食堂 | 3 |
+| ドトールコーヒーショップ | 3 |
+| 明光義塾 | 3 |
+
 ### `unverified-63-focus.csv` (63 社)
 人手 TSV の **未 verified** (corp 空) 63 社のフォーカスリスト。手動確認 / 再検索
 候補。`reason_hint` 列で失敗要因を分類。

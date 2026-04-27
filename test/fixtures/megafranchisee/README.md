@@ -109,6 +109,32 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 
 列: `brand_name, industry, operator_name, corporate_number, head_office, prefecture, operator_type, estimated_store_count, source, source_url, note`
 
+### `fc-brand-seeds-2026-04-27.tsv` (223 rows, 2026-04-27)
+ユーザー提供の追加 FC ブランド seed。14 対象ブランドは再処理から除外し、
+`ITTO個別指導学院・みやび個別指導学院` や `ワークマン／ワークマンプラス` の
+ような複数ブランド表記は export 時に分割する。seed は「調査対象の指定」であり、
+加盟運営会社の ground truth としては扱わない。
+
+### `extended-brand-summary.csv` (232 rows, 2026-04-27)
+追加ブランド seed の取得状況 summary。`operator_links_found` は既存 ORM/JFA/manual/
+pipeline evidence から franchisee/operator link が取れたブランド、
+`franchisor_seed_only` は現時点で本部 seed または本部 evidence のみのブランド。
+
+### `extended-brand-links.csv` (374 rows, 2026-04-27)
+追加ブランドの監査用 brand × operator flat link。franchisor seed、本部 evidence、
+franchisee link をすべて含む。公式 FC リスト/オーナー一覧/店舗一覧から運営会社が
+取れた場合は `source=official_franchisee_page` として同じ表に入れる。
+
+### `extended-fc-operator-links.csv` (130 rows, 2026-04-27)
+追加ブランドの **FC加盟/運営会社だけ** に絞った flat link。`operator_type=franchisee`
+のみを含み、本部 seed は除外する。ブランド別の同内容は
+`by-view/extended-fc-by-brand/*.csv` (38 ファイル) に出力する。
+
+```bash
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
+  python -m pizza_delivery.extended_fc_brand_export
+```
+
 ### `megajii-raw.csv` (192 rows, 2026-04-24)
 **人手 TSV の SQLite dump**。LLM/クレンジング前の生データ snapshot。
 

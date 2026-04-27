@@ -1,0 +1,6 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+長崎ちゃんぽんリンガーハット,ラーメン・餃子,株式会社リンガーハット,,,,franchisor,570,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/189-1.pdf,method=year_store_count_table; fc_stores=184; rc_stores=386; total_stores=570; observed_at=2014年度,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,existing_link
+長崎ちゃんぽんリンガーハット,,株式会社アメリカヤコーポレーション,1070001021566,群馬県館林市本町4-5-6 アメリカヤビル2F,群馬県,franchisee,75,manual_megajii_2026_04_24,,,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,existing_link
+長崎ちゃんぽんリンガーハット,,株式会社三油商会,9180001036158,愛知県名古屋市中区丸の内二丁目1番5号,愛知県,franchisee,31,manual_megajii_2026_04_24,,,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,existing_link
+長崎ちゃんぽんリンガーハット,,株式会社三栄本社,7390001000722,山形市深町1-9-10,山形県,franchisee,26,manual_megajii_2026_04_24,,,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,existing_link
+長崎ちゃんぽんリンガーハット,,株式会社ユウショク,3500001006133,愛媛県松山市平井町甲1436-1,愛媛県,franchisee,20,manual_megajii_2026_04_24,,,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,existing_link

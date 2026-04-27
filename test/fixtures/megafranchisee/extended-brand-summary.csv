@@ -1,0 +1,233 @@
+brand_name,seed_brand_name,seed_franchisor_name,status,operator_rows,franchisee_rows,franchisor_rows,max_estimated_store_count,sources
+CLUB PILATES,CLUB PILATES,Wellness X Asia,operator_links_found,2,1,1,71,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+Di PUNTO,Di PUNTO(ディプント),株式会社プロントコーポレーション,operator_links_found,2,1,1,113,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+FURDI,FÜRDI,株式会社FURDI,operator_links_found,2,1,1,20,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+Heart Bread ANTIQUE,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,operator_links_found,3,2,1,21,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+Italian Kitchen VANSAN,Italian Kitchen VANSAN,株式会社VANSAN,operator_links_found,3,2,1,25,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+いきなりステーキ,いきなりステーキ,株式会社ペッパーフードサービス,operator_links_found,2,1,1,26,"jfa,manual_megajii_2026_04_24"
+かつや,かつや,アークランドサービスホールディングス株式会社,operator_links_found,14,13,1,96,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+からやま,からやま,エバーアクション株式会社,operator_links_found,6,5,1,75,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+ほっともっと,ほっともっと,株式会社プレナス,operator_links_found,2,1,1,109,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+まいどおおきに食堂,まいどおおきに食堂,フジオフードグループ本社株式会社,operator_links_found,5,3,2,30,"jfa,manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+やよい軒,やよい軒,株式会社プレナス,operator_links_found,2,1,1,109,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+カレーハウスCoCo壱番屋,カレーハウスCoCo壱番屋,株式会社壱番屋,operator_links_found,2,1,1,30,"jfa_disclosure,manual_megajii_2026_04_24"
+ケンタッキーフライドチキン,ケンタッキーフライドチキン,日本ケンタッキー・フライド・チキン株式会社,operator_links_found,13,12,1,216,"jfa,manual_megajii_2026_04_24"
+コンパスウォーク,コンパスウォーク,リハプライム株式会社,operator_links_found,2,1,1,21,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+セブン-イレブン,セブン-イレブン,株式会社セブン-イレブン・ジャパン,operator_links_found,9,8,1,204,"jfa,manual_megajii_2026_04_24"
+トマト&オニオン,トマト&オニオン,株式会社トマトアンドアソシエイツ,operator_links_found,2,1,1,22,"jfa_disclosure,manual_megajii_2026_04_24"
+ドトールコーヒーショップ,ドトールコーヒーショップ,株式会社ドトールコーヒー,operator_links_found,5,3,1,1073,"jfa_disclosure,manual_megajii_2026_04_24,operator_official_brand_link"
+ハウスドゥ,ハウスドゥ,株式会社ハウスドゥ住宅販売,operator_links_found,2,1,1,22,"jfa,manual_megajii_2026_04_24"
+ビアードパパ,ビアードパパ,株式会社DAY TO LIFE,operator_links_found,4,2,2,58,"jfa,manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+ファミリーマート,ファミリーマート,株式会社ファミリーマート,operator_links_found,14,13,1,223,"jfa_disclosure,manual_megajii_2026_04_24,pipeline"
+ベビーフェイスプラネッツ,ベビーフェイスプラネッツ,ベビーフェイスプラネッツ株式会社,operator_links_found,2,1,1,22,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+ホビーオフ,ホビーオフ,ハードオフコーポレーション株式会社,operator_links_found,5,4,1,91,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+ポポラマーマ,ポポラマーマ,株式会社ポポラマーマ,operator_links_found,2,1,1,29,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+マクドナルド,マクドナルド,日本マクドナルド株式会社,operator_links_found,12,11,1,183,"jfa_disclosure,manual_megajii_2026_04_24,pipeline"
+レッツ倶楽部,レッツ倶楽部,QLCプロデュース株式会社,operator_links_found,2,1,1,20,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+ローソン,ローソン,株式会社ローソン,operator_links_found,10,9,1,369,"jfa,manual_megajii_2026_04_24,pipeline"
+串カツ田中,串カツ田中,株式会社串カツ田中ホールディングス,operator_links_found,4,2,2,135,"jfa,manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+丸源ラーメン,丸源ラーメン,株式会社物語コーポレーション,operator_links_found,5,4,1,58,"jfa,manual_megajii_2026_04_24"
+八剣伝,八剣伝,株式会社マルシェ,operator_links_found,3,1,2,26,"jfa_disclosure,manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+大阪王将,大阪王将,イートアンドフーズ株式会社,operator_links_found,7,5,2,76,"jfa_disclosure,manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+成城石井,成城石井,株式会社成城石井,operator_links_found,3,2,1,116,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+明光義塾,明光義塾,株式会社明光ネットワークジャパン,operator_links_found,4,3,1,30,"jfa_disclosure,manual_megajii_2026_04_24"
+武田塾,武田塾,株式会社A.ver,operator_links_found,2,1,1,60,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+焼肉きんぐ,焼肉きんぐ,株式会社物語コーポレーション,operator_links_found,2,1,1,32,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+長崎ちゃんぽんリンガーハット,長崎ちゃんぽんリンガーハット,株式会社リンガーハット,operator_links_found,5,4,1,570,"jfa_disclosure,manual_megajii_2026_04_24"
+餃子の王将,餃子の王将,株式会社王将フードサービス,operator_links_found,3,2,1,46,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+馳走菜,馳走菜,株式会社神戸物産,operator_links_found,2,1,1,62,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+鳥貴族,鳥貴族,株式会社鳥貴族,operator_links_found,5,4,1,76,"manual_megajii_2026_04_24,user_fc_brand_seed_2026_04_27"
+#ワークマン女子,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+24h無人ホルモン直売所,24h無人ホルモン直売所,合同会社藤,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+8番らーめん,8番らーめん,株式会社ハチバン,franchisor_seed_only,1,0,1,0,jfa_disclosure
+ACCEA,ACCEA (アクセア),アクセア株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+Baluko Laundry Place,Baluko Laundry Place,株式会社OKULAB,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+Build’s,Build’s,株式会社アクア,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+CEOキッズアカデミー,CEOキッズアカデミー,CEOキッズアカデミー株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+COCOLANCE,COCOLANCE,株式会社EMILUS,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+CloseFamily,CloseFamily,株式会社Close Family,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ECCベストワン,ECCベストワン,株式会社ECC,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ECOFIT24,ECOFIT24,エーイーシー株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ECOLIFE COCO,ECOLIFE COCO,株式会社AVANCE,franchisor_seed_only,1,0,1,0,jfa
+FUJIYA KOBE他,不二家洋菓子店/FUJIYA KOBE他,株式会社不二家,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+HALLO,HALLO,株式会社やる気スイッチグループ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+HYPERFIT24,HYPERFIT24,株式会社Be-fit Japan,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+IBJ,IBJ,株式会社IBJ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+JBレンタカー,JBレンタカー,株式会社ニシザワ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+KamiBito,KamiBito,日本介護システム株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+Kidsプログラミングラボ,Kidsプログラミングラボ,株式会社エクシード,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+LEMONADE by Lemonica,LEMONADE by Lemonica,レモネード・レモニカ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+LIFE LABEL,LIFE LABEL,株式会社ベツダイ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+LIXILリフォームショップ,LIXILリフォームショップ,株式会社LIXIL,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ME不動産,ME不動産,MEホールディングス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+MUU,MUU,株式会社癒しの手,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+NAYUTAS,NAYUTAS,株式会社NAYUTAS,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ONE TOPパートナー,ONE TOPパートナー,株式会社ONE TOP JAPAN,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+OWNDAYS,OWNDAYS,OWNDAYS株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+RE/MAX,RE/MAX,株式会社IKEZOE TRUST,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+Renotta,Renotta(リノッタ),株式会社クラスコ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+SHOO・LA・RUE,SHOO・LA・RUE,イトキン株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+STEMON,STEMON,株式会社ヴィリング,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+Seria,Seria(セリア),株式会社セリア,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+WhiteningCafe,WhiteningCafe,株式会社YSK,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+mammaciao マンマチャオ,mammaciao マンマチャオ,株式会社エムアイエス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+mr.kanso,mr.kanso,mr.kanso株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+oh!庭ya!,oh!庭ya!,株式会社oh庭ya!,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+あげ焼きパン 象の耳,あげ焼きパン 象の耳,株式会社ZOO,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+あまどい屋,あまどい屋,日本住宅診断株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+いしど式そろばん,いしど式そろばん,株式会社イシド,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+おうちの御用聞き 家工房,おうちの御用聞き 家工房,株式会社HITOSUKE,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+おかやま工房 リエゾンプロジェクト,おかやま工房 リエゾンプロジェクト,株式会社おかやま工房,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+おそうじ隊501,おそうじ隊501,株式会社ビコー,franchisor_seed_only,2,0,2,0,"jfa_disclosure,user_fc_brand_seed_2026_04_27"
+おめで鯛焼き本舗,おめで鯛焼き本舗,株式会社デルソーレ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+お酒の美術館,お酒の美術館,株式会社NBG,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+からあげ専門店 鶏笑,からあげ専門店 鶏笑,SRSホールディングス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+からあげ縁,からあげ縁,エバーアクション株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+からあげ金と銀,からあげ金と銀,株式会社金と銀,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+かんてい局,かんてい局,FTC株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+がブリチキン,がブリチキン,株式会社ブルームダイニングサービス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+すし上等!,宅配寿司 銀のさら/宅配御膳 釜寅/宅配寿司 すし上等!,株式会社ライドオンエクスプレス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+たいやき わらしべ,たいやき わらしべ,有限会社わらしべ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ときわ亭,0秒レモンサワー®仙台ホルモン焼肉酒場ときわ亭,GOSSO株式会社,franchisor_seed_only,1,0,1,0,jfa
+はあとねいる,はあとねいる,株式会社Norn,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+はぐくみ弁当plus,はぐくみ弁当plus,株式会社GLUG,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+はんこ屋さん21,はんこ屋さん21,株式会社グレエイト,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ばり嗎,ばり嗎,株式会社ウィズリンク,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ふろいち,ふろいち,株式会社理想化研,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+まごころ弁当,まごころ弁当,株式会社シルバーライフ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+やきとり大吉,やきとり大吉,ダイキチシステム株式会社,franchisor_seed_only,1,0,1,0,jfa
+やきとり家 すみれ,やきとり家 すみれ,株式会社すみれ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ゆで太郎,ゆで太郎,株式会社ゆで太郎システム,franchisor_seed_only,1,0,1,0,jfa_disclosure
+アイフルホーム,アイフルホーム,株式会社LIXIL住宅研究所,franchisor_seed_only,1,0,1,0,jfa_disclosure
+アップガレージライダース,アップガレージライダース,株式会社アップガレージグループ,franchisor_seed_only,1,0,1,0,jfa_disclosure
+アトム電器,アトム電器,株式会社アトムチェーン本部,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+アパホテル,アパホテル,アパホテル株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+イエステーション,イエステーション,株式会社イエステーション,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ウィズ・ユー,ウィズ・ユー,有信アクロス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+エコカーマーケット,エコカーマーケット,D-REX株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+エフワン,エフワン,株式会社エフワン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+カフェ・ド・クリエ,カフェ・ド・クリエ,株式会社ポッカクリエイト,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+カラオケCLUB DAM,カラオケCLUB DAM,株式会社第一興商,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+カーマッチ,カーマッチ,株式会社カーマッチ,franchisor_seed_only,1,0,1,0,jfa
+ガチャガチャの森,ガチャガチャの森,株式会社ルルアーク,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ガルエージェンシー,ガルエージェンシー,株式会社ガルエージェンシー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+キャンドゥ,キャンドゥ,株式会社キャンドゥ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+キングラム,キングラム,株式会社ベストバイ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+クラシード,クラシード,株式会社クラシード,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+クルマ買取りハッピーカーズ,クルマ買取りハッピーカーズ,株式会社ハッピーカーズ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+コミック・バスター,コミック・バスター,株式会社アクロス,franchisor_seed_only,2,0,2,0,"jfa_disclosure,user_fc_brand_seed_2026_04_27"
+コードアドベンチャー,コードアドベンチャー,合同会社ドリーマーズギルド,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+サブウェイ,サブウェイ,日本サブウェイ合同会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+スクールIE,スクールIE,株式会社やる気スイッチグループ,franchisor_seed_only,2,0,2,1182,"jfa,jfa_disclosure"
+ステルスラーメンチェーン,ステルスラーメンチェーン,株式会社テイクユー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+スペースクリエイト自遊空間,スペースクリエイト自遊空間,株式会社ランシステム,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+スマイルカーズ,スマイルカーズ,株式会社スマイルカンパニー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+スマホスピタル by日本PCサービス,スマホスピタル by日本PCサービス,日本PCサービス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+スマホ修理工房,スマホ修理工房,ユウソリューションズ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+セルフ脱毛サロン ハイジ,セルフ脱毛サロン ハイジ,株式会社ハイジ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+センチュリー21,センチュリー2,株式会社センチュリー21・ジャパン,franchisor_seed_only,1,0,1,0,jfa
+ソレイルミナーレ,ソレイルミナーレ,株式会社HLC,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+タイトーFステーション,タイトーFステーション,株式会社タイトー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+タニタフィッツミー,タニタフィッツミー,株式会社タニタヘルスリンク,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ダイキチカバーオール,ダイキチカバーオール,株式会社ダイキチ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+チャイルド・アイズ,チャイルド・アイズ,株式会社やる気スイッチグループ,franchisor_seed_only,1,0,1,160,jfa_disclosure
+デイリーヤマザキ,デイリーヤマザキ,山崎製パン株式会社,franchisor_seed_only,2,0,2,0,"jfa_disclosure,user_fc_brand_seed_2026_04_27"
+デューポイント,デューポイント,株式会社デューアソシエ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ドクターネイル爪革命,ドクターネイル爪革命,在宅医療マッサージ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ニコニコレンタカー,ニコニコレンタカー,株式会社レンタス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+バーガーキング,BURGER KING,ビーケージャパンホールディングス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ヒューマンアカデミージュニア STE”AMスクール,ヒューマンアカデミージュニア STE”AMスクール,ヒューマンアカデミー株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ファンキーバナナ!!,ファンキーバナナ!!,株式会社楽場,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+フトン巻きのジロー,フトン巻きのジロー,フトン巻きのジロー株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ブリッジライフ,ブリッジライフ,QLCプロデュース株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ブルーミングケア,ブルーミングケア,株式会社ブルーミングケア,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ブロッサムジュニア,ブロッサムジュニア,ブロッサムグループ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+プライベートジムHPER,プライベートジムHPER(ハイパー),株式会社HPER,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+プラスル,プラスル,株式会社クラスコ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+プロタイムズ,プロタイムズ,株式会社アステックペイント,franchisor_seed_only,1,0,1,0,jfa
+プロポーションづくりのダイアナ,プロポーションづくりのダイアナ,株式会社ダイアナ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ペットシッターSOS,ペットシッターSOS,株式会社現代舎,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ペルメールケア,ペルメールケア,株式会社Care Nation,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ホームメイト,ホームメイト,東建コーポレーション株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ポプラ,ポプラ/生活彩家,株式会社ポプラ,franchisor_seed_only,1,0,1,0,jfa_disclosure
+マジックミシン,マジックミシン,リフォームスタジオ株式会社,franchisor_seed_only,1,0,1,0,jfa
+ミニストップ,ミニストップ,ミニストップ株式会社,franchisor_seed_only,1,0,1,0,jfa_disclosure
+メディカルホワイトニングHAKU,メディカルホワイトニングHAKU(次世代型ホワイトニングサロンHAKU),ハロウ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ユニテハウスフランチャイズシステム,ユニテハウスフランチャイズシステム,株式会社クリエイト礼文,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ユニバーサルホーム,ユニバーサルホーム,株式会社ユニバーサルホーム,franchisor_seed_only,1,0,1,0,jfa_disclosure
+ライフデリ,ライフデリ,株式会社グランフーズ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リアット!,リアット!,リフォームスタジオ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リサイクルマート,リサイクルマート,FTC株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リディアダンスアカデミー,リディアダンスアカデミー,株式会社スポーツ&ライフ・イノベーション,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リノスぺ,リノスぺ,リノスペ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リノベ不動産,リノベ不動産,株式会社WAKUWAKU,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+リハプライド,リハプライド,リハコンテンツ株式会社,franchisor_seed_only,1,0,1,0,jfa_disclosure
+リフォーム職人,リフォーム職人,リフォーム職人株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ロイヤルハウス,ロイヤルハウス,ロイヤルハウス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ローソン・ポプラ,ローソン・ポプラ,株式会社ローソン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ワークマン,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ワークマンプラス,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+ワークマンプロ,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+不二家洋菓子店,不二家洋菓子店/FUJIYA KOBE他,株式会社不二家,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+京進の個別指導スクール・ワン,京進の個別指導スクール・ワン,株式会社京進,franchisor_seed_only,1,0,1,0,jfa_disclosure
+京都北白川ラーメン魁力屋,京都北白川ラーメン魁力屋,株式会社魁力屋,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+介護リフォーム本舗,介護リフォーム本舗,株式会社ユニバーサルスペース,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+伊三郎製ぱん・136Bakery,伊三郎製ぱん・136Bakery,株式会社ブランワン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+便利屋!お助け本舗,便利屋!お助け本舗,株式会社アシストリンク,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+信州そば 小木曽製粉所,信州そば 小木曽製粉所,株式会社王滝,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+個別指導Axis,個別指導Axis,株式会社ワオ・コーポレーション,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+個別指導学院フリーステップ,個別指導学院フリーステップ,株式会社フリーステップ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+元祖豚丼屋TON TON,元祖豚丼屋TON TON,ワンズトライン株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+内職市場,内職市場,株式会社内職市場,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+収納ピット,収納ピット,株式会社アンビシャス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+味千ラーメン,味千ラーメン,重光産業株式会社,franchisor_seed_only,1,0,1,0,jfa_disclosure
+喜多方ラーメン坂内,喜多方ラーメン坂内,株式会社麺食,franchisor_seed_only,1,0,1,0,jfa_disclosure
+在宅マッサージ フレアス,在宅マッサージ フレアス,株式会社フレアス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+城南コベッツ,城南コベッツ,株式会社城南進学研究社,franchisor_seed_only,1,0,1,0,jfa_disclosure
+壁紙革命クロスメイ,壁紙革命クロスメイ,株式会社壁紙革命,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+大判小判,大判小判,株式会社Axis,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+大戸屋ごはん処,大戸屋ごはん処,株式会社大戸屋,franchisor_seed_only,1,0,1,0,jfa
+大衆焼き鳥酒場やきとりさんきゅう,大衆焼き鳥酒場やきとりさんきゅう,株式会社To-U,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+大阪ふくちぁん餃子,大阪ふくちぁん餃子,株式会社アストジャパン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+宅食ライフ,宅食ライフ,株式会社シルバーライフ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+定額制リフォーム「イメチェン」,定額制リフォーム「イメチェン」,株式会社イメチェン,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+家族葬ホールティア,葬儀会館ティア/家族葬ホールティア,株式会社ティア,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+張替本舗 金沢屋,張替本舗 金沢屋,株式会社HITOSUKE,franchisor_seed_only,1,0,1,0,jfa
+忍者ナイン,忍者ナイン,株式会社やる気スイッチグループ,franchisor_seed_only,1,0,1,573,jfa_disclosure
+手軽な手もみ屋 もみかる,手軽な手もみ屋 もみかる,株式会社もみかる,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+整足院,整足院,整足院株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+村さ来,村さ来,株式会社焼肉坂井ホールディングス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+業務レンタカー,業務レンタカー,カーチョイス・レンタカーサービス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+樹楽,樹楽,有信アクロス株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+機能訓練専門デイサービス きたえるーむ,機能訓練専門デイサービス きたえるーむ,株式会社ヤマチコーポレーション,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+河合塾マナビス,河合塾マナビス,株式会社河合塾マナビス,franchisor_seed_only,1,0,1,0,jfa
+注文住宅の相談窓口,注文住宅の相談窓口,株式会社あおぞらカンパニー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+満室の窓口,満室の窓口,株式会社クラスコ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+炭火焼肉屋さかい,焼肉屋さかい/炭火焼肉屋さかい,株式会社さかい,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+焼肉屋さかい,焼肉屋さかい/炭火焼肉屋さかい,株式会社さかい,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+片付け堂,片付け堂,株式会社Loop,franchisor_seed_only,2,0,2,0,"jfa,user_fc_brand_seed_2026_04_27"
+珈琲館,珈琲館,C-United株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+生活彩家,ポプラ/生活彩家,株式会社ポプラ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+町の便利屋さんファミリー,町の便利屋さんファミリー,株式会社ミスター通商,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+癒し~ぷ,癒し~ぷ,株式会社癒しテック,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+神楽食堂 串家物語,神楽食堂 串家物語,フジオフードグループ本社株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+美容室イレブンカット,美容室イレブンカット,株式会社エム・ワイ・ケー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+美容室ラポールヘア,美容室ラポールヘア,株式会社ラポールヘア・グループ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+肉と米ハジメ,肉と米ハジメ,株式会社Be alive,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+肉餃子専門店 包王Paou,肉餃子専門店 包王Paou,株式会社アップラインズ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+自立学習RED,自立学習RED,株式会社スプリックス,franchisor_seed_only,1,0,1,0,jfa
+葬儀会館ティア,葬儀会館ティア/家族葬ホールティア,株式会社ティア,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+買取大吉,買取大吉,株式会社エンパワー,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+買取専門店さすがや,買取専門店さすがや,株式会社さすがや,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+足と爪のかかりつけサロン リゼラアンドコー,足と爪のかかりつけサロン リゼラアンドコー,株式会社ディビュース,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+車検のコバック,車検のコバック,株式会社コバック,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+配食のふれ愛,配食のふれ愛,株式会社シルバーライフ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+釜寅,宅配寿司 銀のさら/宅配御膳 釜寅/宅配寿司 すし上等!,株式会社ライドオンエクスプレス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+銀のさら,宅配寿司 銀のさら/宅配御膳 釜寅/宅配寿司 すし上等!,株式会社ライドオンエクスプレス,franchisor_seed_only,2,0,2,0,"jfa,user_fc_brand_seed_2026_04_27"
+銀座パリス,銀座パリス,株式会社銀座パリス,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+難関大受験専門塾 現論会,難関大受験専門塾 現論会,株式会社現論会,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+革研究所,革研究所,株式会社セカンドステージ,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+靴下屋,靴下屋,タビオ株式会社,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,株式会社シニアライフクリエイト,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+鰻の成瀬,鰻の成瀬,株式会社フランチャイズビジネスインキュベーション,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27
+麺場 田所商店,麺場 田所商店,有限会社トライ・インターナショナル,franchisor_seed_only,1,0,1,0,user_fc_brand_seed_2026_04_27

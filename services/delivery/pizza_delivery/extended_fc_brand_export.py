@@ -1,0 +1,457 @@
+"""Export additional FC brand operator tables from user-provided brand seeds.
+
+The seed file is not treated as franchisee ground truth.  It only defines which
+new brands should be reported and which franchisor row may be shown as seed
+evidence.  Franchisee/operator links still come from existing ORM exports such
+as JFA, manual Megajii, pipeline, and official-page evidence.
+"""
+
+from __future__ import annotations
+
+import argparse
+import csv
+import re
+import shutil
+import sqlite3
+import unicodedata
+from dataclasses import dataclass
+from pathlib import Path
+
+from pizza_delivery.megafranchisee_clean_export import (
+    TARGET_BRAND_SET,
+    _dedupe_link_rows,
+    canonical_brand,
+)
+from pizza_delivery.normalize import canonical_key, normalize_operator_name
+
+
+SEED_SOURCE = "user_fc_brand_seed_2026_04_27"
+DEFAULT_SEED_PATH = Path("test/fixtures/megafranchisee/fc-brand-seeds-2026-04-27.tsv")
+DEFAULT_FC_LINKS_PATH = Path("test/fixtures/megafranchisee/fc-links.csv")
+DEFAULT_OUT = Path("test/fixtures/megafranchisee/extended-brand-links.csv")
+DEFAULT_SUMMARY_OUT = Path("test/fixtures/megafranchisee/extended-brand-summary.csv")
+DEFAULT_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/extended-by-brand")
+DEFAULT_FC_OUT = Path("test/fixtures/megafranchisee/extended-fc-operator-links.csv")
+DEFAULT_FC_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/extended-fc-by-brand")
+
+BASE_LINK_FIELDS = [
+    "brand_name",
+    "industry",
+    "operator_name",
+    "corporate_number",
+    "head_office",
+    "prefecture",
+    "operator_type",
+    "estimated_store_count",
+    "source",
+    "source_url",
+    "note",
+]
+EXTENDED_LINK_FIELDS = [
+    *BASE_LINK_FIELDS,
+    "seed_brand_name",
+    "seed_franchisor_name",
+    "match_status",
+]
+SUMMARY_FIELDS = [
+    "brand_name",
+    "seed_brand_name",
+    "seed_franchisor_name",
+    "status",
+    "operator_rows",
+    "franchisee_rows",
+    "franchisor_rows",
+    "max_estimated_store_count",
+    "sources",
+]
+
+SEED_BRAND_ALIASES = {
+    "女性だけの30分健康体操教室 Curves(カーブス)": "カーブス",
+    "Curves": "カーブス",
+    "ITTO個別指導学院": "Itto個別指導学院",
+    "珈琲所コメダ珈琲店": "コメダ珈琲",
+    "BRAND OFF": "Brand off",
+    "センチュリー2": "センチュリー21",
+    "ケンタッキー": "ケンタッキーフライドチキン",
+    "ケンタッキーフライドチキン": "ケンタッキーフライドチキン",
+    "カレーハウスCoCo壱番屋": "カレーハウスCoCo壱番屋",
+    "カレーハウスCOCO壱番屋": "カレーハウスCoCo壱番屋",
+    "ドトール": "ドトールコーヒーショップ",
+    "ドトールコーヒー": "ドトールコーヒーショップ",
+    "ドトールコーヒーショップ": "ドトールコーヒーショップ",
+    "リンガーハット": "長崎ちゃんぽんリンガーハット",
+    "長崎ちゃんぽん リンガーハット": "長崎ちゃんぽんリンガーハット",
+    "長崎ちゃんぽんリンガーハット": "長崎ちゃんぽんリンガーハット",
+    "宅配寿司 銀のさら": "銀のさら",
+    "宅配御膳 釜寅": "釜寅",
+    "宅配寿司 すし上等!": "すし上等!",
+    "0秒レモンサワー®仙台ホルモン焼肉酒場ときわ亭": "ときわ亭",
+    "ACCEA (アクセア)": "ACCEA",
+    "ACCEA(アクセア)": "ACCEA",
+    "Di PUNTO(ディプント)": "Di PUNTO",
+    "BURGER KING": "バーガーキング",
+    "FÜRDI": "FURDI",
+    "FURDI": "FURDI",
+    "Renotta(リノッタ)": "Renotta",
+    "Seria(セリア)": "Seria",
+    "プライベートジムHPER(ハイパー)": "プライベートジムHPER",
+    "メディカルホワイトニングHAKU(次世代型ホワイトニングサロンHAKU)": "メディカルホワイトニングHAKU",
+    "蔦屋": "TSUTAYA",
+}
+
+
+@dataclass(frozen=True)
+class SeedBrand:
+    brand_name: str
+    seed_brand_name: str
+    seed_franchisor_name: str
+
+
+@dataclass(frozen=True)
+class HoujinMatch:
+    corporate_number: str = ""
+    head_office: str = ""
+    prefecture: str = ""
+    note: str = ""
+
+
+def _nfkc(value: str) -> str:
+    return unicodedata.normalize("NFKC", (value or "").strip())
+
+
+def _brand_key(value: str) -> str:
+    s = _nfkc(value).lower()
+    return re.sub(r"[\s　・･/／()（）「」『』!！®#・]", "", s)
+
+
+def _canonical_extended_brand(value: str) -> str:
+    raw = _clean_brand(value)
+    if raw in SEED_BRAND_ALIASES:
+        return SEED_BRAND_ALIASES[raw]
+    canonical = canonical_brand(raw)
+    return SEED_BRAND_ALIASES.get(canonical, canonical)
+
+
+def _clean_brand(value: str) -> str:
+    s = _nfkc(value)
+    s = s.replace("　", " ")
+    s = re.sub(r"\s+", " ", s)
+    return s.strip(" 、。")
+
+
+def _split_seed_brand_name(brand_name: str) -> list[str]:
+    raw = _clean_brand(brand_name)
+    if not raw:
+        return []
+    if raw in {"RE/MAX"}:
+        return [raw]
+    if raw == "ITTO個別指導学院・みやび個別指導学院":
+        return ["ITTO個別指導学院", "みやび個別指導学院"]
+    parts = [p.strip() for p in re.split(r"／|/", raw) if p.strip()]
+    return parts or [raw]
+
+
+def _brand_variants(brand_name: str) -> list[str]:
+    variants: list[str] = []
+    for part in _split_seed_brand_name(brand_name):
+        cleaned = _clean_brand(part)
+        if cleaned in SEED_BRAND_ALIASES:
+            variants.append(SEED_BRAND_ALIASES[cleaned])
+            continue
+        if cleaned:
+            variants.append(cleaned)
+        parens = re.findall(r"[（(]([^（）()]+)[）)]", cleaned)
+        variants.extend(_clean_brand(p) for p in parens if _clean_brand(p))
+        without_paren = re.sub(r"[（(][^（）()]+[）)]", "", cleaned).strip()
+        if without_paren and without_paren != cleaned:
+            variants.append(without_paren)
+    out: list[str] = []
+    seen: set[str] = set()
+    for variant in variants:
+        canonical = _canonical_extended_brand(variant)
+        key = _brand_key(canonical)
+        if canonical and key not in seen:
+            seen.add(key)
+            out.append(canonical)
+    return out
+
+
+def load_seed_brands(path: Path) -> list[SeedBrand]:
+    rows: list[SeedBrand] = []
+    seen: set[tuple[str, str]] = set()
+    with path.open(encoding="utf-8", newline="") as f:
+        reader = csv.DictReader(f, delimiter="\t")
+        for row in reader:
+            franchisor = normalize_operator_name(row.get("franchisor_name", ""))
+            seed_brand = _clean_brand(row.get("brand_name", ""))
+            if not franchisor or not seed_brand:
+                continue
+            for brand in _brand_variants(seed_brand):
+                if _canonical_extended_brand(brand) in TARGET_BRAND_SET:
+                    continue
+                key = (_brand_key(brand), canonical_key(franchisor))
+                if key in seen:
+                    continue
+                seen.add(key)
+                rows.append(
+                    SeedBrand(
+                        brand_name=_canonical_extended_brand(brand),
+                        seed_brand_name=seed_brand,
+                        seed_franchisor_name=franchisor,
+                    )
+                )
+    return rows
+
+
+def _load_fc_links(path: Path) -> dict[str, list[dict[str, str]]]:
+    by_brand: dict[str, list[dict[str, str]]] = {}
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            brand = _canonical_extended_brand(row.get("brand_name", ""))
+            normalized = dict(row)
+            normalized["brand_name"] = brand
+            by_brand.setdefault(_brand_key(brand), []).append(normalized)
+    return by_brand
+
+
+def _resolve_existing_operator(conn: sqlite3.Connection, name: str) -> HoujinMatch:
+    rows = conn.execute(
+        """
+        SELECT corporate_number, head_office, prefecture
+        FROM operator_company
+        WHERE lower(name) = lower(?)
+           OR lower(replace(name, ' ', '')) = lower(replace(?, ' ', ''))
+        ORDER BY corporate_number != '' DESC, updated_at DESC
+        LIMIT 3
+        """,
+        (name, name),
+    ).fetchall()
+    if len(rows) == 1:
+        row = rows[0]
+        return HoujinMatch(row[0] or "", row[1] or "", row[2] or "", "operator_company_match")
+    if rows:
+        row = rows[0]
+        return HoujinMatch(row[0] or "", row[1] or "", row[2] or "", "operator_company_multiple")
+    return HoujinMatch()
+
+
+def _resolve_houjin(houjin_db: Path | None, name: str) -> HoujinMatch:
+    if not houjin_db or not houjin_db.exists():
+        return HoujinMatch()
+    conn = sqlite3.connect(houjin_db)
+    try:
+        rows = conn.execute(
+            """
+            SELECT corporate_number, prefecture, city, street
+            FROM houjin_registry
+            WHERE normalized_name = ?
+            ORDER BY update_date DESC
+            LIMIT 5
+            """,
+            (canonical_key(name),),
+        ).fetchall()
+    finally:
+        conn.close()
+    if not rows:
+        return HoujinMatch()
+    corporate_numbers = {r[0] for r in rows if r[0]}
+    if len(corporate_numbers) != 1:
+        return HoujinMatch(note="houjin_ambiguous")
+    row = rows[0]
+    head_office = "".join(part for part in (row[1], row[2], row[3]) if part)
+    return HoujinMatch(row[0] or "", head_office, row[1] or "", "houjin_exact")
+
+
+def _seed_row(seed: SeedBrand, match: HoujinMatch) -> dict[str, str]:
+    note = "seed_only=user_provided_fc_brand"
+    if match.note:
+        note = f"{note}; {match.note}"
+    return {
+        "brand_name": seed.brand_name,
+        "industry": "",
+        "operator_name": seed.seed_franchisor_name,
+        "corporate_number": match.corporate_number,
+        "head_office": match.head_office,
+        "prefecture": match.prefecture,
+        "operator_type": "franchisor",
+        "estimated_store_count": "0",
+        "source": SEED_SOURCE,
+        "source_url": "",
+        "note": note,
+        "seed_brand_name": seed.seed_brand_name,
+        "seed_franchisor_name": seed.seed_franchisor_name,
+        "match_status": "franchisor_seed",
+    }
+
+
+def _row_score(row: dict[str, str]) -> tuple[int, str]:
+    try:
+        count = int(row.get("estimated_store_count") or 0)
+    except ValueError:
+        count = 0
+    return (-count, row.get("operator_name") or "")
+
+
+def _with_seed_context(row: dict[str, str], seed: SeedBrand, status: str) -> dict[str, str]:
+    out = {k: row.get(k, "") for k in BASE_LINK_FIELDS}
+    out["seed_brand_name"] = seed.seed_brand_name
+    out["seed_franchisor_name"] = seed.seed_franchisor_name
+    out["match_status"] = status
+    return out
+
+
+def _has_same_operator(rows: list[dict[str, str]], operator_name: str, corporate_number: str) -> bool:
+    op_key = canonical_key(operator_name)
+    for row in rows:
+        if corporate_number and row.get("corporate_number") == corporate_number:
+            return True
+        if canonical_key(row.get("operator_name") or "") == op_key:
+            return True
+    return False
+
+
+def _write_csv(path: Path, rows: list[dict[str, str]], fields: list[str]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    with path.open("w", encoding="utf-8", newline="") as f:
+        writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
+        writer.writeheader()
+        writer.writerows(rows)
+
+
+def _safe_filename(name: str) -> str:
+    safe = re.sub(r'[\\/:*?"<>|]', "_", name)
+    safe = safe.strip().strip(".")
+    return safe or "unknown"
+
+
+def export_extended_brands(
+    *,
+    seed_path: Path,
+    fc_links_path: Path,
+    orm_db: Path,
+    houjin_db: Path | None,
+    out: Path,
+    summary_out: Path,
+    by_brand_dir: Path,
+    fc_out: Path,
+    fc_by_brand_dir: Path,
+) -> dict[str, int]:
+    seeds = load_seed_brands(seed_path)
+    links_by_brand = _load_fc_links(fc_links_path)
+    orm = sqlite3.connect(orm_db)
+    try:
+        all_rows: list[dict[str, str]] = []
+        fc_rows_all: list[dict[str, str]] = []
+        summary_rows: list[dict[str, str]] = []
+        if by_brand_dir.exists():
+            shutil.rmtree(by_brand_dir)
+        by_brand_dir.mkdir(parents=True, exist_ok=True)
+        if fc_by_brand_dir.exists():
+            shutil.rmtree(fc_by_brand_dir)
+        fc_by_brand_dir.mkdir(parents=True, exist_ok=True)
+
+        for seed in seeds:
+            existing = [
+                _with_seed_context(row, seed, "existing_link")
+                for row in links_by_brand.get(_brand_key(seed.brand_name), [])
+            ]
+            op_match = _resolve_existing_operator(orm, seed.seed_franchisor_name)
+            if not op_match.corporate_number:
+                op_match = _resolve_houjin(houjin_db, seed.seed_franchisor_name)
+            seed_link = _seed_row(seed, op_match)
+            if not _has_same_operator(existing, seed.seed_franchisor_name, op_match.corporate_number):
+                existing.append(seed_link)
+
+            deduped = [
+                _with_seed_context(row, seed, row.get("match_status") or "existing_link")
+                for row in _dedupe_link_rows(existing)
+            ]
+            deduped.sort(key=_row_score)
+            all_rows.extend(deduped)
+
+            franchisee_rows = [r for r in deduped if r.get("operator_type") == "franchisee"]
+            if franchisee_rows:
+                fc_rows_all.extend(franchisee_rows)
+                _write_csv(
+                    fc_by_brand_dir / f"{_safe_filename(seed.brand_name)}.csv",
+                    franchisee_rows,
+                    EXTENDED_LINK_FIELDS,
+                )
+            franchisor_rows = [r for r in deduped if r.get("operator_type") == "franchisor"]
+            counts: list[int] = []
+            for row in deduped:
+                try:
+                    counts.append(int(row.get("estimated_store_count") or 0))
+                except ValueError:
+                    pass
+            status = "operator_links_found" if franchisee_rows else "franchisor_seed_only"
+            if franchisee_rows and all(r.get("source") == SEED_SOURCE for r in deduped):
+                status = "franchisor_seed_only"
+            sources = ",".join(sorted({r.get("source", "") for r in deduped if r.get("source")}))
+            summary_rows.append(
+                {
+                    "brand_name": seed.brand_name,
+                    "seed_brand_name": seed.seed_brand_name,
+                    "seed_franchisor_name": seed.seed_franchisor_name,
+                    "status": status,
+                    "operator_rows": str(len(deduped)),
+                    "franchisee_rows": str(len(franchisee_rows)),
+                    "franchisor_rows": str(len(franchisor_rows)),
+                    "max_estimated_store_count": str(max(counts) if counts else 0),
+                    "sources": sources,
+                }
+            )
+            _write_csv(by_brand_dir / f"{_safe_filename(seed.brand_name)}.csv", deduped, EXTENDED_LINK_FIELDS)
+
+        all_rows.sort(key=lambda r: (r.get("brand_name") or "", *_row_score(r)))
+        fc_rows_all.sort(key=lambda r: (r.get("brand_name") or "", *_row_score(r)))
+        summary_rows.sort(key=lambda r: (r["status"] != "operator_links_found", r["brand_name"]))
+        _write_csv(out, all_rows, EXTENDED_LINK_FIELDS)
+        _write_csv(fc_out, fc_rows_all, EXTENDED_LINK_FIELDS)
+        _write_csv(summary_out, summary_rows, SUMMARY_FIELDS)
+        return {
+            "seed_brands": len(seeds),
+            "extended_brand_links": len(all_rows),
+            "extended_fc_operator_links": len(fc_rows_all),
+            "extended_by_brand_files": len(summary_rows),
+            "extended_fc_by_brand_files": sum(
+                1 for r in summary_rows if int(r["franchisee_rows"] or 0) > 0
+            ),
+            "operator_link_brands": sum(1 for r in summary_rows if r["status"] == "operator_links_found"),
+            "franchisor_seed_only_brands": sum(
+                1 for r in summary_rows if r["status"] == "franchisor_seed_only"
+            ),
+        }
+    finally:
+        orm.close()
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--seed", type=Path, default=DEFAULT_SEED_PATH)
+    parser.add_argument("--fc-links", type=Path, default=DEFAULT_FC_LINKS_PATH)
+    parser.add_argument("--orm-db", type=Path, default=Path("var/pizza-registry.sqlite"))
+    parser.add_argument("--houjin-db", type=Path, default=Path("var/houjin/registry.sqlite"))
+    parser.add_argument("--out", type=Path, default=DEFAULT_OUT)
+    parser.add_argument("--summary-out", type=Path, default=DEFAULT_SUMMARY_OUT)
+    parser.add_argument("--by-brand-dir", type=Path, default=DEFAULT_BY_BRAND_DIR)
+    parser.add_argument("--fc-out", type=Path, default=DEFAULT_FC_OUT)
+    parser.add_argument("--fc-by-brand-dir", type=Path, default=DEFAULT_FC_BY_BRAND_DIR)
+    args = parser.parse_args()
+    stats = export_extended_brands(
+        seed_path=args.seed,
+        fc_links_path=args.fc_links,
+        orm_db=args.orm_db,
+        houjin_db=args.houjin_db,
+        out=args.out,
+        summary_out=args.summary_out,
+        by_brand_dir=args.by_brand_dir,
+        fc_out=args.fc_out,
+        fc_by_brand_dir=args.fc_by_brand_dir,
+    )
+    for key, value in stats.items():
+        print(f"{key}={value}")
+
+
+if __name__ == "__main__":
+    main()

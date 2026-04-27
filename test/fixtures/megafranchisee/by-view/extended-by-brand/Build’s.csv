@@ -1,0 +1,2 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+Build’s,,株式会社アクア,1430001077233,北海道札幌市東区北二十五条東７丁目２番２０号,北海道,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,Build’s,株式会社アクア,franchisor_seed
