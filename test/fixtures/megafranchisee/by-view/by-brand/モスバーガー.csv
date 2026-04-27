@@ -12,6 +12,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社ティ・プロジェクト,2310001005733,長崎県佐世保市黒神町732-1,長崎県,franchisee,21,manual_megajii_2026_04_24,,
 モスバーガー,ハンバーガー,株式会社フレックス,3270001000688,鳥取県鳥取市湖山町北１丁目４５４番地５,鳥取県,franchisee,21,manual_megajii_2026_04_24,,
 モスバーガー,ハンバーガー,フレックスシステム株式会社,4430001059410,,,franchisee,17,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+モスバーガー,ハンバーガー,フレックス,,,,franchisee,14,pipeline,,discovered_via=operator_spider_address_match
 モスバーガー,ハンバーガー,株式会社アドバンス,1430001076383,,,franchisee,10,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社フルハウス,1430001059594,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社JR九州ファーストフーズ,6290001013578,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,福岡県,franchisee,7,operator_official_brand_link,https://www.jrff.co.jp/section-mos/,anchor=モスバーガー; href=https://www.jrff.co.jp/section-mos/; page=https://www.jrff.co.jp/; fact_check=official_operator_site_7_stores
@@ -23,10 +24,12 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社エメラルドフードサービス,7230001009770,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社クリエイティブジャパン,1430001035991,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ハトラス,3240001008957,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社ミツヤ,6430001023331,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社山浩商事,1360001012164,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社東光,1460401001021,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,三亜フードサービス有限会社,9080102006185,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,小原井産業株式会社,3290801009992,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社まるとく商事,8360002004195,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社アンビシャス,5460102007727,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社エムフードサービス,5430002039856,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社ミキフードサービス,4310002018971,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -34,14 +37,13 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社アーミップ,7070001000052,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ウィンドベル,3380001027935,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ウイ・テック,6330001012682,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社エイト,1430001065857,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社エムエム,7450001010319,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社デリシア,2011701014418,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社フジケイ,8030001016472,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社ミツヤ,6430001023331,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社木馬,3030001046292,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,アドカンパニー株式会社,9040001016470,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,モンド有限会社,4140002037403,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,有限会社まるとく商事,8360002004195,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社エアーズ,8030002026611,埼玉県戸田市下前２丁目２番７号,埼玉県,franchisee,2,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 モスバーガー,ハンバーガー,有限会社グラッド,3380002009016,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社コモンセンス,3070002002200,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -56,8 +58,8 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,有限会社真美商,8380002035107,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社長崎屋,1420002011290,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ありがとうサービス,3140001046100,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社いちい,5460302004103,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社アオキエンタープライズ,4030001093185,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社エイト,1430001065857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社エヌシー・フードシステム,5030001050846,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社カナダハウス,7200001001045,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ガイアフードサービス,1180001092935,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -77,6 +79,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社ロング・ウッド・アクティー,4030001047827,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ヴィアン,5010401003406,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社三佳,7070001003204,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社吉高,5060001028682,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社田所商事,9350001001020,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社縁結商事,6040001046652,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社関屋コーポレーション,7320001006073,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -110,6 +113,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,有限会社ジョイフードビジネス,3120002020048,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社スリーホワイ,8340002016738,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社ゼア,6210002001903,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,有限会社タケジ・コーポレーション,1100002002891,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社ツェンティーフォー,7180002035565,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社トムズ,9440002003080,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社トライ,1430002029324,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -127,7 +131,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,有限会社武田商事,3430002012105,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社筑後フーズ,9290002047390,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,松井アルファス株式会社,1320201000261,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社いちい,5460302004103,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社おくう,8020001038204,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社インテグリティ,9430001081343,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -137,6 +140,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社クリアスカイ,4040001102176,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社グローリアス,6011301021414,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社コクサコ,6020001002021,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社サンキープ,3030001106360,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社サンセリテ,5430001085496,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社サンライズ,3460101002045,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社サークス,8410001007086,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -169,6 +173,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社猫の散歩道,8013301038023,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社石橋,9380001017245,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社秋桜,8450001014748,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社Ｏｎｃｅ,1430001052467,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,誠懸株式会社,2300001013027,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,都市フーズサービス有限会社,9040002008310,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,Ｈｉｇｈ　Ｔｒｅｅ株式会社,2180001130470,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin

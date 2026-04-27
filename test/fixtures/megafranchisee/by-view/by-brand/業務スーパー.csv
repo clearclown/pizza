@@ -8,7 +8,9 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 業務スーパー,食品スーパー,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,62,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,株式会社Ｇ＆Ｌマート,1010101004708,東京都八王子市田町２番５号,東京都,franchisee,25,manual_megajii_2026_04_24,,
 業務スーパー,食品スーパー,グランマルシェ食品株式会社,4120001091601,大阪府大阪市中央区本町4丁目5-16 本町スクウェアビルII 3F,大阪府,franchisee,24,manual_megajii_2026_04_24,,
+業務スーパー,食品スーパー,ボトルワールドOK,,,,franchisee,18,pipeline,,discovered_via=operator_spider_address_match
 業務スーパー,食品スーパー,株式会社オーシャンシステム,5010801014837,,,franchisee,18,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 業務スーパー,食品スーパー,株式会社大創産業,7240001022681,広島県東広島市西条吉行東１丁目４番１４号,広島県,direct,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+業務スーパー,食品スーパー,株式会社エブリイ,,,,franchisee,1,pipeline,,discovered_via=osm_operator_tag_unverified
 業務スーパー,食品スーパー,株式会社チャレンジ,3220002015129,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
 業務スーパー,食品スーパー,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=業務スーパー; href=https://www.kanseki.co.jp/store/gyoumusuper/; page=https://www.kanseki.co.jp/store/gyoumusuper/

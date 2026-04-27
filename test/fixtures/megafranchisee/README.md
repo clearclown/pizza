@@ -27,14 +27,14 @@ uv run --project services/delivery python -m pizza_delivery.operator_master_expo
 
 1 行 = 1 社 (megajii section 179 + franchisor section 13)。すべて 17 列。
 
-### `fc-operators-all.csv` (802 rows, 2026-04-27)
+### `fc-operators-all.csv` (822 rows, 2026-04-27)
 **1 事業会社 1 行** の all-brand audit CSV。14 対象ブランド以外も含むため、
 ユーザー向けの 14 ブランド結果には使わない。
 同一 operator × canonical brand に複数 source がある場合は、店舗数の最大値だけを
 `total_stores` に採用する (`manual_megajii` + `jfa_disclosure` の二重計上防止)。
 同名 operator の法人番号あり/なし重複は CSV 生成時に 1 行へ畳み込む。
 
-### ⭐ `fc-operators-14brand-only.csv` (461 rows, 2026-04-27)
+### ⭐ `fc-operators-14brand-only.csv` (481 rows, 2026-04-27)
 **14 対象ブランドだけ**に絞った 1 事業会社 1 行 CSV。`target_brands` と
 `total_stores` は、カーブス / モスバーガー / 業務スーパー /
 Itto個別指導学院 / エニタイムフィットネス / コメダ珈琲 / シャトレーゼ /
@@ -87,7 +87,7 @@ JFA 情報開示書面 index の live PDF link 一覧。HTML comment 内の旧 l
 PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 `brand_operator_link.source = jfa_disclosure` として取り込む。
 
-### `fc-links.csv` (1,432 rows, 2026-04-27)
+### `fc-links.csv` (1,452 rows, 2026-04-27)
 **all-brand の brand × operator flat link table**。JFA / manual_megajii の
 広義 source を保持する監査用で、14 対象ブランド以外も含む。
 2026-04-27 追加の `operator_official_brand_link` は、operator 公式 HP の
@@ -95,7 +95,7 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 (開店告知・休業/閉店・求人/採用・社員インタビュー文脈は自動反映から除外)。
 店舗数根拠は別ソースが必要なので `estimated_store_count=0` のまま保持する。
 
-### `fc-links-14brand-only.csv` (410 rows, 2026-04-27)
+### `fc-links-14brand-only.csv` (427 rows, 2026-04-27)
 **14 対象ブランドだけ**に絞った brand × operator flat link table。
 コンビニ / 自動車用品 / 外食など対象外ブランドは含めない。
 同一 brand × operator 表示名の重複は、店舗数・source 優先度・法人番号・
@@ -109,14 +109,34 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 
 列: `brand_name, industry, operator_name, corporate_number, head_office, prefecture, operator_type, estimated_store_count, source, source_url, note`
 
-### `all-fc-operator-links.csv` (727 rows, 2026-04-27)
+### `all-fc-operator-links.csv` (744 rows, 2026-04-27)
 全ブランド横断で `operator_type=franchisee` のみを抽出し、ブランド名ゆれを正規化して
 重複を落とした FC 運営会社 flat link。14 対象ブランドも追加ブランドも含む。
 ブランド別の同内容は `by-view/all-fc-by-brand/*.csv` (172 ファイル) に出力する。
 
-### `all-fc-operator-candidates.csv` (750 rows, 2026-04-27)
+### `all-fc-operator-candidates.csv` (767 rows, 2026-04-27)
 上記に `operator_type=unknown` の候補リンクも加えた監査用 CSV。`franchisee` 確定リスト
 ではないため、ユーザー向け確定リストには `all-fc-operator-links.csv` を使う。
+
+### `brand-fill-rate.csv` (433 rows, 2026-04-27)
+`fc-links.csv` を brand 単位で再集計し、本部公表店舗数 (`franchisor` / `direct`
+link の最大 `estimated_store_count`) に対して、FC 運営会社 evidence がどれだけ
+埋まっているかを示す監査 CSV。`priority` は追加調査の優先度で、
+`P0_FIND_OFFICIAL_LIST` / `P0_EXPAND` / `P1_EXPAND` / `P2_EXPAND` /
+`REVIEW_OVERFILL` / `P3_MONITOR` / `P4_NEED_TOTAL` を出す。
+ハードオフ / オフハウスのように operator 側の全店数と brand 店舗数の基準が
+混ざる場合は `overfilled_review` として過充填レビューに回す。
+
+```bash
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza brand-fill-rate-export
+```
+
+### `official-source-audit.csv` (15 rows, 2026-04-27)
+公式本部・公式求人・公式店舗一覧から operator evidence を取れる経路の監査 CSV。
+`official_franchisee_parser` は公式FCページ/本部PR本文を直接 parse し、
+`official_recruitment_crawl` は公式 jobfind/Recop 詳細ページの募集者/雇用主/運営会社
+欄を店舗 match + 国税庁 verify 後に採用する。`official_store_sync` は店舗一覧だけで、
+operator 名を直接 publish していない場合は `no_store_list_only` として区別する。
 
 ### `by-view/allbrand-operators-min20.csv` (213 rows, 2026-04-27)
 全ブランド横断で 20 店舗以上の operator。1 ブランドのみの大口運営会社も含む。
@@ -169,11 +189,15 @@ sqlite3 -csv -header var/external/megajii.sqlite \
 
 ## 現状の既知制約
 
-### 偏り / 不足 (2026-04-26 時点)
-- **brand link 付き operator 802 / 20+店舗 operator 213 / 2+業態かつ20+店舗 122**
-- **エニタイムフィットネス** 公表 957 店舗に対し ORM 33 operator (実態は 100-200 社)
-- **モスバーガー** 公表 1,318 店舗に対し ORM 173 operator (JFA 開示書面 + pipeline 反映後)
-- **空 prefecture 643/1,432 (45%)** — JFA disclosure 由来 franchisor が増えたため、houjin hydrate 余地あり
+### 偏り / 不足 (2026-04-27 時点)
+- **brand link 付き operator 822 / 20+店舗 operator 213 / 2+業態かつ20+店舗 122**
+- **brand-fill-rate P0 11 / low_or_empty 14** — スクールIE、Kids Duo、カーブス、
+  コメダ珈琲、ドトール等は公式 source / 採用 source / 追加開示資料の優先調査対象
+- **エニタイムフィットネス** 公表 957 店舗に対し FC operator link 22
+  (実態は 100-200 社規模と推定、公式店舗一覧は operator 名を公開していない)
+- **モスバーガー** 公表 1,318 店舗に対し FC operator link 176
+  (JFA 開示書面 + pipeline + 公式求人反映後)
+- **空 prefecture 663/1,452 (46%)** — JFA disclosure 由来 franchisor が増えたため、houjin hydrate 余地あり
 - **pipeline observed stores は関東偏重** (東京+神奈川+埼玉+千葉 で全 5,721 stores の 61%)
 
 ### 崩れ

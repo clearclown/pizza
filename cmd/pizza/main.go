@@ -181,6 +181,10 @@ func main() {
 		if err := cmdExtendedFCBrandExport(os.Args[2:]); err != nil {
 			log.Fatalf("pizza extended-fc-brand-export: %v", err)
 		}
+	case "brand-fill-rate-export":
+		if err := cmdBrandFillRateExport(os.Args[2:]); err != nil {
+			log.Fatalf("pizza brand-fill-rate-export: %v", err)
+		}
 	case "osm-fetch-all":
 		if err := cmdOSMFetchAll(os.Args[2:]); err != nil {
 			log.Fatalf("pizza osm-fetch-all: %v", err)
@@ -242,6 +246,7 @@ Subcommands:
   pizza operator-spider  ORM 登録済 operator 公式 HP → 店舗一覧 scrape → 住所 match → operator 確定
   pizza operator-brand-discovery  operator 公式HPの事業/ブランドlink → FC brand link を追加収集
   pizza extended-fc-brand-export  追加FCブランド seed + 既存非14ブランド evidence → 監査/FC専用CSV出力
+  pizza brand-fill-rate-export  brand別の本部公表店舗数に対する FC operator 充填率 CSV 出力
   pizza osm-fetch-all    OSM Overpass 全国 fetch + operator:ja tag capture
   pizza areas     利用可能エリア一覧
   pizza version
@@ -1325,6 +1330,26 @@ func cmdExtendedFCBrandExport(args []string) error {
 		"--all-fc-out", *allFCOut,
 		"--all-fc-by-brand-dir", *allFCByBrandDir,
 		"--all-fc-candidates-out", *allFCCandidatesOut,
+	}
+	return runDeliveryPython(pyArgs...).Run()
+}
+
+// cmdBrandFillRateExport は fc-links.csv を brand 単位で集計し、本部公表店舗数に
+// 対する FC 運営会社 evidence の充填率を監査 CSV として出力する。
+//
+//	pizza brand-fill-rate-export
+func cmdBrandFillRateExport(args []string) error {
+	fs := flag.NewFlagSet("brand-fill-rate-export", flag.ExitOnError)
+	fcLinks := fs.String("fc-links", "test/fixtures/megafranchisee/fc-links.csv", "all-brand brand/operator link CSV")
+	out := fs.String("out", "test/fixtures/megafranchisee/brand-fill-rate.csv", "brand 充填率 CSV 出力")
+	officialSourceOut := fs.String("official-source-out", "test/fixtures/megafranchisee/official-source-audit.csv", "公式 source 経路 audit CSV 出力")
+	if err := fs.Parse(args); err != nil {
+		return err
+	}
+	pyArgs := []string{"python", "-m", "pizza_delivery.brand_fill_rate_export",
+		"--fc-links", *fcLinks,
+		"--out", *out,
+		"--official-source-out", *officialSourceOut,
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }

@@ -21,5 +21,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 エニタイムフィットネス,フィットネス,株式会社トピーレック,4010601024954,東京都江東区南砂６丁目７番１５号,東京都,franchisee,5,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社ペルゴラ,6140001061476,兵庫県姫路市中地１８８番地の１,兵庫県,franchisee,4,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社サンパーク,4120901006550,大阪府吹田市岸部北５丁目１１番１号,大阪府,franchisee,3,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
+エニタイムフィットネス,フィットネス,KOHATAホールディングス,,,,franchisee,1,pipeline,,discovered_via=operator_spider_address_match
 エニタイムフィットネス,フィットネス,glob,,広島県福山市王子町1-3-5,広島県,unknown,0,operator_official_brand_link,https://www.glob.co.jp/businesscontent/yuzuan/,anchor=エニタイムフィットネス; href=https://www.glob.co.jp/businesscontent/anytimefitness/; page=https://www.glob.co.jp/businesscontent/yuzuan/
 エニタイムフィットネス,フィットネス,ペルゴ,,愛媛県姫路市中地188-1,愛媛県,unknown,0,operator_official_brand_link,https://www.pergo.co.jp/brand/vansan,anchor=エニタイムフィットネス; href=https://www.pergo.co.jp/brand/anytime; page=https://www.pergo.co.jp/brand/vansan

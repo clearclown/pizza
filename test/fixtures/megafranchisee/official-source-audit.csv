@@ -1,0 +1,16 @@
+brand_name,source_type,source_url,usable_for_operator_ground_truth,pipeline_command,notes
+Brand off,official_franchisee_parser,https://www.brandoff.co.jp/company/,yes,pizza official-franchisee-sources,parser=brand_off_company; official page body parsed then houjin verified
+Brand off,official_franchisee_parser,https://www.brandoff.co.jp/fc/,yes,pizza official-franchisee-sources,parser=brand_off_fc; official page body parsed then houjin verified
+エニタイムフィットネス,official_store_sync,https://www.anytimefitness.co.jp/,no_store_list_only,pizza anytime-official-sync,official store list improves store coverage; operator name is not published there
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://harika-yame.jp/,yes,pizza official-franchisee-sources,parser=haricom_company; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://prtimes.jp/main/html/rd/p/000000004.000050301.html,yes,pizza official-franchisee-sources,parser=kandon_prtimes; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://prtimes.jp/main/html/rd/p/000000005.000050301.html,yes,pizza official-franchisee-sources,parser=kandon_prtimes; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://prtimes.jp/main/html/rd/p/000000006.000050301.html,yes,pizza official-franchisee-sources,parser=kandon_prtimes; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://prtimes.jp/main/html/rd/p/000000007.000050301.html,yes,pizza official-franchisee-sources,parser=kandon_prtimes; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://prtimes.jp/main/html/rd/p/000000009.000050301.html,yes,pizza official-franchisee-sources,parser=kandon_prtimes; official page body parsed then houjin verified
+カルビ丼とスン豆腐専門店韓丼,official_franchisee_parser,https://www.birion.com/group/kandon/,yes,pizza official-franchisee-sources,parser=birion_company; official page body parsed then houjin verified
+カーブス,official_recruitment_crawl,https://curves-job.net/jobfind-pc/area/All,yes_after_store_match_and_houjin_verify,pizza official-recruitment-crawl,official jobfind/recop detail pages; operator label extracted only from page body
+コメダ珈琲,official_recruitment_crawl,https://komeda-recruit.net/jobfind-pc/area/All,yes_after_store_match_and_houjin_verify,pizza official-recruitment-crawl,official jobfind/recop detail pages; operator label extracted only from page body
+シャトレーゼ,official_recruitment_crawl,https://chateraise-job.net/brand-jobfind/area/All?jobtype=00017%2C00018%2C00019%2C00147%2C00148%2C00149,yes_after_store_match_and_houjin_verify,pizza official-recruitment-crawl,official jobfind/recop detail pages; operator label extracted only from page body
+モスバーガー,official_recruitment_crawl,https://mos-recruit.net/jobfind-pc/area/All,yes_after_store_match_and_houjin_verify,pizza official-recruitment-crawl,official jobfind/recop detail pages; operator label extracted only from page body
+業務スーパー,official_recruitment_crawl,https://ocean-gyomusuper-job.net/jobfind-pc/area/All,yes_after_store_match_and_houjin_verify,pizza official-recruitment-crawl,official jobfind/recop detail pages; operator label extracted only from page body

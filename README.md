@@ -35,12 +35,14 @@
 | ファイル | 行数 | 役割 |
 |---|--:|---|
 | [`operator-centric-master-14brand-complete.csv`](./test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv) | 527 | 14 ブランド横持ちの operator-centric master |
-| [`fc-operators-14brand-only.csv`](./test/fixtures/megafranchisee/fc-operators-14brand-only.csv) | 461 | 14 対象ブランドだけの 1 事業会社 1 行 master |
-| [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 410 | 14 対象ブランドだけの brand × operator flat link |
-| [`all-fc-operator-links.csv`](./test/fixtures/megafranchisee/all-fc-operator-links.csv) | 727 | 全ブランド横断の franchisee/operator 確定 flat link |
-| [`all-fc-operator-candidates.csv`](./test/fixtures/megafranchisee/all-fc-operator-candidates.csv) | 750 | 全ブランド横断の franchisee + unknown 候補監査 flat link |
+| [`fc-operators-14brand-only.csv`](./test/fixtures/megafranchisee/fc-operators-14brand-only.csv) | 481 | 14 対象ブランドだけの 1 事業会社 1 行 master |
+| [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 427 | 14 対象ブランドだけの brand × operator flat link |
+| [`all-fc-operator-links.csv`](./test/fixtures/megafranchisee/all-fc-operator-links.csv) | 744 | 全ブランド横断の franchisee/operator 確定 flat link |
+| [`all-fc-operator-candidates.csv`](./test/fixtures/megafranchisee/all-fc-operator-candidates.csv) | 767 | 全ブランド横断の franchisee + unknown 候補監査 flat link |
 | [`extended-fc-operator-links.csv`](./test/fixtures/megafranchisee/extended-fc-operator-links.csv) | 348 | 追加FCブランド + 既存非14ブランドの franchisee/operator 専用 flat link |
 | [`extended-brand-summary.csv`](./test/fixtures/megafranchisee/extended-brand-summary.csv) | 345 | 追加FCブランド seed + 既存非14ブランドの取得状況 summary |
+| [`brand-fill-rate.csv`](./test/fixtures/megafranchisee/brand-fill-rate.csv) | 433 | brand 別の本部公表店舗数に対する FC operator 充填率・優先度 |
+| [`official-source-audit.csv`](./test/fixtures/megafranchisee/official-source-audit.csv) | 15 | 公式FCページ / 公式求人 / 公式店舗一覧の利用可能 source 経路 |
 | [`by-view/allbrand-operators-min20.csv`](./test/fixtures/megafranchisee/by-view/allbrand-operators-min20.csv) | 213 | 全ブランド横断 20店舗以上 operator |
 | [`by-view/allbrand-megajii-min20-2brand.csv`](./test/fixtures/megafranchisee/by-view/allbrand-megajii-min20-2brand.csv) | 122 | 全ブランド横断 20店舗以上かつ2ブランド以上のメガジー |
 | [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 22 | 14 対象ブランド内で 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
@@ -57,6 +59,7 @@ env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza jfa-disclosure-sync --fe
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza official-franchisee-sources
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza integrate --mode export \
   --out test/fixtures/megafranchisee/fc-links.csv
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza brand-fill-rate-export
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
   python -m pizza_delivery.megafranchisee_clean_export
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza extended-fc-brand-export
