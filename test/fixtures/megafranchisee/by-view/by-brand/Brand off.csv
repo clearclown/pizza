@@ -1,7 +1,7 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
-Brand off,,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,86,official_franchisee_page,https://www.brandoff.co.jp/company/,official company profile; houjin_unique_name_inactive_fallback
-Brand off,,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,27,manual_megajii_2026_04_24,,
-Brand off,,株式会社ＴＧＭ,3370001023415,宮城県仙台市若林区中倉３丁目１７番５７号,宮城県,franchisee,2,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF LIFE仙台六丁の目店;BRAND OFF LIFE仙台中倉店
-Brand off,,株式会社アリーモ,2010501046646,東京都台東区東上野２丁目１３番４号さかえビルＢ１,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-Brand off,,株式会社サンライズトレーディング,5420002001305,青森県青森市大字平新田字池上５６番地１,青森県,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF 弘前ヒロロ店
-Brand off,,株式会社ティー・クラウド,7440001001260,北海道函館市湯川町３丁目２６番３号,北海道,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_unique_name; stores=BRAND OFF クレア函館人見店
+Brand off,ブランド品リユース,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,86,official_franchisee_page,https://www.brandoff.co.jp/company/,official company profile; houjin_unique_name_inactive_fallback
+Brand off,ブランド品リユース,株式会社K-ブランドオフ,1220001023167,石川県金沢市新神田２丁目５番１７号,石川県,franchisor,27,manual_megajii_2026_04_24,,
+Brand off,ブランド品リユース,株式会社ＴＧＭ,3370001023415,宮城県仙台市若林区中倉３丁目１７番５７号,宮城県,franchisee,2,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF LIFE仙台六丁の目店;BRAND OFF LIFE仙台中倉店
+Brand off,ブランド品リユース,株式会社アリーモ,2010501046646,東京都台東区東上野２丁目１３番４号さかえビルＢ１,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+Brand off,ブランド品リユース,株式会社サンライズトレーディング,5420002001305,青森県青森市大字平新田字池上５６番地１,青森県,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_context_match; stores=BRAND OFF 弘前ヒロロ店
+Brand off,ブランド品リユース,株式会社ティー・クラウド,7440001001260,北海道函館市湯川町３丁目２６番３号,北海道,franchisee,1,official_franchisee_page,https://www.brandoff.co.jp/fc/,official FC owner voice; houjin_unique_name; stores=BRAND OFF クレア函館人見店

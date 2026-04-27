@@ -1,18 +1,18 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
-ハードオフ,,ハードオフコーポレーション株式会社,,新潟県新発田市新栄町3-1-13,新潟県,franchisor,241,manual_megajii_2026_04_24,,
-ハードオフ,,ありがとうサービス,,愛媛県今治市八町西3丁目6-30,愛媛県,franchisee,114,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,98,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-ハードオフ,,株式会社ハードオフコーポレーション,,,,unknown,98,pipeline,,discovered_via=chain_discovery
-ハードオフ,,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,franchisee,91,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社エコプラス,3370801000679,宮城県名取市上余田字千刈田308,宮城県,franchisee,67,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,franchisee,66,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,65,manual_megajii_2026_04_24,,
-ハードオフ,,浜松ホーエー株式会社,4080401004167,静岡県浜松市中央区中央3丁目2-19 Nビル3F,静岡県,franchisee,24,manual_megajii_2026_04_24,,
-ハードオフ,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,3,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-ハードオフ,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-ハードオフ,,株式会社大宮電化-埼玉県,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-ハードオフ,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,unknown,0,operator_official_brand_link,https://eco-mtc.co.jp/property,anchor=ハードオフ; href=https://eco-mtc.co.jp/business; page=https://eco-mtc.co.jp/property
-ハードオフ,,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,unknown,0,operator_official_brand_link,https://www.eco-nos.com/reuse/shop/off-house.html,anchor=ハードオフ; href=https://www.eco-nos.com/reuse/shop/hard-off.html; page=https://www.eco-nos.com/reuse/shop/off-house.html
-ハードオフ,,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=ハードオフ・オフハウス; href=https://www.kanseki.co.jp/store/offhouse/; page=https://www.kanseki.co.jp/store/gyoumusuper/
-HARD OFF,パソコン・オーディオ・各種ソフト、家具・インテリア等リサイクル,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+ハードオフ,リユース,ハードオフコーポレーション株式会社,,新潟県新発田市新栄町3-1-13,新潟県,franchisor,241,manual_megajii_2026_04_24,,
+ハードオフ,リユース,ありがとうサービス,,愛媛県今治市八町西3丁目6-30,愛媛県,franchisee,114,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,98,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,リユース,株式会社ハードオフコーポレーション,,,,unknown,98,pipeline,,discovered_via=chain_discovery
+ハードオフ,リユース,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,franchisee,91,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社エコプラス,3370801000679,宮城県名取市上余田字千刈田308,宮城県,franchisee,67,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,franchisee,66,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,65,manual_megajii_2026_04_24,,
+ハードオフ,リユース,浜松ホーエー株式会社,4080401004167,静岡県浜松市中央区中央3丁目2-19 Nビル3F,静岡県,franchisee,24,manual_megajii_2026_04_24,,
+ハードオフ,リユース,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,3,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,リユース,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+ハードオフ,リユース,株式会社大宮電化-埼玉県,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+ハードオフ,リユース,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,unknown,0,operator_official_brand_link,https://eco-mtc.co.jp/property,anchor=ハードオフ; href=https://eco-mtc.co.jp/business; page=https://eco-mtc.co.jp/property
+ハードオフ,リユース,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,unknown,0,operator_official_brand_link,https://www.eco-nos.com/reuse/shop/off-house.html,anchor=ハードオフ; href=https://www.eco-nos.com/reuse/shop/hard-off.html; page=https://www.eco-nos.com/reuse/shop/off-house.html
+ハードオフ,リユース,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,unknown,0,operator_official_brand_link,https://www.kanseki.co.jp/store/gyoumusuper/,anchor=ハードオフ・オフハウス; href=https://www.kanseki.co.jp/store/offhouse/; page=https://www.kanseki.co.jp/store/gyoumusuper/
+ハードオフ,リユース,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,

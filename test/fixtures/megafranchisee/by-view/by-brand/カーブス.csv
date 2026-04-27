@@ -1,104 +1,104 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
-カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1996,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/217-1.pdf,method=history_store_count; total_stores=1996; observed_at=2025-08
-カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1965,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,unknown,255,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,,,,unknown,149,pipeline,,discovered_via=chain_discovery
-カーブス,学習塾・カルチャースクール,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,Do Frontier,,愛知県名古屋市名東区高社1丁目258番地,愛知県,franchisee,26,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,ステラ株式会社,2260001010730,岡山県岡山市北区西古松237-126 松本ビル1F,岡山県,franchisee,22,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,株式会社エーガールズ,9240001050904,広島県三原市城町1丁目12-5 エムセックビル4F,広島県,franchisee,20,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,20,manual_megajii_2026_04_24,,
-カーブス,学習塾・カルチャースクール,株式会社ハイ・スタンダード,5010401135835,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社モバイルフィット,3500001014094,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社はっけん,7240001034009,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社トップライジング,9021001048745,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,オー・シー・エム東海株式会社,9190001001284,,,franchisee,8,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,ウィン株式会社,3040001090190,,,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,モリススマイル株式会社,9140001104835,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社エヌエス・リンク,7060001005928,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社アドバンス,1430001076383,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社マツバヤ,6380001016712,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,ラロット株式会社,9040001091679,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,レッドライフ合同会社,6300003000705,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,寺尾商事株式会社,4130001040227,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,有限会社らじん,9012802011181,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社エフアイ,1400001000338,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社オレンジスペース,5120001212412,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社キートス,4450001010602,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ジェイエムカンパニー,1140001071744,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ソピュア,3040001045070,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ヘルスプラン,2390001012689,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社モリモト,3430001017105,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社玉扇グローバル,9100001020978,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,三州紙業株式会社,9080001001725,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,丸友商事株式会社,1462501000448,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,国際貿易株式会社,3050001014909,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,有限会社戸田駒,4130002004057,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,栃尾石油株式会社,4140001050241,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社かがやき,5440001005866,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社やまもと,4430001054015,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社クリンプロ,8240001024041,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ジェイフード,7050001032857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社タカノ,2450001001850,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ヒューマン,3430001014052,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ファンオール,2120901032086,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社プライムネス,1460001004614,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社メッカコーポレーション,5020001008102,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ライフネス,4011001062784,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社リエゾン,8420001005221,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社東山,4010401182762,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社舟木食品,7380001011555,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社電陽社,3230001008322,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,ひと・いきいきカンパニー株式会社,6240001017303,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,インベントクリエイション株式会社,2200002015222,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,コサキ株式会社,5180301012878,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,ニッポンインシュア株式会社,7290001022124,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,平野産業株式会社,4420001013855,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-カーブス,学習塾・カルチャースクール,有限会社するが薬局,8080102010659,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,有限会社タンバ,6011502009720,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,有限会社雄鳳,9290002046087,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-カーブス,学習塾・カルチャースクール,東京海上日動火災保険株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-カーブス,学習塾・カルチャースクール,東京海上日動火災保険株式会社,2010001008824,東京都千代田区大手町２丁目６番４号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社イシグロ・ヘルスケア,7200001037568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社インフィニティ,1450001005893,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社イーエン,7190001024568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社エフケイシー,7030001096904,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社キュー,8380001004921,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社クオーレ,5430001071125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社クリフ,7380001003949,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社クーバル,3120001161470,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社グリーンスポーツ企画,6110001018982,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社コシダカ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-カーブス,学習塾・カルチャースクール,株式会社コシダカホールディングス,7070001003674,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社サツキ商事,5020001072973,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社セフティ,1020001132442,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ダイコク,5430001073600,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ナイスケア,8080001013688,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ニワ・コーポレーション,7070001017427,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ネクシア,6370001043609,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ボルトン,4070001002943,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社マイテレホン,5360001009487,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ムーヴ・オン,4030003019493,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社モンテグッチ,6180002084472,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ライフサポート,1430001032205,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社ラクオーレ,4011701016800,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社リノクレスト,2160001006697,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社三協メディケア,7400001012906,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社丸福山田屋,9370801000599,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社亀山社中,1010601031961,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社南陽商会,4100001024125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社宇都宮建設,2330001009121,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-カーブス,学習塾・カルチャースクール,株式会社日の出ネットワークス,9260001029426,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社横浜サカイヤ薬局堂,3020001003914,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,株式会社藤田電気商会,5420001007658,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,洋三プラスチックス工業有限会社,5180002085926,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,学習塾・カルチャースクール,アルフォンソ株式会社,9070001000216,群馬県前橋市住吉町1-3-12 アルフォンソビル,群馬県,unknown,0,operator_official_brand_link,http://www.alfonso.co.jp/gongcha/shoplist.html,anchor=CURVES; href=http://www.alfonso.co.jp/curves/; page=http://www.alfonso.co.jp/gongcha/shoplist.html
-カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
-カーブス,学習塾・カルチャースクール,株式会社カーブスホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
-カーブス,学習塾・カルチャースクール,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,unknown,0,operator_official_brand_link,https://www.chapondoux.com/storelist/store.html?id=78,anchor=カーブス; href=https://www.chapondoux.com/storelist/index.html; page=https://www.chapondoux.com/storelist/store.html?id=78
+カーブス,フィットネス,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1996,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/217-1.pdf,method=history_store_count; total_stores=1996; observed_at=2025-08
+カーブス,フィットネス,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1965,manual_megajii_2026_04_24,,
+カーブス,フィットネス,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,
+カーブス,フィットネス,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,unknown,255,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,フィットネス,株式会社カーブスホールディングス,,,,unknown,149,pipeline,,discovered_via=chain_discovery
+カーブス,フィットネス,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,
+カーブス,フィットネス,Do Frontier,,愛知県名古屋市名東区高社1丁目258番地,愛知県,franchisee,26,manual_megajii_2026_04_24,,
+カーブス,フィットネス,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,
+カーブス,フィットネス,ステラ株式会社,2260001010730,岡山県岡山市北区西古松237-126 松本ビル1F,岡山県,franchisee,22,manual_megajii_2026_04_24,,
+カーブス,フィットネス,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,フィットネス,株式会社エーガールズ,9240001050904,広島県三原市城町1丁目12-5 エムセックビル4F,広島県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,フィットネス,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,20,manual_megajii_2026_04_24,,
+カーブス,フィットネス,株式会社ハイ・スタンダード,5010401135835,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社モバイルフィット,3500001014094,,,franchisee,14,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社はっけん,7240001034009,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社トップライジング,9021001048745,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,オー・シー・エム東海株式会社,9190001001284,,,franchisee,8,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,ウィン株式会社,3040001090190,,,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社エクスティード,4160001014203,滋賀県栗東市綣2丁目2番34号 ウイングビュー1F 117,滋賀県,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,モリススマイル株式会社,9140001104835,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社エヌエス・リンク,7060001005928,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社アドバンス,1430001076383,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社マツバヤ,6380001016712,,,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,4,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,ラロット株式会社,9040001091679,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,レッドライフ合同会社,6300003000705,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,寺尾商事株式会社,4130001040227,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,有限会社らじん,9012802011181,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社エフアイ,1400001000338,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社オレンジスペース,5120001212412,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社キートス,4450001010602,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ジェイエムカンパニー,1140001071744,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ソピュア,3040001045070,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ヘルスプラン,2390001012689,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社モリモト,3430001017105,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社玉扇グローバル,9100001020978,,,franchisee,3,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,三州紙業株式会社,9080001001725,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,丸友商事株式会社,1462501000448,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,国際貿易株式会社,3050001014909,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,有限会社戸田駒,4130002004057,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,栃尾石油株式会社,4140001050241,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社かがやき,5440001005866,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社やまもと,4430001054015,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社クリンプロ,8240001024041,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ジェイフード,7050001032857,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社タカノ,2450001001850,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ヒューマン,3430001014052,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ファンオール,2120901032086,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社プライムネス,1460001004614,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社メッカコーポレーション,5020001008102,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ライフネス,4011001062784,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社リエゾン,8420001005221,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社東山,4010401182762,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社舟木食品,7380001011555,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社電陽社,3230001008322,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,ひと・いきいきカンパニー株式会社,6240001017303,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,インベントクリエイション株式会社,2200002015222,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,コサキ株式会社,5180301012878,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,ニッポンインシュア株式会社,7290001022124,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,平野産業株式会社,4420001013855,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,フィットネス,有限会社するが薬局,8080102010659,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,有限会社タンバ,6011502009720,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,有限会社雄鳳,9290002046087,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,フィットネス,東京海上日動火災保険株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+カーブス,フィットネス,東京海上日動火災保険株式会社,2010001008824,東京都千代田区大手町２丁目６番４号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,フィットネス,株式会社イシグロ・ヘルスケア,7200001037568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社インフィニティ,1450001005893,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社イーエン,7190001024568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社エフケイシー,7030001096904,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社キュー,8380001004921,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社クオーレ,5430001071125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社クリフ,7380001003949,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社クーバル,3120001161470,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社グリーンスポーツ企画,6110001018982,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社コシダカ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+カーブス,フィットネス,株式会社コシダカホールディングス,7070001003674,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+カーブス,フィットネス,株式会社サツキ商事,5020001072973,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社セフティ,1020001132442,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ダイコク,5430001073600,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ナイスケア,8080001013688,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ニワ・コーポレーション,7070001017427,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ネクシア,6370001043609,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ボルトン,4070001002943,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社マイテレホン,5360001009487,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ムーヴ・オン,4030003019493,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社モンテグッチ,6180002084472,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ライフサポート,1430001032205,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社ラクオーレ,4011701016800,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社リノクレスト,2160001006697,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社三協メディケア,7400001012906,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社丸福山田屋,9370801000599,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社亀山社中,1010601031961,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社南陽商会,4100001024125,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社宇都宮建設,2330001009121,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
+カーブス,フィットネス,株式会社日の出ネットワークス,9260001029426,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社横浜サカイヤ薬局堂,3020001003914,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,株式会社藤田電気商会,5420001007658,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,洋三プラスチックス工業有限会社,5180002085926,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+カーブス,フィットネス,アルフォンソ株式会社,9070001000216,群馬県前橋市住吉町1-3-12 アルフォンソビル,群馬県,unknown,0,operator_official_brand_link,http://www.alfonso.co.jp/gongcha/shoplist.html,anchor=CURVES; href=http://www.alfonso.co.jp/curves/; page=http://www.alfonso.co.jp/gongcha/shoplist.html
+カーブス,フィットネス,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+カーブス,フィットネス,株式会社カーブスホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+カーブス,フィットネス,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,unknown,0,operator_official_brand_link,https://www.chapondoux.com/storelist/store.html?id=78,anchor=カーブス; href=https://www.chapondoux.com/storelist/index.html; page=https://www.chapondoux.com/storelist/store.html?id=78

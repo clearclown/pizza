@@ -1,9 +1,9 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
-アップガレージ,自動車・自転車関係小売,株式会社ホットマン,3370001002204,宮城県仙台市太白区西多賀四丁目4番17号,宮城県,franchisee,124,manual_megajii_2026_04_24,,
-アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,111,manual_megajii_2026_04_24,,
-アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ企業,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-アップガレージ,自動車・自転車関係小売,株式会社サイン・ハウス,6010902006286,神奈川県川崎市中原区中丸子１３番地２,神奈川県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-アップガレージ,自動車・自転車関係小売,株式会社サイン・ハウス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-アップガレージ,自動車・自転車関係小売,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
-アップガレージ,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/9-1.pdf,method=none
+アップガレージ,自動車用品リユース,株式会社ホットマン,3370001002204,宮城県仙台市太白区西多賀四丁目4番17号,宮城県,franchisee,124,manual_megajii_2026_04_24,,
+アップガレージ,自動車用品リユース,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,111,manual_megajii_2026_04_24,,
+アップガレージ,自動車用品リユース,株式会社アップガレージグループ企業,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+アップガレージ,自動車用品リユース,株式会社サイン・ハウス,6010902006286,神奈川県川崎市中原区中丸子１３番地２,神奈川県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+アップガレージ,自動車用品リユース,株式会社サイン・ハウス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
+アップガレージ,自動車用品リユース,株式会社ハードオフコーポレーション,6110001012853,新潟県新発田市新栄町３丁目１番１３号,新潟県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
+アップガレージ,自動車用品リユース,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
+アップガレージ,自動車用品リユース,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/9-1.pdf,method=none

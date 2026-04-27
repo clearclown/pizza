@@ -37,6 +37,22 @@ TARGET_BRANDS = (
     "TSUTAYA",
 )
 TARGET_BRAND_SET = set(TARGET_BRANDS)
+TARGET_BRAND_INDUSTRIES = {
+    "カーブス": "フィットネス",
+    "エニタイムフィットネス": "フィットネス",
+    "モスバーガー": "ハンバーガー",
+    "業務スーパー": "食品スーパー",
+    "Itto個別指導学院": "学習塾",
+    "コメダ珈琲": "コーヒーショップ",
+    "シャトレーゼ": "菓子・スイーツ",
+    "ハードオフ": "リユース",
+    "オフハウス": "リユース",
+    "Kids Duo": "学童保育・英語教育",
+    "アップガレージ": "自動車用品リユース",
+    "カルビ丼とスン豆腐専門店韓丼": "外食",
+    "Brand off": "ブランド品リユース",
+    "TSUTAYA": "メディア・書店",
+}
 
 BRAND_ALIASES = {
     "モスバーガーチェーン": "モスバーガー",
@@ -170,6 +186,15 @@ def _write_csv(path: Path, rows: list[dict], fields: list[str]) -> None:
         writer = csv.DictWriter(f, fieldnames=fields, extrasaction="ignore", lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
+
+
+def _normalize_target_link_row(row: dict[str, str]) -> dict[str, str]:
+    out = dict(row)
+    brand = canonical_brand(out.get("brand_name", ""))
+    out["brand_name"] = brand
+    if brand in TARGET_BRAND_INDUSTRIES:
+        out["industry"] = TARGET_BRAND_INDUSTRIES[brand]
+    return out
 
 
 def load_operators(orm_db: str | Path) -> dict[int, OperatorAggregate]:
@@ -410,7 +435,7 @@ def export_clean_megajii(
     links_14brand = []
     if links:
         links_14brand = [
-            r for r in links
+            _normalize_target_link_row(r) for r in links
             if canonical_brand(r.get("brand_name", "")) in TARGET_BRAND_SET
         ]
         _write_csv(
@@ -419,7 +444,11 @@ def export_clean_megajii(
             list(links[0].keys()),
         )
         for brand in TARGET_BRANDS:
-            rows = [r for r in links if canonical_brand(r.get("brand_name", "")) == brand]
+            rows = [
+                _normalize_target_link_row(r)
+                for r in links
+                if canonical_brand(r.get("brand_name", "")) == brand
+            ]
             rows.sort(
                 key=lambda r: (
                     -int(r.get("estimated_store_count") or 0),

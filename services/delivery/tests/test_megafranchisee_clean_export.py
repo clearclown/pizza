@@ -8,6 +8,7 @@ from pizza_delivery.megafranchisee_clean_export import (
     canonical_brand,
     consolidate_operators,
     export_clean_megajii,
+    _normalize_target_link_row,
 )
 
 
@@ -46,6 +47,15 @@ def test_consolidate_operators_merges_same_name_with_missing_corp() -> None:
     assert row["corp"] == "6110001012853"
     assert row["brands"] == "オフハウス,ハードオフ"
     assert row["total_stores"] == 210
+
+
+def test_normalize_target_link_row_sets_curves_as_fitness() -> None:
+    row = _normalize_target_link_row(
+        {"brand_name": "カーブス", "industry": "学習塾・カルチャースクール"}
+    )
+
+    assert row["brand_name"] == "カーブス"
+    assert row["industry"] == "フィットネス"
 
 
 def test_export_writes_14brand_only_ranking(tmp_path) -> None:

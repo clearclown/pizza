@@ -1,11 +1,11 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
-カルビ丼とスン豆腐専門店韓丼,,株式会社やる気,9130001015983,京都府京都市伏見区羽束師志水町121-1,京都府,franchisor,65,manual_megajii_2026_04_24,,
-カルビ丼とスン豆腐専門店韓丼,,株式会社ビリオンフーズハヤシ,7210001008527,福井県福井市開発町第８号２番地の３,福井県,franchisee,3,official_franchisee_page,https://www.birion.com/group/kandon/,official operator brand page; houjin_unique_name; stores=大宮店;鯖江店;丸山店
-カルビ丼とスン豆腐専門店韓丼,,ユウクリエイティブ株式会社,9070002031400,群馬県太田市飯塚町１４３４番地１,群馬県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000006.000050301.html,official franchisor press release; houjin_unique_name; stores=韓丼秋田中央店; address=秋田県秋田市高陽幸町8-19
-カルビ丼とスン豆腐専門店韓丼,,大和物産株式会社,9050001023334,,,franchisee,1,pipeline,,discovered_via=recruitment_search_houjin_verified
-カルビ丼とスン豆腐専門店韓丼,,東富商事株式会社,3180001020241,愛知県名古屋市中川区新家３丁目１４０７番地,愛知県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000005.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼豊田下市場店; address=愛知県豊田市前田町5丁目２
-カルビ丼とスン豆腐専門店韓丼,,株式会社ナック,3390001001443,山形県山形市春日町１番４０号,山形県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000004.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼山形あかねヶ丘店; address=山形県山形市あかねヶ丘二丁目16-12
-カルビ丼とスン豆腐専門店韓丼,,株式会社ハリコム,4290001047446,福岡県八女市馬場５４番地の４,福岡県,franchisee,1,official_franchisee_page,https://harika-yame.jp/,official operator company profile; houjin_corp_number; stores=韓丼八女店
-カルビ丼とスン豆腐専門店韓丼,,株式会社ライズコーポレーション,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000007.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼豊橋藤沢店; address=愛知県豊橋市神ノ輪88
-カルビ丼とスン豆腐専門店韓丼,,株式会社都商事,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000009.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼浜松原島店; address=静岡県浜松市東区原島町375番１
-カルビ丼とスン豆腐専門店韓丼,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=韓丼; href=https://bigone.co.jp/store_category/kandon/; page=https://bigone.co.jp/contents/cafe/
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社やる気,9130001015983,京都府京都市伏見区羽束師志水町121-1,京都府,franchisor,65,manual_megajii_2026_04_24,,
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社ビリオンフーズハヤシ,7210001008527,福井県福井市開発町第８号２番地の３,福井県,franchisee,3,official_franchisee_page,https://www.birion.com/group/kandon/,official operator brand page; houjin_unique_name; stores=大宮店;鯖江店;丸山店
+カルビ丼とスン豆腐専門店韓丼,外食,ユウクリエイティブ株式会社,9070002031400,群馬県太田市飯塚町１４３４番地１,群馬県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000006.000050301.html,official franchisor press release; houjin_unique_name; stores=韓丼秋田中央店; address=秋田県秋田市高陽幸町8-19
+カルビ丼とスン豆腐専門店韓丼,外食,大和物産株式会社,9050001023334,,,franchisee,1,pipeline,,discovered_via=recruitment_search_houjin_verified
+カルビ丼とスン豆腐専門店韓丼,外食,東富商事株式会社,3180001020241,愛知県名古屋市中川区新家３丁目１４０７番地,愛知県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000005.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼豊田下市場店; address=愛知県豊田市前田町5丁目２
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社ナック,3390001001443,山形県山形市春日町１番４０号,山形県,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000004.000050301.html,official franchisor press release; houjin_context_match; stores=韓丼山形あかねヶ丘店; address=山形県山形市あかねヶ丘二丁目16-12
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社ハリコム,4290001047446,福岡県八女市馬場５４番地の４,福岡県,franchisee,1,official_franchisee_page,https://harika-yame.jp/,official operator company profile; houjin_corp_number; stores=韓丼八女店
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社ライズコーポレーション,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000007.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼豊橋藤沢店; address=愛知県豊橋市神ノ輪88
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社都商事,,,,franchisee,1,official_franchisee_page,https://prtimes.jp/main/html/rd/p/000000009.000050301.html,official franchisor press release; houjin_ambiguous; stores=韓丼浜松原島店; address=静岡県浜松市東区原島町375番１
+カルビ丼とスン豆腐専門店韓丼,外食,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=韓丼; href=https://bigone.co.jp/store_category/kandon/; page=https://bigone.co.jp/contents/cafe/
