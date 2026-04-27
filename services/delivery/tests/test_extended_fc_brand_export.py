@@ -141,6 +141,9 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
     fc_by_brand = tmp_path / "fc-by-brand"
     all_fc_out = tmp_path / "all-fc.csv"
     all_fc_by_brand = tmp_path / "all-fc-by-brand"
+    all_fc_min2_by_brand = tmp_path / "all-fc-by-brand-min2"
+    all_fc_brand_index = tmp_path / "all-fc-brand-index.csv"
+    all_fc_singletons = tmp_path / "all-fc-singletons.csv"
     all_fc_candidates = tmp_path / "all-fc-candidates.csv"
     _write_seed(seed)
     _write_links(links)
@@ -158,6 +161,9 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         fc_by_brand_dir=fc_by_brand,
         all_fc_out=all_fc_out,
         all_fc_by_brand_dir=all_fc_by_brand,
+        all_fc_min2_by_brand_dir=all_fc_min2_by_brand,
+        all_fc_brand_index_out=all_fc_brand_index,
+        all_fc_singletons_out=all_fc_singletons,
         all_fc_candidates_out=all_fc_candidates,
     )
 
@@ -173,6 +179,9 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         "franchisor_seed_only_brands": 5,
         "all_fc_operator_links": 2,
         "all_fc_operator_link_brands": 2,
+        "all_fc_min2_by_brand_files": 0,
+        "all_fc_brand_index_rows": 2,
+        "all_fc_singleton_brands": 2,
         "all_fc_operator_candidates": 2,
         "all_fc_operator_candidate_brands": 2,
     }
@@ -213,4 +222,15 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
     ]
     assert (all_fc_by_brand / "カレーハウスCoCo壱番屋.csv").exists()
     assert (all_fc_by_brand / "ミスタードーナツ.csv").exists()
+    assert not (all_fc_min2_by_brand / "カレーハウスCoCo壱番屋.csv").exists()
+    singleton_rows = list(csv.DictReader(all_fc_singletons.open(encoding="utf-8")))
+    assert [r["brand_name"] for r in singleton_rows] == [
+        "カレーハウスCoCo壱番屋",
+        "ミスタードーナツ",
+    ]
+    index_rows = list(csv.DictReader(all_fc_brand_index.open(encoding="utf-8")))
+    assert {r["brand_name"]: r["review_status"] for r in index_rows} == {
+        "カレーハウスCoCo壱番屋": "singleton_expand",
+        "ミスタードーナツ": "singleton_expand",
+    }
     assert len(list(csv.DictReader(all_fc_candidates.open(encoding="utf-8")))) == 2

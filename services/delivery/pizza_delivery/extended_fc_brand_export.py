@@ -35,6 +35,15 @@ DEFAULT_FC_OUT = Path("test/fixtures/megafranchisee/extended-fc-operator-links.c
 DEFAULT_FC_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/extended-fc-by-brand")
 DEFAULT_ALL_FC_OUT = Path("test/fixtures/megafranchisee/all-fc-operator-links.csv")
 DEFAULT_ALL_FC_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/all-fc-by-brand")
+DEFAULT_ALL_FC_MIN2_BY_BRAND_DIR = Path(
+    "test/fixtures/megafranchisee/by-view/all-fc-by-brand-min2"
+)
+DEFAULT_ALL_FC_BRAND_INDEX_OUT = Path(
+    "test/fixtures/megafranchisee/by-view/all-fc-brand-index.csv"
+)
+DEFAULT_ALL_FC_SINGLETONS_OUT = Path(
+    "test/fixtures/megafranchisee/by-view/all-fc-singleton-brands.csv"
+)
 DEFAULT_ALL_FC_CANDIDATES_OUT = Path(
     "test/fixtures/megafranchisee/all-fc-operator-candidates.csv"
 )
@@ -68,6 +77,25 @@ SUMMARY_FIELDS = [
     "franchisor_rows",
     "max_estimated_store_count",
     "sources",
+]
+ALL_FC_BRAND_INDEX_FIELDS = [
+    "brand_name",
+    "franchisee_rows",
+    "verified_franchisee_rows",
+    "estimated_store_sum",
+    "max_operator_store_count",
+    "largest_operator_name",
+    "sources",
+    "review_status",
+    "by_brand_csv",
+    "min2_by_brand_csv",
+    "note",
+]
+ALL_FC_SINGLETON_FIELDS = [
+    *BASE_LINK_FIELDS,
+    "review_status",
+    "by_brand_csv",
+    "review_note",
 ]
 
 SEED_BRAND_ALIASES = {
@@ -444,7 +472,7 @@ def _load_canonical_link_rows(
 
 
 def _write_by_brand_files(
-    rows: list[dict[str, str]], by_brand_dir: Path, fields: list[str]
+    rows: list[dict[str, str]], by_brand_dir: Path, fields: list[str], *, min_rows: int = 1
 ) -> int:
     if by_brand_dir.exists():
         shutil.rmtree(by_brand_dir)
@@ -455,9 +483,114 @@ def _write_by_brand_files(
     for brand, brand_rows in brands.items():
         if not brand:
             continue
+        if len(brand_rows) < min_rows:
+            continue
         brand_rows.sort(key=_row_score)
         _write_csv(by_brand_dir / f"{_safe_filename(brand)}.csv", brand_rows, fields)
-    return len(brands)
+    return sum(1 for brand_rows in brands.values() if len(brand_rows) >= min_rows)
+
+
+def _brand_groups(rows: list[dict[str, str]]) -> dict[str, list[dict[str, str]]]:
+    groups: dict[str, list[dict[str, str]]] = {}
+    for row in rows:
+        brand = row.get("brand_name") or ""
+        if brand:
+            groups.setdefault(brand, []).append(row)
+    return groups
+
+
+def _store_count(row: dict[str, str]) -> int:
+    try:
+        return int(row.get("estimated_store_count") or 0)
+    except ValueError:
+        return 0
+
+
+def _all_fc_review_status(row_count: int, max_count: int) -> str:
+    if row_count <= 1 and max_count >= 100:
+        return "singleton_high_store_count_expand"
+    if row_count <= 1:
+        return "singleton_expand"
+    if row_count == 2:
+        return "thin_expand"
+    return "multi_operator"
+
+
+def _relative_csv_path(path: Path) -> str:
+    return str(path).replace("\\", "/")
+
+
+def _all_fc_brand_index_rows(
+    rows: list[dict[str, str]],
+    *,
+    all_fc_by_brand_dir: Path,
+    all_fc_min2_by_brand_dir: Path,
+    min_operator_rows: int,
+) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    for brand, brand_rows in _brand_groups(rows).items():
+        counts = [_store_count(r) for r in brand_rows]
+        largest = max(brand_rows, key=_store_count)
+        row_count = len(brand_rows)
+        max_count = max(counts) if counts else 0
+        filename = f"{_safe_filename(brand)}.csv"
+        status = _all_fc_review_status(row_count, max_count)
+        note = ""
+        if row_count == 1:
+            note = "only_one_confirmed_franchisee_operator; keep as evidence, expand via official/JFA/recruiting/operator sources"
+        elif row_count == 2:
+            note = "two_confirmed_franchisee_operators; still thin for brand-level review"
+        out.append(
+            {
+                "brand_name": brand,
+                "franchisee_rows": str(row_count),
+                "verified_franchisee_rows": str(
+                    sum(1 for r in brand_rows if r.get("corporate_number"))
+                ),
+                "estimated_store_sum": str(sum(counts)),
+                "max_operator_store_count": str(max_count),
+                "largest_operator_name": largest.get("operator_name") or "",
+                "sources": ",".join(
+                    sorted({r.get("source", "") for r in brand_rows if r.get("source")})
+                ),
+                "review_status": status,
+                "by_brand_csv": _relative_csv_path(all_fc_by_brand_dir / filename),
+                "min2_by_brand_csv": (
+                    _relative_csv_path(all_fc_min2_by_brand_dir / filename)
+                    if row_count >= min_operator_rows else ""
+                ),
+                "note": note,
+            }
+        )
+    out.sort(
+        key=lambda r: (
+            int(r["franchisee_rows"]),
+            -int(r["max_operator_store_count"] or 0),
+            r["brand_name"],
+        )
+    )
+    return out
+
+
+def _all_fc_singleton_rows(
+    rows: list[dict[str, str]], *, all_fc_by_brand_dir: Path
+) -> list[dict[str, str]]:
+    out: list[dict[str, str]] = []
+    for brand, brand_rows in _brand_groups(rows).items():
+        if len(brand_rows) != 1:
+            continue
+        row = dict(brand_rows[0])
+        max_count = _store_count(row)
+        row["review_status"] = _all_fc_review_status(1, max_count)
+        row["by_brand_csv"] = _relative_csv_path(
+            all_fc_by_brand_dir / f"{_safe_filename(brand)}.csv"
+        )
+        row["review_note"] = (
+            "single confirmed franchisee/operator row; not a complete brand list yet"
+        )
+        out.append(row)
+    out.sort(key=lambda r: (-_store_count(r), r.get("brand_name") or ""))
+    return out
 
 
 def export_all_fc_operator_links(
@@ -466,6 +599,10 @@ def export_all_fc_operator_links(
     all_fc_out: Path,
     all_fc_by_brand_dir: Path,
     all_fc_candidates_out: Path,
+    all_fc_brand_index_out: Path = DEFAULT_ALL_FC_BRAND_INDEX_OUT,
+    all_fc_singletons_out: Path = DEFAULT_ALL_FC_SINGLETONS_OUT,
+    all_fc_min2_by_brand_dir: Path = DEFAULT_ALL_FC_MIN2_BY_BRAND_DIR,
+    min_operator_rows: int = 2,
 ) -> dict[str, int]:
     franchisee_rows = _dedupe_link_rows(
         _load_canonical_link_rows(fc_links_path, operator_types={"franchisee"})
@@ -479,9 +616,30 @@ def export_all_fc_operator_links(
     _write_csv(all_fc_out, franchisee_rows, BASE_LINK_FIELDS)
     _write_csv(all_fc_candidates_out, candidate_rows, BASE_LINK_FIELDS)
     by_brand_count = _write_by_brand_files(franchisee_rows, all_fc_by_brand_dir, BASE_LINK_FIELDS)
+    min2_by_brand_count = _write_by_brand_files(
+        franchisee_rows,
+        all_fc_min2_by_brand_dir,
+        BASE_LINK_FIELDS,
+        min_rows=min_operator_rows,
+    )
+    index_rows = _all_fc_brand_index_rows(
+        franchisee_rows,
+        all_fc_by_brand_dir=all_fc_by_brand_dir,
+        all_fc_min2_by_brand_dir=all_fc_min2_by_brand_dir,
+        min_operator_rows=min_operator_rows,
+    )
+    singleton_rows = _all_fc_singleton_rows(
+        franchisee_rows,
+        all_fc_by_brand_dir=all_fc_by_brand_dir,
+    )
+    _write_csv(all_fc_brand_index_out, index_rows, ALL_FC_BRAND_INDEX_FIELDS)
+    _write_csv(all_fc_singletons_out, singleton_rows, ALL_FC_SINGLETON_FIELDS)
     return {
         "all_fc_operator_links": len(franchisee_rows),
         "all_fc_operator_link_brands": by_brand_count,
+        "all_fc_min2_by_brand_files": min2_by_brand_count,
+        "all_fc_brand_index_rows": len(index_rows),
+        "all_fc_singleton_brands": len(singleton_rows),
         "all_fc_operator_candidates": len(candidate_rows),
         "all_fc_operator_candidate_brands": len(
             {row.get("brand_name") for row in candidate_rows if row.get("brand_name")}
@@ -503,6 +661,10 @@ def export_extended_brands(
     all_fc_out: Path = DEFAULT_ALL_FC_OUT,
     all_fc_by_brand_dir: Path = DEFAULT_ALL_FC_BY_BRAND_DIR,
     all_fc_candidates_out: Path = DEFAULT_ALL_FC_CANDIDATES_OUT,
+    all_fc_brand_index_out: Path = DEFAULT_ALL_FC_BRAND_INDEX_OUT,
+    all_fc_singletons_out: Path = DEFAULT_ALL_FC_SINGLETONS_OUT,
+    all_fc_min2_by_brand_dir: Path = DEFAULT_ALL_FC_MIN2_BY_BRAND_DIR,
+    min_operator_rows: int = 2,
 ) -> dict[str, int]:
     links_by_brand = _load_fc_links(fc_links_path)
     user_seeds = load_seed_brands(seed_path)
@@ -607,6 +769,10 @@ def export_extended_brands(
                 all_fc_out=all_fc_out,
                 all_fc_by_brand_dir=all_fc_by_brand_dir,
                 all_fc_candidates_out=all_fc_candidates_out,
+                all_fc_brand_index_out=all_fc_brand_index_out,
+                all_fc_singletons_out=all_fc_singletons_out,
+                all_fc_min2_by_brand_dir=all_fc_min2_by_brand_dir,
+                min_operator_rows=min_operator_rows,
             )
         )
         return stats
@@ -627,6 +793,10 @@ def main() -> None:
     parser.add_argument("--fc-by-brand-dir", type=Path, default=DEFAULT_FC_BY_BRAND_DIR)
     parser.add_argument("--all-fc-out", type=Path, default=DEFAULT_ALL_FC_OUT)
     parser.add_argument("--all-fc-by-brand-dir", type=Path, default=DEFAULT_ALL_FC_BY_BRAND_DIR)
+    parser.add_argument("--all-fc-min2-by-brand-dir", type=Path, default=DEFAULT_ALL_FC_MIN2_BY_BRAND_DIR)
+    parser.add_argument("--all-fc-brand-index-out", type=Path, default=DEFAULT_ALL_FC_BRAND_INDEX_OUT)
+    parser.add_argument("--all-fc-singletons-out", type=Path, default=DEFAULT_ALL_FC_SINGLETONS_OUT)
+    parser.add_argument("--min-operator-rows", type=int, default=2)
     parser.add_argument(
         "--all-fc-candidates-out",
         type=Path,
@@ -646,6 +816,10 @@ def main() -> None:
         all_fc_out=args.all_fc_out,
         all_fc_by_brand_dir=args.all_fc_by_brand_dir,
         all_fc_candidates_out=args.all_fc_candidates_out,
+        all_fc_brand_index_out=args.all_fc_brand_index_out,
+        all_fc_singletons_out=args.all_fc_singletons_out,
+        all_fc_min2_by_brand_dir=args.all_fc_min2_by_brand_dir,
+        min_operator_rows=args.min_operator_rows,
     )
     for key, value in stats.items():
         print(f"{key}={value}")

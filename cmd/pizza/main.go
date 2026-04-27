@@ -1313,7 +1313,11 @@ func cmdExtendedFCBrandExport(args []string) error {
 	fcByBrandDir := fs.String("fc-by-brand-dir", "test/fixtures/megafranchisee/by-view/extended-fc-by-brand", "FC 運営会社 brand 別出力 dir")
 	allFCOut := fs.String("all-fc-out", "test/fixtures/megafranchisee/all-fc-operator-links.csv", "全ブランド FC 運営会社専用 CSV")
 	allFCByBrandDir := fs.String("all-fc-by-brand-dir", "test/fixtures/megafranchisee/by-view/all-fc-by-brand", "全ブランド FC 運営会社 brand 別出力 dir")
+	allFCMin2ByBrandDir := fs.String("all-fc-min2-by-brand-dir", "test/fixtures/megafranchisee/by-view/all-fc-by-brand-min2", "全ブランド FC 運営会社 2件以上 brand 別出力 dir")
+	allFCBrandIndexOut := fs.String("all-fc-brand-index-out", "test/fixtures/megafranchisee/by-view/all-fc-brand-index.csv", "全ブランド FC brand 別件数 index CSV")
+	allFCSingletonsOut := fs.String("all-fc-singletons-out", "test/fixtures/megafranchisee/by-view/all-fc-singleton-brands.csv", "全ブランド FC 1件 brand 監査 CSV")
 	allFCCandidatesOut := fs.String("all-fc-candidates-out", "test/fixtures/megafranchisee/all-fc-operator-candidates.csv", "全ブランド FC 運営会社候補 CSV (franchisee + unknown)")
+	minOperatorRows := fs.Int("min-operator-rows", 2, "min2 brand 別出力に含める最小 operator 行数")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -1329,7 +1333,11 @@ func cmdExtendedFCBrandExport(args []string) error {
 		"--fc-by-brand-dir", *fcByBrandDir,
 		"--all-fc-out", *allFCOut,
 		"--all-fc-by-brand-dir", *allFCByBrandDir,
+		"--all-fc-min2-by-brand-dir", *allFCMin2ByBrandDir,
+		"--all-fc-brand-index-out", *allFCBrandIndexOut,
+		"--all-fc-singletons-out", *allFCSingletonsOut,
 		"--all-fc-candidates-out", *allFCCandidatesOut,
+		"--min-operator-rows", strconv.Itoa(*minOperatorRows),
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }

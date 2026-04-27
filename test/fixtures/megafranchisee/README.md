@@ -118,6 +118,18 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 上記に `operator_type=unknown` の候補リンクも加えた監査用 CSV。`franchisee` 確定リスト
 ではないため、ユーザー向け確定リストには `all-fc-operator-links.csv` を使う。
 
+### `by-view/all-fc-brand-index.csv` (172 rows, 2026-04-27)
+`all-fc-operator-links.csv` を brand 単位で集計した index。`franchisee_rows` /
+`verified_franchisee_rows` / `estimated_store_sum` / `largest_operator_name` /
+`review_status` を持つ。`review_status=singleton_high_store_count_expand` は
+1 社しか確認できていないが、その 1 社の店舗数が 100 以上で、優先的に追加 source を
+当てるべきブランド。
+
+### `by-view/all-fc-singleton-brands.csv` (109 rows, 2026-04-27)
+`all-fc-by-brand/*.csv` のうち operator 1 件だけのブランドをまとめた監査 CSV。
+1 件ファイルを消すと evidence が失われるため、canonical な `all-fc-by-brand` は残し、
+閲覧用には `by-view/all-fc-by-brand-min2/*.csv` (63 ファイル) を使う。
+
 ### `brand-fill-rate.csv` (433 rows, 2026-04-27)
 `fc-links.csv` を brand 単位で再集計し、本部公表店舗数 (`franchisor` / `direct`
 link の最大 `estimated_store_count`) に対して、FC 運営会社 evidence がどれだけ
@@ -191,6 +203,9 @@ sqlite3 -csv -header var/external/megajii.sqlite \
 
 ### 偏り / 不足 (2026-04-27 時点)
 - **brand link 付き operator 822 / 20+店舗 operator 213 / 2+業態かつ20+店舗 122**
+- **全ブランド by-brand 172 ファイルのうち 109 は operator 1 件のみ** —
+  `by-view/all-fc-singleton-brands.csv` に分離し、2 件以上の閲覧用は
+  `by-view/all-fc-by-brand-min2/` に出力
 - **brand-fill-rate P0 11 / low_or_empty 14** — スクールIE、Kids Duo、カーブス、
   コメダ珈琲、ドトール等は公式 source / 採用 source / 追加開示資料の優先調査対象
 - **エニタイムフィットネス** 公表 957 店舗に対し FC operator link 22

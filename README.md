@@ -39,6 +39,8 @@
 | [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 427 | 14 対象ブランドだけの brand × operator flat link |
 | [`all-fc-operator-links.csv`](./test/fixtures/megafranchisee/all-fc-operator-links.csv) | 744 | 全ブランド横断の franchisee/operator 確定 flat link |
 | [`all-fc-operator-candidates.csv`](./test/fixtures/megafranchisee/all-fc-operator-candidates.csv) | 767 | 全ブランド横断の franchisee + unknown 候補監査 flat link |
+| [`by-view/all-fc-brand-index.csv`](./test/fixtures/megafranchisee/by-view/all-fc-brand-index.csv) | 172 | 全ブランド横断の brand 別 operator 件数 index |
+| [`by-view/all-fc-singleton-brands.csv`](./test/fixtures/megafranchisee/by-view/all-fc-singleton-brands.csv) | 109 | operator 1件だけの薄い brand 監査リスト |
 | [`extended-fc-operator-links.csv`](./test/fixtures/megafranchisee/extended-fc-operator-links.csv) | 348 | 追加FCブランド + 既存非14ブランドの franchisee/operator 専用 flat link |
 | [`extended-brand-summary.csv`](./test/fixtures/megafranchisee/extended-brand-summary.csv) | 345 | 追加FCブランド seed + 既存非14ブランドの取得状況 summary |
 | [`brand-fill-rate.csv`](./test/fixtures/megafranchisee/brand-fill-rate.csv) | 433 | brand 別の本部公表店舗数に対する FC operator 充填率・優先度 |
