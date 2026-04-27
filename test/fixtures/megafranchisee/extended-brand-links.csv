@@ -1,8 +1,14 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
 #ワークマン女子,,株式会社ワークマン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed
+100時間カレー,,REGAO,,広島県広島市佐伯区八幡東2-2-2,広島県,franchisee,141,manual_megajii_2026_04_24,,,100時間カレー,,existing_nonseed_link
 24h無人ホルモン直売所,,合同会社藤,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,24h無人ホルモン直売所,合同会社藤,franchisor_seed
+3Qカット,,株式会社ホワイト急便,,宮崎県宮崎市神宮東,宮崎県,franchisee,102,manual_megajii_2026_04_24,,,3Qカット,,existing_nonseed_link
+3Qカット,,株式会社パールドライ,2310001003308,長崎県長崎市愛宕3-19-6,長崎県,franchisee,92,manual_megajii_2026_04_24,,,3Qカット,,existing_nonseed_link
+3Qカット,,株式会社ウイズダム,7240001015495,広島県広島市中区舟入町7-12,広島県,franchisee,23,manual_megajii_2026_04_24,,,3Qカット,,existing_nonseed_link
+7つの習慣 J,,株式会社リックプレイス,9010601030568,東京都中央区東日本橋3-11-11,東京都,franchisee,195,manual_megajii_2026_04_24,,,7つの習慣 J,,existing_nonseed_link
 8番らーめん,ラーメン・餃子,株式会社ハチバン,4220001005352,石川県金沢市新神田１丁目１２番１８号,石川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/114-1.pdf,method=none,8番らーめん,株式会社ハチバン,existing_link
 ACCEA,,アクセア株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ACCEA (アクセア),アクセア株式会社,franchisor_seed
+BABY FACE,,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,,BABY FACE,,existing_nonseed_link
 Baluko Laundry Place,,株式会社OKULAB,6011001112471,東京都渋谷区元代々木町４番５号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,Baluko Laundry Place,株式会社OKULAB,franchisor_seed
 Build’s,,株式会社アクア,1430001077233,北海道札幌市東区北二十五条東７丁目２番２０号,北海道,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,Build’s,株式会社アクア,franchisor_seed
 CEOキッズアカデミー,,CEOキッズアカデミー株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,CEOキッズアカデミー,CEOキッズアカデミー株式会社,franchisor_seed
@@ -12,22 +18,36 @@ COCOLANCE,,株式会社EMILUS,9011201024778,東京都杉並区阿佐谷南３丁
 CloseFamily,,株式会社Close Family,9120001260201,大阪府大阪市中央区東心斎橋１丁目１７番５号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,CloseFamily,株式会社Close Family,franchisor_seed
 Di PUNTO,,株式会社太陽エンタープライズ,7020001010196,神奈川県横浜市西区みなとみらい2-2-1横浜ランドマークタワー 47F,神奈川県,franchisee,113,manual_megajii_2026_04_24,,,Di PUNTO(ディプント),株式会社プロントコーポレーション,existing_link
 Di PUNTO,,株式会社プロントコーポレーション,8010401026511,東京都港区港南１丁目８番２７号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,Di PUNTO(ディプント),株式会社プロントコーポレーション,franchisor_seed
+Dr.Stretch,,株式会社細山田商事,9340001003876,鹿児島市中央町35番地31,鹿児島県,franchisee,28,manual_megajii_2026_04_24,,,Dr.Stretch,,existing_nonseed_link
 ECCベストワン,,株式会社ECC,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ECCベストワン,株式会社ECC,franchisor_seed
 ECOFIT24,,エーイーシー株式会社,7180001048915,愛知県名古屋市守山区大字中志段味字下定納８０番地ＧＬＰ名古屋守山ＷＥＳＴ２階,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ECOFIT24,エーイーシー株式会社,franchisor_seed
 ECOLIFE COCO,子供用品・育児用品専門リユースショップ,株式会社AVANCE,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ECOLIFE COCO,株式会社AVANCE,existing_link
+FIT365,,ヤマウチ,,香川県高松市田村町397番地,香川県,franchisee,149,manual_megajii_2026_04_24,,,FIT365,,existing_nonseed_link
+FIT365,,株式会社カゴハラゴルフ,6030001084562,埼玉県熊谷市三ヶ尻364,埼玉県,franchisee,29,manual_megajii_2026_04_24,,,FIT365,,existing_nonseed_link
 FUJIYA KOBE他,,株式会社不二家,7180001120211,愛知県名古屋市千種区千種３丁目２５番１６号,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,不二家洋菓子店/FUJIYA KOBE他,株式会社不二家,franchisor_seed
 FURDI,,株式会社かんなん丸,6030001001831,さいたま市浦和区北浦和4丁目1番1号 群青ビル,埼玉県,franchisee,20,manual_megajii_2026_04_24,,,FÜRDI,株式会社FURDI,existing_link
 FURDI,,株式会社FURDI,3010001194515,東京都千代田区麹町６丁目６番２号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,FÜRDI,株式会社FURDI,franchisor_seed
+GOGASHA53,,ダンク,,大阪市北区天神橋3-3-3 南森町イシカワビル8F,,franchisee,28,manual_megajii_2026_04_24,,,GOGASHA53,,existing_nonseed_link
+Gong cha,,SENSACION,,大阪府大阪市天王寺区大道2-6-16 佐谷大道ビル,大阪府,franchisee,28,manual_megajii_2026_04_24,,,Gong cha,,existing_nonseed_link
+Gong cha,,株式会社細山田商事,9340001003876,鹿児島市中央町35番地31,鹿児島県,franchisee,28,manual_megajii_2026_04_24,,,Gong cha,,existing_nonseed_link
+Gong cha,,アルフォンソ株式会社,9070001000216,群馬県前橋市住吉町1-3-12 アルフォンソビル,群馬県,franchisee,26,manual_megajii_2026_04_24,,,Gong cha,,existing_nonseed_link
+Gong cha,,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,,Gong cha,,existing_nonseed_link
+Gong cha,,株式会社アクティブホールディングス,2320002008214,大分県大分市中島西2-1-3,大分県,franchisee,22,manual_megajii_2026_04_24,,,Gong cha,,existing_nonseed_link
+Gong cha,,エクステンド,,京都市下京区金東横町239,,unknown,0,operator_official_brand_link,https://extend.co.jp/environment/,anchor=ゴンチャ; href=https://extend.co.jp/environment/detail/id=667; page=https://extend.co.jp/environment/,Gong cha,,existing_nonseed_link
+Gong cha,,ワイズ,,奈良県生駒市あすか野南2丁目1-8 ワイズビル2階,奈良県,unknown,0,operator_official_brand_link,https://www.yscorp-nara.co.jp/business/,anchor=ゴンチャ; href=https://www.yscorp-nara.co.jp/business/gongcha/; page=https://www.yscorp-nara.co.jp/business/,Gong cha,,existing_nonseed_link
 HALLO,,株式会社やる気スイッチグループ,7010401130925,東京都中央区八丁堀２丁目２４番２号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,HALLO,株式会社やる気スイッチグループ,franchisor_seed
-HEART BREAD ANTIQUE,,メガエフシーシステムズ株式会社,1021001014630,神奈川県相模原市中央区富士見2-1-1,神奈川県,franchisee,21,manual_megajii_2026_04_24,,,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,existing_link
-HEART BREAD ANTIQUE,,MiK,,青森県青森市堤町二丁目1番3号 あおばビル6F,青森県,franchisee,20,manual_megajii_2026_04_24,,,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,existing_link
 HYPERFIT24,,株式会社Be-fit Japan,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,HYPERFIT24,株式会社Be-fit Japan,franchisor_seed
+Heart Bread ANTIQUE,,メガエフシーシステムズ株式会社,1021001014630,神奈川県相模原市中央区富士見2-1-1,神奈川県,franchisee,21,manual_megajii_2026_04_24,,,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,existing_link
+Heart Bread ANTIQUE,,MiK,,青森県青森市堤町二丁目1番3号 あおばビル6F,青森県,franchisee,20,manual_megajii_2026_04_24,,,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,existing_link
 Heart Bread ANTIQUE,,株式会社オールハーツ・カンパニー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,Heart Bread ANTIQUE,株式会社オールハーツ・カンパニー,franchisor_seed
 IBJ,,株式会社IBJ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,IBJ,株式会社IBJ,franchisor_seed
 Italian Kitchen VANSAN,,株式会社岡田屋,8020001004874,神奈川県横浜市旭区二俣川2-50-14 コプレ二俣川オフィス11F,神奈川県,franchisee,25,manual_megajii_2026_04_24,,,Italian Kitchen VANSAN,株式会社VANSAN,existing_link
 Italian Kitchen VANSAN,,株式会社かんなん丸,6030001001831,さいたま市浦和区北浦和4丁目1番1号 群青ビル,埼玉県,franchisee,20,manual_megajii_2026_04_24,,,Italian Kitchen VANSAN,株式会社VANSAN,existing_link
 Italian Kitchen VANSAN,,株式会社VANSAN,4010401106317,東京都港区南青山１丁目１５番１６号山城ビル６階,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,Italian Kitchen VANSAN,株式会社VANSAN,franchisor_seed
 JBレンタカー,,株式会社ニシザワ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,JBレンタカー,株式会社ニシザワ,franchisor_seed
+JOYFIT,,ファイコム,,大阪府高槻市富田丘町2-2 ステーシア高槻１F JOYFIT摂津富田内,大阪府,franchisee,26,manual_megajii_2026_04_24,,,JOYFIT,,existing_nonseed_link
+JOYFIT24,,ヤマウチ,,香川県高松市田村町397番地,香川県,franchisee,149,manual_megajii_2026_04_24,,,JOYFIT24,,existing_nonseed_link
+JOYFULL,,アメイズ,,大分県大分市西鶴崎1丁目7-17,大分県,franchisee,23,manual_megajii_2026_04_24,,,JOYFULL,,existing_nonseed_link
 KamiBito,,日本介護システム株式会社,6120001172028,大阪府大阪市中央区本町１丁目５番７号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,KamiBito,日本介護システム株式会社,franchisor_seed
 Kidsプログラミングラボ,,株式会社エクシード,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,Kidsプログラミングラボ,株式会社エクシード,franchisor_seed
 LEMONADE by Lemonica,,レモネード・レモニカ株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,LEMONADE by Lemonica,レモネード・レモニカ株式会社,franchisor_seed
@@ -36,13 +56,25 @@ LIXILリフォームショップ,,株式会社LIXIL,,,,franchisor,0,user_fc_bran
 ME不動産,,MEホールディングス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ME不動産,MEホールディングス,franchisor_seed
 MUU,,株式会社癒しの手,8150001017970,奈良県生駒市小明町１３３５番２,奈良県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,MUU,株式会社癒しの手,franchisor_seed
 NAYUTAS,,株式会社NAYUTAS,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,NAYUTAS,株式会社NAYUTAS,franchisor_seed
+NOVA バイリンガルKIDS,,ＷＥグループホールディングス株式会社,9180001164900,愛知県大府市中央町７丁目３３６番地,愛知県,franchisee,237,manual_megajii_2026_04_24,,,NOVA バイリンガルKIDS,,existing_nonseed_link
 ONE TOPパートナー,,株式会社ONE TOP JAPAN,7120001196372,大阪府大阪市淀川区東三国２丁目３７番１０号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ONE TOPパートナー,株式会社ONE TOP JAPAN,franchisor_seed
+OWNDAYS,,株式会社近鉄百貨店,3120001098201,大阪府大阪市阿倍野区阿倍野筋1丁目1番43号,大阪府,franchisee,72,manual_megajii_2026_04_24,,,OWNDAYS,OWNDAYS株式会社,existing_link
+OWNDAYS,,株式会社サクシードグループ,3070001035969,鹿児島県霧島市国分中央1丁目7番31号,鹿児島県,franchisee,20,manual_megajii_2026_04_24,,,OWNDAYS,OWNDAYS株式会社,existing_link
 OWNDAYS,,OWNDAYS株式会社,8360001017611,沖縄県那覇市松山２丁目１－１２合人社那覇松山ビル３階,沖縄県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,OWNDAYS,OWNDAYS株式会社,franchisor_seed
+PLAZA,,つるや,,愛媛県松山市湊町3丁目8-12,愛媛県,franchisee,72,manual_megajii_2026_04_24,,,PLAZA,,existing_nonseed_link
+PRONTO,カフェ・バー,株式会社コミュニティー京成,3010601026175,千葉県八千代市八千代台東1-5-3 京成八千代台東ビル3階,千葉県,franchisee,67,manual_megajii_2026_04_24,,,PRONTO,株式会社プロントコーポレーション,existing_nonseed_link
+PRONTO,カフェ・バー,株式会社プロントコーポレーション,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,PRONTO,株式会社プロントコーポレーション,existing_nonseed_link
+R BAKER,,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,R BAKER,,existing_nonseed_link
 RE/MAX,,株式会社IKEZOE TRUST,4011003005386,東京都千代田区九段南３丁目４番５号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,RE/MAX,株式会社IKEZOE TRUST,franchisor_seed
+Rabbit,,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,Rabbit,,existing_nonseed_link
 Renotta,,株式会社クラスコ,3220001004108,石川県金沢市西念４丁目２４番２１号,石川県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,Renotta(リノッタ),株式会社クラスコ,franchisor_seed
 SHOO・LA・RUE,,イトキン株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,SHOO・LA・RUE,イトキン株式会社,franchisor_seed
 STEMON,,株式会社ヴィリング,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,STEMON,株式会社ヴィリング,franchisor_seed
+STEP GOLF,,株式会社細山田商事,9340001003876,鹿児島市中央町35番地31,鹿児島県,franchisee,28,manual_megajii_2026_04_24,,,STEP GOLF,,existing_nonseed_link
 Seria,,株式会社セリア,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,Seria(セリア),株式会社セリア,franchisor_seed
+Ume limit,,株式会社細山田商事,9340001003876,鹿児島市中央町35番地31,鹿児島県,franchisee,28,manual_megajii_2026_04_24,,,Ume limit,,existing_nonseed_link
+WASHハウス,,株式会社ｉ・ライフソリューションズ,1290001061318,福岡県福岡市博多区上呉服町１番１０号,福岡県,franchisee,22,manual_megajii_2026_04_24,,,WASHハウス,,existing_nonseed_link
+WILD-1,,株式会社カンセキ,8060001001208,栃木県宇都宮市西川田本町1-1-1,栃木県,franchisee,29,manual_megajii_2026_04_24,,,WILD-1,,existing_nonseed_link
 WhiteningCafe,,株式会社YSK,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,WhiteningCafe,株式会社YSK,franchisor_seed
 mammaciao マンマチャオ,,株式会社エムアイエス,2430001087446,北海道札幌市北区北七条西４丁目１番地１－８０１,北海道,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,mammaciao マンマチャオ,株式会社エムアイエス,franchisor_seed
 mr.kanso,,mr.kanso株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,mr.kanso,mr.kanso株式会社,franchisor_seed
@@ -56,7 +88,9 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 おかやま工房 リエゾンプロジェクト,,株式会社おかやま工房,4260001009110,岡山県岡山市北区田中１１２番地１０３,岡山県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,おかやま工房 リエゾンプロジェクト,株式会社おかやま工房,franchisor_seed
 おそうじ隊501,,株式会社ビコー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,おそうじ隊501,株式会社ビコー,franchisor_seed
 おそうじ隊501,その他のサービス,株式会社モリサービス,9021001020571,神奈川県厚木市岡田３０８０番地３,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/153-1.pdf,method=none,おそうじ隊501,株式会社ビコー,existing_link
+おたからや,,東洋企業株式会社,6180001008911,愛知県名古屋市昭和区元宮町4-37,愛知県,franchisee,21,manual_megajii_2026_04_24,,,おたからや,,existing_nonseed_link
 おめで鯛焼き本舗,,株式会社デルソーレ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,おめで鯛焼き本舗,株式会社デルソーレ,franchisor_seed
+お好み焼道とん堀,,株式会社桶谷ホールディングス,1150001016038,奈良県奈良市東九条町418-1 2F,奈良県,franchisee,32,manual_megajii_2026_04_24,,,お好み焼道とん堀,,existing_nonseed_link
 お酒の美術館,,株式会社NBG,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,お酒の美術館,株式会社NBG,franchisor_seed
 かつや,,タニザワフーズ株式会社,2180301001314,愛知県岡崎市井田西町1番地2号,愛知県,franchisee,96,manual_megajii_2026_04_24,,,かつや,アークランドサービスホールディングス株式会社,existing_link
 かつや,,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,franchisee,91,manual_megajii_2026_04_24,,,かつや,アークランドサービスホールディングス株式会社,existing_link
@@ -72,6 +106,7 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 かつや,,ワイ・テイ・ワイ産業株式会社,3120101008002,大阪府堺市堺区市之町西2丁1-15,大阪府,franchisee,22,manual_megajii_2026_04_24,,,かつや,アークランドサービスホールディングス株式会社,existing_link
 かつや,,株式会社サンシップ,2021001029223,神奈川県大和市大和南1-7-3,神奈川県,franchisee,22,manual_megajii_2026_04_24,,,かつや,アークランドサービスホールディングス株式会社,existing_link
 かつや,,アークランドサービスホールディングス株式会社,5010001106113,東京都千代田区神田駿河台４丁目３番地新お茶の水ビルディング１４階,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,かつや,アークランドサービスホールディングス株式会社,franchisor_seed
+かまどか,,アメイズ,,大分県大分市西鶴崎1丁目7-17,大分県,franchisee,23,manual_megajii_2026_04_24,,,かまどか,,existing_nonseed_link
 からあげ専門店 鶏笑,,SRSホールディングス株式会社,4120101022786,大阪府大阪市中央区安土町２丁目３番１３号大阪国際ビルディング３０階,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,からあげ専門店 鶏笑,SRSホールディングス株式会社,franchisor_seed
 からあげ縁,,エバーアクション株式会社,3010001170210,東京都千代田区神田駿河台４丁目３番地新お茶の水ビルディング１４階,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,からあげ縁,エバーアクション株式会社,franchisor_seed
 からあげ金と銀,,株式会社金と銀,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,からあげ金と銀,株式会社金と銀,franchisor_seed
@@ -83,14 +118,36 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 からやま,,エバーアクション株式会社,3010001170210,東京都千代田区神田駿河台４丁目３番地新お茶の水ビルディング１４階,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,からやま,エバーアクション株式会社,franchisor_seed
 かんてい局,,FTC株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,かんてい局,FTC株式会社,franchisor_seed
 がブリチキン,,株式会社ブルームダイニングサービス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,がブリチキン,株式会社ブルームダイニングサービス,franchisor_seed
+くまちゃん温泉,,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,くまちゃん温泉,,existing_nonseed_link
+しゃぶしゃぶ温野菜,,REGAO,,広島県広島市佐伯区八幡東2-2-2,広島県,franchisee,141,manual_megajii_2026_04_24,,,しゃぶしゃぶ温野菜,,existing_nonseed_link
+しゃぶしゃぶ温野菜,,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,しゃぶしゃぶ温野菜,,existing_nonseed_link
+しゃぶしゃぶ温野菜,,株式会社香川フードサービス,1470001008275,香川県丸亀市山北町43-3,香川県,franchisee,26,manual_megajii_2026_04_24,,,しゃぶしゃぶ温野菜,,existing_nonseed_link
+しゃぶしゃぶ温野菜,,アメイズ,,大分県大分市西鶴崎1丁目7-17,大分県,franchisee,23,manual_megajii_2026_04_24,,,しゃぶしゃぶ温野菜,,existing_nonseed_link
+しんぱち食堂,,M&Sフードサービス,,大阪府大阪市中央区安土町2-3-13,大阪府,franchisee,29,manual_megajii_2026_04_24,,,しんぱち食堂,,existing_nonseed_link
+じげもんちゃんぽん,,ダンク,,大阪市北区天神橋3-3-3 南森町イシカワビル8F,,franchisee,28,manual_megajii_2026_04_24,,,じげもんちゃんぽん,,existing_nonseed_link
 すし上等!,,株式会社ライドオンエクスプレス,9010401134197,東京都港区三田３丁目５番２７号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,宅配寿司 銀のさら/宅配御膳 釜寅/宅配寿司 すし上等!,株式会社ライドオンエクスプレス,franchisor_seed
 たいやき わらしべ,,有限会社わらしべ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,たいやき わらしべ,有限会社わらしべ,franchisor_seed
 ときわ亭,外食,GOSSO株式会社,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,0秒レモンサワー®仙台ホルモン焼肉酒場ときわ亭,GOSSO株式会社,existing_link
+とん八,,株式会社三栄本社,7390001000722,山形市深町1-9-10,山形県,franchisee,26,manual_megajii_2026_04_24,,,とん八,,existing_nonseed_link
+なか卯,,株式会社三栄本社,7390001000722,山形市深町1-9-10,山形県,franchisee,26,manual_megajii_2026_04_24,,,なか卯,,existing_nonseed_link
+ねこねこ食パン,,MiK,,青森県青森市堤町二丁目1番3号 あおばビル6F,青森県,franchisee,20,manual_megajii_2026_04_24,,,ねこねこ食パン,,existing_nonseed_link
 はあとねいる,,株式会社Norn,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,はあとねいる,株式会社Norn,franchisor_seed
 はぐくみ弁当plus,,株式会社GLUG,9010501032672,東京都港区東麻布２丁目１６－３サナダビル,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,はぐくみ弁当plus,株式会社GLUG,franchisor_seed
 はんこ屋さん21,,株式会社グレエイト,3010501016532,東京都台東区東上野３丁目３７番９号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,はんこ屋さん21,株式会社グレエイト,franchisor_seed
 ばり嗎,,株式会社ウィズリンク,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ばり嗎,株式会社ウィズリンク,franchisor_seed
+びっくりドンキー,ファミリーレストラン,株式会社桶谷ホールディングス,1150001016038,奈良県奈良市東九条町418-1 2F,奈良県,franchisee,32,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,株式会社石垣エスエスグループ,1360001013039,沖縄県石垣市登野城1273,沖縄県,franchisee,25,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,株式会社元廣,3130001019098,京都府京都市伏見区下鳥羽広長町162,京都府,franchisee,24,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,ノーザンミツワ株式会社,9460001001331,北海道釧路市鳥取南5丁目12-5,北海道,franchisee,23,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,ワイ・テイ・ワイ産業株式会社,3120101008002,大阪府堺市堺区市之町西2丁1-15,大阪府,franchisee,22,manual_megajii_2026_04_24,,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
+びっくりドンキー,ファミリーレストラン,株式会社アレフ,9430001001078,北海道札幌市白石区菊水六条３丁目１番２６号,北海道,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,びっくりドンキー,株式会社アレフ,existing_nonseed_link
 ふろいち,,株式会社理想化研,4021001045367,神奈川県相模原市南区東林間２丁目２番９号,神奈川県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ふろいち,株式会社理想化研,franchisor_seed
+ほぐしや本舗,,株式会社ウイズダム,7240001015495,広島県広島市中区舟入町7-12,広島県,franchisee,23,manual_megajii_2026_04_24,,,ほぐしや本舗,,existing_nonseed_link
+ほけんの窓口,,タイホウコーポレーション株式会社,1180001037667,愛知県名古屋市中区上前津2丁目4-10 タイホウグループ本社ビル,愛知県,franchisee,25,manual_megajii_2026_04_24,,,ほけんの窓口,,existing_nonseed_link
+ほっかほっか亭,持帰り弁当,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,120,manual_megajii_2026_04_24,,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link
+ほっかほっか亭,持帰り弁当,ビストワン,,大阪府東大阪市中鴻池町1-3-7-502,大阪府,franchisee,20,manual_megajii_2026_04_24,,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link
+ほっかほっか亭,持帰り弁当,株式会社ほっかほっか亭総本部,2010401027580,東京都港区浜松町２丁目４番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link
 ほっともっと,,株式会社ブレンズ,8310001005959,沖縄県那覇市首里石嶺町4丁目318 2F,沖縄県,franchisee,109,manual_megajii_2026_04_24,,,ほっともっと,株式会社プレナス,existing_link
 ほっともっと,,株式会社プレナス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ほっともっと,株式会社プレナス,franchisor_seed
 まいどおおきに食堂,食堂,株式会社キノシタ,4080001014780,静岡県焼津市大覚寺３丁目１５番地の１０,静岡県,franchisee,30,manual_megajii_2026_04_24,,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link
@@ -99,22 +156,46 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 まいどおおきに食堂,,フジオフードグループ本社株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,まいどおおきに食堂,フジオフードグループ本社株式会社,franchisor_seed
 まいどおおきに食堂,食堂,株式会社フジオフードシステム,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,まいどおおきに食堂,フジオフードグループ本社株式会社,existing_link
 まごころ弁当,,株式会社シルバーライフ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,まごころ弁当,株式会社シルバーライフ,franchisor_seed
+みやび個別指導学院,,ＷＥグループホールディングス株式会社,9180001164900,愛知県大府市中央町７丁目３３６番地,愛知県,franchisee,237,manual_megajii_2026_04_24,,,みやび個別指導学院,,existing_nonseed_link
+みやび個別指導学院,,アイ・ディー・エー株式会社,8120001059826,大阪府大阪市北区梅田3-4-5,大阪府,franchisee,31,manual_megajii_2026_04_24,,,みやび個別指導学院,,existing_nonseed_link
 やきとり大吉,やきとり店,ダイキチシステム株式会社,6120001083076,大阪府大阪市中央区淡路町４丁目２番１３号アーバンネット御堂筋ビル２０Ｆ,大阪府,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,やきとり大吉,ダイキチシステム株式会社,existing_link
 やきとり家 すみれ,,株式会社すみれ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,やきとり家 すみれ,株式会社すみれ,franchisor_seed
+やきとん大丸屋,,ダンク,,大阪市北区天神橋3-3-3 南森町イシカワビル8F,,franchisee,28,manual_megajii_2026_04_24,,,やきとん大丸屋,,existing_nonseed_link
 やよい軒,,株式会社ブレンズ,8310001005959,沖縄県那覇市首里石嶺町4丁目318 2F,沖縄県,franchisee,109,manual_megajii_2026_04_24,,,やよい軒,株式会社プレナス,existing_link
 やよい軒,,株式会社プレナス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,やよい軒,株式会社プレナス,franchisor_seed
+ゆず庵,,glob,,広島県福山市王子町1-3-5,広島県,franchisee,85,manual_megajii_2026_04_24,,,ゆず庵,,existing_nonseed_link
 ゆで太郎,その他ファーストフード,株式会社ゆで太郎システム,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/216-1.pdf,method=none,ゆで太郎,株式会社ゆで太郎システム,existing_link
 アイフルホーム,住宅建築・リフォーム・ビルメンテナンス,株式会社LIXIL住宅研究所,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/4-1.pdf,method=none,アイフルホーム,株式会社LIXIL住宅研究所,existing_link
 アップガレージライダース,自動車・自転車関係小売,株式会社アップガレージグループ,7020001105153,神奈川県横浜市青葉区榎が丘7-22,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/9-4.pdf,method=none,アップガレージライダース,株式会社アップガレージグループ,existing_link
 アトム電器,,株式会社アトムチェーン本部,6120101031868,大阪府羽曳野市野々上４丁目６番５号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,アトム電器,株式会社アトムチェーン本部,franchisor_seed
 アパホテル,,アパホテル株式会社,4010401043403,東京都港区赤坂３丁目２番３号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,アパホテル,アパホテル株式会社,franchisor_seed
+アパマンショップ,,有限会社明和不動産,9330002026448,熊本県熊本市中央区辛島町4-35,熊本県,franchisee,20,manual_megajii_2026_04_24,,,アパマンショップ,,existing_nonseed_link
 イエステーション,,株式会社イエステーション,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,イエステーション,株式会社イエステーション,franchisor_seed
+イエローハット,,株式会社ホットマン,3370001002204,宮城県仙台市太白区西多賀四丁目4番17号,宮城県,franchisee,124,manual_megajii_2026_04_24,,,イエローハット,,existing_nonseed_link
+イエローハット,,株式会社津田屋,4040001054310,千葉県市原市牛久503-1,千葉県,franchisee,23,manual_megajii_2026_04_24,,,イエローハット,,existing_nonseed_link
 ウィズ・ユー,,有信アクロス株式会社,3120901005173,大阪府吹田市江の木町１７番１号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ウィズ・ユー,有信アクロス株式会社,franchisor_seed
+エクセルシオールカフェ,,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,29,manual_megajii_2026_04_24,,,エクセルシオールカフェ,,existing_nonseed_link
 エコカーマーケット,,D-REX株式会社,1370001022121,宮城県仙台市青葉区片平１丁目２番２４号,宮城県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,エコカーマーケット,D-REX株式会社,franchisor_seed
+エスポワール,,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,エスポワール,,existing_nonseed_link
+エディオン,,サンエー,,沖縄県宜野湾市大山7-2-10,沖縄県,franchisee,369,manual_megajii_2026_04_24,,,エディオン,,existing_nonseed_link
 エフワン,,株式会社エフワン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,エフワン,株式会社エフワン,franchisor_seed
+オリックスレンタカー,,タカサワ通商株式会社,5100001012698,長野県長野市南千歳1-15-3,長野県,franchisee,64,manual_megajii_2026_04_24,,,オリックスレンタカー,,existing_nonseed_link
+オリックスレンタカー,,株式会社石垣エスエスグループ,1360001013039,沖縄県石垣市登野城1273,沖縄県,franchisee,25,manual_megajii_2026_04_24,,,オリックスレンタカー,,existing_nonseed_link
+オリックスレンタカー,,ユアサモビリティサービス株式会社,9040001106503,千葉県松戸市岩瀬154-1,千葉県,franchisee,21,manual_megajii_2026_04_24,,,オリックスレンタカー,,existing_nonseed_link
+オリックスレンタカー,,株式会社ダイツー,3120001045104,大阪府大阪市都島区都島本通4丁目3番24号,大阪府,franchisee,21,manual_megajii_2026_04_24,,,オリックスレンタカー,,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,株式会社オートバックスセブン,3010601030532,東京都江東区豊洲５丁目６番５２号,東京都,franchisor,582,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/30-1.pdf,method=year_store_count_table; fc_stores=578; rc_stores=4; total_stores=582; observed_at=2024年度,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,株式会社キノシタ,4080001014780,静岡県焼津市大覚寺３丁目１５番地の１０,静岡県,franchisee,30,manual_megajii_2026_04_24,,,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,株式会社北日本オートバックス,3430001018755,北海道札幌市豊平区月寒東1条17丁目1-55,北海道,franchisee,24,manual_megajii_2026_04_24,,,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
+オートバックス,自動車・自転車関係小売,大興産業株式会社,5170001007824,和歌山県岩出市高瀬７４番地の１ダイコービル,和歌山県,franchisee,22,manual_megajii_2026_04_24,,,オートバックス,株式会社オートバックスセブン,existing_nonseed_link
 カフェ・ド・クリエ,,株式会社ポッカクリエイト,4011101028306,東京都千代田区九段南４丁目８番２１号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,カフェ・ド・クリエ,株式会社ポッカクリエイト,franchisor_seed
+カプリチョーザ,,株式会社ケー・アンド・アイ,1040001065517,千葉県柏市柏4丁目8-14 柏染谷ビル1階,千葉県,franchisee,67,manual_megajii_2026_04_24,,,カプリチョーザ,,existing_nonseed_link
+カプリチョーザ,,エクステンド,,京都市下京区金東横町239,,franchisee,38,manual_megajii_2026_04_24,,,カプリチョーザ,,existing_nonseed_link
+カプリチョーザ,,MiK,,青森県青森市堤町二丁目1番3号 あおばビル6F,青森県,franchisee,20,manual_megajii_2026_04_24,,,カプリチョーザ,,existing_nonseed_link
 カラオケCLUB DAM,,株式会社第一興商,6010701005431,東京都港区三田３丁目９番６号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,カラオケCLUB DAM,株式会社第一興商,franchisor_seed
 カレーハウスCoCo壱番屋,カレー専門店,株式会社フルラッキーコーポレーション,5290001016532,福岡県福岡市博多区東光寺町2-1-22,福岡県,franchisee,30,manual_megajii_2026_04_24,,,カレーハウスCoCo壱番屋,株式会社壱番屋,existing_link
+カレーハウスCoCo壱番屋,,スカイスクレイバー,,群馬県太田市東矢島町101,群馬県,franchisee,28,manual_megajii_2026_04_24,,,カレーハウスCoCo壱番屋,株式会社壱番屋,existing_link
 カレーハウスCoCo壱番屋,カレー・牛丼,株式会社壱番屋,2010501026037,東京都台東区浅草１丁目３１番１号,東京都,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/17-1.pdf,method=none,カレーハウスCoCo壱番屋,株式会社壱番屋,existing_link
 カーマッチ,新車、中古自動車、買取、リースのフランチャイズ事業、コンサルティング事業,株式会社カーマッチ,3180001134149,愛知県名古屋市西区笠取町１丁目１１番地の１,愛知県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,カーマッチ,株式会社カーマッチ,existing_link
 ガチャガチャの森,,株式会社ルルアーク,1290001003427,福岡県福岡市東区松島３丁目３０番２３号,福岡県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ガチャガチャの森,株式会社ルルアーク,franchisor_seed
@@ -136,19 +217,43 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 ケンタッキーフライドチキン,,株式会社シー・オー・エム,7160001008920,滋賀県彦根市西今町1番地,滋賀県,franchisee,43,manual_megajii_2026_04_24,,,ケンタッキーフライドチキン,日本ケンタッキー・フライド・チキン株式会社,existing_link
 ケンタッキーフライドチキン,,信越企業株式会社,2110001002395,新潟県新潟市西区寺尾7番8号,新潟県,franchisee,27,manual_megajii_2026_04_24,,,ケンタッキーフライドチキン,日本ケンタッキー・フライド・チキン株式会社,existing_link
 ケンタッキーフライドチキン,洋風ファーストフード,日本ケンタッキー・フライド・チキン株式会社,9011001095004,神奈川県横浜市西区みなとみらい４丁目４番５号,神奈川県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ケンタッキーフライドチキン,日本ケンタッキー・フライド・チキン株式会社,existing_link
-コミックバスター,コーヒーショップ,有信アクロス株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/183-1.pdf,method=none,コミック・バスター,株式会社アクロス,existing_link
+ココス,,ファイブスター,,滋賀県彦根市松原町1880番5,滋賀県,franchisee,77,manual_megajii_2026_04_24,,,ココス,,existing_nonseed_link
+コミック・バスター,コーヒーショップ,有信アクロス株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/183-1.pdf,method=none,コミック・バスター,株式会社アクロス,existing_link
 コミック・バスター,,株式会社アクロス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,コミック・バスター,株式会社アクロス,franchisor_seed
 コンパスウォーク,,東洋企業株式会社,6180001008911,愛知県名古屋市昭和区元宮町4-37,愛知県,franchisee,21,manual_megajii_2026_04_24,,,コンパスウォーク,リハプライム株式会社,existing_link
 コンパスウォーク,,リハプライム株式会社,2030001019869,埼玉県さいたま市大宮区上小町１１０６,埼玉県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,コンパスウォーク,リハプライム株式会社,franchisor_seed
 コードアドベンチャー,,合同会社ドリーマーズギルド,9180303004886,愛知県豊田市神田町１丁目１－１,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,コードアドベンチャー,合同会社ドリーマーズギルド,franchisor_seed
+ゴルフパートナー,,株式会社カゴハラゴルフ,6030001084562,埼玉県熊谷市三ヶ尻364,埼玉県,franchisee,29,manual_megajii_2026_04_24,,,ゴルフパートナー,,existing_nonseed_link
+ゴルフパートナー,,東北テレメディア開発株式会社,4370001004372,宮城県仙台市若林区沖野2丁目5-5,宮城県,franchisee,23,manual_megajii_2026_04_24,,,ゴルフパートナー,,existing_nonseed_link
+サイクルスペースあさひ,,株式会社ダイツー,3120001045104,大阪府大阪市都島区都島本通4丁目3番24号,大阪府,franchisee,21,manual_megajii_2026_04_24,,,サイクルスペースあさひ,,existing_nonseed_link
 サブウェイ,,日本サブウェイ合同会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,サブウェイ,日本サブウェイ合同会社,franchisor_seed
+サーティワンアイスクリーム,アイスクリーム,株式会社イートスタイル,1350001010012,宮崎県小林市細野288-1,宮崎県,franchisee,135,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,120,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,エムシーアイ,,大阪府大阪市中央区安土町3-5-6 ナカヒロビル6F,大阪府,franchisee,82,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,イズミ・フード・サービス株式会社,2240001000790,広島市西区商工センター2-3-1,広島県,franchisee,76,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,,ワイズ,,奈良県生駒市あすか野南2丁目1-8 ワイズビル2階,奈良県,franchisee,47,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,株式会社ティ・プロジェクト,2310001005733,長崎県佐世保市黒神町732-1,長崎県,franchisee,21,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,株式会社マックアースフーズ,7140001046609,兵庫県養父市丹戸896-2,兵庫県,franchisee,20,manual_megajii_2026_04_24,,,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+サーティワンアイスクリーム,アイスクリーム,B - Rサーティワンアイスクリーム株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/116-1.pdf,method=none,サーティワンアイスクリーム,B-Rサーティワンアイスクリーム株式会社,existing_nonseed_link
+シアトルズコーヒー,,株式会社JR九州ファーストフーズ,,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,,franchisee,216,manual_megajii_2026_04_24,,,シアトルズコーヒー,,existing_nonseed_link
+シフォン&スプーン,,昭和フード,,広島県呉市中央1-4-24,広島県,franchisee,31,manual_megajii_2026_04_24,,,シフォン&スプーン,,existing_nonseed_link
+ジョイフィット,,株式会社カゴハラゴルフ,6030001084562,埼玉県熊谷市三ヶ尻364,埼玉県,franchisee,29,manual_megajii_2026_04_24,,,ジョイフィット,,existing_nonseed_link
 スクールIE,学習塾・カルチャースクール,株式会社やる気スイッチグループ,,,,franchisor,1182,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/76-1.pdf,method=year_store_count_table; fc_stores=1021; rc_stores=161; total_stores=1182; observed_at=2024年度,スクールIE,株式会社やる気スイッチグループ,existing_link
 スクールIE,学習塾・カルチャースクール,株式会社やる気スイッチグループホールディングス,1010001099583,東京都中央区八丁堀2丁目24番2号 八丁堀第一生命ビル,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,スクールIE,株式会社やる気スイッチグループ,existing_link
+スターバックス,,オリックスレンタカー・カメイ株式会社,1370001007493,宮城県仙台市青葉区国分町3-1-18,宮城県,franchisee,32,manual_megajii_2026_04_24,,,スターバックス,,existing_nonseed_link
+スターバックス,,株式会社JR九州ファーストフーズ,,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,,unknown,0,operator_official_brand_link,https://www.jrff.co.jp/,anchor=スターバックス; href=https://www.jrff.co.jp/section-sbux/; page=https://www.jrff.co.jp/,スターバックス,,existing_nonseed_link
+スターバックス,,株式会社ジェイアール西日本デイリーサービスネット,6140001055008,兵庫県尼崎市潮江1丁目2番12号 JR尼崎駅北NKビル,兵庫県,unknown,0,operator_official_brand_link,https://www.dailyservice.co.jp/shop,anchor=スターバックスコーヒー JR京都駅西口店; href=https://www.dailyservice.co.jp/shop/detail/4523; page=https://www.dailyservice.co.jp/shop,スターバックス,,existing_nonseed_link
+ステップゴルフ,,株式会社リックプレイス,9010601030568,東京都中央区東日本橋3-11-11,東京都,franchisee,195,manual_megajii_2026_04_24,,,ステップゴルフ,,existing_nonseed_link
 ステルスラーメンチェーン,,株式会社テイクユー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ステルスラーメンチェーン,株式会社テイクユー,franchisor_seed
+スペースクリエイト自遊空間,,株式会社サクシードグループ,3070001035969,鹿児島県霧島市国分中央1丁目7番31号,鹿児島県,franchisee,20,manual_megajii_2026_04_24,,,スペースクリエイト自遊空間,株式会社ランシステム,existing_link
 スペースクリエイト自遊空間,,株式会社ランシステム,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,スペースクリエイト自遊空間,株式会社ランシステム,franchisor_seed
 スマイルカーズ,,株式会社スマイルカンパニー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,スマイルカーズ,株式会社スマイルカンパニー,franchisor_seed
 スマホスピタル by日本PCサービス,,日本PCサービス株式会社,9120901014607,大阪府吹田市広芝町９番３３号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,スマホスピタル by日本PCサービス,日本PCサービス株式会社,franchisor_seed
 スマホ修理工房,,ユウソリューションズ株式会社,8013301032991,東京都豊島区南池袋２丁目２８番１４号大和証券池袋ビル８階,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,スマホ修理工房,ユウソリューションズ株式会社,franchisor_seed
+スーパーホテル,,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,,スーパーホテル,,existing_nonseed_link
+セカンドストリート,,glob,,広島県福山市王子町1-3-5,広島県,franchisee,85,manual_megajii_2026_04_24,,,セカンドストリート,,existing_nonseed_link
 セブン-イレブン,,株式会社ジェイアール西日本デイリーサービスネット,6140001055008,兵庫県尼崎市潮江1丁目2番12号 JR尼崎駅北NKビル,兵庫県,franchisee,204,manual_megajii_2026_04_24,,,セブン-イレブン,株式会社セブン-イレブン・ジャパン,existing_link
 セブン-イレブン,,アイル・パートナーズ株式会社,1470001001619,香川県高松市花園町1-2-11,香川県,franchisee,110,manual_megajii_2026_04_24,,,セブン-イレブン,株式会社セブン-イレブン・ジャパン,existing_link
 セブン-イレブン,,小田急商事株式会社,8010901028635,神奈川県川崎市麻生区万福寺3丁目1番2号,神奈川県,franchisee,47,manual_megajii_2026_04_24,,,セブン-イレブン,株式会社セブン-イレブン・ジャパン,existing_link
@@ -162,9 +267,24 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 センチュリー21,不動産仲介,株式会社センチュリー21・ジャパン,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,センチュリー2,株式会社センチュリー21・ジャパン,existing_link
 ソレイルミナーレ,,株式会社HLC,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ソレイルミナーレ,株式会社HLC,franchisor_seed
 タイトーFステーション,,株式会社タイトー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,タイトーFステーション,株式会社タイトー,franchisor_seed
+タックルベリー,,株式会社ウイズダム,7240001015495,広島県広島市中区舟入町7-12,広島県,franchisee,23,manual_megajii_2026_04_24,,,タックルベリー,,existing_nonseed_link
 タニタフィッツミー,,株式会社タニタヘルスリンク,2010001107304,東京都渋谷区神宮前５丁目５２番２号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,タニタフィッツミー,株式会社タニタヘルスリンク,franchisor_seed
+タリーズコーヒー,コーヒーショップ,株式会社トップカルチャー,1110001003592,新潟市西区小針4丁目9番1号,新潟県,franchisee,69,manual_megajii_2026_04_24,,,タリーズコーヒー,タリーズコーヒージャパン株式会社,existing_nonseed_link
+タリーズコーヒー,コーヒーショップ,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,,タリーズコーヒー,タリーズコーヒージャパン株式会社,existing_nonseed_link
+タリーズコーヒー,コーヒーショップ,株式会社メソッドカイザー,8110001026018,新潟県長岡市古正寺町347-1,新潟県,franchisee,22,manual_megajii_2026_04_24,,,タリーズコーヒー,タリーズコーヒージャパン株式会社,existing_nonseed_link
+タリーズコーヒー,コーヒーショップ,株式会社明文堂プランナー,4230001007620,富山県下新川郡朝日町沼保909-2,富山県,franchisee,21,manual_megajii_2026_04_24,,,タリーズコーヒー,タリーズコーヒージャパン株式会社,existing_nonseed_link
+タリーズコーヒー,コーヒーショップ,タリーズコーヒージャパン株式会社,9011101048118,東京都新宿区箪笥町２２番地,東京都,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/279-1.pdf,method=none,タリーズコーヒー,タリーズコーヒージャパン株式会社,existing_nonseed_link
 ダイキチカバーオール,,株式会社ダイキチ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ダイキチカバーオール,株式会社ダイキチ,franchisor_seed
+ダイソー,,株式会社ひらせいホームセンター,1110001004748,新潟県新潟市西区寺尾台2丁目3番3号,新潟県,franchisee,73,manual_megajii_2026_04_24,,,ダイソー,,existing_nonseed_link
+ダイソー,,つるや,,愛媛県松山市湊町3丁目8-12,愛媛県,franchisee,72,manual_megajii_2026_04_24,,,ダイソー,,existing_nonseed_link
+ダイソー,,株式会社マキヤ,3080101001770,静岡県富士市大渕2373,静岡県,franchisee,67,manual_megajii_2026_04_24,,,ダイソー,,existing_nonseed_link
+ダイソー,,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,,ダイソー,,existing_nonseed_link
+ダイソー,,株式会社ヤスサキ,4210001004215,福井県福井市松城町１２０１番地１,福井県,franchisee,29,manual_megajii_2026_04_24,,,ダイソー,,existing_nonseed_link
+ダスキン,,株式会社岡田屋,8020001004874,神奈川県横浜市旭区二俣川2-50-14 コプレ二俣川オフィス11F,神奈川県,franchisee,25,manual_megajii_2026_04_24,,,ダスキン,,existing_nonseed_link
+ダンダダン,,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,,ダンダダン,,existing_nonseed_link
+ダンダン酒場,,AZism,,東京都立川市西砂町2-17-4,東京都,franchisee,27,manual_megajii_2026_04_24,,,ダンダン酒場,,existing_nonseed_link
 チャイルド・アイズ,学習塾・カルチャースクール,株式会社やる気スイッチグループ,,,,franchisor,160,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/76-2.pdf,method=year_store_count_table; fc_stores=82; rc_stores=78; total_stores=160; observed_at=2024年度,チャイルド・アイズ,株式会社やる気スイッチグループ,existing_link
+デイサービスジョイリハ,,ヤマウチ,,香川県高松市田村町397番地,香川県,franchisee,149,manual_megajii_2026_04_24,,,デイサービスジョイリハ,,existing_nonseed_link
 デイリーヤマザキ,,山崎製パン株式会社,4010001008806,東京都千代田区岩本町３丁目１０番１号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,デイリーヤマザキ,山崎製パン株式会社,franchisor_seed
 デイリーヤマザキ,コンビニエンスストア,山崎製パン株式会社デイリーヤマザキ事業統括本部,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/88-1.pdf,method=none,デイリーヤマザキ,山崎製パン株式会社,existing_link
 デューポイント,,株式会社デューアソシエ,3180001035165,愛知県名古屋市中区松原１丁目１３番９号,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,デューポイント,株式会社デューアソシエ,franchisor_seed
@@ -177,14 +297,25 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 ドトールコーヒーショップ,,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,29,manual_megajii_2026_04_24,,,ドトールコーヒーショップ,株式会社ドトールコーヒー,existing_link
 ドトールコーヒーショップ,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=ドトールコーヒーショップ; href=https://bigone.co.jp/store_category/doutor-coffee/; page=https://bigone.co.jp/contents/cafe/,ドトールコーヒーショップ,株式会社ドトールコーヒー,existing_link
 ニコニコレンタカー,,株式会社レンタス,8020001059869,神奈川県横浜市港北区新横浜２丁目６番地１,神奈川県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ニコニコレンタカー,株式会社レンタス,franchisor_seed
+ネイルサロンTN,,株式会社明文堂プランナー,4230001007620,富山県下新川郡朝日町沼保909-2,富山県,franchisee,21,manual_megajii_2026_04_24,,,ネイルサロンTN,,existing_nonseed_link
 ハウスドゥ,ハウス・リースバック事業、不動産売買事業、リフォーム事業,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,,ハウスドゥ,株式会社ハウスドゥ住宅販売,existing_link
 ハウスドゥ,ハウス・リースバック事業、不動産売買事業、リフォーム事業,株式会社ハウスドゥ住宅販売,7130001045017,奈良県橿原市醍醐町２６７番地の１,奈良県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ハウスドゥ,株式会社ハウスドゥ住宅販売,existing_link
+ハッピーテラス,,ビックエル株式会社,5210001002779,福井県福井市新保3-2218,福井県,franchisee,22,manual_megajii_2026_04_24,,,ハッピーテラス,,existing_nonseed_link
+ハンズオフ,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,franchisee,28,manual_megajii_2026_04_24,,,ハンズオフ,,existing_nonseed_link
 バーガーキング,,ビーケージャパンホールディングス株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,BURGER KING,ビーケージャパンホールディングス株式会社,franchisor_seed
+パンチョ,,ビックエル株式会社,5210001002779,福井県福井市新保3-2218,福井県,franchisee,22,manual_megajii_2026_04_24,,,パンチョ,,existing_nonseed_link
 ヒューマンアカデミージュニア STE”AMスクール,,ヒューマンアカデミー株式会社,4011101055952,東京都新宿区西新宿７丁目５番２５号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ヒューマンアカデミージュニア STE”AMスクール,ヒューマンアカデミー株式会社,franchisor_seed
 ビアードパパ,外食,サンパーク,,大阪府吹田市岸部北5-11-1,大阪府,franchisee,58,manual_megajii_2026_04_24,,,ビアードパパ,株式会社DAY TO LIFE,existing_link
 ビアードパパ,外食,株式会社東京天竜,6010001005280,東京都文京区本郷2丁目27番20号 本郷センタービル7階,東京都,franchisee,21,manual_megajii_2026_04_24,,,ビアードパパ,株式会社DAY TO LIFE,existing_link
 ビアードパパ,外食,株式会社DAY,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ビアードパパ,株式会社DAY TO LIFE,existing_link
 ビアードパパ,,株式会社DAY TO LIFE,4120001071116,大阪府大阪市北区西天満３丁目１３番２０号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ビアードパパ,株式会社DAY TO LIFE,franchisor_seed
+ピザハット,,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,franchisee,91,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,株式会社ウタシカン,5130001025499,京都市中京区新町通三条上ル町頭町112 菊三ビル4階,京都府,franchisee,84,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,株式会社さわやか,9010001124160,東京都中央区新川1-28-23 東京ダイヤビルディング5号館8階,東京都,franchisee,81,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,TANABEグローバルキッチン,,島根県雲南市吉田町吉田2407,島根県,franchisee,68,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,信越企業株式会社,2110001002395,新潟県新潟市西区寺尾7番8号,新潟県,franchisee,27,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
+ピザハット,,タイホウコーポレーション株式会社,1180001037667,愛知県名古屋市中区上前津2丁目4-10 タイホウグループ本社ビル,愛知県,franchisee,25,manual_megajii_2026_04_24,,,ピザハット,,existing_nonseed_link
 ファミリーマート,コンビニエンスストア,ＪＲ九州リテール株式会社,1290001013566,福岡県福岡市博多区博多駅東１丁目１番１４号,福岡県,franchisee,223,manual_megajii_2026_04_24,,,ファミリーマート,株式会社ファミリーマート,existing_link
 ファミリーマート,コンビニエンスストア,JR九州リテール株式会社,,,,franchisee,212,pipeline,,discovered_via=registry,ファミリーマート,株式会社ファミリーマート,existing_link
 ファミリーマート,コンビニエンスストア,株式会社近鉄リテーリング,4120001023117,大阪市天王寺区上本町6丁目5番13号,大阪府,franchisee,116,manual_megajii_2026_04_24,,,ファミリーマート,株式会社ファミリーマート,existing_link
@@ -200,7 +331,21 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 ファミリーマート,コンビニエンスストア,株式会社キノシタ,7430001038345,北海道札幌市南区藤野二条５丁目９番１５号,北海道,franchisee,12,pipeline,,discovered_via=registry,ファミリーマート,株式会社ファミリーマート,existing_link
 ファミリーマート,コンビニエンスストア,株式会社ファミリーマート,9180001085915,東京都港区芝浦３丁目１番２１号,東京都,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/120-3.pdf,method=none,ファミリーマート,株式会社ファミリーマート,existing_link
 ファンキーバナナ!!,,株式会社楽場,6140001121412,兵庫県神戸市兵庫区鵯越町１５番１０号,兵庫県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ファンキーバナナ!!,株式会社楽場,franchisor_seed
+ファーストトレジャー,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,franchisee,28,manual_megajii_2026_04_24,,,ファーストトレジャー,,existing_nonseed_link
 フトン巻きのジロー,,フトン巻きのジロー株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,フトン巻きのジロー,フトン巻きのジロー株式会社,franchisor_seed
+フレッシュランチ,,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,67,manual_megajii_2026_04_24,,,フレッシュランチ,,existing_nonseed_link
+ブックオフ,,ありがとうサービス,,愛媛県今治市八町西3丁目6-30,愛媛県,franchisee,114,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,franchisee,65,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社ヌマニウコーポレーション,4060001009411,栃木県下野市下古山128-1,栃木県,franchisee,65,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,29,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,松川商事株式会社,8270001003587,鳥取県米子市両三柳2366-4,鳥取県,franchisee,28,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,浜松ホーエー株式会社,4080401004167,静岡県浜松市中央区中央3丁目2-19 Nビル3F,静岡県,franchisee,24,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社ブックレット,3120001016138,大阪府大阪市城東区新喜多1丁目5-26,大阪府,franchisee,23,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社サクシードグループ,3070001035969,鹿児島県霧島市国分中央1丁目7番31号,鹿児島県,franchisee,20,manual_megajii_2026_04_24,,,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,医薬品・書籍・スポーツ用具・中古品等小売,ブックオフコーポレーション株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/124-1.pdf,method=none,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,unknown,0,operator_official_brand_link,https://www.zero-emission.co.jp/store-list3,anchor=㈱ゼロエミッションはリユース・リサイクルショップのハードオフ・オフハウス・ホビーオフ・モードオフ・ブックオフを運営。; href=https://www.zero-emission.co.jp/; page=https://www.zero-emission.co.jp/store-list3,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
+ブックオフ,,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,unknown,0,operator_official_brand_link,https://bigone.co.jp/contents/cafe/,anchor=BOOKOFF; href=https://bigone.co.jp/store_category/bookoff/; page=https://bigone.co.jp/contents/cafe/,ブックオフ,ブックオフコーポレーション株式会社,existing_nonseed_link
 ブリッジライフ,,QLCプロデュース株式会社,9010701014454,東京都品川区西五反田１丁目３番８号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ブリッジライフ,QLCプロデュース株式会社,franchisor_seed
 ブルーミングケア,,株式会社ブルーミングケア,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ブルーミングケア,株式会社ブルーミングケア,franchisor_seed
 ブロッサムジュニア,,ブロッサムグループ株式会社,1013301042130,東京都豊島区西池袋１丁目１１番１号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ブロッサムジュニア,ブロッサムグループ株式会社,franchisor_seed
@@ -212,12 +357,20 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 ベビーフェイスプラネッツ,,ベビーフェイスプラネッツ株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ベビーフェイスプラネッツ,ベビーフェイスプラネッツ株式会社,franchisor_seed
 ペットシッターSOS,,株式会社現代舎,6012801000452,東京都立川市柴崎町３丁目５番８号名取ビル,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ペットシッターSOS,株式会社現代舎,franchisor_seed
 ペルメールケア,,株式会社Care Nation,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ペルメールケア,株式会社Care Nation,franchisor_seed
+ペンギンベーカリー,,株式会社フルラッキーコーポレーション,5290001016532,福岡県福岡市博多区東光寺町2-1-22,福岡県,franchisee,30,manual_megajii_2026_04_24,,,ペンギンベーカリー,,existing_nonseed_link
+ペンギンベーカリー,,株式会社ダイツー,3120001045104,大阪府大阪市都島区都島本通4丁目3番24号,大阪府,franchisee,21,manual_megajii_2026_04_24,,,ペンギンベーカリー,,existing_nonseed_link
 ホビーオフ,,株式会社ゼロエミッション,4010101001999,東京都八王子市大和田町5-8-10,東京都,franchisee,91,manual_megajii_2026_04_24,,,ホビーオフ,ハードオフコーポレーション株式会社,existing_link
 ホビーオフ,,株式会社エコプラス,3370801000679,宮城県名取市上余田字千刈田308,宮城県,franchisee,67,manual_megajii_2026_04_24,,,ホビーオフ,ハードオフコーポレーション株式会社,existing_link
 ホビーオフ,,株式会社大宮電化,3030001001578,埼玉県さいたま市大宮区桜木町1-7-5 ソニックシティビル16F,埼玉県,franchisee,66,manual_megajii_2026_04_24,,,ホビーオフ,ハードオフコーポレーション株式会社,existing_link
 ホビーオフ,,株式会社エコノス,3430001029991,北海道札幌市白石区北郷4条13丁目3番25号,北海道,franchisee,65,manual_megajii_2026_04_24,,,ホビーオフ,ハードオフコーポレーション株式会社,existing_link
 ホビーオフ,,ハードオフコーポレーション株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,ホビーオフ,ハードオフコーポレーション株式会社,franchisor_seed
+ホワイト急便,クリーニング業,株式会社第一ドライ,4250002017088,山口県周南市櫛ヶ浜西塩田499-4,山口県,franchisee,164,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社ホワイト急便,,宮崎県宮崎市神宮東,宮崎県,franchisee,102,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社パールドライ,2310001003308,長崎県長崎市愛宕3-19-6,長崎県,franchisee,92,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,有限会社京屋クリーニング,4420002013103,青森県弘前市大字神田2丁目5-10,青森県,franchisee,65,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社日本さわやかグループ,8330001003572,熊本県熊本市東区上南部２丁目１番１００号,熊本県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
 ホームメイト,,東建コーポレーション株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ホームメイト,東建コーポレーション株式会社,franchisor_seed
+ポケットフィットネス,,株式会社ジェイアール西日本デイリーサービスネット,6140001055008,兵庫県尼崎市潮江1丁目2番12号 JR尼崎駅北NKビル,兵庫県,franchisee,204,manual_megajii_2026_04_24,,,ポケットフィットネス,,existing_nonseed_link
 ポプラ,コンビニエンスストア,株式会社ポプラ,3430001049429,北海道札幌市豊平区平岸一条２丁目４番７号,北海道,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/138-1.pdf,method=none,ポプラ/生活彩家,株式会社ポプラ,existing_link
 ポポラマーマ,,M&Sフードサービス,,大阪府大阪市中央区安土町2-3-13,大阪府,franchisee,29,manual_megajii_2026_04_24,,,ポポラマーマ,株式会社ポポラマーマ,existing_link
 ポポラマーマ,,株式会社ポポラマーマ,8011701007226,東京都千代田区四番町４番地１９,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ポポラマーマ,株式会社ポポラマーマ,franchisor_seed
@@ -234,14 +387,40 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 マクドナルド,ハンバーガー,株式会社リバーサイドコーポレーション,9090001011657,山梨県韮崎市藤井町南下條279,山梨県,franchisee,20,manual_megajii_2026_04_24,,,マクドナルド,日本マクドナルド株式会社,existing_link
 マクドナルド,ハンバーガー,日本マクドナルド株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/204-1.pdf,method=none,マクドナルド,日本マクドナルド株式会社,existing_link
 マジックミシン,衣料品のファッションリフォーム 靴修理と合鍵の作成,リフォームスタジオ株式会社,2010001140478,千葉県千葉市美浜区高洲３丁目２１番１号,千葉県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,マジックミシン,リフォームスタジオ株式会社,existing_link
+マツモトキヨシ,,サンエー,,沖縄県宜野湾市大山7-2-10,沖縄県,franchisee,369,manual_megajii_2026_04_24,,,マツモトキヨシ,,existing_nonseed_link
+マネケン,,TANABEグローバルキッチン,,島根県雲南市吉田町吉田2407,島根県,franchisee,68,manual_megajii_2026_04_24,,,マネケン,,existing_nonseed_link
+ミスタードーナツ,,株式会社JR九州ファーストフーズ,,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,,franchisee,216,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社太陽エンタープライズ,7020001010196,神奈川県横浜市西区みなとみらい2-2-1横浜ランドマークタワー 47F,神奈川県,franchisee,113,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,イズミ・フード・サービス株式会社,2240001000790,広島市西区商工センター2-3-1,広島県,franchisee,76,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,大和フーヅ株式会社,5010401089998,埼玉県熊谷市筑波3-193 熊谷通運ビル5F,埼玉県,franchisee,69,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,チタカ・インターナショナル・フーズ株式会社,5180001045939,愛知県北名古屋市沖村山ノ神54,愛知県,franchisee,45,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,ロイヤル商事株式会社,3013301012478,東京都豊島区池袋1-7-17ロイヤル商事ビル,東京都,franchisee,45,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社フジタコーポレーション,9430001054035,北海道苫小牧市若草町5-3-5,北海道,franchisee,43,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,昭和フード,,広島県呉市中央1-4-24,広島県,franchisee,31,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,M&Sフードサービス,,大阪府大阪市中央区安土町2-3-13,大阪府,franchisee,29,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社JR北海道フレッシュキヨスク,,北海道札幌市中央区北2条西1-1-1,北海道,franchisee,29,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社サンポーコーポレーション,6010001161925,岐阜市西荘3-10-22,東京都,franchisee,26,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,ニップンドーナツ株式会社,7011001017323,東京都渋谷区千駄ヶ谷5丁目27-3,東京都,franchisee,25,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,株式会社岡田屋,8020001004874,神奈川県横浜市旭区二俣川2-50-14 コプレ二俣川オフィス11F,神奈川県,franchisee,25,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,有限会社松屋,5380002003470,福島県福島市飯坂町銀杏1-13,福島県,franchisee,21,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスタードーナツ,,立花エンターテインメント・ワン株式会社,7120101004146,大阪府堺市西区浜寺船尾町西4丁432-2,大阪府,franchisee,20,manual_megajii_2026_04_24,,,ミスタードーナツ,,existing_nonseed_link
+ミスターバーク,,株式会社カリーノビジネスサポート,6330001010570,熊本県熊本市中央区安政町1-2 カリーノ下通7F,熊本県,franchisee,24,manual_megajii_2026_04_24,,,ミスターバーク,,existing_nonseed_link
 ミニストップ,コンビニエンスストア,ミニストップ株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/145-1.pdf,method=none,ミニストップ,ミニストップ株式会社,existing_link
 メディカルホワイトニングHAKU,,ハロウ株式会社,4010801032864,東京都中央区日本橋富沢町１１番１９号ＳＯＨＯ３０－９０３号室,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,メディカルホワイトニングHAKU(次世代型ホワイトニングサロンHAKU),ハロウ株式会社,franchisor_seed
+メンズカーブス,,株式会社井上,2370301000156,宮城県石巻市大街道東1丁目4番18号 井上ビル2F,宮城県,franchisee,20,manual_megajii_2026_04_24,,,メンズカーブス,,existing_nonseed_link
+ユニクロ,,ＪＲ九州リテール株式会社,1290001013566,福岡県福岡市博多区博多駅東１丁目１番１４号,福岡県,franchisee,223,manual_megajii_2026_04_24,,,ユニクロ,,existing_nonseed_link
 ユニテハウスフランチャイズシステム,,株式会社クリエイト礼文,1390001000538,山形県山形市南原町２丁目７番３９号,山形県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ユニテハウスフランチャイズシステム,株式会社クリエイト礼文,franchisor_seed
 ユニバーサルホーム,住宅建築・リフォーム・ビルメンテナンス,株式会社ユニバーサルホーム,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/157-1.pdf,method=none,ユニバーサルホーム,株式会社ユニバーサルホーム,existing_link
+ヨシケイ,,オーシャンシステム,,新潟県三条市西本成寺二丁目26番57号,新潟県,franchisee,67,manual_megajii_2026_04_24,,,ヨシケイ,,existing_nonseed_link
 ライフデリ,,株式会社グランフーズ,1011101054263,東京都渋谷区代々木１丁目５４番８号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,ライフデリ,株式会社グランフーズ,franchisor_seed
 リアット!,,リフォームスタジオ株式会社,2010001140478,千葉県千葉市美浜区高洲３丁目２１番１号,千葉県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,リアット!,リフォームスタジオ株式会社,franchisor_seed
 リサイクルマート,,FTC株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,リサイクルマート,FTC株式会社,franchisor_seed
 リディアダンスアカデミー,,株式会社スポーツ&ライフ・イノベーション,6120001165799,大阪府箕面市船場西３丁目１－７ＩＣＣビル５階,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,リディアダンスアカデミー,株式会社スポーツ&ライフ・イノベーション,franchisor_seed
+リトルマーメイド,,株式会社コミュニティー京成,3010601026175,千葉県八千代市八千代台東1-5-3 京成八千代台東ビル3階,千葉県,franchisee,67,manual_megajii_2026_04_24,,,リトルマーメイド,,existing_nonseed_link
 リノスぺ,,リノスペ株式会社,7010403017930,東京都新宿区新宿７丁目２７－４ライオンズマンション新宿第２－３０６,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,リノスぺ,リノスペ株式会社,franchisor_seed
 リノベ不動産,,株式会社WAKUWAKU,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,リノベ不動産,株式会社WAKUWAKU,franchisor_seed
 リハプライド,その他のサービス,リハコンテンツ株式会社,7040001025283,千葉県船橋市習志野台２丁目６番５号,千葉県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/207-2.pdf,method=none,リハプライド,リハコンテンツ株式会社,existing_link
@@ -263,39 +442,59 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 ワークマン,,株式会社ワークマン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed
 ワークマンプラス,,株式会社ワークマン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed
 ワークマンプロ,,株式会社ワークマン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,ワークマン/ワークマンプラス/#ワークマン女子/ワークマンプロ,株式会社ワークマン,franchisor_seed
+一楽,,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,一楽,,existing_nonseed_link
+一番どり,,株式会社香川フードサービス,1470001008275,香川県丸亀市山北町43-3,香川県,franchisee,26,manual_megajii_2026_04_24,,,一番どり,,existing_nonseed_link
+一軒め酒場,,株式会社良知経営,5020001140788,神奈川県川崎市宮前区宮崎二丁目6番地10 宮崎台ガーデンオフィス2階,神奈川県,franchisee,83,manual_megajii_2026_04_24,,,一軒め酒場,,existing_nonseed_link
 不二家洋菓子店,,株式会社不二家,7180001120211,愛知県名古屋市千種区千種３丁目２５番１６号,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,不二家洋菓子店/FUJIYA KOBE他,株式会社不二家,franchisor_seed
 串カツ田中,外食,株式会社イートスタイル,1350001010012,宮崎県小林市細野288-1,宮崎県,franchisee,135,manual_megajii_2026_04_24,,,串カツ田中,株式会社串カツ田中ホールディングス,existing_link
 串カツ田中,外食,AZism,,東京都立川市西砂町2-17-4,東京都,franchisee,27,manual_megajii_2026_04_24,,,串カツ田中,株式会社串カツ田中ホールディングス,existing_link
 串カツ田中,外食,株式会社串カツ田中,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,串カツ田中,株式会社串カツ田中ホールディングス,existing_link
 串カツ田中,,株式会社串カツ田中ホールディングス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,串カツ田中,株式会社串カツ田中ホールディングス,franchisor_seed
+丸亀製麺,,オリックスレンタカー・カメイ株式会社,1370001007493,宮城県仙台市青葉区国分町3-1-18,宮城県,franchisee,32,manual_megajii_2026_04_24,,,丸亀製麺,,existing_nonseed_link
+丸亀製麺,,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,,丸亀製麺,,existing_nonseed_link
 丸源ラーメン,外食,サンパーク,,大阪府吹田市岸部北5-11-1,大阪府,franchisee,58,manual_megajii_2026_04_24,,,丸源ラーメン,株式会社物語コーポレーション,existing_link
 丸源ラーメン,外食,株式会社桶谷ホールディングス,1150001016038,奈良県奈良市東九条町418-1 2F,奈良県,franchisee,32,manual_megajii_2026_04_24,,,丸源ラーメン,株式会社物語コーポレーション,existing_link
 丸源ラーメン,外食,株式会社元廣,3130001019098,京都府京都市伏見区下鳥羽広長町162,京都府,franchisee,24,manual_megajii_2026_04_24,,,丸源ラーメン,株式会社物語コーポレーション,existing_link
 丸源ラーメン,外食,株式会社カワマートホールディングス,5490001004830,高知県四万十市有岡31番地1,高知県,franchisee,20,manual_megajii_2026_04_24,,,丸源ラーメン,株式会社物語コーポレーション,existing_link
 丸源ラーメン,外食,株式会社物語コーポレーション,7180301007414,愛知県豊橋市西岩田５丁目７番地の１１,愛知県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,丸源ラーメン,株式会社物語コーポレーション,existing_link
-京進の個別指導 スクール・ワン,学習塾・カルチャースクール,株式会社京進,2020001093576,神奈川県横浜市青葉区新石川４丁目１４－２６,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/39-1.pdf,method=none,京進の個別指導スクール・ワン,株式会社京進,existing_link
+久世福商店,,株式会社イートスタイル,1350001010012,宮崎県小林市細野288-1,宮崎県,franchisee,135,manual_megajii_2026_04_24,,,久世福商店,,existing_nonseed_link
+京進の個別指導スクール・ワン,学習塾・カルチャースクール,株式会社京進,2020001093576,神奈川県横浜市青葉区新石川４丁目１４－２６,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/39-1.pdf,method=none,京進の個別指導スクール・ワン,株式会社京進,existing_link
+京都北白川ラーメン魁力屋,,株式会社三油商会,9180001036158,愛知県名古屋市中区丸の内二丁目1番5号,愛知県,franchisee,31,manual_megajii_2026_04_24,,,京都北白川ラーメン魁力屋,株式会社魁力屋,existing_link
+京都北白川ラーメン魁力屋,,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,,京都北白川ラーメン魁力屋,株式会社魁力屋,existing_link
 京都北白川ラーメン魁力屋,,株式会社魁力屋,4130001026309,京都府京都市中京区烏丸通錦小路上る手洗水町６７０番地,京都府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,京都北白川ラーメン魁力屋,株式会社魁力屋,franchisor_seed
 介護リフォーム本舗,,株式会社ユニバーサルスペース,6021001006020,神奈川県横浜市港北区新横浜２丁目６番地１アーバス新横浜３Ｆ,神奈川県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,介護リフォーム本舗,株式会社ユニバーサルスペース,franchisor_seed
 伊三郎製ぱん・136Bakery,,株式会社ブランワン,1130001065326,京都府京都市中京区烏丸通蛸薬師上る七観音町６３７番地インターワンプレイス烏丸ビル７Ｆ,京都府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,伊三郎製ぱん・136Bakery,株式会社ブランワン,franchisor_seed
 便利屋!お助け本舗,,株式会社アシストリンク,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,便利屋!お助け本舗,株式会社アシストリンク,franchisor_seed
+信州そば 小木曽製粉所,,アース,,石川県野々市市横宮町14-30 河端ビル2F,石川県,franchisee,22,manual_megajii_2026_04_24,,,信州そば 小木曽製粉所,株式会社王滝,existing_link
 信州そば 小木曽製粉所,,株式会社王滝,6100001012862,長野県松本市大字笹賀７６００番地５１,長野県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,信州そば 小木曽製粉所,株式会社王滝,franchisor_seed
 個別指導Axis,,株式会社ワオ・コーポレーション,8120001167224,大阪府大阪市北区中崎西１丁目５番１４号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,個別指導Axis,株式会社ワオ・コーポレーション,franchisor_seed
+個別指導VAN,,株式会社エイコス,3190001000218,三重県津市新町1-12-17,三重県,franchisee,29,manual_megajii_2026_04_24,,,個別指導VAN,,existing_nonseed_link
+個別指導塾スタンダード,,株式会社マンツーマンアカデミーホールディングス,6040001078299,千葉県旭市二1394-15 マンツーマンアカデミービル5階,千葉県,franchisee,32,manual_megajii_2026_04_24,,,個別指導塾スタンダード,,existing_nonseed_link
 個別指導学院フリーステップ,,株式会社フリーステップ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,個別指導学院フリーステップ,株式会社フリーステップ,franchisor_seed
 元祖豚丼屋TON TON,,ワンズトライン株式会社,9120001205148,大阪府大阪市北区芝田２丁目３番１６号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,元祖豚丼屋TON TON,ワンズトライン株式会社,franchisor_seed
 八剣伝,居酒屋・パブ,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,八剣伝,株式会社マルシェ,existing_link
 八剣伝,居酒屋・パブ,マルシェ株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/142-3.pdf,method=none,八剣伝,株式会社マルシェ,existing_link
 八剣伝,,株式会社マルシェ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,八剣伝,株式会社マルシェ,franchisor_seed
 内職市場,,株式会社内職市場,3180001077323,愛知県春日井市下原町椎ノ木２２３３番地,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,内職市場,株式会社内職市場,franchisor_seed
+北海道うまいもの館,,ノーザンミツワ株式会社,9460001001331,北海道釧路市鳥取南5丁目12-5,北海道,franchisee,23,manual_megajii_2026_04_24,,,北海道うまいもの館,,existing_nonseed_link
 収納ピット,,株式会社アンビシャス,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,収納ピット,株式会社アンビシャス,franchisor_seed
+吉野家,外食,タニザワフーズ株式会社,2180301001314,愛知県岡崎市井田西町1番地2号,愛知県,franchisee,96,manual_megajii_2026_04_24,,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link
+吉野家,外食,メガエフシーシステムズ株式会社,1021001014630,神奈川県相模原市中央区富士見2-1-1,神奈川県,franchisee,21,manual_megajii_2026_04_24,,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link
+吉野家,外食,株式会社吉野家ホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link
 味千ラーメン,ラーメン・餃子,重光産業株式会社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/61-1.pdf,method=none,味千ラーメン,重光産業株式会社,existing_link
+和カフェTsumugi,,株式会社サンシップ,2021001029223,神奈川県大和市大和南1-7-3,神奈川県,franchisee,22,manual_megajii_2026_04_24,,,和カフェTsumugi,,existing_nonseed_link
 喜多方ラーメン坂内,ラーメン・餃子,株式会社麺食,7100001027513,長野県須坂市墨坂３丁目９番８号,長野県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/151-1.pdf,method=none,喜多方ラーメン坂内,株式会社麺食,existing_link
 在宅マッサージ フレアス,,株式会社フレアス,9200001030315,山形県西村山郡河北町谷地字砂田２０３番地５セレッサ河北２階,山形県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,在宅マッサージ フレアス,株式会社フレアス,franchisor_seed
 城南コベッツ,学習塾・カルチャースクール,株式会社城南進学研究社,,,,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/211-1.pdf,method=none,城南コベッツ,株式会社城南進学研究社,existing_link
 壁紙革命クロスメイ,,株式会社壁紙革命,3013401006231,東京都多摩市乞田１２８４番地永山Ｕビル,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,壁紙革命クロスメイ,株式会社壁紙革命,franchisor_seed
 大判小判,,株式会社Axis,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,大判小判,株式会社Axis,franchisor_seed
-大戸屋ごはん処,和定食,株式会社大戸屋,4012401021669,神奈川県横浜市西区北幸１丁目１番８号,神奈川県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,大戸屋ごはん処,株式会社大戸屋,existing_link
+大戸屋ごはん処,焼肉店・その他の一般レストラン店,タカサワ通商株式会社,5100001012698,長野県長野市南千歳1-15-3,長野県,franchisee,64,manual_megajii_2026_04_24,,,大戸屋ごはん処,株式会社大戸屋,existing_link
+大戸屋ごはん処,焼肉店・その他の一般レストラン店,株式会社ティ・プロジェクト,2310001005733,長崎県佐世保市黒神町732-1,長崎県,franchisee,21,manual_megajii_2026_04_24,,,大戸屋ごはん処,株式会社大戸屋,existing_link
+大戸屋ごはん処,焼肉店・その他の一般レストラン店,株式会社東京天竜,6010001005280,東京都文京区本郷2丁目27番20号 本郷センタービル7階,東京都,franchisee,21,manual_megajii_2026_04_24,,,大戸屋ごはん処,株式会社大戸屋,existing_link
+大戸屋ごはん処,焼肉店・その他の一般レストラン店,株式会社大戸屋,4012401021669,神奈川県横浜市西区北幸１丁目１番８号,神奈川県,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/221-1.pdf,method=none,大戸屋ごはん処,株式会社大戸屋,existing_link
 大衆焼き鳥酒場やきとりさんきゅう,,株式会社To-U,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,大衆焼き鳥酒場やきとりさんきゅう,株式会社To-U,franchisor_seed
 大阪ふくちぁん餃子,,株式会社アストジャパン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,大阪ふくちぁん餃子,株式会社アストジャパン,franchisor_seed
+大阪満マル,,ステラ株式会社,2260001010730,岡山県岡山市北区西古松237-126 松本ビル1F,岡山県,franchisee,22,manual_megajii_2026_04_24,,,大阪満マル,,existing_nonseed_link
 大阪王将,ラーメン・餃子,イズミ・フード・サービス株式会社,2240001000790,広島市西区商工センター2-3-1,広島県,franchisee,76,manual_megajii_2026_04_24,,,大阪王将,イートアンドフーズ株式会社,existing_link
 大阪王将,ラーメン・餃子,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,大阪王将,イートアンドフーズ株式会社,existing_link
 大阪王将,ラーメン・餃子,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,大阪王将,イートアンドフーズ株式会社,existing_link
@@ -303,11 +502,18 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 大阪王将,ラーメン・餃子,立花エンターテインメント・ワン株式会社,7120101004146,大阪府堺市西区浜寺船尾町西4丁432-2,大阪府,franchisee,20,manual_megajii_2026_04_24,,,大阪王将,イートアンドフーズ株式会社,existing_link
 大阪王将,,イートアンドフーズ株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,大阪王将,イートアンドフーズ株式会社,franchisor_seed
 大阪王将,ラーメン・餃子,株式会社大阪王将,9120001229329,大阪府枚方市春日北町１丁目１０番１０号,大阪府,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/210-2.pdf,method=none,大阪王将,イートアンドフーズ株式会社,existing_link
+天丼てんや,外食,株式会社トークインコーポレーション,8080002010783,静岡県静岡市清水区春日2丁目3-37,静岡県,franchisee,25,manual_megajii_2026_04_24,,,天丼てんや,ロイヤルホールディングス株式会社,existing_nonseed_link
+天丼てんや,外食,ロイヤルホールディングス株式会社,2290001017525,福岡県福岡市博多区那珂３丁目２８番５号,福岡県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,天丼てんや,ロイヤルホールディングス株式会社,existing_nonseed_link
+天釜屋,,M&Sフードサービス,,大阪府大阪市中央区安土町2-3-13,大阪府,franchisee,29,manual_megajii_2026_04_24,,,天釜屋,,existing_nonseed_link
 宅食ライフ,,株式会社シルバーライフ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,宅食ライフ,株式会社シルバーライフ,franchisor_seed
 定額制リフォーム「イメチェン」,,株式会社イメチェン,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,定額制リフォーム「イメチェン」,株式会社イメチェン,franchisor_seed
+宮脇書店,,映クラ株式会社,5240001029935,広島県福山市引野町3丁目23-31,広島県,franchisee,26,manual_megajii_2026_04_24,,,宮脇書店,,existing_nonseed_link
 家族葬ホールティア,,株式会社ティア,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,葬儀会館ティア/家族葬ホールティア,株式会社ティア,franchisor_seed
+庄や,,株式会社かんなん丸,6030001001831,さいたま市浦和区北浦和4丁目1番1号 群青ビル,埼玉県,franchisee,20,manual_megajii_2026_04_24,,,庄や,,existing_nonseed_link
 張替本舗 金沢屋,襖・障子・網戸の張替専門店、高齢者向け生活支援サービス,株式会社HITOSUKE,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,張替本舗 金沢屋,株式会社HITOSUKE,existing_link
+御馳菜,,グランマルシェ食品株式会社,4120001091601,大阪府大阪市中央区本町4丁目5-16 本町スクウェアビルII 3F,大阪府,franchisee,24,manual_megajii_2026_04_24,,,御馳菜,,existing_nonseed_link
 忍者ナイン,学習塾・カルチャースクール,株式会社やる気スイッチグループ,,,,franchisor,573,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/76-3.pdf,method=year_store_count_table; fc_stores=554; rc_stores=19; total_stores=573; observed_at=2024年度,忍者ナイン,株式会社やる気スイッチグループ,existing_link
+情熱ホルモン,,株式会社香川フードサービス,1470001008275,香川県丸亀市山北町43-3,香川県,franchisee,26,manual_megajii_2026_04_24,,,情熱ホルモン,,existing_nonseed_link
 成城石井,,株式会社近鉄リテーリング,4120001023117,大阪市天王寺区上本町6丁目5番13号,大阪府,franchisee,116,manual_megajii_2026_04_24,,,成城石井,株式会社成城石井,existing_link
 成城石井,,株式会社近鉄百貨店,3120001098201,大阪府大阪市阿倍野区阿倍野筋1丁目1番43号,大阪府,franchisee,72,manual_megajii_2026_04_24,,,成城石井,株式会社成城石井,existing_link
 成城石井,,株式会社成城石井,5010901028646,東京都世田谷区成城６丁目１１番４号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,成城石井,株式会社成城石井,franchisor_seed
@@ -318,6 +524,8 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 明光義塾,学習塾・カルチャースクール,株式会社イデアグループ,1410002004130,秋田県秋田市茨島4-19-52,秋田県,franchisee,20,manual_megajii_2026_04_24,,,明光義塾,株式会社明光ネットワークジャパン,existing_link
 明光義塾,学習塾・カルチャースクール,株式会社明光ネットワークジャパン,5011101055381,東京都新宿区西新宿７丁目２０番１号,東京都,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/149-1.pdf,method=none,明光義塾,株式会社明光ネットワークジャパン,existing_link
 村さ来,,株式会社焼肉坂井ホールディングス,2370001010224,愛知県名古屋市北区黒川本通２丁目４６番地,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,村さ来,株式会社焼肉坂井ホールディングス,franchisor_seed
+東進衛星予備校,,アイトップ,,神奈川県横浜市神奈川区金港町1-4 横浜イーストスクエア5F,神奈川県,franchisee,62,manual_megajii_2026_04_24,,,東進衛星予備校,,existing_nonseed_link
+東進衛星予備校,,株式会社マンツーマンアカデミーホールディングス,6040001078299,千葉県旭市二1394-15 マンツーマンアカデミービル5階,千葉県,franchisee,32,manual_megajii_2026_04_24,,,東進衛星予備校,,existing_nonseed_link
 業務レンタカー,,カーチョイス・レンタカーサービス株式会社,9120001169608,大阪府寝屋川市下神田町２７番１号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,業務レンタカー,カーチョイス・レンタカーサービス株式会社,franchisor_seed
 樹楽,,有信アクロス株式会社,3120901005173,大阪府吹田市江の木町１７番１号,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,樹楽,有信アクロス株式会社,franchisor_seed
 機能訓練専門デイサービス きたえるーむ,,株式会社ヤマチコーポレーション,5430001013234,北海道札幌市中央区北一条西１０丁目１番１７号,北海道,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,機能訓練専門デイサービス きたえるーむ,株式会社ヤマチコーポレーション,franchisor_seed
@@ -327,24 +535,47 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 注文住宅の相談窓口,,株式会社あおぞらカンパニー,5120001231503,大阪府大阪市淀川区宮原１丁目１－１新大阪阪急ビル３階,大阪府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,注文住宅の相談窓口,株式会社あおぞらカンパニー,franchisor_seed
 満室の窓口,,株式会社クラスコ,3220001004108,石川県金沢市西念４丁目２４番２１号,石川県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,満室の窓口,株式会社クラスコ,franchisor_seed
 炭火焼肉屋さかい,,株式会社さかい,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,焼肉屋さかい/炭火焼肉屋さかい,株式会社さかい,franchisor_seed
+焼肉おくう,,株式会社良知経営,5020001140788,神奈川県川崎市宮前区宮崎二丁目6番地10 宮崎台ガーデンオフィス2階,神奈川県,franchisee,83,manual_megajii_2026_04_24,,,焼肉おくう,,existing_nonseed_link
+焼肉きんぐ,,glob,,広島県福山市王子町1-3-5,広島県,franchisee,85,manual_megajii_2026_04_24,,,焼肉きんぐ,株式会社物語コーポレーション,existing_link
 焼肉きんぐ,,株式会社桶谷ホールディングス,1150001016038,奈良県奈良市東九条町418-1 2F,奈良県,franchisee,32,manual_megajii_2026_04_24,,,焼肉きんぐ,株式会社物語コーポレーション,existing_link
 焼肉きんぐ,,株式会社物語コーポレーション,7180301007414,愛知県豊橋市西岩田５丁目７番地の１１,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,焼肉きんぐ,株式会社物語コーポレーション,franchisor_seed
+焼肉ライク,,SENSACION,,大阪府大阪市天王寺区大道2-6-16 佐谷大道ビル,大阪府,franchisee,28,manual_megajii_2026_04_24,,,焼肉ライク,,existing_nonseed_link
+焼肉五苑,,株式会社香川フードサービス,1470001008275,香川県丸亀市山北町43-3,香川県,franchisee,26,manual_megajii_2026_04_24,,,焼肉五苑,,existing_nonseed_link
 焼肉屋さかい,,株式会社さかい,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,焼肉屋さかい/炭火焼肉屋さかい,株式会社さかい,franchisor_seed
+焼肉飛牛,,株式会社フルラッキーコーポレーション,5290001016532,福岡県福岡市博多区東光寺町2-1-22,福岡県,franchisee,30,manual_megajii_2026_04_24,,,焼肉飛牛,,existing_nonseed_link
 片付け堂,,株式会社Loop,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,片付け堂,株式会社Loop,franchisor_seed
 片付け堂,不用品回収、遺品整理、解体事業,株式会社片付け堂,7010401135734,東京都中央区湊１丁目６番１１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,片付け堂,株式会社Loop,existing_link
+牛角,,REGAO,,広島県広島市佐伯区八幡東2-2-2,広島県,franchisee,141,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,株式会社太陽エンタープライズ,7020001010196,神奈川県横浜市西区みなとみらい2-2-1横浜ランドマークタワー 47F,神奈川県,franchisee,113,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,株式会社ウタシカン,5130001025499,京都市中京区新町通三条上ル町頭町112 菊三ビル4階,京都府,franchisee,84,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,株式会社さわやか,9010001124160,東京都中央区新川1-28-23 東京ダイヤビルディング5号館8階,東京都,franchisee,81,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,東北テレメディア開発株式会社,4370001004372,宮城県仙台市若林区沖野2丁目5-5,宮城県,franchisee,23,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
+牛角,,メガエフシーシステムズ株式会社,1021001014630,神奈川県相模原市中央区富士見2-1-1,神奈川県,franchisee,21,manual_megajii_2026_04_24,,,牛角,,existing_nonseed_link
 珈琲館,,C-United株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,珈琲館,C-United株式会社,franchisor_seed
 生活彩家,,株式会社ポプラ,3430001049429,北海道札幌市豊平区平岸一条２丁目４番７号,北海道,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,ポプラ/生活彩家,株式会社ポプラ,franchisor_seed
 町の便利屋さんファミリー,,株式会社ミスター通商,3010601040564,東京都板橋区中丸町５１番１０号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,町の便利屋さんファミリー,株式会社ミスター通商,franchisor_seed
 癒し~ぷ,,株式会社癒しテック,1011101097403,東京都新宿区西新宿７丁目７番２６号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,癒し~ぷ,株式会社癒しテック,franchisor_seed
+神楽食堂 串家物語,,株式会社プライムウィル,7140001071598,兵庫県芦屋市岩園町1-7 ロイヤルパーク芦屋3階,兵庫県,franchisee,26,manual_megajii_2026_04_24,,,神楽食堂 串家物語,フジオフードグループ本社株式会社,existing_link
 神楽食堂 串家物語,,フジオフードグループ本社株式会社,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,神楽食堂 串家物語,フジオフードグループ本社株式会社,franchisor_seed
+福よし,,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,福よし,,existing_nonseed_link
+福包酒場,,SENSACION,,大阪府大阪市天王寺区大道2-6-16 佐谷大道ビル,大阪府,franchisee,28,manual_megajii_2026_04_24,,,福包酒場,,existing_nonseed_link
+築地銀だこ,たこ焼きの製造・販売,大和フーヅ株式会社,5010401089998,埼玉県熊谷市筑波3-193 熊谷通運ビル5F,埼玉県,franchisee,69,manual_megajii_2026_04_24,,,築地銀だこ,株式会社ホットランドホールディングス,existing_nonseed_link
+築地銀だこ,たこ焼きの製造・販売,株式会社グローバルノースジャパン,4420001009770,秋田県秋田市中通2-2-3,秋田県,franchisee,32,manual_megajii_2026_04_24,,,築地銀だこ,株式会社ホットランドホールディングス,existing_nonseed_link
+築地銀だこ,,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,32,manual_megajii_2026_04_24,,,築地銀だこ,株式会社ホットランドホールディングス,existing_nonseed_link
+築地銀だこ,たこ焼きの製造・販売,ニップンドーナツ株式会社,7011001017323,東京都渋谷区千駄ヶ谷5丁目27-3,東京都,franchisee,25,manual_megajii_2026_04_24,,,築地銀だこ,株式会社ホットランドホールディングス,existing_nonseed_link
+築地銀だこ,たこ焼きの製造・販売,株式会社ホットランドホールディングス,6370301002917,東京都中央区新富１丁目９番６号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,築地銀だこ,株式会社ホットランドホールディングス,existing_nonseed_link
+美容室イレブンカット,,株式会社東京天竜,6010001005280,東京都文京区本郷2丁目27番20号 本郷センタービル7階,東京都,franchisee,21,manual_megajii_2026_04_24,,,美容室イレブンカット,株式会社エム・ワイ・ケー,existing_link
 美容室イレブンカット,,株式会社エム・ワイ・ケー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,美容室イレブンカット,株式会社エム・ワイ・ケー,franchisor_seed
 美容室ラポールヘア,,株式会社ラポールヘア・グループ,9370301002930,宮城県石巻市大街道西２丁目２番２７号,宮城県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,美容室ラポールヘア,株式会社ラポールヘア・グループ,franchisor_seed
 肉と米ハジメ,,株式会社Be alive,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,肉と米ハジメ,株式会社Be alive,franchisor_seed
+肉汁餃子のダンダダン,,株式会社香川フードサービス,1470001008275,香川県丸亀市山北町43-3,香川県,franchisee,26,manual_megajii_2026_04_24,,,肉汁餃子のダンダダン,,existing_nonseed_link
 肉餃子専門店 包王Paou,,株式会社アップラインズ,5160001008914,滋賀県彦根市高宮町１５５５番地１,滋賀県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,肉餃子専門店 包王Paou,株式会社アップラインズ,franchisor_seed
 自立学習RED,学習塾事業、教育サービスの提供,株式会社スプリックス,7110001022686,新潟県長岡市東坂之上町２丁目２番地１,新潟県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,自立学習RED,株式会社スプリックス,existing_link
 葬儀会館ティア,,株式会社ティア,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,葬儀会館ティア/家族葬ホールティア,株式会社ティア,franchisor_seed
 買取大吉,,株式会社エンパワー,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,買取大吉,株式会社エンパワー,franchisor_seed
 買取専門店さすがや,,株式会社さすがや,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,買取専門店さすがや,株式会社さすがや,franchisor_seed
+赤から,,オカダコーポレーション株式会社,5190001010883,三重県松阪市京町508-1 101ビル2F,三重県,franchisee,26,manual_megajii_2026_04_24,,,赤から,,existing_nonseed_link
 足と爪のかかりつけサロン リゼラアンドコー,,株式会社ディビュース,8011001157688,東京都渋谷区神宮前４丁目７番１号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,足と爪のかかりつけサロン リゼラアンドコー,株式会社ディビュース,franchisor_seed
 車検のコバック,,株式会社コバック,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,車検のコバック,株式会社コバック,franchisor_seed
 配食のふれ愛,,株式会社シルバーライフ,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_ambiguous,配食のふれ愛,株式会社シルバーライフ,franchisor_seed
@@ -365,11 +596,16 @@ oh!庭ya!,,株式会社oh庭ya!,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,s
 餃子の王将,,株式会社王将フードサービス,3130001012441,京都府京都市山科区西野山射庭ノ上町２９４番地の１,京都府,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; houjin_exact,餃子の王将,株式会社王将フードサービス,franchisor_seed
 馳走菜,,株式会社ボトルワールドＯＫ,7150001019464,奈良県吉野郡吉野町大字新子３１７番地,奈良県,franchisee,62,manual_megajii_2026_04_24,,,馳走菜,株式会社神戸物産,existing_link
 馳走菜,,株式会社神戸物産,5140001044630,兵庫県加古川市加古川町平野125番1,兵庫県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_match,馳走菜,株式会社神戸物産,franchisor_seed
-高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,,株式会社シニアライフクリエイト,4010001237462,東京都品川区勝島１丁目６番２２号,東京都,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,株式会社シニアライフクリエイト,franchisor_seed
+駿河屋,,NICリテールズ,,東京都千代田区神田駿河台四丁目3番地,東京都,franchisee,82,manual_megajii_2026_04_24,,,駿河屋,,existing_nonseed_link
+高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,高齢者専門宅配弁当,株式会社シニアライフクリエイト,4010001237462,東京都品川区勝島１丁目６番２２号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー,株式会社シニアライフクリエイト,existing_link
+魚輝水産,,トラオム株式会社,1120001160730,大阪府大阪市浪速区立葉1-2-12 ナミコービル3F,大阪府,franchisee,76,manual_megajii_2026_04_24,,,魚輝水産,,existing_nonseed_link
 鰻の成瀬,,株式会社フランチャイズビジネスインキュベーション,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,鰻の成瀬,株式会社フランチャイズビジネスインキュベーション,franchisor_seed
 鳥貴族,,トラオム株式会社,1120001160730,大阪府大阪市浪速区立葉1-2-12 ナミコービル3F,大阪府,franchisee,76,manual_megajii_2026_04_24,,,鳥貴族,株式会社鳥貴族,existing_link
 鳥貴族,,SENSACION,,大阪府大阪市天王寺区大道2-6-16 佐谷大道ビル,大阪府,franchisee,28,manual_megajii_2026_04_24,,,鳥貴族,株式会社鳥貴族,existing_link
 鳥貴族,,ダンク,,大阪市北区天神橋3-3-3 南森町イシカワビル8F,,franchisee,28,manual_megajii_2026_04_24,,,鳥貴族,株式会社鳥貴族,existing_link
 鳥貴族,,グラッド,,大阪府大阪市浪速区立葉1丁目2-12 ナミコービル2F,大阪府,franchisee,22,manual_megajii_2026_04_24,,,鳥貴族,株式会社鳥貴族,existing_link
 鳥貴族,,株式会社鳥貴族,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,鳥貴族,株式会社鳥貴族,franchisor_seed
+鶴橋風月,,立花エンターテインメント・ワン株式会社,7120101004146,大阪府堺市西区浜寺船尾町西4丁432-2,大阪府,franchisee,20,manual_megajii_2026_04_24,,,鶴橋風月,,existing_nonseed_link
+麺場 田所商店,ラーメン・餃子,株式会社ニッシンコーポレーション,2250001005855,山口県下関市卸新町7-1,山口県,franchisee,27,manual_megajii_2026_04_24,,,麺場 田所商店,有限会社トライ・インターナショナル,existing_link
 麺場 田所商店,,有限会社トライ・インターナショナル,,,,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand,麺場 田所商店,有限会社トライ・インターナショナル,franchisor_seed
+麺場 田所商店,ラーメン・餃子,株式会社トライ・インターナショナル,6430001064012,北海道札幌市豊平区平岸五条１０丁目１番地３,北海道,franchisor,0,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/214-1.pdf,method=none,麺場 田所商店,有限会社トライ・インターナショナル,existing_link

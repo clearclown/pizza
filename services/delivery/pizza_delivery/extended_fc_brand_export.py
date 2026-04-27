@@ -69,6 +69,7 @@ SEED_BRAND_ALIASES = {
     "女性だけの30分健康体操教室 Curves(カーブス)": "カーブス",
     "Curves": "カーブス",
     "ITTO個別指導学院": "Itto個別指導学院",
+    "ITTO個別指導": "Itto個別指導学院",
     "珈琲所コメダ珈琲店": "コメダ珈琲",
     "BRAND OFF": "Brand off",
     "センチュリー2": "センチュリー21",
@@ -97,6 +98,45 @@ SEED_BRAND_ALIASES = {
     "プライベートジムHPER(ハイパー)": "プライベートジムHPER",
     "メディカルホワイトニングHAKU(次世代型ホワイトニングサロンHAKU)": "メディカルホワイトニングHAKU",
     "蔦屋": "TSUTAYA",
+    "CoCo壱番屋": "カレーハウスCoCo壱番屋",
+    "スペースクリエイト自遊空間": "スペースクリエイト自遊空間",
+    "自遊空間": "スペースクリエイト自遊空間",
+    "信州そば 小木曽製粉所": "信州そば 小木曽製粉所",
+    "小木曽製粉所": "信州そば 小木曽製粉所",
+    "神楽食堂 串家物語": "神楽食堂 串家物語",
+    "串家物語": "神楽食堂 串家物語",
+    "美容室イレブンカット": "美容室イレブンカット",
+    "イレブンカット": "美容室イレブンカット",
+    "大戸屋": "大戸屋ごはん処",
+    "大戸屋ごはん処": "大戸屋ごはん処",
+    "田所商店": "麺場 田所商店",
+    "「蔵出し味噌」麺場 田所商店": "麺場 田所商店",
+    "「蔵出し味噌」麺場　田所商店": "麺場 田所商店",
+    "コミックバスター": "コミック・バスター",
+    "コミック・バスター": "コミック・バスター",
+    "京進の個別指導 スクール・ワン": "京進の個別指導スクール・ワン",
+    "京進の個別指導スクール・ワン": "京進の個別指導スクール・ワン",
+    "張替本舗　金沢屋": "張替本舗 金沢屋",
+    "張替本舗 金沢屋": "張替本舗 金沢屋",
+    "宅配クックワン・ツゥ・スリー": "高齢者専門宅配弁当 宅配クック ワン・ツゥ・スリー",
+    "Goncha": "Gong cha",
+    "ゴンチャ": "Gong cha",
+    "Heart Bread ANTIQUE": "Heart Bread ANTIQUE",
+    "HEART BREAD ANTIQUE": "Heart Bread ANTIQUE",
+    "サーティワン": "サーティワンアイスクリーム",
+    "サーティーワン": "サーティワンアイスクリーム",
+    "フィット365": "FIT365",
+    "オンデーズ": "OWNDAYS",
+    "焼肉キング": "焼肉きんぐ",
+    "銀だこ": "築地銀だこ",
+    "赤カラ": "赤から",
+    "魅力屋": "京都北白川ラーメン魁力屋",
+}
+
+EXCLUDED_EXISTING_NONSEED_BRAND_NAMES = {
+    "ザ",
+    "ホームセンター",
+    "名代とんかつ",
 }
 
 
@@ -105,6 +145,7 @@ class SeedBrand:
     brand_name: str
     seed_brand_name: str
     seed_franchisor_name: str
+    discovered_from_existing_links: bool = False
 
 
 @dataclass(frozen=True)
@@ -214,6 +255,48 @@ def _load_fc_links(path: Path) -> dict[str, list[dict[str, str]]]:
     return by_brand
 
 
+def _first_franchisor_name(rows: list[dict[str, str]]) -> str:
+    for row in rows:
+        if row.get("operator_type") == "franchisor":
+            return normalize_operator_name(row.get("operator_name") or "")
+    return ""
+
+
+def _append_existing_nonseed_brands(
+    seeds: list[SeedBrand], links_by_brand: dict[str, list[dict[str, str]]]
+) -> list[SeedBrand]:
+    """Add already-evidenced non-14 brands that have franchisee rows.
+
+    User seeds define the requested investigation scope, but the existing
+    all-brand FC export already contains additional franchisee evidence from
+    JFA/manual/pipeline sources.  This keeps those discovered brands visible
+    without treating an LLM or a hand-written list as ground truth.
+    """
+
+    out = list(seeds)
+    seen = {_brand_key(seed.brand_name) for seed in seeds}
+    for key, rows in sorted(links_by_brand.items(), key=lambda item: item[0]):
+        if key in seen:
+            continue
+        if not any(row.get("operator_type") == "franchisee" for row in rows):
+            continue
+        brand = _canonical_extended_brand(rows[0].get("brand_name") or "")
+        if brand in EXCLUDED_EXISTING_NONSEED_BRAND_NAMES:
+            continue
+        if not brand or _canonical_extended_brand(brand) in TARGET_BRAND_SET:
+            continue
+        seen.add(key)
+        out.append(
+            SeedBrand(
+                brand_name=brand,
+                seed_brand_name=brand,
+                seed_franchisor_name=_first_franchisor_name(rows),
+                discovered_from_existing_links=True,
+            )
+        )
+    return out
+
+
 def _resolve_existing_operator(conn: sqlite3.Connection, name: str) -> HoujinMatch:
     rows = conn.execute(
         """
@@ -294,6 +377,7 @@ def _row_score(row: dict[str, str]) -> tuple[int, str]:
 
 def _with_seed_context(row: dict[str, str], seed: SeedBrand, status: str) -> dict[str, str]:
     out = {k: row.get(k, "") for k in BASE_LINK_FIELDS}
+    out["brand_name"] = seed.brand_name
     out["seed_brand_name"] = seed.seed_brand_name
     out["seed_franchisor_name"] = seed.seed_franchisor_name
     out["match_status"] = status
@@ -336,8 +420,9 @@ def export_extended_brands(
     fc_out: Path,
     fc_by_brand_dir: Path,
 ) -> dict[str, int]:
-    seeds = load_seed_brands(seed_path)
     links_by_brand = _load_fc_links(fc_links_path)
+    user_seeds = load_seed_brands(seed_path)
+    seeds = _append_existing_nonseed_brands(user_seeds, links_by_brand)
     orm = sqlite3.connect(orm_db)
     try:
         all_rows: list[dict[str, str]] = []
@@ -351,16 +436,24 @@ def export_extended_brands(
         fc_by_brand_dir.mkdir(parents=True, exist_ok=True)
 
         for seed in seeds:
+            existing_status = (
+                "existing_nonseed_link"
+                if seed.discovered_from_existing_links
+                else "existing_link"
+            )
             existing = [
-                _with_seed_context(row, seed, "existing_link")
+                _with_seed_context(row, seed, existing_status)
                 for row in links_by_brand.get(_brand_key(seed.brand_name), [])
             ]
-            op_match = _resolve_existing_operator(orm, seed.seed_franchisor_name)
-            if not op_match.corporate_number:
-                op_match = _resolve_houjin(houjin_db, seed.seed_franchisor_name)
-            seed_link = _seed_row(seed, op_match)
-            if not _has_same_operator(existing, seed.seed_franchisor_name, op_match.corporate_number):
-                existing.append(seed_link)
+            if seed.seed_franchisor_name and not seed.discovered_from_existing_links:
+                op_match = _resolve_existing_operator(orm, seed.seed_franchisor_name)
+                if not op_match.corporate_number:
+                    op_match = _resolve_houjin(houjin_db, seed.seed_franchisor_name)
+                seed_link = _seed_row(seed, op_match)
+                if not _has_same_operator(
+                    existing, seed.seed_franchisor_name, op_match.corporate_number
+                ):
+                    existing.append(seed_link)
 
             deduped = [
                 _with_seed_context(row, seed, row.get("match_status") or "existing_link")
@@ -410,7 +503,9 @@ def export_extended_brands(
         _write_csv(fc_out, fc_rows_all, EXTENDED_LINK_FIELDS)
         _write_csv(summary_out, summary_rows, SUMMARY_FIELDS)
         return {
-            "seed_brands": len(seeds),
+            "seed_brands": len(user_seeds),
+            "existing_nonseed_brands": sum(1 for seed in seeds if seed.discovered_from_existing_links),
+            "reported_brands": len(seeds),
             "extended_brand_links": len(all_rows),
             "extended_fc_operator_links": len(fc_rows_all),
             "extended_by_brand_files": len(summary_rows),

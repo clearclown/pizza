@@ -241,7 +241,7 @@ Subcommands:
   pizza edinet-sync      EDINET 有価証券報告書 → 関係会社・FC 契約先 → 国税庁 verify → ORM 登録
   pizza operator-spider  ORM 登録済 operator 公式 HP → 店舗一覧 scrape → 住所 match → operator 確定
   pizza operator-brand-discovery  operator 公式HPの事業/ブランドlink → FC brand link を追加収集
-  pizza extended-fc-brand-export  追加FCブランド seed → 既存 evidence に通して監査/FC専用CSV出力
+  pizza extended-fc-brand-export  追加FCブランド seed + 既存非14ブランド evidence → 監査/FC専用CSV出力
   pizza osm-fetch-all    OSM Overpass 全国 fetch + operator:ja tag capture
   pizza areas     利用可能エリア一覧
   pizza version
@@ -1290,8 +1290,8 @@ func cmdOperatorBrandDiscovery(args []string) error {
 	return runDeliveryPython(pyArgs...).Run()
 }
 
-// cmdExtendedFCBrandExport はユーザー提供の追加 FC ブランド seed を既存 ORM/JFA/manual/
-// pipeline evidence に通し、監査表と FC 運営会社専用表を生成する。
+// cmdExtendedFCBrandExport はユーザー提供の追加 FC ブランド seed と既存 all-brand
+// evidence にある非14ブランドを統合し、監査表と FC 運営会社専用表を生成する。
 //
 //	pizza extended-fc-brand-export
 //	pizza extended-fc-brand-export --seed test/fixtures/megafranchisee/fc-brand-seeds-2026-04-27.tsv

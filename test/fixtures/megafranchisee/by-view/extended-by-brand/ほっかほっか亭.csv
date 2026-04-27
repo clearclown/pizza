@@ -1,0 +1,4 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+ほっかほっか亭,持帰り弁当,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,120,manual_megajii_2026_04_24,,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link
+ほっかほっか亭,持帰り弁当,ビストワン,,大阪府東大阪市中鴻池町1-3-7-502,大阪府,franchisee,20,manual_megajii_2026_04_24,,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link
+ほっかほっか亭,持帰り弁当,株式会社ほっかほっか亭総本部,2010401027580,東京都港区浜松町２丁目４番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ほっかほっか亭,株式会社ほっかほっか亭総本部,existing_nonseed_link

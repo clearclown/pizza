@@ -37,8 +37,8 @@
 | [`operator-centric-master-14brand-complete.csv`](./test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv) | 527 | 14 ブランド横持ちの operator-centric master |
 | [`fc-operators-14brand-only.csv`](./test/fixtures/megafranchisee/fc-operators-14brand-only.csv) | 461 | 14 対象ブランドだけの 1 事業会社 1 行 master |
 | [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 410 | 14 対象ブランドだけの brand × operator flat link |
-| [`extended-fc-operator-links.csv`](./test/fixtures/megafranchisee/extended-fc-operator-links.csv) | 130 | 追加FCブランドの franchisee/operator 専用 flat link |
-| [`extended-brand-summary.csv`](./test/fixtures/megafranchisee/extended-brand-summary.csv) | 232 | 追加FCブランド seed の取得状況 summary |
+| [`extended-fc-operator-links.csv`](./test/fixtures/megafranchisee/extended-fc-operator-links.csv) | 348 | 追加FCブランド + 既存非14ブランドの franchisee/operator 専用 flat link |
+| [`extended-brand-summary.csv`](./test/fixtures/megafranchisee/extended-brand-summary.csv) | 345 | 追加FCブランド seed + 既存非14ブランドの取得状況 summary |
 | [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 22 | 14 対象ブランド内で 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
 | [`jfa-disclosures.csv`](./test/fixtures/megafranchisee/jfa-disclosures.csv) | 103 | JFA 情報開示書面 PDF index |
 
@@ -200,7 +200,7 @@ pizza/
 |---|---|---|
 | 14 ブランド operator-centric master | 🟢 | 527 operator、14 ブランド全 CSV export |
 | FC operator directory | 🟢 | 14対象ブランド 461 operator / 410 brand links |
-| 追加FCブランド directory | 🟢 | 232追加ブランド seed / 38ブランドで130 franchisee links |
+| 追加FCブランド directory | 🟢 | 232追加ブランド seed + 113既存非14ブランド / 159ブランドで348 franchisee links |
 | 厳密メガジーランキング | 🟢 | 22 社、14対象ブランド内で2+業態かつ20+店舗、対象外ブランドは除外 |
 | OSM Overpass 全国補完 | 🟢 | Google API 不使用の店舗取得経路 |
 | JFA 協会員 / 情報開示書面 | 🟢 | 協会員 scrape + PDF index 103 件 |

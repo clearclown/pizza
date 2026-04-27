@@ -70,6 +70,19 @@ def _write_links(path: Path) -> None:
             "source_url": "",
             "note": "discovered_via=chain_discovery",
         },
+        {
+            "brand_name": "ミスタードーナツ",
+            "industry": "ドーナツ店",
+            "operator_name": "株式会社フランチャイジーテスト",
+            "corporate_number": "9999999999999",
+            "head_office": "東京都",
+            "prefecture": "東京都",
+            "operator_type": "franchisee",
+            "estimated_store_count": "12",
+            "source": "manual_megajii_2026_04_24",
+            "source_url": "",
+            "note": "",
+        },
     ]
     with path.open("w", encoding="utf-8", newline="") as f:
         writer = csv.DictWriter(f, fieldnames=EXTENDED_LINK_FIELDS[:11], lineterminator="\n")
@@ -144,11 +157,13 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
 
     assert stats == {
         "seed_brands": 6,
-        "extended_brand_links": 7,
-        "extended_fc_operator_links": 1,
-        "extended_by_brand_files": 6,
-        "extended_fc_by_brand_files": 1,
-        "operator_link_brands": 1,
+        "existing_nonseed_brands": 1,
+        "reported_brands": 7,
+        "extended_brand_links": 8,
+        "extended_fc_operator_links": 2,
+        "extended_by_brand_files": 7,
+        "extended_fc_by_brand_files": 2,
+        "operator_link_brands": 2,
         "franchisor_seed_only_brands": 5,
     }
     rows = list(csv.DictReader(out.open(encoding="utf-8")))
@@ -165,9 +180,19 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         and r["match_status"] == "franchisor_seed"
         for r in rows
     )
+    assert any(
+        r["brand_name"] == "ミスタードーナツ"
+        and r["operator_name"] == "株式会社フランチャイジーテスト"
+        and r["match_status"] == "existing_nonseed_link"
+        for r in rows
+    )
     assert (by_brand / "カレーハウスCoCo壱番屋.csv").exists()
     assert (by_brand / "未登録ブランド.csv").exists()
     fc_rows = list(csv.DictReader(fc_out.open(encoding="utf-8")))
-    assert [r["operator_name"] for r in fc_rows] == ["株式会社フルラッキーコーポレーション"]
+    assert [r["operator_name"] for r in fc_rows] == [
+        "株式会社フルラッキーコーポレーション",
+        "株式会社フランチャイジーテスト",
+    ]
     assert (fc_by_brand / "カレーハウスCoCo壱番屋.csv").exists()
+    assert (fc_by_brand / "ミスタードーナツ.csv").exists()
     assert not (fc_by_brand / "未登録ブランド.csv").exists()

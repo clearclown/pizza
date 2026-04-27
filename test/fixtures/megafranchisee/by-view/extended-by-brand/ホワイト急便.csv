@@ -1,0 +1,6 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+ホワイト急便,クリーニング業,株式会社第一ドライ,4250002017088,山口県周南市櫛ヶ浜西塩田499-4,山口県,franchisee,164,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社ホワイト急便,,宮崎県宮崎市神宮東,宮崎県,franchisee,102,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社パールドライ,2310001003308,長崎県長崎市愛宕3-19-6,長崎県,franchisee,92,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,有限会社京屋クリーニング,4420002013103,青森県弘前市大字神田2丁目5-10,青森県,franchisee,65,manual_megajii_2026_04_24,,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link
+ホワイト急便,クリーニング業,株式会社日本さわやかグループ,8330001003572,熊本県熊本市東区上南部２丁目１番１００号,熊本県,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,ホワイト急便,株式会社日本さわやかグループ,existing_nonseed_link

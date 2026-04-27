@@ -1,0 +1,4 @@
+brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+吉野家,外食,タニザワフーズ株式会社,2180301001314,愛知県岡崎市井田西町1番地2号,愛知県,franchisee,96,manual_megajii_2026_04_24,,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link
+吉野家,外食,メガエフシーシステムズ株式会社,1021001014630,神奈川県相模原市中央区富士見2-1-1,神奈川県,franchisee,21,manual_megajii_2026_04_24,,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link
+吉野家,外食,株式会社吉野家ホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,,吉野家,株式会社吉野家ホールディングス,existing_nonseed_link

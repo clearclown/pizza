@@ -1,3 +1,4 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note,seed_brand_name,seed_franchisor_name,match_status
+焼肉きんぐ,,glob,,広島県福山市王子町1-3-5,広島県,franchisee,85,manual_megajii_2026_04_24,,,焼肉きんぐ,株式会社物語コーポレーション,existing_link
 焼肉きんぐ,,株式会社桶谷ホールディングス,1150001016038,奈良県奈良市東九条町418-1 2F,奈良県,franchisee,32,manual_megajii_2026_04_24,,,焼肉きんぐ,株式会社物語コーポレーション,existing_link
 焼肉きんぐ,,株式会社物語コーポレーション,7180301007414,愛知県豊橋市西岩田５丁目７番地の１１,愛知県,franchisor,0,user_fc_brand_seed_2026_04_27,,seed_only=user_provided_fc_brand; operator_company_multiple,焼肉きんぐ,株式会社物語コーポレーション,franchisor_seed
