@@ -15,20 +15,8 @@ TSUTAYA,メディア・書店,株式会社ダイレクト・ショップ,1160001
 TSUTAYA,メディア・書店,スターバックスコーヒージャパン株式会社,7011001031943,,,unknown,11,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 TSUTAYA,メディア・書店,株式会社ブックエース,4050001002210,茨城県水戸市笠原町300-1,茨城県,franchisee,5,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 TSUTAYA,メディア・書店,株式会社ビッグワン,9380001001240,福島県福島市森合字山ノ下１８番地,福島県,unknown,2,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-TSUTAYA,メディア・書店,株式会社ビッグワン,,,,unknown,2,pipeline,,discovered_via=chain_discovery
 TSUTAYA,メディア・書店,株式会社 精文館書店,,,,franchisee,1,pipeline,,discovered_via=osm_operator_tag_unverified
-TSUTAYA,メディア・書店,株式会社TSUTAYA南アルプスガーデン店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社Vidaway,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社Vidaway TSUTAYA柏駅前店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社Vidaway創り手,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 TSUTAYA,メディア・書店,株式会社ゴトー,1380001009662,福島県本宮市高木字井戸上４６番地２,福島県,franchisee,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-TSUTAYA,メディア・書店,株式会社ゴトー,,,,franchisee,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社バンダイナムコアミューズメント,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社バンダイナムコアミューズメントラボ,9010601053998,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 TSUTAYA,メディア・書店,株式会社ビッグワンホールディングス,6060001006885,栃木県さくら市櫻野505番地,栃木県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-TSUTAYA,メディア・書店,株式会社戸田建設,6460101001085,北海道帯広市南町東一条７丁目１２番地１,北海道,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-TSUTAYA,メディア・書店,株式会社戸田建設,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社東京都公安委員会許可第303310908618号,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-TSUTAYA,メディア・書店,株式会社精文館書店愛知県豊橋市,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 TSUTAYA,メディア・書店,株式会社Ｖｉｄａｗａｙ,2010401061159,神奈川県横浜市瀬谷区下瀬谷２丁目１８番１３号,神奈川県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match
 TSUTAYA,メディア・書店,東食品株式会社,6010401001739,東京都港区南青山7-3-1,東京都,unknown,0,operator_official_brand_link,https://azumashokuhin.jp/business/index.html,anchor=TSUTAYAユニット; href=https://azumashokuhin.jp/business/unit.html; page=https://azumashokuhin.jp/business/index.html

@@ -95,9 +95,12 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 (開店告知・休業/閉店・求人/採用・社員インタビュー文脈は自動反映から除外)。
 店舗数根拠は別ソースが必要なので `estimated_store_count=0` のまま保持する。
 
-### `fc-links-14brand-only.csv` (554 rows, 2026-04-27)
+### `fc-links-14brand-only.csv` (469 rows, 2026-04-27)
 **14 対象ブランドだけ**に絞った brand × operator flat link table。
 コンビニ / 自動車用品 / 外食など対象外ブランドは含めない。
+同一 brand × operator × source の重複は、法人番号・本社住所・根拠 URL・店舗数
+の強い行に集約する。`unknown` かつ `chain_discovery` / `chain_verified` 由来の
+1 店舗 pipeline 行は、14 ブランド向け公開 CSV から除外する。
 
 ```bash
 ./bin/pizza integrate --mode export --out test/fixtures/megafranchisee/fc-links.csv

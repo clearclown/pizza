@@ -19,20 +19,11 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 エニタイムフィットネス,フィットネス,株式会社アズ,8120001073612,大阪府大阪市中央区粉川町１番２号,大阪府,franchisee,13,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社glob,2240001041216,広島県福山市王子町１丁目３番５号,広島県,franchisee,10,pipeline,,discovered_via=registry
 エニタイムフィットネス,フィットネス,株式会社さくらホーム,3430001027962,北海道札幌市西区八軒五条東３丁目７番３４号,北海道,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社さくらホーム,,,,franchisee,8,pipeline,,discovered_via=registry
 エニタイムフィットネス,フィットネス,株式会社ベイスオブスポーツ,6360001019114,沖縄県那覇市宮城１丁目１８－１,沖縄県,franchisee,8,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社フィットベイト,7040001099451,千葉県船橋市印内町６０６番地１,千葉県,unknown,6,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社フィットベイト,,,,unknown,6,pipeline,,discovered_via=chain_discovery
 エニタイムフィットネス,フィットネス,株式会社トピーレック,4010601024954,東京都江東区南砂６丁目７番１５号,東京都,franchisee,5,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社ペルゴラ,6140001061476,兵庫県姫路市中地１８８番地の１,兵庫県,franchisee,4,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
 エニタイムフィットネス,フィットネス,株式会社アクト・ティ,9011501000140,東京都北区王子1-9-15 リバティビルディング8F,東京都,franchisee,3,pipeline,,discovered_via=operator_spider_address_match
 エニタイムフィットネス,フィットネス,株式会社サンパーク,4120901006550,大阪府吹田市岸部北５丁目１１番１号,大阪府,franchisee,3,pipeline,,discovered_via=registry;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社アルペンクイックフィットネス,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-エニタイムフィットネス,フィットネス,株式会社アーミーフィットネスジャパン,7030001034491,埼玉県さいたま市見沼区大和田町２丁目１５５３番地１－４０９号,埼玉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社アーミーフィットネスジャパン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-エニタイムフィットネス,フィットネス,株式会社エイゼン,2430001077273,北海道札幌市白石区東札幌二条５丁目２番１号,北海道,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社エイゼン,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-エニタイムフィットネス,フィットネス,株式会社湘南開発,6040002073695,千葉県市原市姉崎西１丁目２番１３号,千葉県,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified
-エニタイムフィットネス,フィットネス,株式会社湘南開発,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 エニタイムフィットネス,フィットネス,glob,,広島県福山市王子町1-3-5,広島県,unknown,0,operator_official_brand_link,https://www.glob.co.jp/businesscontent/yuzuan/,anchor=エニタイムフィットネス; href=https://www.glob.co.jp/businesscontent/anytimefitness/; page=https://www.glob.co.jp/businesscontent/yuzuan/
 エニタイムフィットネス,フィットネス,ペルゴ,,愛媛県姫路市中地188-1,愛媛県,unknown,0,operator_official_brand_link,https://www.pergo.co.jp/brand/vansan,anchor=エニタイムフィットネス; href=https://www.pergo.co.jp/brand/anytime; page=https://www.pergo.co.jp/brand/vansan

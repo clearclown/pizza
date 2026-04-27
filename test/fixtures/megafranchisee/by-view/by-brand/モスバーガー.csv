@@ -1,8 +1,7 @@
 brand_name,industry,operator_name,corporate_number,head_office,prefecture,operator_type,estimated_store_count,source,source_url,note
 モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,1318,jfa_disclosure,https://www.jfa-fc.or.jp/fc-g-misc/pdf/152-1.pdf,method=fc_rc_total_table; fc_stores=1273; rc_stores=45; total_stores=1318; observed_at=2024年度; raw_brand=モスバーガーチェーン
 モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,1266,manual_megajii_2026_04_24,,
-モスバーガー,ハンバーガー,株式会社モスストアカンパニー,3010701019707,東京都品川区大崎２丁目１番１号,東京都,franchisee,266,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社モスストアカンパニー,,,,franchisee,209,pipeline,,discovered_via=registry
+モスバーガー,ハンバーガー,株式会社モスストアカンパニー,3010701019707,東京都品川区大崎２丁目１番１号,東京都,direct,200,pipeline,https://www.mos.co.jp/company/outline/profile/,discovered_via=official_recruit_jobfind_houjin_verified; fact_check=mos_group_company_operates_about_200_stores
 モスバーガー,ハンバーガー,大和フーヅ株式会社,5010401089998,埼玉県熊谷市筑波3-193 熊谷通運ビル5F,埼玉県,franchisee,69,manual_megajii_2026_04_24,,
 モスバーガー,ハンバーガー,株式会社フジタコーポレーション,9430001054035,北海道苫小牧市若草町5-3-5,北海道,franchisee,43,manual_megajii_2026_04_24,,
 モスバーガー,ハンバーガー,オリックスレンタカー・カメイ株式会社,1370001007493,宮城県仙台市青葉区国分町3-1-18,宮城県,franchisee,32,manual_megajii_2026_04_24,,
@@ -17,6 +16,7 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社フレックス,3270001000688,鳥取県鳥取市湖山町北１丁目４５４番地５,鳥取県,franchisee,14,pipeline,,discovered_via=operator_spider_address_match
 モスバーガー,ハンバーガー,株式会社アドバンス,1430001076383,,,franchisee,10,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社フルハウス,1430001059594,,,franchisee,9,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
+モスバーガー,ハンバーガー,株式会社JR九州ファーストフーズ,6290001013578,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,福岡県,franchisee,7,operator_official_brand_link,https://www.jrff.co.jp/section-mos/,anchor=モスバーガー; href=https://www.jrff.co.jp/section-mos/; page=https://www.jrff.co.jp/; fact_check=official_operator_site_7_stores
 モスバーガー,ハンバーガー,株式会社一柳,2040001065202,,,franchisee,6,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社アルカス,2430001064214,,,franchisee,5,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社エイ・ライン,2011301000999,東京都杉並区和泉３丁目１３番１９号,東京都,franchisee,5,pipeline,,discovered_via=enrich_phone_lookup;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
@@ -132,7 +132,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,有限会社武田商事,3430002012105,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,有限会社筑後フーズ,9290002047390,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,松井アルファス株式会社,1320201000261,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社Ambition,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 モスバーガー,ハンバーガー,株式会社いちい,5460302004103,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社おくう,8020001038204,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社みちのくジャパン,8400001006262,岩手県北上市大通り四丁目4-22,岩手県,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -153,7 +152,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社ディボート,3010601068151,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ディモラス,7080101018043,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社トゥルーハートサービス,1050001022599,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社ドムドムフードサービス,8021001062020,東京都台東区浅草６丁目７番８号,東京都,unknown,1,pipeline,,discovered_via=chain_verified
 モスバーガー,ハンバーガー,株式会社ハチマルフード,9180001106522,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ピエール,1010401096016,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社フジモリフードサービス,5080401020048,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -162,10 +160,8 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,株式会社ヤマ一・フード,2150001006137,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ヨコハマ丸正,1020001030852,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社ヨシダフードサービス,1300001001073,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社リプラス,2430001085268,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 モスバーガー,ハンバーガー,株式会社レアス,9020001114722,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社七彩,2430001038011,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-モスバーガー,ハンバーガー,株式会社世羅高原農場,1240005011521,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 モスバーガー,ハンバーガー,株式会社四葉堂フーズ,9090001014965,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社壱林堂,3020001132291,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,株式会社多翔,5360001017688,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -181,6 +177,4 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 モスバーガー,ハンバーガー,誠懸株式会社,2300001013027,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,都市フーズサービス有限会社,9040002008310,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 モスバーガー,ハンバーガー,Ｈｉｇｈ　Ｔｒｅｅ株式会社,2180001130470,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-モスバーガー,ハンバーガー,株式会社JR九州ファーストフーズ,,福岡市博多区博多駅東1丁目10番7号 JR九州博多駅東ビル3階,,unknown,0,operator_official_brand_link,https://www.jrff.co.jp/,anchor=モスバーガー; href=https://www.jrff.co.jp/section-mos/; page=https://www.jrff.co.jp/
 モスバーガー,ハンバーガー,株式会社モスフードサービス,5010701019713,東京都品川区大崎2丁目1番1号 ThinkPark Tower 4階,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
-モスバーガー,ハンバーガー,株式会社モスフードサービス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,

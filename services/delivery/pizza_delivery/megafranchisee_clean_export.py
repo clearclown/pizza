@@ -53,6 +53,22 @@ TARGET_BRAND_INDUSTRIES = {
     "Brand off": "ブランド品リユース",
     "TSUTAYA": "メディア・書店",
 }
+TARGET_LINK_OVERRIDES = {
+    ("モスバーガー", "株式会社モスストアカンパニー"): {
+        "operator_type": "direct",
+        "estimated_store_count": "200",
+        "source_url": "https://www.mos.co.jp/company/outline/profile/",
+        "note": "fact_check=mos_group_company_operates_about_200_stores",
+    },
+    ("モスバーガー", "株式会社JR九州ファーストフーズ"): {
+        "corporate_number": "6290001013578",
+        "prefecture": "福岡県",
+        "operator_type": "franchisee",
+        "estimated_store_count": "7",
+        "source_url": "https://www.jrff.co.jp/section-mos/",
+        "note": "fact_check=official_operator_site_7_stores",
+    },
+}
 
 BRAND_ALIASES = {
     "モスバーガーチェーン": "モスバーガー",
@@ -194,7 +210,68 @@ def _normalize_target_link_row(row: dict[str, str]) -> dict[str, str]:
     out["brand_name"] = brand
     if brand in TARGET_BRAND_INDUSTRIES:
         out["industry"] = TARGET_BRAND_INDUSTRIES[brand]
+    override = TARGET_LINK_OVERRIDES.get((brand, out.get("operator_name") or ""))
+    if override:
+        existing_note = out.get("note") or ""
+        for key, value in override.items():
+            if key == "note" and existing_note:
+                out[key] = f"{existing_note}; {value}"
+            else:
+                out[key] = value
     return out
+
+
+def _link_name_key(name: str) -> str:
+    return "".join((name or "").split())
+
+
+def _is_weak_unknown_link(row: dict[str, str]) -> bool:
+    """Drop low-evidence user-facing links that only came from chain discovery."""
+    if (row.get("source") or "") != "pipeline":
+        return False
+    if (row.get("operator_type") or "") != "unknown":
+        return False
+    if row.get("source_url"):
+        return False
+    try:
+        count = int(row.get("estimated_store_count") or 0)
+    except ValueError:
+        count = 0
+    if count > 1:
+        return False
+    note = row.get("note") or ""
+    return "chain_discovery" in note or "chain_verified" in note
+
+
+def _link_row_score(row: dict[str, str]) -> tuple[int, int, int, int, str]:
+    try:
+        count = int(row.get("estimated_store_count") or 0)
+    except ValueError:
+        count = 0
+    return (
+        1 if row.get("corporate_number") else 0,
+        1 if row.get("head_office") else 0,
+        1 if row.get("source_url") else 0,
+        count,
+        row.get("note") or "",
+    )
+
+
+def _dedupe_link_rows(rows: list[dict[str, str]]) -> list[dict[str, str]]:
+    """Keep the strongest row per target brand/operator/source."""
+    best: dict[tuple[str, str, str], dict[str, str]] = {}
+    for row in rows:
+        if _is_weak_unknown_link(row):
+            continue
+        key = (
+            row.get("brand_name") or "",
+            _link_name_key(row.get("operator_name") or ""),
+            row.get("source") or "",
+        )
+        current = best.get(key)
+        if current is None or _link_row_score(row) > _link_row_score(current):
+            best[key] = row
+    return list(best.values())
 
 
 def load_operators(orm_db: str | Path) -> dict[int, OperatorAggregate]:
@@ -434,21 +511,21 @@ def export_clean_megajii(
     links = list(csv.DictReader(links_path.open(encoding="utf-8"))) if links_path.exists() else []
     links_14brand = []
     if links:
-        links_14brand = [
+        links_14brand = _dedupe_link_rows([
             _normalize_target_link_row(r) for r in links
             if canonical_brand(r.get("brand_name", "")) in TARGET_BRAND_SET
-        ]
+        ])
         _write_csv(
             fixture_root / "fc-links-14brand-only.csv",
             links_14brand,
             list(links[0].keys()),
         )
         for brand in TARGET_BRANDS:
-            rows = [
+            rows = _dedupe_link_rows([
                 _normalize_target_link_row(r)
                 for r in links
                 if canonical_brand(r.get("brand_name", "")) == brand
-            ]
+            ])
             rows.sort(
                 key=lambda r: (
                     -int(r.get("estimated_store_count") or 0),

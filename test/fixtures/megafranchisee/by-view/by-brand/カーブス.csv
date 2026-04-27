@@ -3,7 +3,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 カーブス,フィットネス,株式会社カーブスジャパン,7010001121952,東京都港区芝浦3丁目9番1号 芝浦ルネサイトタワー11F,東京都,franchisor,1965,manual_megajii_2026_04_24,,
 カーブス,フィットネス,G-7ホールディングス,,兵庫県神戸市須磨区弥栄台2丁目1-3,兵庫県,franchisee,349,manual_megajii_2026_04_24,,
 カーブス,フィットネス,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,unknown,255,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-カーブス,フィットネス,株式会社カーブスホールディングス,,,,unknown,149,pipeline,,discovered_via=chain_discovery
 カーブス,フィットネス,MYグループ,,東京都港区赤坂8-4-14 8F,東京都,franchisee,29,manual_megajii_2026_04_24,,
 カーブス,フィットネス,Do Frontier,,愛知県名古屋市名東区高社1丁目258番地,愛知県,franchisee,26,manual_megajii_2026_04_24,,
 カーブス,フィットネス,エムセック,,広島県三原市城町1丁目12-5 エムセックビル,広島県,franchisee,22,manual_megajii_2026_04_24,,
@@ -62,8 +61,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 カーブス,フィットネス,有限会社するが薬局,8080102010659,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,有限会社タンバ,6011502009720,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,有限会社雄鳳,9290002046087,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
-カーブス,フィットネス,東京海上日動火災保険株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-カーブス,フィットネス,東京海上日動火災保険株式会社,2010001008824,東京都千代田区大手町２丁目６番４号,東京都,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 カーブス,フィットネス,株式会社イシグロ・ヘルスケア,7200001037568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社インフィニティ,1450001005893,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社イーエン,7190001024568,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -74,8 +71,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 カーブス,フィットネス,株式会社クリフ,7380001003949,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社クーバル,3120001161470,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社グリーンスポーツ企画,6110001018982,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-カーブス,フィットネス,株式会社コシダカ,,,,unknown,1,pipeline,,discovered_via=chain_discovery
-カーブス,フィットネス,株式会社コシダカホールディングス,7070001003674,,,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
 カーブス,フィットネス,株式会社サツキ商事,5020001072973,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社セフティ,1020001132442,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,株式会社ダイコク,5430001073600,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -100,5 +95,4 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 カーブス,フィットネス,洋三プラスチックス工業有限会社,5180002085926,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 カーブス,フィットネス,アルフォンソ株式会社,9070001000216,群馬県前橋市住吉町1-3-12 アルフォンソビル,群馬県,unknown,0,operator_official_brand_link,http://www.alfonso.co.jp/gongcha/shoplist.html,anchor=CURVES; href=http://www.alfonso.co.jp/curves/; page=http://www.alfonso.co.jp/gongcha/shoplist.html
 カーブス,フィットネス,株式会社カーブスホールディングス,5070001005771,東京都港区芝浦３丁目９番１号,東京都,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
-カーブス,フィットネス,株式会社カーブスホールディングス,,,,franchisor,0,jfa,https://www.jfa-fc.or.jp/particle/38.html,
 カーブス,フィットネス,株式会社シャポンドゥ,2380001000678,福島県福島市西中央二丁目91-5,福島県,unknown,0,operator_official_brand_link,https://www.chapondoux.com/storelist/store.html?id=78,anchor=カーブス; href=https://www.chapondoux.com/storelist/index.html; page=https://www.chapondoux.com/storelist/store.html?id=78

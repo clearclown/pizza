@@ -24,7 +24,6 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 コメダ珈琲,コーヒーショップ,アーネストカーゴ株式会社,9030001034597,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,エクシト株式会社,1030001116700,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,エヌピーエムズ株式会社,9380001026312,,,franchisee,2,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
-コメダ珈琲,コーヒーショップ,-0023東京都新宿区西新宿六丁目10番1号日土地西新宿ビル7階関係会社株式会社,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 コメダ珈琲,コーヒーショップ,タキヒヨー株式会社,7180001037793,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,井田スクエア株式会社,8210001013897,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,安富産業株式会社,2011301007177,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
@@ -32,6 +31,4 @@ brand_name,industry,operator_name,corporate_number,head_office,prefecture,operat
 コメダ珈琲,コーヒーショップ,日翔フーズ株式会社,1021001024506,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
 コメダ珈琲,コーヒーショップ,有限会社日光商事,2080002010863,,,franchisee,1,pipeline,,discovered_via=address_reverse_houjin
 コメダ珈琲,コーヒーショップ,株式会社神奈中システムプラン,5021001036349,神奈川県平塚市八重咲町3-3,神奈川県,franchisee,1,pipeline,,discovered_via=operator_spider_address_match;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-コメダ珈琲,コーヒーショップ,株式会社竹中工務店,3120001077469,大阪府大阪市中央区本町４丁目１番１３号,大阪府,unknown,1,pipeline,,discovered_via=chain_discovery;llm_cleanse_houjin_verified;llm_cleanse_houjin_verified
-コメダ珈琲,コーヒーショップ,株式会社竹中工務店,,,,unknown,1,pipeline,,discovered_via=chain_discovery
 コメダ珈琲,コーヒーショップ,興永産業株式会社,9030001042666,,,franchisee,1,pipeline,,discovered_via=official_recruit_jobfind_houjin_verified
