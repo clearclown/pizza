@@ -265,6 +265,8 @@ def test_export_writes_14brand_only_ranking(tmp_path) -> None:
     assert stats["fc_operators_all"] == 3
     assert stats["fc_operators_14brand_only"] == 2
     assert stats["megajii_ranking"] == 1
+    assert stats["by_view_allbrand_operators_min20"] == 3
+    assert stats["by_view_allbrand_megajii_min20_2brand"] == 1
 
     ranking = list(csv.DictReader((fixture_root / "by-view/megajii-ranking.csv").open()))
     assert ranking == [
@@ -286,3 +288,15 @@ def test_export_writes_14brand_only_ranking(tmp_path) -> None:
     assert [row["operator_name"] for row in operators_14] == ["対象混在", "対象1ブランド"]
     assert operators_14[0]["target_brands"] == "カーブス,業務スーパー"
     assert operators_14[0]["total_stores"] == "300"
+    allbrand_operators = list(
+        csv.DictReader((fixture_root / "by-view/allbrand-operators-min20.csv").open())
+    )
+    assert [row["operator_name"] for row in allbrand_operators] == [
+        "対象混在",
+        "対象外だけ",
+        "対象1ブランド",
+    ]
+    allbrand_megajii = list(
+        csv.DictReader((fixture_root / "by-view/allbrand-megajii-min20-2brand.csv").open())
+    )
+    assert [row["operator_name"] for row in allbrand_megajii] == ["対象混在"]

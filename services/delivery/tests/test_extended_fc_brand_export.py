@@ -139,6 +139,9 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
     by_brand = tmp_path / "by-brand"
     fc_out = tmp_path / "fc.csv"
     fc_by_brand = tmp_path / "fc-by-brand"
+    all_fc_out = tmp_path / "all-fc.csv"
+    all_fc_by_brand = tmp_path / "all-fc-by-brand"
+    all_fc_candidates = tmp_path / "all-fc-candidates.csv"
     _write_seed(seed)
     _write_links(links)
     _write_orm(orm)
@@ -153,6 +156,9 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         by_brand_dir=by_brand,
         fc_out=fc_out,
         fc_by_brand_dir=fc_by_brand,
+        all_fc_out=all_fc_out,
+        all_fc_by_brand_dir=all_fc_by_brand,
+        all_fc_candidates_out=all_fc_candidates,
     )
 
     assert stats == {
@@ -165,6 +171,10 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
         "extended_fc_by_brand_files": 2,
         "operator_link_brands": 2,
         "franchisor_seed_only_brands": 5,
+        "all_fc_operator_links": 2,
+        "all_fc_operator_link_brands": 2,
+        "all_fc_operator_candidates": 2,
+        "all_fc_operator_candidate_brands": 2,
     }
     rows = list(csv.DictReader(out.open(encoding="utf-8")))
     assert "株式会社本文混入" not in [r["operator_name"] for r in rows]
@@ -196,3 +206,11 @@ def test_export_extended_brands_uses_existing_links_and_seed_only_rows(tmp_path:
     assert (fc_by_brand / "カレーハウスCoCo壱番屋.csv").exists()
     assert (fc_by_brand / "ミスタードーナツ.csv").exists()
     assert not (fc_by_brand / "未登録ブランド.csv").exists()
+    all_fc_rows = list(csv.DictReader(all_fc_out.open(encoding="utf-8")))
+    assert [r["operator_name"] for r in all_fc_rows] == [
+        "株式会社フルラッキーコーポレーション",
+        "株式会社フランチャイジーテスト",
+    ]
+    assert (all_fc_by_brand / "カレーハウスCoCo壱番屋.csv").exists()
+    assert (all_fc_by_brand / "ミスタードーナツ.csv").exists()
+    assert len(list(csv.DictReader(all_fc_candidates.open(encoding="utf-8")))) == 2

@@ -1306,6 +1306,9 @@ func cmdExtendedFCBrandExport(args []string) error {
 	byBrandDir := fs.String("by-brand-dir", "test/fixtures/megafranchisee/by-view/extended-by-brand", "監査用 brand 別出力 dir")
 	fcOut := fs.String("fc-out", "test/fixtures/megafranchisee/extended-fc-operator-links.csv", "FC 運営会社専用 CSV")
 	fcByBrandDir := fs.String("fc-by-brand-dir", "test/fixtures/megafranchisee/by-view/extended-fc-by-brand", "FC 運営会社 brand 別出力 dir")
+	allFCOut := fs.String("all-fc-out", "test/fixtures/megafranchisee/all-fc-operator-links.csv", "全ブランド FC 運営会社専用 CSV")
+	allFCByBrandDir := fs.String("all-fc-by-brand-dir", "test/fixtures/megafranchisee/by-view/all-fc-by-brand", "全ブランド FC 運営会社 brand 別出力 dir")
+	allFCCandidatesOut := fs.String("all-fc-candidates-out", "test/fixtures/megafranchisee/all-fc-operator-candidates.csv", "全ブランド FC 運営会社候補 CSV (franchisee + unknown)")
 	if err := fs.Parse(args); err != nil {
 		return err
 	}
@@ -1319,6 +1322,9 @@ func cmdExtendedFCBrandExport(args []string) error {
 		"--by-brand-dir", *byBrandDir,
 		"--fc-out", *fcOut,
 		"--fc-by-brand-dir", *fcByBrandDir,
+		"--all-fc-out", *allFCOut,
+		"--all-fc-by-brand-dir", *allFCByBrandDir,
+		"--all-fc-candidates-out", *allFCCandidatesOut,
 	}
 	return runDeliveryPython(pyArgs...).Run()
 }

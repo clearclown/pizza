@@ -109,6 +109,22 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 
 列: `brand_name, industry, operator_name, corporate_number, head_office, prefecture, operator_type, estimated_store_count, source, source_url, note`
 
+### `all-fc-operator-links.csv` (727 rows, 2026-04-27)
+全ブランド横断で `operator_type=franchisee` のみを抽出し、ブランド名ゆれを正規化して
+重複を落とした FC 運営会社 flat link。14 対象ブランドも追加ブランドも含む。
+ブランド別の同内容は `by-view/all-fc-by-brand/*.csv` (172 ファイル) に出力する。
+
+### `all-fc-operator-candidates.csv` (750 rows, 2026-04-27)
+上記に `operator_type=unknown` の候補リンクも加えた監査用 CSV。`franchisee` 確定リスト
+ではないため、ユーザー向け確定リストには `all-fc-operator-links.csv` を使う。
+
+### `by-view/allbrand-operators-min20.csv` (213 rows, 2026-04-27)
+全ブランド横断で 20 店舗以上の operator。1 ブランドのみの大口運営会社も含む。
+
+### `by-view/allbrand-megajii-min20-2brand.csv` (122 rows, 2026-04-27)
+全ブランド横断で 20 店舗以上かつ 2 ブランド以上のメガフランチャイジー。
+14 対象ブランドに限定しないため、`by-view/megajii-ranking.csv` より広い。
+
 ### `fc-brand-seeds-2026-04-27.tsv` (223 rows, 2026-04-27)
 ユーザー提供の追加 FC ブランド seed。14 対象ブランドは再処理から除外し、
 `ITTO個別指導学院・みやび個別指導学院` や `ワークマン／ワークマンプラス` の
@@ -121,7 +137,7 @@ PDF 本文の店舗数は `pizza jfa-disclosure-sync --fetch-pdfs` で
 franchisee/operator link が取れたブランド、`franchisor_seed_only` は現時点で本部 seed
 または本部 evidence のみのブランド。
 
-### `extended-brand-links.csv` (610 rows, 2026-04-27)
+### `extended-brand-links.csv` (612 rows, 2026-04-27)
 追加ブランドの監査用 brand × operator flat link。franchisor seed、本部 evidence、
 franchisee link をすべて含む。公式 FC リスト/オーナー一覧/店舗一覧から運営会社が
 取れた場合は `source=official_franchisee_page` として同じ表に入れる。

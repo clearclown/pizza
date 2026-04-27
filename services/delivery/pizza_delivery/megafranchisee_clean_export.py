@@ -486,6 +486,12 @@ def export_clean_megajii(
     }
     for name, rows in phase_sets.items():
         _write_csv(phase_dir / name, rows, phase_fields)
+    by_view_phase_sets = {
+        "allbrand-operators-min20.csv": phase_sets["operators-allbrand-registry-min20.csv"],
+        "allbrand-megajii-min20-2brand.csv": strict_allbrand,
+    }
+    for name, rows in by_view_phase_sets.items():
+        _write_csv(by_view / name, rows, phase_fields)
 
     review_rows: list[dict] = []
     for op in ops:
@@ -548,6 +554,10 @@ def export_clean_megajii(
         "megajii_ranking": len(strict_target),
         "operators_allbrand_min20": len(phase_sets["operators-allbrand-registry-min20.csv"]),
         "megajii_allbrand_min20_2brand": len(strict_allbrand),
+        "by_view_allbrand_operators_min20": len(by_view_phase_sets["allbrand-operators-min20.csv"]),
+        "by_view_allbrand_megajii_min20_2brand": len(
+            by_view_phase_sets["allbrand-megajii-min20-2brand.csv"]
+        ),
         "operators_14brand_min20": len(phase_sets["operators-14brand-registry-min20.csv"]),
         "megajii_14brand_min20_2brand": len(strict_target),
         "evidence_only_review": len(review_rows),

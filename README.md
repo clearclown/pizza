@@ -37,8 +37,12 @@
 | [`operator-centric-master-14brand-complete.csv`](./test/fixtures/megafranchisee/operator-centric-master-14brand-complete.csv) | 527 | 14 ブランド横持ちの operator-centric master |
 | [`fc-operators-14brand-only.csv`](./test/fixtures/megafranchisee/fc-operators-14brand-only.csv) | 461 | 14 対象ブランドだけの 1 事業会社 1 行 master |
 | [`fc-links-14brand-only.csv`](./test/fixtures/megafranchisee/fc-links-14brand-only.csv) | 410 | 14 対象ブランドだけの brand × operator flat link |
+| [`all-fc-operator-links.csv`](./test/fixtures/megafranchisee/all-fc-operator-links.csv) | 727 | 全ブランド横断の franchisee/operator 確定 flat link |
+| [`all-fc-operator-candidates.csv`](./test/fixtures/megafranchisee/all-fc-operator-candidates.csv) | 750 | 全ブランド横断の franchisee + unknown 候補監査 flat link |
 | [`extended-fc-operator-links.csv`](./test/fixtures/megafranchisee/extended-fc-operator-links.csv) | 348 | 追加FCブランド + 既存非14ブランドの franchisee/operator 専用 flat link |
 | [`extended-brand-summary.csv`](./test/fixtures/megafranchisee/extended-brand-summary.csv) | 345 | 追加FCブランド seed + 既存非14ブランドの取得状況 summary |
+| [`by-view/allbrand-operators-min20.csv`](./test/fixtures/megafranchisee/by-view/allbrand-operators-min20.csv) | 213 | 全ブランド横断 20店舗以上 operator |
+| [`by-view/allbrand-megajii-min20-2brand.csv`](./test/fixtures/megafranchisee/by-view/allbrand-megajii-min20-2brand.csv) | 122 | 全ブランド横断 20店舗以上かつ2ブランド以上のメガジー |
 | [`by-view/megajii-ranking.csv`](./test/fixtures/megafranchisee/by-view/megajii-ranking.csv) | 22 | 14 対象ブランド内で 2 業態以上かつ 20 店舗以上の厳密メガジーランキング |
 | [`jfa-disclosures.csv`](./test/fixtures/megafranchisee/jfa-disclosures.csv) | 103 | JFA 情報開示書面 PDF index |
 
@@ -55,6 +59,7 @@ env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza integrate --mode export 
   --out test/fixtures/megafranchisee/fc-links.csv
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
   python -m pizza_delivery.megafranchisee_clean_export
+env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 ./bin/pizza extended-fc-brand-export
 env UV_CACHE_DIR=/tmp/uv-cache UV_NO_SYNC=1 uv run --project services/delivery \
   python -m pizza_delivery.operator_master_export \
   --min-total 1 \
@@ -200,8 +205,9 @@ pizza/
 |---|---|---|
 | 14 ブランド operator-centric master | 🟢 | 527 operator、14 ブランド全 CSV export |
 | FC operator directory | 🟢 | 14対象ブランド 461 operator / 410 brand links |
+| 全ブランド FC operator links | 🟢 | 172ブランドで727 franchisee links / 候補750 links |
 | 追加FCブランド directory | 🟢 | 232追加ブランド seed + 113既存非14ブランド / 159ブランドで348 franchisee links |
-| 厳密メガジーランキング | 🟢 | 22 社、14対象ブランド内で2+業態かつ20+店舗、対象外ブランドは除外 |
+| 厳密メガジーランキング | 🟢 | 全ブランド122社 / 14対象ブランド22社、2+業態かつ20+店舗 |
 | OSM Overpass 全国補完 | 🟢 | Google API 不使用の店舗取得経路 |
 | JFA 協会員 / 情報開示書面 | 🟢 | 協会員 scrape + PDF index 103 件 |
 | 公式ページ source 追加 | 🟢 | 公式FC・運営会社・本部PR本文を国税庁照合付きで ORM 化 |

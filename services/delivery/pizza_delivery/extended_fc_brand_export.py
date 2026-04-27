@@ -33,6 +33,11 @@ DEFAULT_SUMMARY_OUT = Path("test/fixtures/megafranchisee/extended-brand-summary.
 DEFAULT_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/extended-by-brand")
 DEFAULT_FC_OUT = Path("test/fixtures/megafranchisee/extended-fc-operator-links.csv")
 DEFAULT_FC_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/extended-fc-by-brand")
+DEFAULT_ALL_FC_OUT = Path("test/fixtures/megafranchisee/all-fc-operator-links.csv")
+DEFAULT_ALL_FC_BY_BRAND_DIR = Path("test/fixtures/megafranchisee/by-view/all-fc-by-brand")
+DEFAULT_ALL_FC_CANDIDATES_OUT = Path(
+    "test/fixtures/megafranchisee/all-fc-operator-candidates.csv"
+)
 
 BASE_LINK_FIELDS = [
     "brand_name",
@@ -70,10 +75,16 @@ SEED_BRAND_ALIASES = {
     "Curves": "カーブス",
     "ITTO個別指導学院": "Itto個別指導学院",
     "ITTO個別指導": "Itto個別指導学院",
+    "Anytime Fitness": "エニタイムフィットネス",
+    "ANYTIME FITNESS": "エニタイムフィットネス",
     "珈琲所コメダ珈琲店": "コメダ珈琲",
+    "コメダ珈琲店": "コメダ珈琲",
     "BRAND OFF": "Brand off",
+    "ブランドオフ": "Brand off",
     "センチュリー2": "センチュリー21",
+    "セブンイレブン": "セブン-イレブン",
     "ケンタッキー": "ケンタッキーフライドチキン",
+    "KFC": "ケンタッキーフライドチキン",
     "ケンタッキーフライドチキン": "ケンタッキーフライドチキン",
     "カレーハウスCoCo壱番屋": "カレーハウスCoCo壱番屋",
     "カレーハウスCOCO壱番屋": "カレーハウスCoCo壱番屋",
@@ -99,6 +110,7 @@ SEED_BRAND_ALIASES = {
     "メディカルホワイトニングHAKU(次世代型ホワイトニングサロンHAKU)": "メディカルホワイトニングHAKU",
     "蔦屋": "TSUTAYA",
     "CoCo壱番屋": "カレーハウスCoCo壱番屋",
+    "韓丼": "カルビ丼とスン豆腐専門店韓丼",
     "スペースクリエイト自遊空間": "スペースクリエイト自遊空間",
     "自遊空間": "スペースクリエイト自遊空間",
     "信州そば 小木曽製粉所": "信州そば 小木曽製粉所",
@@ -127,6 +139,7 @@ SEED_BRAND_ALIASES = {
     "サーティーワン": "サーティワンアイスクリーム",
     "フィット365": "FIT365",
     "オンデーズ": "OWNDAYS",
+    "タリーズ": "タリーズコーヒー",
     "焼肉キング": "焼肉きんぐ",
     "銀だこ": "築地銀だこ",
     "赤カラ": "赤から",
@@ -408,6 +421,74 @@ def _safe_filename(name: str) -> str:
     return safe or "unknown"
 
 
+def _load_canonical_link_rows(
+    path: Path, *, operator_types: set[str] | None = None
+) -> list[dict[str, str]]:
+    rows: list[dict[str, str]] = []
+    with path.open(encoding="utf-8", newline="") as f:
+        for row in csv.DictReader(f):
+            operator_type = row.get("operator_type") or ""
+            if operator_types is not None and operator_type not in operator_types:
+                continue
+            brand = _canonical_extended_brand(row.get("brand_name", ""))
+            if brand in EXCLUDED_EXISTING_NONSEED_BRAND_NAMES:
+                continue
+            operator_name = normalize_operator_name(row.get("operator_name") or "")
+            if not brand or not operator_name:
+                continue
+            out = {field: row.get(field, "") for field in BASE_LINK_FIELDS}
+            out["brand_name"] = brand
+            out["operator_name"] = operator_name
+            rows.append(out)
+    return rows
+
+
+def _write_by_brand_files(
+    rows: list[dict[str, str]], by_brand_dir: Path, fields: list[str]
+) -> int:
+    if by_brand_dir.exists():
+        shutil.rmtree(by_brand_dir)
+    by_brand_dir.mkdir(parents=True, exist_ok=True)
+    brands: dict[str, list[dict[str, str]]] = {}
+    for row in rows:
+        brands.setdefault(row.get("brand_name") or "", []).append(row)
+    for brand, brand_rows in brands.items():
+        if not brand:
+            continue
+        brand_rows.sort(key=_row_score)
+        _write_csv(by_brand_dir / f"{_safe_filename(brand)}.csv", brand_rows, fields)
+    return len(brands)
+
+
+def export_all_fc_operator_links(
+    *,
+    fc_links_path: Path,
+    all_fc_out: Path,
+    all_fc_by_brand_dir: Path,
+    all_fc_candidates_out: Path,
+) -> dict[str, int]:
+    franchisee_rows = _dedupe_link_rows(
+        _load_canonical_link_rows(fc_links_path, operator_types={"franchisee"})
+    )
+    candidate_rows = _dedupe_link_rows(
+        _load_canonical_link_rows(fc_links_path, operator_types={"franchisee", "unknown"})
+    )
+    franchisee_rows.sort(key=lambda r: (r.get("brand_name") or "", *_row_score(r)))
+    candidate_rows.sort(key=lambda r: (r.get("brand_name") or "", *_row_score(r)))
+
+    _write_csv(all_fc_out, franchisee_rows, BASE_LINK_FIELDS)
+    _write_csv(all_fc_candidates_out, candidate_rows, BASE_LINK_FIELDS)
+    by_brand_count = _write_by_brand_files(franchisee_rows, all_fc_by_brand_dir, BASE_LINK_FIELDS)
+    return {
+        "all_fc_operator_links": len(franchisee_rows),
+        "all_fc_operator_link_brands": by_brand_count,
+        "all_fc_operator_candidates": len(candidate_rows),
+        "all_fc_operator_candidate_brands": len(
+            {row.get("brand_name") for row in candidate_rows if row.get("brand_name")}
+        ),
+    }
+
+
 def export_extended_brands(
     *,
     seed_path: Path,
@@ -419,6 +500,9 @@ def export_extended_brands(
     by_brand_dir: Path,
     fc_out: Path,
     fc_by_brand_dir: Path,
+    all_fc_out: Path = DEFAULT_ALL_FC_OUT,
+    all_fc_by_brand_dir: Path = DEFAULT_ALL_FC_BY_BRAND_DIR,
+    all_fc_candidates_out: Path = DEFAULT_ALL_FC_CANDIDATES_OUT,
 ) -> dict[str, int]:
     links_by_brand = _load_fc_links(fc_links_path)
     user_seeds = load_seed_brands(seed_path)
@@ -502,7 +586,7 @@ def export_extended_brands(
         _write_csv(out, all_rows, EXTENDED_LINK_FIELDS)
         _write_csv(fc_out, fc_rows_all, EXTENDED_LINK_FIELDS)
         _write_csv(summary_out, summary_rows, SUMMARY_FIELDS)
-        return {
+        stats = {
             "seed_brands": len(user_seeds),
             "existing_nonseed_brands": sum(1 for seed in seeds if seed.discovered_from_existing_links),
             "reported_brands": len(seeds),
@@ -517,6 +601,15 @@ def export_extended_brands(
                 1 for r in summary_rows if r["status"] == "franchisor_seed_only"
             ),
         }
+        stats.update(
+            export_all_fc_operator_links(
+                fc_links_path=fc_links_path,
+                all_fc_out=all_fc_out,
+                all_fc_by_brand_dir=all_fc_by_brand_dir,
+                all_fc_candidates_out=all_fc_candidates_out,
+            )
+        )
+        return stats
     finally:
         orm.close()
 
@@ -532,6 +625,13 @@ def main() -> None:
     parser.add_argument("--by-brand-dir", type=Path, default=DEFAULT_BY_BRAND_DIR)
     parser.add_argument("--fc-out", type=Path, default=DEFAULT_FC_OUT)
     parser.add_argument("--fc-by-brand-dir", type=Path, default=DEFAULT_FC_BY_BRAND_DIR)
+    parser.add_argument("--all-fc-out", type=Path, default=DEFAULT_ALL_FC_OUT)
+    parser.add_argument("--all-fc-by-brand-dir", type=Path, default=DEFAULT_ALL_FC_BY_BRAND_DIR)
+    parser.add_argument(
+        "--all-fc-candidates-out",
+        type=Path,
+        default=DEFAULT_ALL_FC_CANDIDATES_OUT,
+    )
     args = parser.parse_args()
     stats = export_extended_brands(
         seed_path=args.seed,
@@ -543,6 +643,9 @@ def main() -> None:
         by_brand_dir=args.by_brand_dir,
         fc_out=args.fc_out,
         fc_by_brand_dir=args.fc_by_brand_dir,
+        all_fc_out=args.all_fc_out,
+        all_fc_by_brand_dir=args.all_fc_by_brand_dir,
+        all_fc_candidates_out=args.all_fc_candidates_out,
     )
     for key, value in stats.items():
         print(f"{key}={value}")
