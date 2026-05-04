@@ -46,7 +46,7 @@ jobs:
             -m "chore(upstream): sync $PREFIX with $UPSTREAM@$BRANCH"
       - name: Create PR if changes
         if: steps.check.outputs.exists == 'true'
-        uses: peter-evans/create-pull-request@v7
+        uses: peter-evans/create-pull-request@v8
         with:
           branch: upstream-sync/${{ matrix.prefix }}
           title: "chore(upstream): sync ${{ matrix.prefix }}"
